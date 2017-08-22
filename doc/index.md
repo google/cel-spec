@@ -1,4 +1,4 @@
-# Common Expressin Language
+# Common Expression Language
 
 The Common Expression Language, CEL is an embedded expression language tailored
 to simple computations on protocol buffers. CEL is not used standalone but
