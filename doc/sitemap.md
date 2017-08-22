@@ -1,5 +1,0 @@
-*   [Home](index.md)
-*   [Introduction](intro.md)
-*   [Language Definition](langdef.md)
-*   [Application Embedding](embed.md)
-*   [Community](community.md)
