@@ -1,6 +1,7 @@
 # Common Expression Language
 
-The Common Expression Language (CEL) implements common semantics for expression evaluation, enabling different applications to more easily interoperate.
+The Common Expression Language (CEL) implements common semantics for expression
+evaluation, enabling different applications to more easily interoperate.
 
 Key Applications
 *   Security policy: organization have complex infrastructure and need common
