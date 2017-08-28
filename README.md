@@ -4,6 +4,7 @@ The Common Expression Language (CEL) implements common semantics for expression
 evaluation, enabling different applications to more easily interoperate.
 
 Key Applications
+
 *   Security policy: organization have complex infrastructure and need common
     tooling to reason about the system as a whole
 *   Protocols: expressions are a useful data type and require interoperability
@@ -11,6 +12,7 @@ Key Applications
 
 
 Guiding philosophy:
+
 1.  Keep it small & fast.
     *   CEL evaluates in linear time, is mutation free, and not Turing-complete.
         This limitation is a feature of the language design, which allows the
@@ -28,6 +30,7 @@ Guiding philosophy:
         teams that seek to integrate CEL into their platforms.
 
 The required components of a system that supports CEL are:
+
 *   The textual representation of an expression as written by a developer. It is
     of similar syntax of expressions in C/C++/Java/JavaScript
 *   A binary representation of an expression. It is an abstract syntax tree
@@ -53,6 +56,7 @@ common.GeoPoint{ latitude: 10.0, longitude: -5.5 }
 ```
 
 For more detail, see:
+
 *   [Introduction](doc/intro.md)
 *   [Language Definition](doc/langdef.md)
 
