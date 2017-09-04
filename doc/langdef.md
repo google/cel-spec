@@ -3,8 +3,6 @@
 This page constitutes the reference for CEL. For a gentle introduction, see
 [Intro](intro.md).
 
-[TOC]
-
 ## Syntax
 
 The grammar of CEL is defined below. We use `T?` for an optional token, but not
@@ -75,7 +73,7 @@ kept implicit in string tokens. The meaning is that in strings without the `r`
 or `R` (raw) prefix, `ESCAPE` is processed, whereas in strings with they stay
 uninterpreted.
 
-## Values {#values}
+## Values
 
 Values in CEL represent any of the following:
 
@@ -112,7 +110,7 @@ of the basic representations introduced in [Values](#values) above as follows:
 NOTE(go/api-expr-open): heterogenous vs homogeneous lists and maps, as well as
 treatment of Any.
 
-## Types {#types}
+## Types
 
 Every value in CEL has a runtime type which is a value by itself. The standard
 function `type(x)` denotes this type.
@@ -127,7 +125,7 @@ type `type(int)`, which is an expression by itself which in turn has type
 `type(type(int))`. Types of types have no actual use in CEL, but are included
 for consistency as excluding them would be more complicated than otherwise.
 
-## Functions {#functions}
+## Functions
 
 A function value represents a computation which delivers a new value based on
 zero or more arguments. Function applications have no observable side-effects
@@ -217,7 +215,7 @@ macros are:
     map `e`. Here `x` is a simple identifier to be used in `p` which binds to
     the element or key.
 
-### Argument Evaluation {#arg-eval}
+### Argument Evaluation
 
 By default, all arguments to function calls are strictly evaluated
 (call-by-value). Any errors produced during argument evaluation are propagated.
@@ -240,7 +238,7 @@ A function overload can be declared to use receiver call-style, so it must be
 called as `e1.f(e2)` instead of `f(e1, e2)`. Overloads with different call
 styles are non-overlapping per definition, regardless of their types.
 
-## Field Selection {#select}
+## Field Selection
 
 A field selection expression, `e.f`, can be applied both to messages and to
 maps. For maps, selection is interpreted as the field being a string key.
@@ -275,7 +273,7 @@ where `M` must be a simple or qualified name which resolves to a messsage type
 
 NOTE(go/api-expr-open): heterogenous vs homogeneous lists and maps.
 
-## Runtime Errors {#errors}
+## Runtime Errors
 
 In general, when a runtime error is produced, expression evaluation is
 terminated; exceptions to this rule are discussed in [Argument
@@ -286,7 +284,7 @@ built-in errors are `no_matching_overload` and `no_such_field`; those errors
 correspond to type errors in static typing (see [Gradual Type
 Checking](#type-checking)).
 
-## Name Resolution {#resolution}
+## Name Resolution
 
 A CEL expression can contain simple names as in `a` or qualified names as in
 `a.b`. Such names are resolved in the lexical scope of a protobuf package or
@@ -311,7 +309,7 @@ name which resolves in the current lexical scope is used. For example, if
 possible field selection, then `a.b.c` takes priority over the interpretation
 `(a.b).c`.
 
-## Standard Definitions {#standard}
+## Standard Definitions
 
 All predefined operators, functions and constants are listed in the table below.
 For each symbol, the available overloads are listed. Operator symbols use a
@@ -1319,7 +1317,7 @@ descriptions need to be updated in the code.
 
 <!-- END GENERATED DECL TABLE; DO NOT EDIT ABOVE -->
 
-## Gradual Type Checking {#type-checking}
+## Gradual Type Checking
 
 A CEL type checker attempts to identify occurrences of `no_matching_overload`
 and `no_such_field` runtime errors ahead of runtime. It also serves to optimize
