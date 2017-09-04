@@ -1,10 +1,10 @@
 # Introduction
 
 The Common Expression Language (CEL) is a simple expression language built on
-top of protocol buffers. This page discusses basic usage. See [Language
-Definition](langdef.md) for the reference.
+top of [protocol buffer][1] types. This page discusses basic usage. See
+[Language Definition](langdef.md) for the reference.
 
-Suppose a proto defined as follows:
+Suppose a type defined as follows (using protocol buffer syntax):
 
 ```proto
 package google.account;
@@ -24,8 +24,8 @@ message Account {
 }
 ```
 
-CEL allows for simple computations to be defined on messages like this one. For
-example, given an instance of the `Account` message assigned to the variable
+CEL allows for simple computations to be defined on types like this one. For
+example, given an instance of the `Account` type assigned to the variable
 `account`:
 
 ```proto
@@ -35,14 +35,14 @@ matches("[0-9-]+", account.phone_number)        // true if number matches regexp
 ```
 
 CEL expressions support most operators and functions one would expect when
-working with protobufs: boolean operators, relations, arithmetics on numbers,
-string and byte string operations, and operations to deal with lists and maps.
-The full reference of standard operations is described in the [language
-definiton](langdef.md#standard). Note that applications of CEL may add more
-functions and also allow users to define their own.
+working with protocol buffers: boolean operators, relations, arithmetics on
+numbers, string and byte string operations, and operations to deal with lists
+and maps. The full reference of standard operations is described in the
+[language definiton](langdef.md#standard). Note that applications of CEL may add
+more functions and also allow users to define their own.
 
-CEL also supports message, list, and map construction. The following expressions
-evaluate to true:
+CEL also supports construction of list, map, and protocol buffer objects. The
+following expressions evaluate to true:
 
 ```proto
 Account{user_id: 'Pokemon'}.user_id == 'Pokemon'
@@ -52,11 +52,12 @@ Account{user_id: 'Pokemon'}.user_id == 'Pokemon'
 
 CEL expressions are usually type checked, though the language is designed such
 that type checking is optional. Moreover, the language can deal with dynamically
-typed features of proto3 like `google.protobuf.Struct`. Consider the field
-`account.properties` which has type `Struct`. This type represents an untyped
-Object and is similar to JSON's notion of an Object. Many APIs use this type for
-representing user defined data which doesn't have a matching protobuf type.
-Within CEL, these objects support the same accesses and functions as messages:
+typed features of the most recent protocol buffer standard, [proto3][2], like
+`google.protobuf.Struct`. Consider the field `account.properties` which has type
+`Struct`. This type represents an untyped Object and is similar to JSON's notion
+of an Object. Many APIs use this type for representing user defined data which
+doesn't have a matching protocol buffer type. Within CEL, these objects support
+the same accesses and functions as protocol buffer types:
 
 ```proto
 has(account.properties.id) && size(account.properties.id) > 0
@@ -94,5 +95,5 @@ undecidable decisions to the runtime. However, a CEL expression which does not
 make use of any of the dynamic features based on `Struct` et.al can be always
 fully type checked at compile time.
 
-NOTE(go/api-expr-open): explain intuitively how && and || works if we decide to
-go for the commutative semantics.
+[1]: https://en.wikipedia.org/wiki/Protocol_Buffers
+[2]: https://developers.google.com/protocol-buffers/docs/proto3
