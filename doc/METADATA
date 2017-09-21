@@ -1,0 +1,27 @@
+# https://cs.corp.google.com/#google3/devtools/metadata/presubmit.proto
+
+name: "Common Expression Language"
+
+# Configure theme
+g3doc: {
+  headerfooter: {
+    # Theme: go/solace
+    name: "solace"
+  }
+  color_scheme: "teal"
+  contact_group: "protocontracts-dev"
+  site_search: COLLECTIONS
+  # doc_bug_component: nnnnn
+}
+
+# Markdown checks, see go/mdformat, go/g3doc-style
+presubmit: {
+  path_expression: "....md"
+  check_presubmit_service {
+    base { id: "CheckMarkdownFormat" }
+    address: "blade:fmtserver-presubmit"
+    options: "Markdown"
+    failure_status: WARNING
+  }
+  check_lint {}
+}

@@ -315,11 +315,10 @@ All predefined operators, functions and constants are listed in the table below.
 For each symbol, the available overloads are listed. Operator symbols use a
 notation like `_+_` where `_` is a placeholder for an argument.
 
-TODO(wgg): have better descriptions. The table is auto-generated so the
+TODO https://issuetracker.google.com/67014381 : have better descriptions. The table is auto-generated so the
 descriptions need to be updated in the code.
 
 <!-- BEGIN GENERATED DECL TABLE; DO NOT EDIT BELOW -->
-
 <table style="width=100%" border="1">
   <col width="15%">
   <col width="40%">
@@ -1314,7 +1313,6 @@ descriptions need to be updated in the code.
     </td>
   </tr>
 </table>
-
 <!-- END GENERATED DECL TABLE; DO NOT EDIT ABOVE -->
 
 ## Gradual Type Checking
