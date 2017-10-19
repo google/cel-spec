@@ -14,12 +14,12 @@ Conditional    ::= LogicalOr
                  | LogicalOr '?' Conditional ':' LogicalOr
 LogicalOr      ::= LogicalAnd
                  | LogicalOr '||' LogicalAnd
-LogicalAnd     ::= Equality
-                 | LogicalAnd '&&' Equality
-Equality       ::= Relation
-                 | Relation ( '==' | '!=') Relation
+LogicalAnd     ::= Relation
+                 | LogicalAnd '&&' Relation
 Relation       ::= Addition
-                 | Addition ( '<' | '<=' | '>' | '>=' ) Addition
+                 | Addition ( '==' | '!='
+                            | '<'  | '<=' | '>' | '>='
+                            | 'in' ) Addition
 Addition       ::= Multiplication
                  | Addition ( '+' | '-' ) Multiplication
 Multiplication ::= Primary
@@ -774,6 +774,25 @@ descriptions need to be updated in the code.
     </td>
     <td>
       map indexing
+    </td>
+  </tr>
+  <tr>
+    <th rowspan="2">
+      _in_
+    </th>
+    <td>
+      (A, list(A)) -> bool
+    </td>
+    <td>
+      list membership
+    </td>
+  </tr>
+  <tr>
+    <td>
+      (A, map(A, B)) -> bool
+    </td>
+    <td>
+      map key membership
     </td>
   </tr>
   <tr>
