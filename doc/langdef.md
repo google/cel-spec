@@ -156,17 +156,16 @@ treatment of Any.
 ## Types
 
 Every value in CEL has a runtime type which is a value by itself. The standard
-function `type(x)` denotes this type.
+function `type(x)` returns the type of expression `x`.
 
-As types are values, denotations of aggregate types are regular function
-applications. For example, `map(int, string)` denotes the type of maps from
-`int` to `string`, where `map` is simply a function applied to the values for
-types `int` and `string`.
+As types are values, those values (`int`, `string`, etc.) also have a type: the
+type `type`, which is an expression by itself which in turn also has type
+`type`. So
 
-As types are values, those values also have a type: the expression `int` has
-type `type(int)`, which is an expression by itself which in turn has type
-`type(type(int))`. Types of types have no actual use in CEL, but are included
-for consistency as excluding them would be more complicated than otherwise.
+*   `type(1)` evaluates to `int`
+*   `type("a")` evaluates to `string`
+*   `type(1) == string` evaluates to `false`
+*   `type(type(1)) == type(string)` evaluates to `true`
 
 ## Functions
 
