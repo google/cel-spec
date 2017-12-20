@@ -5,49 +5,72 @@ This page constitutes the reference for CEL. For a gentle introduction, see
 
 ## Syntax
 
-The grammar of CEL is defined below. We use `T?` for an optional token, but not
-other meta-notation beyond BNF.
+The grammar of CEL is defined below, using `|` for alternatives, `[]` for
+optional, `{}` for repeated, and `()` for grouping.
 
 ```grammar
-Expr           ::= Conditional
-Conditional    ::= LogicalOr
-                 | LogicalOr '?' Conditional ':' LogicalOr
-LogicalOr      ::= LogicalAnd
-                 | LogicalOr '||' LogicalAnd
-LogicalAnd     ::= Relation
-                 | LogicalAnd '&&' Relation
-Relation       ::= Addition
-                 | Addition ( '==' | '!='
-                            | '<'  | '<=' | '>' | '>='
-                            | 'in' ) Addition
-Addition       ::= Multiplication
-                 | Addition ( '+' | '-' ) Multiplication
-Multiplication ::= Primary
-                 | Multiplication ( '*' | '/' | '%' ) Primary
-Primary        ::= '!' Primary
-                 | '-' Primary
-                 | Primary '.' IDENT
-                 | Primary '.' IDENT '(' ')' | Primary '.' IDENT '(' ExprList ')'
-                 | Primary '[' Expr ']'
-                 | QualifiedIdent '{' '}' | QualifiedIdent '{' FieldInits ','? '}'
-                 | '{' '}' | '{' MapInits ','? '}'
-                 | '[' ']' | '[' ExprList ','? ']'
-                 | '(' Expr ')'
-                 | '.'? IDENT
-                 | LITERAL
-ExprList       ::= Expr | Expr ',' ExprList
-FieldInits     ::= IDENT ':' Expr | FieldInits ',' IDENT ':' Expr
-MapInits       ::= Expr ':' Expr | MapInits ',' Expr ':' Expr
-QualifiedIdent ::= '.'? IDENT | QualifiedIdent '.' IDENT
+Expr           = ConditionalOr ["?" ConditionalOr ":" Expr] ;
+ConditionalOr  = [ConditionalOr "||"] ConditionalAnd ;
+ConditionalAnd = [ConditionalAnd "&&"] Relation ;
+Relation       = [Relation Relop] Addition ;
+Relop          = "<" | "<=" | ">=" | ">" | "==" | "!=" | "in" ;
+Addition       = [Addition ("+" | "-")] Multiplication ;
+Multiplication = [Multiplication ("*" | "/" | "%")] Unary ;
+Unary          = Member
+               | "!" {"!"} Member
+               | "-" {"-"} Member
+               ;
+Member         = Primary
+               | Member "." IDENT ["(" [ExprList] ")"]
+               | Member "[" Expr "]"
+               | Member "{" [FieldInits] "}"
+               ;
+Primary        = ["."] IDENT ["(" [ExprList] ")"]
+               | "(" Expr ")"
+               | "[" [ExprList] "]"
+               | "{" [MapInits] "}"
+               | LITERAL
+               ;
+ExprList       = Expr {"," Expr} ;
+FieldInits     = IDENT ":" Expr {"," IDENT ":" Expr} ;
+MapInits       = Expr ":" Expr {"," Expr ":" Expr} ;
 ```
 
-The lexis is defined below. A form of regular expressions which are white-space
-insensitive is used:
+This grammar corresponds to the following operator precedence and associativity:
+
+Precedence | Operator        | Description                    | Associativity
+---------- | --------------- | ------------------------------ | -------------
+1          | ()              | Function call                  | Left-to-right
+           | .               | Qualified name or field access |
+           | []              | Indexing                       |
+           | {}              | Field initialization           |
+2          | - (unary)       | Negation                       | Right-to-left
+           | !               | Logical NOT                    |
+3          | *               | Multiplication                 | Left-to-right
+           | /               | Division                       |
+           | %               | Remainder                      |
+4          | +               | Addition                       |
+           | - (binary)      | Subtraction                    |
+5          | == != < > <= >= | Relations                      |
+           | in              | Inclusion test                 |
+6          | &&              | Logical AND                    |
+7          | \|\|            | Logical OR                     |
+8          | ?:              | Conditional                    | Right-to-left
+
+Operator subexpressions are treated as calls to specially-named built-in
+functions. For instance, the expression `e1 + e2` is dispatched to the function
+`_+_` with arguments `e1` and `e2`. Note that since`_+_` is not an identifier
+(see the lexis below), there would be no way to write this as a normal function
+call.
+
+The lexis is defined below. As is typical, the `WHITESPACE` and `COMMENT`
+productions are only used to recognize separate lexical elements and are ignored
+by the grammar.
 
 ```
-IDENT          ::= [_a-zA-Z][_a-zA-Z0-9]*
+IDENT          ::= [_a-zA-Z][_a-zA-Z0-9]* - RESERVED
 LITERAL        ::= INT_LIT | UINT_LIT | FLOAT_LIT | STRING_LIT | BYTES_LIT
-                 | DURATION_LIT | TIMESTAMP_LIT
+                 | BOOL_LIT | NULL_LIT
 INT_LIT        ::= DIGIT+ | 0x HEXDIGIT+
 UINT_LIT       ::= INT_LIT [uU]
 FLOAT_LIT      ::= DIGIT* . DIGIT+ EXPONENT? | DIGIT+ EXPONENT
@@ -62,16 +85,36 @@ STRING_LIT     ::= [rR]? ( "    ~( " | NEWLINE )*  "
 BYTES_LIT      ::= [bB] STRING_LIT
 ESCAPE         ::= \ [bfnrt"'\]
                  | \ u HEXDIGIT HEXDIGIT HEXDIGIT HEXDIGIT
-                 | \ [0-7] [0-7] [0-7]
+                 | \ [0-3] [0-7] [0-7]
 NEWLINE        ::= \r\n | \r | \n
-DURATION_LIT   ::= FLOAT_LIT [sS]
-TIMESTAMP_LIT  ::= [tT] STRING_LIT
+BOOL_LIT       ::= "true" | "false"
+NULL_LIT       ::= "null"
+RESERVED       ::= BOOL_LIT | NULL_LIT | "in"
+                 | "for" | "if" | "function" | "return" | "void"
+                 | "import" | "package" | "as" | "let" | "const"
+WHITESPACE     ::= [\t\n\f\r ]+
+COMMENT        ::= '//' ~NEWLINE* NEWLINE
 ```
 
-For the sake of a readable representation, the escape sequences (`ESCAPE`) are
-kept implicit in string tokens. The meaning is that in strings without the `r`
-or `R` (raw) prefix, `ESCAPE` is processed, whereas in strings with they stay
-uninterpreted.
+Note that negative numbers are recognized as positives with the unary `-`
+operator from the grammar. For the sake of a readable representation, the escape
+sequences (`ESCAPE`) are kept implicit in string tokens. The meaning is that in
+strings without the `r` or `R` (raw) prefix, `ESCAPE` is processed, whereas in
+strings with they stay uninterpreted.
+
+The following identifiers are reserved due to their use as literal values or in
+the syntax:
+
+    false in null true
+
+The following identifiers are reserved to allow easier embedding of CEL into a
+host language.
+
+    as const else for function if import let package return void
+
+In general it is a bad idea for those defining contexts or extensions to use
+identifiers that are reserved words in programming languages which might embed
+CEL.
 
 ## Values
 
@@ -131,7 +174,7 @@ A function value represents a computation which delivers a new value based on
 zero or more arguments. Function applications have no observable side-effects
 (there maybe side-effects like logging or such which are not observable from
 CEL). The default argument evaluation strategy for functions is strict, with
-exceptions from this rule discussed in [Argument Evaluation](#arg-eval).
+exceptions from this rule discussed in "Argument Evaluation".
 
 Functions are specified by a set of overloads. Each overload defines the number
 and type of arguments and the type of the result, as well as an opaque
@@ -199,6 +242,16 @@ implementation dependent and usually highly curated. For example, an application
 domain of CEL can add a new overload to the `size` function above, provided this
 overload's argument types do not overlap with any existing overload. For
 methodological reasons, CEL disallows to add overloads to operators.
+
+## Type Conversions
+
+Note that currently there are no automatic arithmetic conversions for the
+numeric types (`int`, `uint`, and `double`). The arithmetic operators typically
+contain overloads for arguments of the same numeric type, but not for mixed-type
+arguments. Therefore an expression like `1 + 1u` is going to fail to dispatch.
+To perform mixed-type arithmetic, use explicit conversion functions such as
+`uint(1) + 1u`. Such explicit conversions will maintain their meaning even if
+arithmetic conversions are added in the future.
 
 ### Macros
 
@@ -276,8 +329,7 @@ NOTE(go/api-expr-open): heterogenous vs homogeneous lists and maps.
 ## Runtime Errors
 
 In general, when a runtime error is produced, expression evaluation is
-terminated; exceptions to this rule are discussed in [Argument
-Evaluation](#arg-eval).
+terminated; exceptions to this rule are discussed in "Argument Evaluation".
 
 CEL provides two built-in runtime errors; implementations may add more. The
 built-in errors are `no_matching_overload` and `no_such_field`; those errors
@@ -319,6 +371,7 @@ TODO https://issuetracker.google.com/67014381 : have better descriptions. The ta
 descriptions need to be updated in the code.
 
 <!-- BEGIN GENERATED DECL TABLE; DO NOT EDIT BELOW -->
+
 <table style="width=100%" border="1">
   <col width="15%">
   <col width="40%">
@@ -1332,6 +1385,7 @@ descriptions need to be updated in the code.
     </td>
   </tr>
 </table>
+
 <!-- END GENERATED DECL TABLE; DO NOT EDIT ABOVE -->
 
 ## Gradual Type Checking
