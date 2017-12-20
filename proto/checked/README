@@ -1,0 +1,4 @@
+# Protocol Buffer Definitions
+
+These directories contain the .proto files defining the binary representations
+used by CEL language tools.
