@@ -24,9 +24,14 @@ proto_library(
     ],
 )
 
-proto_library( # IGNORE go_proto_library
-    name = "checked_go_proto",
+go_proto_library(
+    name = "checked_protos_go_proto",
     deps = [":checked_protos"],
+)
+
+alias(
+    name = "checked_go_proto",
+    actual = ":checked_protos_go_proto",
 )
 
 java_proto_library(
@@ -39,7 +44,7 @@ java_lite_proto_library(
     deps = [":checked_protos"],
 )
 
-proto_library( # IGNORE jspb_proto_library
+jspb_proto_library(
     name = "checked_jspb_proto",
     deps = [":checked_protos"],
 )
