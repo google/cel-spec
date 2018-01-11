@@ -44,8 +44,3 @@ java_lite_proto_library(
     name = "checked_java_proto_lite",
     deps = [":checked_protos"],
 )
-
-proto_library( # IGNORE jspb_proto_library
-    name = "checked_jspb_proto",
-    deps = [":checked_protos"],
-)

@@ -43,11 +43,6 @@ java_lite_proto_library(
     deps = [":value_protos"],
 )
 
-proto_library( # IGNORE jspb_proto_library
-    name = "value_jspb_proto",
-    deps = [":value_protos"],
-)
-
 proto_library(
     name = "syntax_protos",
     srcs = [
@@ -72,7 +67,7 @@ go_proto_library(
     importpath = "github.com/google/cel-spec/proto/v1",
 )
 
-proto_library( # IGNORE py_proto_library
+py_proto_library(
     name = "syntax_py_pb2",
     # api_version = 2,
     deps = [":syntax_protos"],
@@ -85,10 +80,5 @@ java_proto_library(
 
 java_lite_proto_library(
     name = "syntax_java_proto_lite",
-    deps = [":syntax_protos"],
-)
-
-proto_library( # IGNORE jspb_proto_library
-    name = "syntax_jspb_proto",
     deps = [":syntax_protos"],
 )
