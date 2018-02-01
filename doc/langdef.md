@@ -56,18 +56,18 @@ This grammar corresponds to the following operator precedence and associativity:
 Precedence | Operator        | Description                    | Associativity
 ---------- | --------------- | ------------------------------ | -------------
 1          | ()              | Function call                  | Left-to-right
-           | .               | Qualified name or field access |
-           | []              | Indexing                       |
-           | {}              | Field initialization           |
+&nbsp;     | .               | Qualified name or field access |
+&nbsp;     | []              | Indexing                       |
+&nbsp;     | {}              | Field initialization           |
 2          | - (unary)       | Negation                       | Right-to-left
-           | !               | Logical NOT                    |
+&nbsp;     | !               | Logical NOT                    |
 3          | *               | Multiplication                 | Left-to-right
-           | /               | Division                       |
-           | %               | Remainder                      |
+&nbsp;     | /               | Division                       |
+&nbsp;     | %               | Remainder                      |
 4          | +               | Addition                       |
-           | - (binary)      | Subtraction                    |
+&nbsp;     | - (binary)      | Subtraction                    |
 5          | == != < > <= >= | Relations                      |
-           | in              | Inclusion test                 |
+&nbsp;     | in              | Inclusion test                 |
 6          | &&              | Logical AND                    |
 7          | \|\|            | Logical OR                     |
 8          | ?:              | Conditional                    | Right-to-left
@@ -221,14 +221,14 @@ multiline string literals can be used for byte literals.
 
 Escape sequences are a backslash (`\`) followed by one of the following:
 
-*   A single-quote(`'`), double-quote(`"`), or backslash(`\\ `), representing
+*   A single-quote(`'`), double-quote(`"`), or backslash(`\`), representing
     itself.
 *   A code for whitespace:
-    *   b: backspace
-    *   n: line feed
-    *   t: horizontal tab
-    *   r: carriage return
-    *   v: vertical tab
+    *   `b`: backspace
+    *   `n`: line feed
+    *   `t`: horizontal tab
+    *   `r`: carriage return
+    *   `v`: vertical tab
 *   A `u` followed by four hexadecimal characters, encoding a Unicode code point
     in the BMP. (Presumably, surrogate pairs can be used for characters in other
     Unicode planes.)
@@ -237,19 +237,20 @@ Escape sequences are a backslash (`\`) followed by one of the following:
 
 Examples:
 
-CEL Literal | Meaning
------------ | --------------------------------------------------------------
-""          | Empty string
-'""'        | String of two double-quote characters
-'''x''x'''  | String of four characters "x''x"
-"\\""       | String of one double-quote character
-r"\\"       | String of one backslash character
-b"abc"      | Byte sequence of 61, 62, 63
-b"&yuml;"   | Sequence of bytes 204 and 191 (UTF-8 of &yuml;)
-b"\303\277" | Also sequence of bytes 204 and 191
-"\303\277"  | String of "&lgrave;&iquest;" (code points 204, 191)
-"\377"      | String of "&yuml;" (code point 255)
-b"\377"     | Sequence of byte 255, _not_ the UTF-8 representation of &yuml;
+CEL Literal  | Meaning
+------------ | --------------------------------------------------------------
+`""`         | Empty string
+`'""'`       | String of two double-quote characters
+`'''x''x'''` | String of four characters "x''x"
+`"\""`       | String of one double-quote character
+`"\\"`       | String of one backslash character
+`r"\\"`      | String of two backslash characters
+`b"abc"`     | Byte sequence of 61, 62, 63
+`b"&yuml;"`  | Sequence of bytes 204 and 191 (UTF-8 of &yuml;)
+`b"\303\277"`| Also sequence of bytes 204 and 191
+`"\303\277"` | String of "&Igrave;&iquest;" (code points 204, 191)
+`"\377"`     | String of "&yuml;" (code point 255)
+`b"\377"`    | Sequence of byte 255 (_not_ UTF-8 of &yuml;)
 
 ### List and Map Values
 
@@ -321,16 +322,14 @@ in the other direction.
 
 | Protocol Buffer Type             | CEL Type                               |
 | -------------------------------- | -------------------------------------- |
-| int32, int64, sing32, sint64,    | int                                    |
-: sfixed32, sfixed64               :                                        :
+| int32, int64, sing32, sint64, sfixed32, sfixed64    | int                 |
 | uint32, uint64, fixed32, fixed64 | uint                                   |
 | float, double                    | double                                 |
 | bool, string, bytes              | same                                   |
 | enum                             | int                                    |
 | repeated                         | list                                   |
 | map                              | map                                    |
-| oneof                            | options expanded individually, at most |
-:                                  : one is set                             :
+| oneof                 | options expanded individually, at most one is set |
 | message                          | same                                   |
 
 Signed integers, unsigned integers, and floating point numbers are converted to
@@ -378,13 +377,10 @@ google.protobuf package to other types.
 
 | google.protobuf message | CEL Conversion                                     |
 | ----------------------- | -------------------------------------------------- |
-| Any                     | dynamically converted to the contained message     |
-:                         : type, or error                                     :
+| Any          | dynamically converted to the contained message type, or error |
 | ListValue               | list of Value messages                             |
 | Struct                  | map (with string keys, Value values)               |
-| Value                   | dynamically converted to the contained message     |
-:                         : type (null, double, string, bool, Struct, or       :
-:                         : ListValue)                                         :
+| Value | dynamically converted to the contained message type (null, double, string, bool, Struct, or ListValue) |
 | wrapper types           | converted to eponymous type                        |
 
 The wrapper types are BoolValue, BytesValue, DoubleValue, EnumValue, FloatValue,
