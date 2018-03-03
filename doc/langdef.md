@@ -7,16 +7,16 @@ This page constitutes the reference for CEL. For a gentle introduction, see
 
 In the taxonomy of programming languages, CEL is:
 
-*   **strongly-typed:** each value has a well-defined type, and operators and
-    functions can only work on values of certain expected types;
-*   **memory-safe:** programs cannot express access to unrelated memory, such as
+   **memory-safe:** programs cannot express access to unrelated memory, such as
     out-of-bounds array indexes or use-after-free pointer dereferences;
-*   **dynamically-typed:** types are associated with values, not with variables
+*   **side-effect-free:** a CEL program only computes an output from its inputs;
+*   **terminating:** CEL programs cannot loop forever;
+*   **strongly-typed:** values have a well-defined type, and operators and
+    functions check that their arguments have the expected types;
+**   **dynamically-typed:** types are associated with values, not with variables
     or expressions, and type safety is enforced at runtime;
 *   **gradually-typed:** an optional type-checking phase before runtime can
-    detect and reject some programs which would violate type constraints;
-*   **side-effect-free:** a CEL program only computes an output from its inputs;
-*   **terminating:** CEL programs cannot loop forever.
+    detect and reject some programs which would violate type constraints.
 
 ## Syntax
 
@@ -156,7 +156,7 @@ If name qualification is mixed with field selection, the longest prefix of the
 name which resolves in the current lexical scope is used. For example, if
 `a.b.c` resolves to a message declaration, and `a.b` does so as well with `c` a
 possible field selection, then `a.b.c` takes priority over the interpretation
-`(a.b).c`. Explicit parentheses can be used to force the field selection
+`(a.b).c`. Explicit parentheses can be used to choose the field selection
 interpretation.
 
 ## Values
@@ -275,21 +275,16 @@ Lists are `list(A)` for the homogenous type `A` of list elements. Maps are
 [Gradual Type Checking](#gradual-type-checking).
 
 Any protocol buffer message is a CEL value, and each message type is its own CEL
-type, represented as its name (e.g. `google.protobuf.timestamp`).
-Some message types will be declared to be _opaque_, which means that CEL
-expressions are not allowed to form literals of this type or to access the
-message fields with the selection operator (see below). Opaque messages can only
-be provided by variables in the evaluation context or returned from functions,
-and they can only be used by providing them as arguments to functions. For
-instance, messages of type `google.protobuf.timestamp` are opaque, and CEL
-expressions will not name their fields directly.
+type, represented as its fully-qualified name.
 
 A list can be denoted by the expression `[e1, e2, ..., eN]`, a map by `{ek1:
 ev1, ek2: ev2, ..., ekN: evN}`, and a message by `M{f1: e1, f2: e2, ..., fN: eN}`,
-where `M` must be a simple or qualified name which resolves to a messsage type
-(see [Name Resolution](#resolution)). It is an error to have duplicate keys or
-field names. The empty list, map, and message are `[]`, `{}`, and `M{}`,
-respectively.
+where `M` must be a simple or qualified name which resolves to a message type
+(see [Name Resolution](#name-resolution)). For a map, the entry keys are
+sub-expressions that must evaluate to values of an allowed type (`int`, `uint`,
+`bool`, or `string`).  For a message, the field names are identifiers.  It is
+an error to have duplicate keys or field names. The empty list, map, and message
+are `[]`, `{}`, and `M{}`, respectively.
 
 See [Field Selection](#field-selection) for accessing elements of lists, maps,
 and messages.
@@ -317,6 +312,25 @@ type `type`, which is an expression by itself which in turn also has type
 *   `type("a")` evaluates to `string`
 *   `type(1) == string` evaluates to `false`
 *   `type(type(1)) == type(string)` evaluates to `true`
+
+### Abstract Types
+
+A CEL implementation can add new types to the language.  These types will be
+given names in the same namespace as the other types, but will have no special 
+upport in the language syntax.  The only way to construct or use values of these
+abstract types is through functions which the implementor will also provide.
+
+Commonly, an abstract type will have a representation as a protocol buffer, so
+that it can be stored or transmitted across a network.  In this case, the abstract
+type will be given the same name as the protocol buffer, which will prevent CEL
+programs from being able to use that particular protocol buffer message type;
+they will not be able to construct values of that type by message expressions
+nor access the message fields.  The abstract type remains abstract.
+
+By default, CEL uses `google.protobuf.Timestamp` and `google.protobuf.Duration`
+as abstract types.  The standard functions provide ways to construct and manipulate
+these values, but CEL programs cannot construct them with message expressions
+or access their message fields.
 
 ### Protocol Buffer Data Conversion
 
