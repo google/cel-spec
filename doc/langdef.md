@@ -120,7 +120,8 @@ the syntax:
 The following identifiers are reserved to allow easier embedding of CEL into a
 host language.
 
-    as const else for function if import let package return void
+    as break const continue else for function if import let loop package
+    namespace return var void while
 
 In general it is a bad idea for those defining contexts or extensions to use
 identifiers that are reserved words in programming languages which might embed
@@ -128,11 +129,11 @@ CEL.
 
 ### Name Resolution
 
-A CEL expression is parsed in the scope of a specific protocol buffer package,
-which controls the interpretation of names. The scope is set by the application
-context of an expression. A CEL expression can contain simple names as in `a` or
-qualified names as in `a.b`. The meaning of such expressions is a combination of
-one or more of:
+A CEL expression is parsed in the scope of a specific protocol buffer package
+or message, which controls the interpretation of names. The scope is set by
+the application context of an expression. A CEL expression can contain simple
+names as in `a` or qualified names as in `a.b`. The meaning of such expressions
+is a combination of one or more of:
 
 *   Variables and Functions: some simple names refer to variables in the
     execution context, standard functions, or other name bindings provided by
@@ -197,7 +198,7 @@ arithmetic conversions are added in the future.
 
 CEL provides no way to control the finer points of floating-point arithmetic,
 such as expression evaluation, rounding mode, or exception handling. However,
-any two not-a-number values will compare equal even if their underlying
+any two not-a-number values will compare unequal even if their underlying
 properties are different.
 
 ### String and Bytes Values
@@ -267,12 +268,16 @@ Lists are ordered sequences of values.
 
 Maps are a set of key values, and a mapping from these keys to arbitrary values.
 Key values must be an allowed key type: `int`, `uint`, `bool`, or `string`.
+Thus maps are the union of what's allowed in protocol buffer maps and JSON
+objects.
 
 Note that the type checker uses a finer-grained notion of list and map types.
 Lists are `list(A)` for the homogenous type `A` of list elements. Maps are
 `map(K, V)` for maps with keys of type `K` and values of type `V`.  The type
 `dyn` is used for heterogeneous values  See
-[Gradual Type Checking](#gradual-type-checking).
+[Gradual Type Checking](#gradual-type-checking). But these constraints are
+only enforced within the type checker; at runtime, lists and maps can have
+heterogeneous types.
 
 Any protocol buffer message is a CEL value, and each message type is its own CEL
 type, represented as its fully-qualified name.
@@ -400,7 +405,7 @@ google.protobuf package to other types.
 | `Any`        | dynamically converted to the contained message type, or error |
 | `ListValue`             | list of `Value` messages                           |
 | `Struct`                | map (with string keys, `Value` values)             |
-| `Value` | dynamically converted to the contained message type (null, double, string, bool, `Struct`, or `ListValue`) |
+| `Value` | dynamically converted to the contained type (null, double, string, bool, `Struct`, or `ListValue`) |
 | wrapper types           | converted to eponymous type                        |
 
 The wrapper types are `BoolValue`, `BytesValue`, `DoubleValue`, `EnumValue`, `FloatValue`,
