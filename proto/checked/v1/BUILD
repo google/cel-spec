@@ -24,16 +24,6 @@ proto_library(
     ],
 )
 
-go_proto_library(
-    name = "checked_protos_go_proto",
-    deps = [":checked_protos"],
-)
-
-alias(
-    name = "checked_go_proto",
-    actual = ":checked_protos_go_proto",
-)
-
 java_proto_library(
     name = "checked_java_proto",
     deps = [":checked_protos"],
@@ -41,10 +31,5 @@ java_proto_library(
 
 java_lite_proto_library(
     name = "checked_java_proto_lite",
-    deps = [":checked_protos"],
-)
-
-jspb_proto_library(
-    name = "checked_jspb_proto",
     deps = [":checked_protos"],
 )

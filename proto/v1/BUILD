@@ -25,16 +25,6 @@ proto_library(
     ],
 )
 
-go_proto_library(
-    name = "value_protos_go_proto",
-    deps = [":value_protos"],
-)
-
-alias(
-    name = "value_go_proto",
-    actual = ":value_protos_go_proto",
-)
-
 java_proto_library(
     name = "value_java_proto",
     deps = [":value_protos"],
@@ -42,11 +32,6 @@ java_proto_library(
 
 java_lite_proto_library(
     name = "value_java_proto_lite",
-    deps = [":value_protos"],
-)
-
-jspb_proto_library(
-    name = "value_jspb_proto",
     deps = [":value_protos"],
 )
 
@@ -68,22 +53,6 @@ proto_library(
     ],
 )
 
-go_proto_library(
-    name = "syntax_protos_go_proto",
-    deps = [":syntax_protos"],
-)
-
-alias(
-    name = "syntax_go_proto",
-    actual = ":syntax_protos_go_proto",
-)
-
-py_proto_library(
-    name = "syntax_py_pb2",
-    # api_version = 2,
-    deps = [":syntax_protos"],
-)
-
 java_proto_library(
     name = "syntax_java_proto",
     deps = [":syntax_protos"],
@@ -91,10 +60,5 @@ java_proto_library(
 
 java_lite_proto_library(
     name = "syntax_java_proto_lite",
-    deps = [":syntax_protos"],
-)
-
-jspb_proto_library(
-    name = "syntax_jspb_proto",
     deps = [":syntax_protos"],
 )
