@@ -27,12 +27,15 @@ proto_library(
     ],
 )
 
+<<<<<<< HEAD
 go_proto_library(
     name = "value_go_proto",
     proto = ":value_protos",
     importpath = "github.com/google/cel-spec/proto/v1",
 )
 
+=======
+>>>>>>> Remove BUILD targets not supported by Bazel.
 java_proto_library(
     name = "value_java_proto",
     deps = [":value_protos"],
@@ -65,12 +68,6 @@ go_proto_library(
     name = "syntax_go_proto",
     proto = ":syntax_protos",
     importpath = "github.com/google/cel-spec/proto/v1",
-)
-
-py_proto_library(
-    name = "syntax_py_pb2",
-    # api_version = 2,
-    deps = [":syntax_protos"],
 )
 
 java_proto_library(

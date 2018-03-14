@@ -1,5 +1,1 @@
-bazel-bin
-bazel-cel-spec
-bazel-genfiles
-bazel-out
-bazel-testlogs
+bazel-*
