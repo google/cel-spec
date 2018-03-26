@@ -3,6 +3,8 @@ package(
     default_visibility = ["//visibility:public"],
 )
 
+load("@io_bazel_rules_go//proto:def.bzl", "go_proto_library")
+
 licenses(["notice"])  # Apache 2.0
 
 exports_files(["LICENSE"])
@@ -25,9 +27,10 @@ proto_library(
     ],
 )
 
-proto_library( # IGNORE go_proto_library
+go_proto_library(
     name = "value_go_proto",
-    deps = [":value_protos"],
+    proto = ":value_protos",
+    importpath = "github.com/google/cel-spec/proto/v1",
 )
 
 java_proto_library(
@@ -63,9 +66,10 @@ proto_library(
     ],
 )
 
-proto_library( # IGNORE go_proto_library
+go_proto_library(
     name = "syntax_go_proto",
-    deps = [":syntax_protos"],
+    proto = ":syntax_protos",
+    importpath = "github.com/google/cel-spec/proto/v1",
 )
 
 proto_library( # IGNORE py_proto_library
