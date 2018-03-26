@@ -5,6 +5,8 @@ package(
     default_visibility = ["//visibility:public"],
 )
 
+load("@io_bazel_rules_go//proto:def.bzl", "go_proto_library")
+
 licenses(["notice"])  # Apache 2.0
 
 exports_files(["LICENSE"])
@@ -27,15 +29,12 @@ proto_library(
     ],
 )
 
-<<<<<<< HEAD
 go_proto_library(
     name = "value_go_proto",
     proto = ":value_protos",
     importpath = "github.com/google/cel-spec/proto/v1",
 )
 
-=======
->>>>>>> Remove BUILD targets not supported by Bazel.
 java_proto_library(
     name = "value_java_proto",
     deps = [":value_protos"],
