@@ -1,9 +1,9 @@
+load("@io_bazel_rules_go//proto:def.bzl", "go_proto_library")
+
 package(
     # default_compatible_with = ["//buildenv/target:appengine"],
     default_visibility = ["//visibility:public"],
 )
-
-load("@io_bazel_rules_go//proto:def.bzl", "go_proto_library")
 
 licenses(["notice"])  # Apache 2.0
 
