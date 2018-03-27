@@ -1,3 +1,5 @@
+load("@io_bazel_rules_go//proto:def.bzl", "go_proto_library")
+
 package(
     # default_compatible_with = ["//buildenv/target:appengine"],
     default_visibility = ["//visibility:public"],
@@ -21,6 +23,15 @@ proto_library(
         "@com_google_protobuf//:any_proto",
         "@com_google_protobuf//:empty_proto",
         "@com_google_protobuf//:struct_proto",
+    ],
+)
+
+go_proto_library(
+    name = "checked_go_proto",
+    importpath = "github.com/google/cel-spec/proto/checked/v1",
+    proto = ":checked_protos",
+    deps = [
+        "//proto/v1:syntax_go_proto",
     ],
 )
 

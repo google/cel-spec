@@ -1,3 +1,5 @@
+load("@io_bazel_rules_go//proto:def.bzl", "go_proto_library")
+
 package(
     # default_compatible_with = ["//buildenv/target:appengine"],
     default_visibility = ["//visibility:public"],
@@ -23,6 +25,12 @@ proto_library(
         "@com_google_protobuf//:struct_proto",
         "@com_google_protobuf//:timestamp_proto",
     ],
+)
+
+go_proto_library(
+    name = "value_go_proto",
+    proto = ":value_protos",
+    importpath = "github.com/google/cel-spec/proto/v1",
 )
 
 java_proto_library(
@@ -51,6 +59,12 @@ proto_library(
         "@com_google_protobuf//:struct_proto",
         "@com_google_protobuf//:timestamp_proto",
     ],
+)
+
+go_proto_library(
+    name = "syntax_go_proto",
+    proto = ":syntax_protos",
+    importpath = "github.com/google/cel-spec/proto/v1",
 )
 
 java_proto_library(
