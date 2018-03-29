@@ -13,7 +13,7 @@ It has these top-level messages:
 	Decl
 	Reference
 */
-package v1
+package checked
 
 import proto "github.com/golang/protobuf/proto"
 import fmt "fmt"

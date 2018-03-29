@@ -28,7 +28,7 @@ proto_library(
 
 go_proto_library(
     name = "checked_go_proto",
-    importpath = "github.com/google/cel-spec/proto/checked/v1",
+    importpath = "github.com/google/cel-spec/proto/checked/v1/checked",
     proto = ":checked_protos",
     deps = [
         "//proto/v1:syntax_go_proto",
