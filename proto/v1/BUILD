@@ -30,7 +30,7 @@ proto_library(
 go_proto_library(
     name = "value_go_proto",
     proto = ":value_protos",
-    importpath = "github.com/google/cel-spec/proto/v1",
+    importpath = "github.com/google/cel-spec/proto/v1/value",
 )
 
 java_proto_library(
@@ -64,7 +64,7 @@ proto_library(
 go_proto_library(
     name = "syntax_go_proto",
     proto = ":syntax_protos",
-    importpath = "github.com/google/cel-spec/proto/v1",
+    importpath = "github.com/google/cel-spec/proto/v1/syntax",
 )
 
 java_proto_library(

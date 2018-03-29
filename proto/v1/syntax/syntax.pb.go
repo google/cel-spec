@@ -13,7 +13,7 @@ It has these top-level messages:
 	Constant
 	SourceInfo
 */
-package v1
+package syntax
 
 import proto "github.com/golang/protobuf/proto"
 import fmt "fmt"

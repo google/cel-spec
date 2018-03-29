@@ -12,7 +12,7 @@ It has these top-level messages:
 	ListValue
 	MapValue
 */
-package v1
+package value
 
 import proto "github.com/golang/protobuf/proto"
 import fmt "fmt"
