@@ -3,21 +3,6 @@
 This page constitutes the reference for CEL. For a gentle introduction, see
 [Intro](intro.md).
 
-## Overview
-
-In the taxonomy of programming languages, CEL is:
-
-   **memory-safe:** programs cannot express access to unrelated memory, such as
-    out-of-bounds array indexes or use-after-free pointer dereferences;
-*   **side-effect-free:** a CEL program only computes an output from its inputs;
-*   **terminating:** CEL programs cannot loop forever;
-*   **strongly-typed:** values have a well-defined type, and operators and
-    functions check that their arguments have the expected types;
-**   **dynamically-typed:** types are associated with values, not with variables
-    or expressions, and type safety is enforced at runtime;
-*   **gradually-typed:** an optional type-checking phase before runtime can
-    detect and reject some programs which would violate type constraints.
-
 ## Syntax
 
 The grammar of CEL is defined below, using `|` for alternatives, `[]` for
@@ -56,21 +41,27 @@ This grammar corresponds to the following operator precedence and associativity:
 Precedence | Operator        | Description                    | Associativity
 ---------- | --------------- | ------------------------------ | -------------
 1          | ()              | Function call                  | Left-to-right
-&nbsp;     | .               | Qualified name or field access |
-&nbsp;     | []              | Indexing                       |
-&nbsp;     | {}              | Field initialization           |
+           | .               | Qualified name or field access |
+           | []              | Indexing                       |
+           | {}              | Field initialization           |
 2          | - (unary)       | Negation                       | Right-to-left
-&nbsp;     | !               | Logical NOT                    |
+           | !               | Logical NOT                    |
 3          | *               | Multiplication                 | Left-to-right
-&nbsp;     | /               | Division                       |
-&nbsp;     | %               | Remainder                      |
+           | /               | Division                       |
+           | %               | Remainder                      |
 4          | +               | Addition                       |
-&nbsp;     | - (binary)      | Subtraction                    |
+           | - (binary)      | Subtraction                    |
 5          | == != < > <= >= | Relations                      |
-&nbsp;     | in              | Inclusion test                 |
+           | in              | Inclusion test                 |
 6          | &&              | Logical AND                    |
 7          | \|\|            | Logical OR                     |
 8          | ?:              | Conditional                    | Right-to-left
+
+Operator subexpressions are treated as calls to specially-named built-in
+functions. For instance, the expression `e1 + e2` is dispatched to the function
+`_+_` with arguments `e1` and `e2`. Note that since`_+_` is not an identifier
+(see the lexis below), there would be no way to write this as a normal function
+call.
 
 The lexis is defined below. As is typical, the `WHITESPACE` and `COMMENT`
 productions are only used to recognize separate lexical elements and are ignored
@@ -109,8 +100,7 @@ Note that negative numbers are recognized as positives with the unary `-`
 operator from the grammar. For the sake of a readable representation, the escape
 sequences (`ESCAPE`) are kept implicit in string tokens. The meaning is that in
 strings without the `r` or `R` (raw) prefix, `ESCAPE` is processed, whereas in
-strings with they stay uninterpreted. See documentation of string literals
-below.
+strings with they stay uninterpreted.
 
 The following identifiers are reserved due to their use as literal values or in
 the syntax:
@@ -120,191 +110,50 @@ the syntax:
 The following identifiers are reserved to allow easier embedding of CEL into a
 host language.
 
-    as break const continue else for function if import let loop package
-    namespace return var void while
+    as const else for function if import let package return void
 
 In general it is a bad idea for those defining contexts or extensions to use
 identifiers that are reserved words in programming languages which might embed
 CEL.
 
-### Name Resolution
-
-A CEL expression is parsed in the scope of a specific protocol buffer package
-or message, which controls the interpretation of names. The scope is set by
-the application context of an expression. A CEL expression can contain simple
-names as in `a` or qualified names as in `a.b`. The meaning of such expressions
-is a combination of one or more of:
-
-*   Variables and Functions: some simple names refer to variables in the
-    execution context, standard functions, or other name bindings provided by
-    the CEL application.
-*   Field selection: appending a period and identifier to an expression could
-    indicate that we're accessing a field within a protocol buffer or map.
-*   Protocol buffer package names: a simple or qualified name could represent an
-    absolute or relative name in the protocol buffer package namespace. Package
-    names must be followed by a message type or enum constant.
-*   Protocol buffer message types and enum constants: following an optional
-    protocol buffer package name, a simple or qualified name could refer to a
-    message type or enum constant in the package's namespace.
-
-Resolution works as follows. If `a.b` is a name to be resolved in the context of
-a protobuf declaration with scope `A.B`, then resolution is attempted, in order,
-as `A.B.a.b`, `A.a.b`, and finally `a.b`. To override this behavior, one can use
-`.a.b`; this name will only be attempted to be resolved in the root scope, i.e.
-as `a.b`.
-
-If name qualification is mixed with field selection, the longest prefix of the
-name which resolves in the current lexical scope is used. For example, if
-`a.b.c` resolves to a message declaration, and `a.b` does so as well with `c` a
-possible field selection, then `a.b.c` takes priority over the interpretation
-`(a.b).c`. Explicit parentheses can be used to choose the field selection
-interpretation.
-
 ## Values
 
 Values in CEL represent any of the following:
 
-Type          | Description
-------------- | ---------------------------------------------------------------
-`int`         | 64-bit signed integers
-`uint`        | 64-bit unsigned integers
-`double`      | 64-bit IEEE floating-point numbers
-`bool`        | Booleans (`true` or `false`)
-`string`      | Strings of UTF-8 code points
-`bytes`       | Byte sequences
-`list`        | Lists of values
-`map`         | Associative arrays with `int`, `uint`, `bool`, or `string` keys
-`null_type`   | The value `null`
-message names | Protocol buffer messages
-`type`        | Values representing the types in the first column
+1.  *Simple Values*, as they come from protocol buffers: booleans, integers,
+    floating-point numbers, strings, byte strings, and messages. Numbers are
+    normalized to the highest precision supported by protobuf, i.e. int32 as
+    int64, uint32 as uint64, and float as double. Enum values are represented as
+    integers. In addition, the well-known types `Duration` and `Timestamp` are
+    not treated as messages, but as primitive values of the given type.
+2.  *Null Value*, a special value to represent an absent value, for example, the
+    default value of messages.
+3.  *Aggregate Values*, as they are implied by `repeated` and `map` in protobuf
+    messages: lists of the above values, and maps of the above values, with the
+    restriction on allowed map keys implied by protobuf.
+4.  *Type Values*. See [Types](#types) below.
+5.  *Function Values*. See [Functions](#functions) below.
 
-### Numeric Values
+### Dynamic Values
 
-CEL supports only 64-bit integers and 64-bit IEEE double-precision
-floating-point. We only support positive, decimal integer literals; negative
-integers are produced by the unary negation operator. Note that the integer 7 as
-an `int` is a different value than 7 as a `uint`, which would be written `7u`.
-Double-precision floating-point is also supported, and the integer 7 would be
-written `7.`, `7.0`, `7e0`, or any equivalent representation using a decimal
-point or exponent.
+Newer versions of protobuf support the well-known types `Struct`, `Value`,
+`Any`, and various wrapper messages for primitives like `Int32Value`. Those
+types have no equivalent in CEL, but instead are automatically converted to one
+of the basic representations introduced in [Values](#values) above as follows:
 
-Note that currently there are no automatic arithmetic conversions for the
-numeric types (`int`, `uint`, and `double`). The arithmetic operators typically
-contain overloads for arguments of the same numeric type, but not for mixed-type
-arguments. Therefore an expression like `1 + 1u` is going to fail to dispatch.
-To perform mixed-type arithmetic, use explicit conversion functions such as
-`uint(1) + 1u`. Such explicit conversions will maintain their meaning even if
-arithmetic conversions are added in the future.
+1.  A `Struct` value is converted to an equivalent of `map<String, Value>`.
+2.  A `ListValue` is converted to an equivalent of `repeated Value`.
+3.  A `Value` union is converted to the according value case: double, string,
+    boolean, map, list, or null.
+4.  An `Any` value is on-the-fly deserialized and converted to the message it
+    represents.
+5.  A wrapper is automatically converted into its underlying value, or `null` if
+    the wrapper message is not set.
 
-CEL provides no way to control the finer points of floating-point arithmetic,
-such as expression evaluation, rounding mode, or exception handling. However,
-any two not-a-number values will compare unequal even if their underlying
-properties are different.
+NOTE(go/api-expr-open): heterogenous vs homogeneous lists and maps, as well as
+treatment of Any.
 
-### String and Bytes Values
-
-Strings are sequences of Unicode code points. Bytes are sequences of octets
-(eight-bit data).
-
-Quoted string literals are delimited by either single- or double-quote
-characters, where the closing delimiter must match the opening one, and can
-contain any unescaped character except the delimiter or newlines (either CR or
-LF).
-
-Triple-quoted string literals are delimited by three single-quotes or three
-double-quotes, and may contain any unescaped characters except for the delimiter
-sequence.  Again, the closing delimiter must match the opening one. Triple-quoted
-strings may contain newlines.
-
-Both sorts of strings can include escape sequences, described below.
-
-If preceded by an `r` or `R` character, the string is a _raw_ string and does
-not interpret escape sequences. Raw strings are useful for expressing strings
-which themselves must use escape sequences, such as regular expressions or
-program text.
-
-Bytes literals are represented by string literals preceded by a `b` or `B`
-character. The bytes literal is the sequence of bytes given by the UTF-8
-representation of the string literal. In addition, the octal escape sequence are
-interpreted as octet values rather than as Unicode code points. Both raw and
-multiline string literals can be used for byte literals.
-
-Escape sequences are a backslash (`\`) followed by one of the following:
-
-*   A single-quote(`'`), double-quote(`"`), or backslash(`\`), representing
-    itself.
-*   A code for whitespace:
-    *   `b`: backspace
-    *   `f`: form feed
-    *   `n`: line feed
-    *   `r`: carriage return
-    *   `t`: horizontal tab
-*   A `u` followed by four hexadecimal characters, encoding a Unicode code point
-    in the BMP. Characters in other Unicode planes can be represented with
-    surrogate pairs.
-*   Three octal digits, in the range `000` to `377`. For strings, it denotes the
-    unicode code point. For bytes, it represents an octet value.
-
-Examples:
-
-CEL Literal  | Meaning
------------- | --------------------------------------------------------------
-`""`         | Empty string
-`'""'`       | String of two double-quote characters
-`'''x''x'''` | String of four characters "x''x"
-`"\""`       | String of one double-quote character
-`"\\"`       | String of one backslash character
-`r"\\"`      | String of two backslash characters
-`b"abc"`     | Byte sequence of 61, 62, 63
-`b"&yuml;"`  | Sequence of bytes 204 and 191 (UTF-8 of &yuml;)
-`b"\303\277"`| Also sequence of bytes 204 and 191
-`"\303\277"` | String of "&Igrave;&iquest;" (code points 204, 191)
-`"\377"`     | String of "&yuml;" (code point 255)
-`b"\377"`    | Sequence of byte 255 (_not_ UTF-8 of &yuml;)
-
-### Aggregate Values
-
-Lists are ordered sequences of values.
-
-Maps are a set of key values, and a mapping from these keys to arbitrary values.
-Key values must be an allowed key type: `int`, `uint`, `bool`, or `string`.
-Thus maps are the union of what's allowed in protocol buffer maps and JSON
-objects.
-
-Note that the type checker uses a finer-grained notion of list and map types.
-Lists are `list(A)` for the homogenous type `A` of list elements. Maps are
-`map(K, V)` for maps with keys of type `K` and values of type `V`.  The type
-`dyn` is used for heterogeneous values  See
-[Gradual Type Checking](#gradual-type-checking). But these constraints are
-only enforced within the type checker; at runtime, lists and maps can have
-heterogeneous types.
-
-Any protocol buffer message is a CEL value, and each message type is its own CEL
-type, represented as its fully-qualified name.
-
-A list can be denoted by the expression `[e1, e2, ..., eN]`, a map by `{ek1:
-ev1, ek2: ev2, ..., ekN: evN}`, and a message by `M{f1: e1, f2: e2, ..., fN: eN}`,
-where `M` must be a simple or qualified name which resolves to a message type
-(see [Name Resolution](#name-resolution)). For a map, the entry keys are
-sub-expressions that must evaluate to values of an allowed type (`int`, `uint`,
-`bool`, or `string`).  For a message, the field names are identifiers.  It is
-an error to have duplicate keys or field names. The empty list, map, and message
-are `[]`, `{}`, and `M{}`, respectively.
-
-See [Field Selection](#field-selection) for accessing elements of lists, maps,
-and messages.
-
-### Booleans and Null
-
-CEL has `true` and `false` as the literals for the `bool` type, with the usual
-meanings.
-
-The null value is written `null`. It is used in conversion to and from protocol
-buffer and JSON data, but otherwise has no built-in meaning in CEL. In
-particular, null has its own type (`null_type`) and is not necessarily allowed
-where a value of some other type is expected.
-
-### Type Values
+## Types
 
 Every value in CEL has a runtime type which is a value by itself. The standard
 function `type(x)` returns the type of expression `x`.
@@ -318,291 +167,13 @@ type `type`, which is an expression by itself which in turn also has type
 *   `type(1) == string` evaluates to `false`
 *   `type(type(1)) == type(string)` evaluates to `true`
 
-### Abstract Types
-
-A CEL implementation can add new types to the language.  These types will be
-given names in the same namespace as the other types, but will have no special 
-upport in the language syntax.  The only way to construct or use values of these
-abstract types is through functions which the implementor will also provide.
-
-Commonly, an abstract type will have a representation as a protocol buffer, so
-that it can be stored or transmitted across a network.  In this case, the abstract
-type will be given the same name as the protocol buffer, which will prevent CEL
-programs from being able to use that particular protocol buffer message type;
-they will not be able to construct values of that type by message expressions
-nor access the message fields.  The abstract type remains abstract.
-
-By default, CEL uses `google.protobuf.Timestamp` and `google.protobuf.Duration`
-as abstract types.  The standard functions provide ways to construct and manipulate
-these values, but CEL programs cannot construct them with message expressions
-or access their message fields.
-
-### Protocol Buffer Data Conversion
-
-Protocol buffers have a richer range of types than CEL, so Protocol buffer data
-is converted to CEL data when read from a message field, and CEL data is
-converted in the other direction when initializing a field. In general, protocol
-buffer data can be converted to CEL without error, but range errors are possible
-in the other direction.
-
-| Protocol Buffer Type             | CEL Type                               |
-| -------------------------------- | -------------------------------------- |
-| int32, int64, sint32, sint64, sfixed32, sfixed64    | `int`               |
-| uint32, uint64, fixed32, fixed64 | `uint`                                 |
-| float, double                    | `double`                               |
-| bool, string, bytes              | same                                   |
-| enum                             | `int`                                  |
-| repeated                         | `list`                                 |
-| map<K, V>                        | `map`                                  |
-| oneof                 | options expanded individually, at most one is set |
-| message                          | same                                   |
-
-Signed integers, unsigned integers, and floating point numbers are converted to
-the singular CEL type of the same sort. The CEL type is capable of expressing
-the full range of protocol buffer values. When converting from CEL to protocol
-buffers, an out-of-range CEL value results in an error.
-
-Boolean, string, and bytes types have identical ranges and are converted without
-error.
-
-Protocol buffer enum values are converted to the corresponding `int` value.
-Protocol buffer enum fields can accept any signed 32-bit number, values outside
-that range will raise an error.
-
-Repeated fields are converted to CEL lists of converted values, preserving the
-order. In the other direction, the CEL list elements must be of the right type
-and value to be converted to the corresponding protocol buffer type. Similarly,
-protocol buffer maps are converted to CEL maps, and CEL map keys and values must
-have the right type and value to be converted in the other direction.
-
-Oneof fields are represented by the translation of each of their options as a
-separate field, but at most one of these fields will be "set", as detected by
-the `has()` macro.  See [Macros](#macros).
-
-Since protocol buffer messages are first-class CEL values, message-valued fields
-are used without conversion.
-
-Every protocol buffer field has a default value, and there is no semantic
-difference between a field set to this default value, and an unset field. For
-message fields, there default value is just the unset state, and an unset
-message field is distinct from one set to an empty (i.e. all-unset) message.
-
-The `has()` macro (see [Macros](#macros)) tells whether a message field is set
-(i.e. not unset, hence not set to the default value). If an unset field is
-nevertheless selected, it evaluates to its default value, or if it is a message
-field, it evaluates to an empty (i.e. all-unset) message. This allows expressions
-to use iterative field selection to examine the state of fields in deeply nested
-messages without needing to test whether every intermediate field is set. (See
-exception for wrapper types, below.)
-
-### Dynamic Values
-
-CEL automatically converts certain protocol buffer messages in the
-google.protobuf package to other types.
-
-| google.protobuf message | CEL Conversion                                     |
-| ----------------------- | -------------------------------------------------- |
-| `Any`        | dynamically converted to the contained message type, or error |
-| `ListValue`             | list of `Value` messages                           |
-| `Struct`                | map (with string keys, `Value` values)             |
-| `Value` | dynamically converted to the contained type (null, double, string, bool, `Struct`, or `ListValue`) |
-| wrapper types           | converted to eponymous type                        |
-
-The wrapper types are `BoolValue`, `BytesValue`, `DoubleValue`, `EnumValue`, `FloatValue`,
-`Int32Value`, `Int64Value`, `NullValue`, `StringValue`, `Uint32Value`, and `Uint64Value`.
-Values of these wrapper types are converted to the obvious type. Additionally,
-field selection of an unset message field of wrapper type will evaluate to
-`null`, instead of the default message. This is an exception to the usual
-evaluation of unset message fields.
-
-Note that this implies some cascading conversions. An `Any` message might be
-converted to a `Struct`, one of whose `Value`-typed values might be converted to a
-`ListValue` of more values, and so on.
-
-Also note that all of these conversions are dynamic at runtime, so CEL's static
-type analysis cannot avoid the possibility of type-related errors in expressions
-using these dynamic values.
-
-## Gradual Type Checking
-
-CEL is a dynamically-typed language, meaning that the types of the values of the
-variables and expressions might not be known until runtime. However, CEL has an
-optional type-checking phase that takes annotation giving the types of all
-variables and tries to deduce the type of the expression and of all its
-sub-expressions. This is not always possible, due to the dynamic expansion of
-certain messages like `Struct`, `Value`, and `Any` (see [Dynamic Values](#dynamic-values)).
-However, if a CEL program does not use dynamically-expanded messages, it can be
-statically type-checked.
-
-The type checker uses a richer type system than the types of the dynamic values:
-lists have a type parameter for the type of the elements, and maps have two
-parameters for the types of keys and values, respectively. These richer types
-preserve the stronger type guarantees that protocol buffer messages have. We can
-infer stronger types from the standard functions, such as accessing list
-elements or map fields. However, the `type()` function and dynamic dispatch to
-particular function overloads only use the coarser types of the dynamic values.
-
-The type checker also introduces the `dyn` type, which is the union of all other
-types. Therefore the type checker could accept a list of heterogeneous values as
-`dyn([1, 3.14, "foo"])`, which is tiven the type `list(dyn)`. The standard
-function `dyn` has no effect at runtime, but signals to the type checker that its
-argument should be considered of type `dyn`, `list(dyn)`, or a `dyn`-valued map.
-
-A CEL type checker attempts to identify occurrences of `no_matching_overload`
-and `no_such_field` runtime errors (see [Runtime Errors](#runtime-errors))
-ahead of runtime. It also serves to optimize execution speed, by narrowing
-down the number of possible matching overloads for a function call, and by
-allowing for a more efficient (unboxed) runtime representation of values.
-
-By construction, a CEL expression that does not use the dynamic features coming
-from `Struct`, `Value`, or `Any`, can be fully statically type checked and all
-overloads can be resolved ahead of runtime.
-
-If a CEL expression uses a mixture of dynamic and static features, a type
-checker will still attempt to derive as much information as possible and
-delegate undecidable type decisions to runtime.
-
-The type checker is an optional phase of evaluation. Running the type checker
-does not affect the result of evaluation, it can only reject expressions as
-ill-typed in a given typing context.
-
-## Evaluation
-
-For a given evaluation environment, a CEL expression will deterministically
-evaluate to either a value or an error. Here are how different expressions are
-evaluated:
-
-*   **Literals:** the various kinds of literals (numbers, booleans, strings, bytes,
-    and `null`) evaluate to the values they represent.
-*   **Variables:** variables are looked up in the binding environment. An unbound
-    variable evaluates to an error.
-*   **List, Map, and Message expressions:** each sub-expression is evaluated and if
-    any sub-expression results in an error, this expression results in an error.
-    Otherwise, it results in the list, map, or message of the sub-expression
-    results, or an error if one of the values is of the wrong type.
-*   **Field selection:** see [Field Selection](#field-selection).
-*   **Macros:** see [Macros](#macros).
-*   **Logical operators:** see [Logical Operators](#logical-operators).
-*   **Other operators:** operators are translated into specially-named functions and
-    the sub-expressions become their arguments, for instance `e1 + e2` becomes
-    `_+_(e1, e2)`, which is then evaluated as a normal function.
-*   **Normal functions:** all argument sub-expressions are evaluated and if any
-    results in an error, then this expression results in an error. Otherwise,
-    the function is identified by its name and dispatched to a particular
-    overload based on the types of the sub-expression values. See [Functions](#functions).
-
-Because CEL is free of side-effects, the order of evaluation among
-sub-expressions is not guaranteed.  If multiple subexpressions would evaluate to errors
-causing the enclosing expression to evaluate to an error, it will propagate one or more
-of the sub-expression erors, but it is not specified which ones.
-
-### Evaluation Environment
-
-A CEL expression is parsed and evaluated in the scope of a particular protocol
-buffer package, which controls name resolution as described above, and a binding
-context, which binds identifiers to values, errors, and functions. A given
-identifier has different meanings as a function name or as a variable, depending
-on the use. For instance in the expression `size(requests) > size`, the first
-`size` is a function, and the second is a variable.
-
-The CEL implementation provides mechanisms for adding bindings of variable names
-to either values or errors. The implementation will also provide function
-bindings for at least all the standard functions listed below.
-
-Some implementations might make use of a _context proto_, where a single
-protocol buffer message represents all variable bindings: each field in the
-message is a binding of the field name to the field value. This provides a
-convenient encapsulation of the binding environment.
-
-The evaluation environment can also specify the expected type of the result. If
-the expected type is one of the protocol buffer wrapper messages, then CEL will
-attempt to convert the result to the wrapper message, or will raise an error if
-the conversion fails.
-
-### Runtime Errors
-
-In general, when a runtime error is produced, expression evaluation is
-terminated; exceptions to this rule are discussed in [Logical Operators](#logical-operators)
-and [Macros](#macros).
-
-CEL provides the following built-in runtime errors:
-
-*   `no_matching_overload`: this function has no overload for the types of the
-    arguments.
-*   `no_such_field`: a map or message does not contain the desired field.
-
-There is no in-language representation of errors, no generic way to raise them,
-and no way to catch or bypass errors, except for the short-circuiting behavior
-of the logical operators, and macros.
-
-### Logical Operators
-
-In the conditional operator `e ? e1 : e2`, evaluates to `e1` if `e`
-evaluates to `true`, and `e2` if `e` evaluates to `false`.  The untaken branch
-is presumed to not be executed, though that is an implementation detail.
-
-In the boolean operators `&&` and `||`: if any of their operands uniquely
-determines the result (`false` for `&&` and `true` for `||`) the other operand
-may or may not be evaluated, and if that evaluation produces a runtime error, it
-will be ignored. This makes those operators commutative (in contrast to
-traditional boolean short-circuit operators). The rationale for this behavior is
-to allow the boolean operators to be mapped to indexed queries, and align better
-with SQL semantics.
-
-### Macros
-
-CEL supports a small set of predefined macros. Macro invocations have the same
-syntax as function calls, but follow different type checking rules and runtime
-semantics than regular functions. An application of CEL opts-in to which macros
-to support, selecting from the predefined set of macros. The currently available
-macros are:
-
-*   `has(e.f)`: tests whether a field is available. See "Field Selection" below.
-*   `e.all(x, p),`: tests where a predicate holds for all elements of a list `e`
-    or keys of a map `e`. Here `x` is a simple identifier to be used in `p`
-    which binds to the element or key. The `all()` macro combines per-element
-    predicate results with the "and" (`&&`) operator, so if any predicate
-    evaluates to false, the macro evaluates to false, ignoring any errors from
-    other predicates.
-*   `e.exists(x, p)`: like the `all()` macro, but combines the predicate results
-    with the "or" (`||`) operator.
-*   `e.exists_one(x,p)`: like the `exists()` macro, but evaluates to `true` only
-    if the predicate of exactly one element/key evaluates to `true`, and the
-    rest to `false`. Any other combination of boolean results evaluates to
-    `false`, and any predicate error causes the macro to raise an error.
-
-### Field Selection
-
-A field selection expression, `e.f`, can be applied both to messages and to
-maps. For maps, selection is interpreted as the field being a string key.
-
-The semantics depends on the type of `e`:
-
-1.  If `e` is a message and `f` is not declared in this message, the runtime
-    error `no_such_field` is raised.
-2.  If `e` is a message and `f` is declared, but the field is not set, the
-    default value of the field's type will be produced. Note that this is `null`
-    for messages or the according primitive default value as determined by
-    proto2 or proto3 semantics.
-3.  If `e` is a map and `f` is not present in the map, a runtime error will be
-    produced. (Note the runtime error is not a well-known one like
-    `no_such_field` but implementation dependent.) It holds that `e.f ==
-    e['f']`.
-
-To test for the presence of a field, the macro `has(e.f)` can be used.
-`has(e.f)` behaves similar as `e.f`, except as where the former would produce
-`null` or an error different than `no_such_field`, it will return false, and
-true otherwise. This means means that `has(e.f)` applied to a message which does
-not declare field `f` produces a `no_such_field` error, where it produces false
-if `f` is declared but not set (or, in proto3, has its default value). Moreover,
-`has(e.f)` where `e` is a map returns false if `f` is not defined in the map.
-
 ## Functions
 
-CEL functions have no observable side-effects (there maybe side-effects like
-logging or such which are not observable from CEL). The default argument
-evaluation strategy for functions is strict, with exceptions from this rule
-discussed in [Logical Operators](#logical-operators) and [Macros](#macros).
+A function value represents a computation which delivers a new value based on
+zero or more arguments. Function applications have no observable side-effects
+(there maybe side-effects like logging or such which are not observable from
+CEL). The default argument evaluation strategy for functions is strict, with
+exceptions from this rule discussed in "Argument Evaluation".
 
 Functions are specified by a set of overloads. Each overload defines the number
 and type of arguments and the type of the result, as well as an opaque
@@ -656,12 +227,10 @@ variables (similar as type erasure in Java). Thus an implementation can
 implement overload resolution by simply mapping all argument types to a strong
 hash.
 
-Operator subexpressions are treated as calls to specially-named built-in
-functions. For instance, the expression `e1 + e2` is dispatched to the function
-`_+_` with arguments `e1` and `e2`. Note that since`_+_` is not an identifier,
-there would be no way to write this as a normal function call.
+Operators like `x + y` are considered syntactic sugar for function calls, using
+symbols like `_+_` for the function name.
 
-See [Standard Definitions](#standard-definitions) for the list of all predefined
+See [Standard Operators and Functions](#standard) for the list of all predefined
 functions and operators.
 
 ### Extension Functions
@@ -673,11 +242,123 @@ domain of CEL can add a new overload to the `size` function above, provided this
 overload's argument types do not overlap with any existing overload. For
 methodological reasons, CEL disallows to add overloads to operators.
 
+## Type Conversions
+
+Note that currently there are no automatic arithmetic conversions for the
+numeric types (`int`, `uint`, and `double`). The arithmetic operators typically
+contain overloads for arguments of the same numeric type, but not for mixed-type
+arguments. Therefore an expression like `1 + 1u` is going to fail to dispatch.
+To perform mixed-type arithmetic, use explicit conversion functions such as
+`uint(1) + 1u`. Such explicit conversions will maintain their meaning even if
+arithmetic conversions are added in the future.
+
+### Macros
+
+CEL supports a small set of predefined macros. Macro invocations have the same
+syntax as function calls, but follow different type checking rules and runtime
+semantics than regular functions. An application of CEL opts-in to which macros
+to support, selecting from the predefined set of macros. The currently available
+macros are:
+
+-   `has(e.f)`: tests whether a field is available. See [discussion of the
+    select](#select) expression.
+-   `e.all(x, p), e.exists(x, p), e.exists_one(x,p)`: tests where a predicate
+    holds for all/at least one/exactly one element of a list `e` or keys of a
+    map `e`. Here `x` is a simple identifier to be used in `p` which binds to
+    the element or key.
+
+### Argument Evaluation
+
+By default, all arguments to function calls are strictly evaluated
+(call-by-value). Any errors produced during argument evaluation are propagated.
+Because CEL is free of side-effects, evaluation order is not guaranteed.
+
+One exception is the conditional operator `e ? e1 : e2`: as common, `e1` is only
+executed if `e` evaluates to true, and `e2` if `e` evaluates to false.
+
+Another exception are the boolean operators `&&` and `||`: if any of their
+operands uniquely determines the result (`false` for `&&` and `true` for `||`)
+the other operand may or may not be evaluated, and if that evaluation produces a
+runtime error, it will be ignored. This makes those operators commutative (in
+contrast to traditional boolean short-circuit operators). The rationale for this
+behavior is to allow the boolean operators to be mapped to indexed queries, and
+align better with SQL semantics.
+
 ### Receiver Call Style
 
 A function overload can be declared to use receiver call-style, so it must be
 called as `e1.f(e2)` instead of `f(e1, e2)`. Overloads with different call
 styles are non-overlapping per definition, regardless of their types.
+
+## Field Selection
+
+A field selection expression, `e.f`, can be applied both to messages and to
+maps. For maps, selection is interpreted as the field being a string key.
+
+The semantics depends on the type of `e`:
+
+1.  If `e` is a message and `f` is not declared in this message, the runtime
+    error `no_such_field` is raised.
+2.  If `e` is a message and `f` is declared, but the field is not set, the
+    default value of the field's type will be produced. Note that this is `null`
+    for messages or the according primitive default value as determined by
+    proto2 or proto3 semantics.
+3.  If `e` is a map and `f` is not present in the map, a runtime error will be
+    produced. (Note the runtime error is not a well-known one like
+    `no_such_field` but implementation dependent.) It holds that `e.f ==
+    e['f']`.
+
+To test for the presence of a field, the macro `has(e.f)` can be used.
+`has(e.f)` behaves similar as `e.f`, except as where the former would produce
+`null` or an error different than `no_such_field`, it will return false, and
+true otherwise. This means means that `has(e.f)` applied to a message which does
+not declare field `f` produces a `no_such_field` error, where it produces false
+if `f` is declared but not set (or, in proto3, has its default value). Moreover,
+`has(e.f)` where `e` is a map returns false if `f` is not defined in the map.
+
+## Aggregates
+
+A list can be denoted by the expression `[e1,e2]`, a map by `{e11:e12,e21:e22}`.
+Message aggregates are also supported, and take the form `M{f1:e1, f2:e2}`,
+where `M` must be a simple or qualified name which resolves to a messsage type
+(see [Name Resolution](#resolution)).
+
+NOTE(go/api-expr-open): heterogenous vs homogeneous lists and maps.
+
+## Runtime Errors
+
+In general, when a runtime error is produced, expression evaluation is
+terminated; exceptions to this rule are discussed in "Argument Evaluation".
+
+CEL provides two built-in runtime errors; implementations may add more. The
+built-in errors are `no_matching_overload` and `no_such_field`; those errors
+correspond to type errors in static typing (see [Gradual Type
+Checking](#type-checking)).
+
+## Name Resolution
+
+A CEL expression can contain simple names as in `a` or qualified names as in
+`a.b`. Such names are resolved in the lexical scope of a protobuf package or
+message declaration, following the same rules as protobuf itself (which in turn
+follows the C++ rules). The scope is set by the application context of an
+expression.
+
+All message and enum constant declarations from the protobuf scope are available
+to CEL expressions. In addition, all [Standard Definitions](#standard) are
+injected into the root scope. Applications of CEL may inject additional name
+bindings in arbitrary scopes.
+
+Resolution works as follows. If `a.b` is a name to be resolved in the context of
+a protobuf declaration with scope `A.B`, then resolution is attempted, in order,
+as `A.B.a.b`, `A.a.b`, and finally `a.b`. To override this behavior, one can use
+`.a.b`; this name will only be attempted to be resolved in the root scope, i.e.
+as `a.b`.
+
+If name qualification is mixed with field selection, the longest prefix of the
+name which resolves in the current lexical scope is used. For example, if
+`a.b.c` resolves to a message declaration, and `a.b` does so as well with `c` a
+possible field selection, then `a.b.c` takes priority over the interpretation
+`(a.b).c`.
 
 ## Standard Definitions
 
@@ -685,8 +366,8 @@ All predefined operators, functions and constants are listed in the table below.
 For each symbol, the available overloads are listed. Operator symbols use a
 notation like `_+_` where `_` is a placeholder for an argument.
 
-TODO https://issuetracker.google.com/67014381 : have better descriptions. The
-table is auto-generated so the descriptions need to be updated in the code.
+TODO https://issuetracker.google.com/67014381 : have better descriptions. The table is auto-generated so the
+descriptions need to be updated in the code.
 
 <!-- BEGIN GENERATED DECL TABLE; DO NOT EDIT BELOW -->
 
@@ -1269,7 +950,7 @@ table is auto-generated so the descriptions need to be updated in the code.
       google.protobuf.Timestamp.(string) -> int
     </td>
     <td>
-      get day of month from the date with timezone, zero-based indexing
+      get day of month from the date with timezone, one-based indexing
     </td>
   </tr>
   <tr>
@@ -1391,7 +1072,7 @@ table is auto-generated so the descriptions need to be updated in the code.
       google.protobuf.Timestamp.(string) -> int
     </td>
     <td>
-      get milliseconds from the date in UTC, 0-999
+      get milliseconds from the date with timezone, 0-999
     </td>
   </tr>
   <tr>
@@ -1702,6 +1383,46 @@ table is auto-generated so the descriptions need to be updated in the code.
       type conversion
     </td>
   </tr>
+  <tr>
+    <th rowspan="1">
+      timestamp
+    </th>
+    <td>
+      (string) -> google.protobuf.Timestamp
+    </td>
+    <td>
+      Type conversion of strings to timestamps according to RFC3339. Example: "1972-01-01T10:00:20.021-05:00"
+    </td>
+  </tr>
+  <tr>
+    <th rowspan="1">
+      duration
+    </th>
+    <td>
+      (string) -> google.protobuf.Duration
+    </td>
+    <td>
+      type conversion, duration should be end with "s", which stands for seconds
+    </td>
+  </tr>
 </table>
 
+Timezone referenced to ftp://ftp.iana.org/tz/, data version: 2018c.
+
 <!-- END GENERATED DECL TABLE; DO NOT EDIT ABOVE -->
+
+## Gradual Type Checking
+
+A CEL type checker attempts to identify occurrences of `no_matching_overload`
+and `no_such_field` runtime errors ahead of runtime. It also serves to optimize
+execution speed, by narrowing down the number of possible matching overloads for
+a function call, and by allowing for a more efficient (unboxed) runtime
+representation of values.
+
+By construction, a CEL expression that does not use the dynamic features coming
+from `Struct`, `Value`, or `Any`, can be fully statically type checked and all
+overloads can be resolved ahead of runtime.
+
+If a CEL expression uses a mixture of dynamic and static features, a type
+checker will still attempt to derive as much information as possible and
+delegate undecidable type decisions to runtime.
