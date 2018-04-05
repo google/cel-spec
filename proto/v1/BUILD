@@ -13,7 +13,6 @@ proto_library(
         "value.proto",
     ],
     # cc_api_version = 2,
-    # go_api_version = 2,
     # java_api_version = 2,
     # js_api_version = 2,
     deps = [
@@ -36,12 +35,35 @@ java_lite_proto_library(
 )
 
 proto_library(
+    name = "eval_protos",
+    srcs = [
+        "eval.proto",
+    ],
+    # cc_api_version = 2,
+    # java_api_version = 2,
+    # js_api_version = 2,
+    deps = [
+        ":value_protos",
+        "@com_google_googleapis//:rpc_status",
+    ],
+)
+
+java_proto_library(
+    name = "eval_java_proto",
+    deps = [":eval_protos"],
+)
+
+java_lite_proto_library(
+    name = "eval_java_proto_lite",
+    deps = [":eval_protos"],
+)
+
+proto_library(
     name = "syntax_protos",
     srcs = [
         "syntax.proto",
     ],
     # cc_api_version = 2,
-    # go_api_version = 2,
     # java_api_version = 2,
     # js_api_version = 2,
     deps = [

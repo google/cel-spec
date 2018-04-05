@@ -13,7 +13,6 @@ proto_library(
         "checked.proto",
     ],
     # cc_api_version = 2,
-    # go_api_version = 2,
     # java_api_version = 2,
     # js_api_version = 2,
     deps = [
