@@ -4,9 +4,7 @@ syntax = "proto3";
 package google.api.expr.v1;
 
 import "google/protobuf/any.proto";
-import "google/protobuf/duration.proto";
 import "google/protobuf/struct.proto";
-import "google/protobuf/timestamp.proto";
 
 option java_multiple_files = true;
 option java_outer_classname = "ValueProto";
@@ -36,26 +34,31 @@ message Value {
     string string_value = 6;
     bytes bytes_value = 7;
 
-    // Well known type values.
-    protobuf.Duration duration_value = 8;
-    protobuf.Timestamp timestamp_value = 9;
-
-    // Proto message value.
-    protobuf.Any message_value = 10;
+    // The proto message backing an object value.
+    protobuf.Any object_value = 10;
 
     // Collection values.
     MapValue map_value = 11;
     ListValue list_value = 12;
+
+    // Type value.
+    TypeValue type_value = 15;
   }
 }
 
 // A list.
+//
+// Wrapped in a message so 'not set' and empty can be differentiated, which is
+// required for use in a 'oneof'.
 message ListValue {
   // The ordered values in the list.
   repeated Value values = 1;
 }
 
 // A map.
+//
+// Wrapped in a message so 'not set' and empty can be differentiated, which is
+// required for use in a 'oneof'.
 message MapValue {
   message Entry {
     // The key.
@@ -69,5 +72,71 @@ message MapValue {
   }
 
   // The set of map entries.
+  //
+  // CEL has fewer restrictions on keys, so a protobuf map representation
+  // cannot be used.
   repeated Entry entries = 1;
+}
+
+// A type value.
+//
+// TypeValue is trivially derivable from a Value.
+//
+message TypeValue {
+  // Builtin type designators for CEL primitive types.
+  enum BasicType {
+    // Unspecified type.
+    BASIC_TYPE_UNSPECIFIED = 0;
+
+    // The null type.
+    NULL_TYPE = 1;
+
+    // The boolean type.
+    BOOL_TYPE = 2;
+
+    // The signed integer type.
+    //
+    // Proto-based integer values are widened to int64.
+    INT_TYPE = 3;
+
+    // The unsigned integer type.
+    //
+    // Proto-based unsigned integer values are widened to uint64.
+    UINT_TYPE = 4;
+
+    // The double type.
+    //
+    // Proto-based float values are widened to double values.
+    DOUBLE_TYPE = 5;
+
+    // The string type.
+    STRING_TYPE = 6;
+
+    // The bytes type.
+    BYTES_TYPE = 7;
+
+    // The type type.
+    TYPE_TYPE = 8;
+
+    // The map type.
+    MAP_TYPE = 9;
+
+    // The list type.
+    LIST_TYPE = 10;
+  }
+
+  // The type designator.
+  //
+  // Type designators are split into two categories due to representational
+  // and ease of use considerations. This split has no semantic implications.
+  oneof designator_kind {
+    // A basic type.
+    BasicType basic_type = 1;
+
+    // The fully qualified name of the object type
+    //
+    // This is usually the fully qualified name of the backing proto message
+    // type, or the full name of an abstract type.
+    string object_type = 6;
+  }
 }

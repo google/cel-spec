@@ -9,7 +9,6 @@ option java_outer_classname = "CheckedProto";
 option java_package = "com.google.api.expr.checked.v1";
 
 import "proto/v1/syntax.proto";
-import "google/protobuf/any.proto";
 import "google/protobuf/empty.proto";
 import "google/protobuf/struct.proto";
 
@@ -51,6 +50,7 @@ message CheckedExpr {
 }
 
 // Represents a CEL type.
+//
 message Type {
   // CEL primitive types.
   enum PrimitiveType {
@@ -124,6 +124,15 @@ message Type {
     repeated Type arg_types = 2;
   }
 
+  // Application defined abstract type.
+  message AbstractType {
+    // The fully qualified name of this abstract type.
+    string name = 1;
+
+    // Parameter types for this abstract type.
+    repeated Type parameter_types = 2;
+  }
+
   // The kind of type.
   oneof type_kind {
     // Dynamic type.
@@ -176,9 +185,11 @@ message Type {
     // errors present in the expression.
     protobuf.Empty error = 12;
 
-    // Extension type, used for extending the type-checking with additional
-    // types which are well-known for a particular application of CEL.
-    protobuf.Any extension = 13;
+    // Older member of the oneof which we do not support any longer.
+    // reserved 13; // Reserved keyword does not work with oneof.
+
+    // Abstract, application defined type.
+    AbstractType abstract_type = 14;
   }
 }
 
@@ -199,7 +210,7 @@ message Decl {
 
     // The constant value of the identifier. If not specified, the identifier
     // must be supplied at evaluation time.
-    google.api.expr.v1.Constant value = 2;
+    google.api.expr.v1.Literal value = 2;
 
     // Documentation string for the identifier.
     string doc = 3;
@@ -270,7 +281,8 @@ message Decl {
   // The fully qualified name of the declaration.
   //
   // Declarations are organized in containers and this represents the full path
-  // to the declaration in its container, as in `google.api.expr.Decl`.
+  // to the declaration in its container, as in
+  // `google.api.expr.v1.checked.Decl`.
   //
   // Declarations used as [FunctionDecl.Overload][] parameters may or may not
   // have a name depending on whether the overload is function declaration or a
@@ -296,10 +308,10 @@ message Reference {
   // presented candidates must happen at runtime because of dynamic types. The
   // type checker attempts to narrow down this list as much as possible.
   //
-  // Empty for [Decl.IdentDecl][] references.
+  // Empty if this is not a reference to a [Decl.FunctionDecl][].
   repeated string overload_id = 3;
 
   // For references to constants, this may contain the value of the
   // constant if known at compile time.
-  google.api.expr.v1.Constant value = 4;
+  google.api.expr.v1.Literal value = 4;
 }

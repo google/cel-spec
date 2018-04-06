@@ -192,8 +192,8 @@ message Expr {
 
   // Required. Variants of expressions.
   oneof expr_kind {
-    // A constant expression.
-    Constant const_expr = 3;
+    // A literal expression.
+    Literal literal_expr = 3;
 
     // An identifier expression.
     Ident ident_expr = 4;
@@ -207,7 +207,7 @@ message Expr {
     // A list creation expression.
     CreateList list_expr = 7;
 
-    // A map or message creation expression.
+    // A map or object creation expression.
     CreateStruct struct_expr = 8;
 
     // A comprehension expression.
@@ -217,18 +217,14 @@ message Expr {
 
 // Represents a primitive literal.
 //
-// This is similar as the primitives supported in the well-known type
-// `google.protobuf.Value`, but richer so it can represent CEL's full range of
-// primitives.
+// List, map, and objects need to be 'constructed' and thus have no
+// literal representation.
 //
-// Lists and structs are not included as constants as these aggregate types may
-// contain [Expr][] elements which require evaluation and are thus not constant.
-//
-// Examples of constants include: `"hello"`, `b'bytes'`, `1u`, `4.2`, `-2`,
+// Examples of literals include: `"hello"`, `b'bytes'`, `1u`, `4.2`, `-2`,
 // `true`, `null`.
-message Constant {
-  // Required. The valid constant kinds.
-  oneof constant_kind {
+message Literal {
+  // Required. The valid literal kinds.
+  oneof literal_kind {
     protobuf.NullValue null_value = 1;       // null value.
     bool bool_value = 2;                     // boolean value.
     int64 int64_value = 3;                   // int64 value.
@@ -236,8 +232,6 @@ message Constant {
     double double_value = 5;                 // double value.
     string string_value = 6;                 // string value.
     bytes bytes_value = 7;                   // bytes value.
-    protobuf.Duration duration_value = 8;    // protobuf.Duration value.
-    protobuf.Timestamp timestamp_value = 9;  // protobuf.Timestamp value.
   }
 }
 
