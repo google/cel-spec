@@ -15,7 +15,6 @@ import "google/protobuf/timestamp.proto";
 
 // An expression together with source information as returned by the parser.
 message ParsedExpr {
-  // (-- field 1 reserved for deprecated field `location` --)
   reserved 1;
 
   // The parsed expression.

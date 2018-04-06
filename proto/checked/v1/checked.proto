@@ -116,11 +116,6 @@ message Type {
   }
 
   // Function type with result and arg types.
-  //
-  // (--
-  // NOTE: function type represents a lambda-style argument to another function.
-  // Supported through macros, but not yet a first-class concept in CEL.
-  // --)
   message FunctionType {
     // Result type of the function.
     Type result_type = 1;
