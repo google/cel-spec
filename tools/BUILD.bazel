@@ -1,0 +1,59 @@
+package(
+    default_visibility = ["//visibility:public"],
+)
+
+licenses(["notice"])  # Apache 2.0
+
+exports_files(["LICENSE"])
+
+cc_library(
+    name = "proto_utils_lib",
+    srcs = [
+        "proto_utils_lib.cc",
+    ],
+    hdrs = [
+        "proto_utils_lib.h",
+    ],
+    copts = ["-DCEL_SPEC_OPEN_SOURCE"],
+    deps = [
+        "//proto/v1:value_cc_proto",
+        "@com_google_absl//absl/strings",
+        "@com_google_googleapis//:cc_rpc_code",
+        "@com_google_googleapis//:cc_rpc_status",
+        "@com_google_protobuf//:cc_wkt_protos",
+        "@com_google_protobuf//:protobuf",
+    ],
+)
+
+cc_test(
+    name = "proto_utils_lib_test",
+    srcs = ["proto_utils_lib_test.cc"],
+    copts = ["-DCEL_SPEC_OPEN_SOURCE"],
+    data = [
+        "//tools/tests:test_message2.proto",
+        "//tools/tests:test_message4.proto",
+    ],
+    deps = [
+        ":proto_utils_lib",
+        "//proto/v1:value_cc_proto",
+        "//tools/tests:test_message1_cc_proto",
+        "//tools/tests:test_value_cc_proto",
+        "@com_github_gflags_gflags//:gflags",
+        "@com_google_absl//absl/strings",
+        "@com_google_googleapis//:cc_rpc_status",
+        "@com_google_googletest//:gtest_main",
+        "@com_google_protobuf//:cc_wkt_protos",
+    ],
+)
+
+cc_binary(
+    name = "prototext2bin",
+    srcs = ["prototext2bin.cc"],
+    deps = [
+        ":proto_utils_lib",
+        "@com_github_gflags_gflags//:gflags",
+        "@com_google_absl//absl/strings",
+        "@com_google_googleapis//:cc_rpc_status",
+        "@com_google_protobuf//:protobuf",
+    ],
+)
