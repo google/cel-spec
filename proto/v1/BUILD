@@ -24,6 +24,11 @@ proto_library(
     ],
 )
 
+cc_proto_library(
+    name = "value_cc_proto",
+    deps = [":value_protos"],
+)
+
 java_proto_library(
     name = "value_java_proto",
     deps = [":value_protos"],

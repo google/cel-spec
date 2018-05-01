@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package third_party.cel.spec.tools.tests;
+
+import "proto/v1/value.proto";
+
+message TestValue {
+  string name = 1;
+
+  google.api.expr.v1.Value value = 2;
+}

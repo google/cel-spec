@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package third_party.cel.spec.tools.tests;
+
+import "tools/tests/test_message1.proto";
+
+message TestMessage2 {
+  string name2 = 1;
+  TestMessage1 message1 = 2;
+}
