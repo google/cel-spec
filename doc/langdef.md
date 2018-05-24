@@ -7,7 +7,7 @@ This page constitutes the reference for CEL. For a gentle introduction, see
 
 In the taxonomy of programming languages, CEL is:
 
-   **memory-safe:** programs cannot express access to unrelated memory, such as
+*   **memory-safe:** programs cannot express access to unrelated memory, such as
     out-of-bounds array indexes or use-after-free pointer dereferences;
 *   **side-effect-free:** a CEL program only computes an output from its inputs;
 *   **terminating:** CEL programs cannot loop forever;
