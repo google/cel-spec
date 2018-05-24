@@ -13,7 +13,7 @@ In the taxonomy of programming languages, CEL is:
 *   **terminating:** CEL programs cannot loop forever;
 *   **strongly-typed:** values have a well-defined type, and operators and
     functions check that their arguments have the expected types;
-**   **dynamically-typed:** types are associated with values, not with variables
+*   **dynamically-typed:** types are associated with values, not with variables
     or expressions, and type safety is enforced at runtime;
 *   **gradually-typed:** an optional type-checking phase before runtime can
     detect and reject some programs which would violate type constraints.
