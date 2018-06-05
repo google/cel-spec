@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package google.api.expr.test.v1;
+
+import "google/api/expr/v1alpha1/eval.proto";
+import "google/api/expr/v1alpha1/value.proto";
+import "google/protobuf/empty.proto";
+
+message EvalResponseMatcher {
+  oneof kind {
+    google.api.expr.v1alpha1.Value value = 1;
+    ErrorSets errors = 2;  // expect one of these
+    UnknownSets unknowns = 3;  // expect one of these
+    string parse_failure_regex = 4;  // "." until we standardize
+    string check_failure_regex = 5;
+    google.protobuf.Empty trueval = 6; // shortcut for true boolean value
+  }
+}
+
+message ErrorSets {
+  // Success if we match any of these sets.
+  repeated google.api.expr.v1alpha1.ErrorSet errors = 1;
+}
+
+message UnknownSets {
+  // Success if we match any of these sets.
+  repeated google.api.expr.v1alpha1.UnknownSet unknowns = 1;
+}
+
+message SimpleEvalTest {
+  string name = 1;
+  string description = 2;
+  string expr = 3;
+  map<string, google.api.expr.v1alpha1.ExprValue> bindings = 4;
+  EvalResponseMatcher expected = 5;
+  bool skip_check = 6;
+  bool use_macros = 7;
+}
+
+message SimpleEvalTestSection {
+  string name = 1;
+  string description = 2;
+  repeated SimpleEvalTest tests = 3;
+}
+
+message SimpleEvalTestFile {
+  string name = 1;
+  string description = 2;
+  repeated SimpleEvalTestSection sections = 3;
+}
