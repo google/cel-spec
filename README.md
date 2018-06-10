@@ -22,7 +22,7 @@ Guiding philosophy:
     *   CEL is designed to be embedded in applications, and allows for
         extensibility via its context which allows for functions and data to be
         provided by the software that embeds it.
-3.  Developer-friendly
+3.  Developer-friendly.
     *   The language is approachable to developers. The initial spec was based
         on the experience of developing Firebase Rules and usability testing
         many prior iterations.
@@ -32,14 +32,14 @@ Guiding philosophy:
 The required components of a system that supports CEL are:
 
 *   The textual representation of an expression as written by a developer. It is
-    of similar syntax of expressions in C/C++/Java/JavaScript
+    of similar syntax to expressions in C/C++/Java/JavaScript
 *   A binary representation of an expression. It is an abstract syntax tree
     (AST).
 *   A compiler library that converts the textual representation to the binary
     representation. This can be done ahead of time (in the control plane) or
     just before evaluation (in the data plane).
 *   A context containing one or more typed variables, often protobuf messages.
-    Most use-case will use attribute_context.proto
+    Most use-cases will use `attribute_context.proto`
 *   An evaluator library that takes the binary format in the context and
     produces a result, usually a Boolean.
 
