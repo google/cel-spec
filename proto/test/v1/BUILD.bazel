@@ -17,6 +17,7 @@ proto_library(
     # java_api_version = 2,
     # js_api_version = 2,
     deps = [
+        "@com_google_googleapis//google/api/expr/v1alpha1:checked_proto",
         "@com_google_googleapis//google/api/expr/v1alpha1:eval_proto",
         "@com_google_googleapis//google/api/expr/v1alpha1:value_proto",
         "@com_google_protobuf//:empty_proto",

@@ -2,9 +2,29 @@ syntax = "proto3";
 
 package google.api.expr.test.v1;
 
+import "google/api/expr/v1alpha1/checked.proto";
 import "google/api/expr/v1alpha1/eval.proto";
 import "google/api/expr/v1alpha1/value.proto";
 import "google/protobuf/empty.proto";
+
+// Configuration needed for running any test.
+message Config {
+  // Command line for executing the CelService server to be used
+  // when no call-specific server is specified.
+  string server_cmd = 1;
+
+  // Command line for executing a CelService server to be used
+  // for Parse() calls.  Default to server_cmd if empty.
+  string parse_server_cmd = 2;
+
+  // Command line for executing a CelService server to be used
+  // for Check() calls.  Default to server_cmd if empty.
+  string check_server_cmd = 3;
+
+  // Command line for executing a CelService server to be used
+  // for Eval() calls.  Default to server_cmd if empty.
+  string eval_server_cmd = 4;
+}
 
 message EvalResponseMatcher {
   oneof kind {
@@ -31,10 +51,11 @@ message SimpleEvalTest {
   string name = 1;
   string description = 2;
   string expr = 3;
-  map<string, google.api.expr.v1alpha1.ExprValue> bindings = 4;
-  EvalResponseMatcher expected = 5;
-  bool skip_check = 6;
-  bool use_macros = 7;
+  repeated google.api.expr.v1alpha1.Decl type_env = 4;
+  map<string, google.api.expr.v1alpha1.ExprValue> bindings = 5;
+  EvalResponseMatcher expected = 6;
+  bool enable_check = 7;
+  bool enable_macros = 8;
 }
 
 message SimpleEvalTestSection {
