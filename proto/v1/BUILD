@@ -1,3 +1,5 @@
+load("@io_bazel_rules_go//proto:def.bzl", "go_proto_library")
+
 package(
     # default_compatible_with = ["//buildenv/target:appengine"],
     default_visibility = ["//visibility:public"],
@@ -29,6 +31,12 @@ cc_proto_library(
     deps = [":value_protos"],
 )
 
+go_proto_library(
+    name = "value_go_proto",
+    importpath = "github.com/google/cel-spec/proto/v1/value",
+    proto = ":value_protos",
+)
+
 java_proto_library(
     name = "value_java_proto",
     deps = [":value_protos"],
@@ -37,6 +45,34 @@ java_proto_library(
 java_lite_proto_library(
     name = "value_java_proto_lite",
     deps = [":value_protos"],
+)
+
+proto_library(
+    name = "cel_service_proto",
+    srcs = [
+        "cel-service.proto",
+    ],
+    deps = [
+        ":eval_protos",
+        ":syntax_protos",
+        ":value_protos",
+        "//proto/checked/v1:checked_protos",
+        "@com_google_googleapis//:rpc_status",
+    ],
+)
+
+go_proto_library(
+    name = "cel_service_go_proto",
+    compilers = ["@io_bazel_rules_go//proto:go_grpc"],
+    importpath = "github.com/google/cel-spec/proto/v1/cel_service",
+    proto = ":cel_service_proto",
+    deps = [
+        ":eval_go_proto",
+        ":syntax_go_proto",
+        ":value_go_proto",
+        "//proto/checked/v1:checked_go_proto",
+        "@com_google_googleapis//:rpc_status_go_proto",
+    ],
 )
 
 proto_library(
@@ -51,6 +87,16 @@ proto_library(
         ":value_protos",
         "@com_google_googleapis//:rpc_status",
     ],
+)
+
+go_proto_library(
+    name = "eval_go_proto",
+    importpath = "github.com/google/cel-spec/proto/v1/eval",
+    proto = ":eval_protos",
+    deps = [
+        ":value_go_proto",
+        "@com_google_googleapis//:rpc_status_go_proto",
+    ]
 )
 
 java_proto_library(
@@ -78,6 +124,12 @@ proto_library(
         "@com_google_protobuf//:struct_proto",
         "@com_google_protobuf//:timestamp_proto",
     ],
+)
+
+go_proto_library(
+    name = "syntax_go_proto",
+    importpath = "github.com/google/cel-spec/proto/v1/syntax",
+    proto = ":syntax_protos",
 )
 
 java_proto_library(
