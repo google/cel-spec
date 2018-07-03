@@ -11,10 +11,49 @@ http_archive(
 )
 
 new_http_archive(
-  name = "com_google_googleapis",
-  url = "https://github.com/googleapis/googleapis/archive/common-protos-1_3_1.zip",
-  strip_prefix = "googleapis-common-protos-1_3_1/",
-  build_file_content = "proto_library(name = 'rpc_status', srcs = ['google/rpc/status.proto'], deps = ['@com_google_protobuf//:any_proto', '@com_google_protobuf//:empty_proto'], visibility = ['//visibility:public']), proto_library(name = 'rpc_code', srcs = ['google/rpc/code.proto'], visibility = ['//visibility:public']), cc_proto_library(name = 'cc_rpc_status', deps = [':rpc_status'], visibility = ['//visibility:public']), cc_proto_library(name = 'cc_rpc_code', deps = [':rpc_code'], visibility = ['//visibility:public'])"
+    name = "com_google_googleapis",
+    url = "https://github.com/googleapis/googleapis/archive/common-protos-1_3_1.zip",
+    strip_prefix = "googleapis-common-protos-1_3_1/",
+    build_file_content = """
+load('@io_bazel_rules_go//proto:def.bzl', 'go_proto_library')
+
+proto_library(
+    name = 'rpc_status',
+    srcs = ['google/rpc/status.proto'],
+    deps = [
+        '@com_google_protobuf//:any_proto',
+        '@com_google_protobuf//:empty_proto',
+    ],
+    visibility = ['//visibility:public'],
+)
+
+proto_library(
+    name = 'rpc_code',
+    srcs = ['google/rpc/code.proto'],
+    visibility = ['//visibility:public'],
+)
+
+cc_proto_library(
+    name = 'cc_rpc_status',
+    deps = [':rpc_status'],
+    visibility = ['//visibility:public'],
+)
+
+cc_proto_library(
+    name = 'cc_rpc_code',
+    deps = [':rpc_code'],
+    visibility = ['//visibility:public'],
+)
+
+go_proto_library(
+    name = 'rpc_status_go_proto',
+    # TODO: Switch to the correct import path when bazel rules fixed.
+    #importpath = 'google.golang.org/genproto/googleapis/rpc/status',
+    importpath = 'github.com/googleapis/googleapis/google/rpc',
+    proto = ':rpc_status',
+    visibility = ['//visibility:public'],
+)
+"""
 )
 
 http_archive(
@@ -50,3 +89,12 @@ http_archive(
     strip_prefix = "abseil-cpp-master",
     urls = ["https://github.com/abseil/abseil-cpp/archive/master.zip"],
 )
+
+http_archive(
+    name = "io_bazel_rules_go",
+    url = "https://github.com/bazelbuild/rules_go/releases/download/0.12.0/rules_go-0.12.0.tar.gz",
+    sha256 = "c1f52b8789218bb1542ed362c4f7de7052abcf254d865d96fb7ba6d44bc15ee3",
+)
+load("@io_bazel_rules_go//go:def.bzl", "go_rules_dependencies", "go_register_toolchains")
+go_rules_dependencies()
+go_register_toolchains()
