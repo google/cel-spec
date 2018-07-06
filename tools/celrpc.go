@@ -60,18 +60,28 @@ func NewClient(serverPath string) (*ConfClient, error) {
 	return &c, nil
 }
 
-func ExampleNewClient() bool {
+func ExampleNewClient() {
 	c, err := NewClient("/path/to/server/binary")
 	defer c.Shutdown()
 	if err != nil {
-		log.Fatalf("")
-		return false
+		log.Fatal("Couldn't create client")
 	}
 	parseRequest := exprpb.ParseRequest{
 		CelSource: "1 + 1",
 	}
 	parseResponse, err := c.Parse(context.Background(), &parseRequest)
-	return parseResponse != nil && err == nil
+	if err != nil {
+		log.Fatal("Couldn't parse")
+	}
+	parsedExpr := parseResponse.ParsedExpr
+	evalRequest := exprpb.EvalRequest{
+		ExprKind: &exprpb.EvalRequest_ParsedExpr{parsedExpr},
+	}
+	evalResponse, err := c.Eval(context.Background(), &evalRequest)
+	if err != nil {
+		log.Fatal("Couldn't eval")
+	}
+	fmt.Println("1 + 1 is %v", evalResponse.Result.GetValue().GetInt64Value())
 }
 
 // Shutdown deallocates all resources associated with the client.
