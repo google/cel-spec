@@ -1,12 +1,14 @@
 package simple
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/golang/protobuf/proto"
+	"github.com/google/cel-spec/tools/celrpc"
 
 	ctpb "github.com/google/cel-spec/proto/test/v1/conformanceTest"
-	exprbp "google.golang.org/genproto/googleapis/api/expr/v1alpha1"
+	exprpb "google.golang.org/genproto/googleapis/api/expr/v1alpha1"
 )
 
 var (
@@ -41,9 +43,9 @@ func Match(m *ctpb.EvalResponseMatcher, actual *exprpb.ExprValue) error {
 			return nil
 		}
 		return fmt.Errorf("Expected unknown, got %v", actual)
-	case *ctpb.EvalResponseMatcher_ParseFailureRegexp:
+	case *ctpb.EvalResponseMatcher_ParseFailureRegex:
 		return fmt.Errorf("parse succeeded but expected failure: %v", actual)
-	case *ctpb.EvalResponseMatcher_CheckFailureRegexp:
+	case *ctpb.EvalResponseMatcher_CheckFailureRegex:
 		return fmt.Errorf("check succeeded but expected failure: %v", actual)
 	case *ctpb.EvalResponseMatcher_Trueval:
 		switch actual.Kind.(type) {
@@ -52,7 +54,7 @@ func Match(m *ctpb.EvalResponseMatcher, actual *exprpb.ExprValue) error {
 		}
 		return fmt.Errorf("Expected true, got %v", actual)
 	}
-	return err("Unsupported matcher kind")
+	return fmt.Errorf("Unsupported matcher kind")
 }
 
 // MatchValue returns whether the actual value is equal to the
@@ -62,15 +64,15 @@ func Match(m *ctpb.EvalResponseMatcher, actual *exprpb.ExprValue) error {
 func MatchValue(expected *exprpb.Value, actual *exprpb.Value) error {
 	// XXX for now, just compare the protos.
 	if !proto.Equal(expected, actual) {
-		return fmt.Errorf("Expected [%v], Actual [%v]", expected, actual
+		return fmt.Errorf("Expected [%v], Actual [%v]", expected, actual)
 	}
 	return nil
 }
 
 type runConfig struct {
-	parseClient *celrpc.Celclient,
-	checkClient *celrpc.Celclient,
-	evalClient *celrpc.Celclient,
+	parseClient *celrpc.ConfClient
+	checkClient *celrpc.ConfClient
+	evalClient *celrpc.ConfClient
 }
 
 func (r *runConfig) RunTest(t *ctpb.SimpleEvalTest) error {
@@ -81,10 +83,10 @@ func (r *runConfig) RunTest(t *ctpb.SimpleEvalTest) error {
 	m := t.Expected
 
 	// Parse
-	preq := cs.ParseRequest{
-		CelSource: ctpb.Expr,
-		SourceLocation: ctpb.Name,
-		EnableMacros: ctpb.EnableMacros,
+	preq := exprpb.ParseRequest{
+		CelSource: t.Expr,
+		SourceLocation: t.Name,
+		DisableMacros: t.DisableMacros,
 	}
 	pres, err := r.parseClient.Parse(context.Background(), &preq)
 	if err != nil {
@@ -93,17 +95,17 @@ func (r *runConfig) RunTest(t *ctpb.SimpleEvalTest) error {
 	if pres == nil {
 		return fmt.Errorf("%s: Empty parse RPC response", t.Name)
 	}
-	parsedExpr := pres.Expr
+	parsedExpr := pres.ParsedExpr
 	if parsedExpr == nil {
-		switch t.Expected.Kind.(type) {
-		case *ctpb.Matcher_ParseFailureRegexp:
-			// TODO interpret regexp
+		switch m.Kind.(type) {
+		case *ctpb.EvalResponseMatcher_ParseFailureRegex:
+			// TODO interpret regex
 			return nil
 		}
-		return fmt.Errorf("%s: Fatal parse errors: %v", t.Name, pres.Fatals)
+		return fmt.Errorf("%s: Fatal parse errors: %v", t.Name, pres.Issues)
 	}
-	switch t.Expected.Kind.(type) {
-	case *ctpb.Matcher_ParseFailureRegexp:
+	switch m.Kind.(type) {
+	case *ctpb.EvalResponseMatcher_ParseFailureRegex:
 		return fmt.Errorf("%s: parse succeeded but expected failure: %v", t.Name)
 	}
 	if parsedExpr.Expr == nil {
@@ -112,10 +114,10 @@ func (r *runConfig) RunTest(t *ctpb.SimpleEvalTest) error {
 	rootId := parsedExpr.Expr.Id
 
 	// Check (optional)
-	var checkedExpr *checked.CheckedExpr
+	var checkedExpr *exprpb.CheckedExpr
 	if t.EnableCheck {
-		creq := cs.CheckRequest{
-			Expr: parsedExpr,
+		creq := exprpb.CheckRequest{
+			ParsedExpr: parsedExpr,
 			TypeEnv: t.TypeEnv,
 		}
 		cres, err := r.checkClient.Check(context.Background(), &creq)
@@ -127,33 +129,33 @@ func (r *runConfig) RunTest(t *ctpb.SimpleEvalTest) error {
 		}
 		checkedExpr = cres.CheckedExpr
 		if checkedExpr == nil {
-			switch t.Expected.Kind.(type) {
-			case *ctpb.Matcher_CheckFailureRegexp:
-				// TODO interpret regexp
+			switch m.Kind.(type) {
+			case *ctpb.EvalResponseMatcher_CheckFailureRegex:
+				// TODO interpret regex
 				return nil
 			}
-			return fmt.Errorf("%s: Fatal check errors: %v", t.Name, cres.Fatals)
+			return fmt.Errorf("%s: Fatal check errors: %v", t.Name, cres.Issues)
 		}
-		switch t.Expected.Kind.(type) {
-		case *ctpb.Matcher_CheckFailureRegexp:
+		switch m.Kind.(type) {
+		case *ctpb.EvalResponseMatcher_CheckFailureRegex:
 			return fmt.Errorf("%s: check succeeded but expected failure: %v", t.Name, checkedExpr)
 		}
-		topType, present := checkedExpr.TypeMap[rootId]
+		_, present := checkedExpr.TypeMap[rootId]
 		if !present {
 			return fmt.Errorf("%s: No type for top level expression: %v", t.Name, cres)
 		}
 	}
 
 	// Eval
-	var ereq cs.EvalRequest
+	var ereq exprpb.EvalRequest
 	if checkedExpr == nil {
-		ereq = cs.EvalRequest{
-			ExprKind: &cs.EvalRequest_Parsed{parsedExpr},
+		ereq = exprpb.EvalRequest{
+			ExprKind: &exprpb.EvalRequest_ParsedExpr{parsedExpr},
 			Bindings: t.Bindings,
 		}
 	} else {
-		ereq = cs.EvalRequest{
-			ExprKind: &cs.EvalRequest_Checked{checkedExpr},
+		ereq = exprpb.EvalRequest{
+			ExprKind: &exprpb.EvalRequest_CheckedExpr{checkedExpr},
 			Bindings: t.Bindings,
 		}
 	}
@@ -164,14 +166,14 @@ func (r *runConfig) RunTest(t *ctpb.SimpleEvalTest) error {
 	if eres == nil || eres.Result == nil {
 		return fmt.Errorf("%s: empty eval response", t.Name)
 	}
-	return Match(t, eres.Result)
+	return Match(m, eres.Result)
 }
 
 func ValidateTest(t *ctpb.SimpleEvalTest) error {
-	if t.Name == nil {
+	if t.Name == "" {
 		return fmt.Errorf("Simple test has no name")
 	}
-	if t.Expr == nil {
+	if t.Expr == "" {
 		return fmt.Errorf("%s: no expression", t.Name)
 	}
 	if t.Expected == nil {

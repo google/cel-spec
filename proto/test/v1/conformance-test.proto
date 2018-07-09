@@ -55,7 +55,7 @@ message SimpleEvalTest {
   map<string, google.api.expr.v1alpha1.ExprValue> bindings = 5;
   EvalResponseMatcher expected = 6;
   bool enable_check = 7;
-  bool enable_macros = 8;
+  bool disable_macros = 8;
 }
 
 message SimpleEvalTestSection {

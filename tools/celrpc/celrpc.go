@@ -86,6 +86,7 @@ func ExampleNewClient() {
 
 // Shutdown deallocates all resources associated with the client.
 // No further calls should be made on the client after shutdown.
+// Shutdown should be called even on an error return from NewClient().
 func (c *ConfClient) Shutdown() {
 	if c.conn != nil {
 		c.conn.Close()
@@ -101,7 +102,8 @@ func (c *ConfClient) Shutdown() {
 // StartServer listens on a dynamically-allocated port on the loopback
 // network device, prints its address and port to stdout, then starts
 // a gRPC server on the socket with the given service callbacks.
-func StartServer(service exprpb.ConformanceServiceServer) {
+// Note that this call doesn't return until ther server exits.
+func RunServer(service exprpb.ConformanceServiceServer) {
         lis, err := net.Listen("tcp", "127.0.0.1:")
         if err != nil {
                 log.Fatalf("failed to listen: %v", err)
