@@ -109,7 +109,7 @@ func RunServer(service exprpb.ConformanceServiceServer) {
                 log.Fatalf("failed to listen: %v", err)
         }
 
-        fmt.Printf("Listening on %v\n", lis.Addr().String())
+        fmt.Printf("Listening on %v\n", lis.Addr())
         os.Stdout.Sync()
 
         s := grpc.NewServer()
