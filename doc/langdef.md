@@ -549,6 +549,11 @@ traditional boolean short-circuit operators). The rationale for this behavior is
 to allow the boolean operators to be mapped to indexed queries, and align better
 with SQL semantics.
 
+To get traditional left-to-right short-circuiting evaluation of logical
+operators, as in C or other languages (also called "McCarthy Evaluation"),
+the expression `e1 && e2` can be rewritten `e1 ? e2 : false`.  Similarly,
+`e1 || e2` can be rewritten `e1 ? true : e2`.
+
 ### Macros
 
 CEL supports a small set of predefined macros. Macro invocations have the same
