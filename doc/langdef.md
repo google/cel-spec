@@ -28,7 +28,7 @@ Expr           = ConditionalOr ["?" ConditionalOr ":" Expr] ;
 ConditionalOr  = [ConditionalOr "||"] ConditionalAnd ;
 ConditionalAnd = [ConditionalAnd "&&"] Relation ;
 Relation       = [Relation Relop] Addition ;
-Relop          = "<" | "<=" | ">=" | ">" | "==" | "!=" | "in" ;
+Relop          = "<" | "<=" | ">=" | ">" | "==" | "!=" | " in " ;
 Addition       = [Addition ("+" | "-")] Multiplication ;
 Multiplication = [Multiplication ("*" | "/" | "%")] Unary ;
 Unary          = Member
@@ -40,7 +40,7 @@ Member         = Primary
                | Member "[" Expr "]"
                | Member "{" [FieldInits] "}"
                ;
-Primary        = ["."] IDENT ["(" [ExprList] ")"]
+Primary        = IDENT ["(" [ExprList] ")"]
                | "(" Expr ")"
                | "[" [ExprList] "]"
                | "{" [MapInits] "}"
@@ -77,8 +77,8 @@ productions are only used to recognize separate lexical elements and are ignored
 by the grammar.
 
 ```
-IDENT          ::= [_a-zA-Z][_a-zA-Z0-9]* - RESERVED
-LITERAL        ::= INT_LIT | UINT_LIT | FLOAT_LIT | STRING_LIT | BYTES_LIT
+IDENT          ::= [_a-zA-Z][_a-zA-Z0-9]* ~RESERVED
+LITERAL        ::= UINT_LIT | INT_LIT | FLOAT_LIT | BYTES_LIT | STRING_LIT  
                  | BOOL_LIT | NULL_LIT
 INT_LIT        ::= DIGIT+ | 0x HEXDIGIT+
 UINT_LIT       ::= INT_LIT [uU]
