@@ -1580,7 +1580,7 @@ table is auto-generated so the descriptions need to be updated in the code.
       (string, string) -> bool
     </td>
     <td>
-      matches second argument against regular expression in first argument
+      matches first argument against regular expression in second argument
     </td>
   </tr>
   <tr>
