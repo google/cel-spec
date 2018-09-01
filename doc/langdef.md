@@ -28,7 +28,7 @@ Expr           = ConditionalOr ["?" ConditionalOr ":" Expr] ;
 ConditionalOr  = [ConditionalOr "||"] ConditionalAnd ;
 ConditionalAnd = [ConditionalAnd "&&"] Relation ;
 Relation       = [Relation Relop] Addition ;
-Relop          = "<" | "<=" | ">=" | ">" | "==" | "!=" | " in " ;
+Relop          = "<" | "<=" | ">=" | ">" | "==" | "!=" | "in" ;
 Addition       = [Addition ("+" | "-")] Multiplication ;
 Multiplication = [Multiplication ("*" | "/" | "%")] Unary ;
 Unary          = Member
