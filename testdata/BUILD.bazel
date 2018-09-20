@@ -44,6 +44,16 @@ proto_library(
     ],
 )
 
+cc_proto_library(
+    name = "test_data_cc_proto",
+    deps = [":test_data_proto"],
+)
+
+cc_proto_library(
+    name = "test_value_cc_proto",
+    deps = [":test_value_proto"],
+)
+
 go_proto_library(
     name = "test_data_go_proto",
     importpath = "github.com/google/cel-spec/testdata/test_data",
