@@ -1,0 +1,2816 @@
+description: "Set of unique (not equivalent) test values."
+test_values {
+  values {
+    name: "null"
+    expr: "null"
+    proto {
+      value_field_name: "single_any"
+    }
+    proto {
+      value_field_name: "single_duration"
+    }
+    proto {
+      value_field_name: "single_timestamp"
+    }
+    proto {
+      value_field_name: "single_null"
+    }
+    proto {
+      value_field_name: "wrapped_bool"
+    }
+    proto {
+      value_field_name: "wrapped_bytes"
+    }
+    proto {
+      value_field_name: "wrapped_double"
+    }
+    proto {
+      value_field_name: "wrapped_float"
+    }
+    proto {
+      value_field_name: "wrapped_int32"
+    }
+    proto {
+      value_field_name: "wrapped_int64"
+    }
+    proto {
+      value_field_name: "wrapped_string"
+    }
+    proto {
+      value_field_name: "wrapped_uint32"
+    }
+    proto {
+      value_field_name: "wrapped_uint64"
+    }
+    proto {
+      single_value {
+        null_value: NULL_VALUE
+      }
+      value_field_name: "single_value"
+    }
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.Value"
+        value: "\010\000"
+      }
+      value_field_name: "single_any"
+    }
+    v1beta1 {
+      value {
+        null_value: NULL_VALUE
+      }
+    }
+  }
+  values {
+    name: "bool(true)"
+    expr: "true"
+    proto {
+      single_bool: true
+      value_field_name: "single_bool"
+    }
+    proto {
+      single_value {
+        bool_value: true
+      }
+      value_field_name: "single_value"
+    }
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.Value"
+        value: " \001"
+      }
+      value_field_name: "single_any"
+    }
+    proto {
+      wrapped_bool {
+        value: true
+      }
+      value_field_name: "wrapped_bool"
+    }
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.BoolValue"
+        value: "\010\001"
+      }
+      value_field_name: "single_any"
+    }
+    v1beta1 {
+      value {
+        bool_value: true
+      }
+    }
+  }
+  values {
+    name: "bool(false)"
+    expr: "false"
+    proto {
+      value_field_name: "single_bool"
+    }
+    proto {
+      single_value {
+        bool_value: false
+      }
+      value_field_name: "single_value"
+    }
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.Value"
+        value: " \000"
+      }
+      value_field_name: "single_any"
+    }
+    proto {
+      wrapped_bool {
+      }
+      value_field_name: "wrapped_bool"
+    }
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.BoolValue"
+      }
+      value_field_name: "single_any"
+    }
+    v1beta1 {
+      value {
+        bool_value: false
+      }
+    }
+  }
+  values {
+    name: "int(min)"
+    expr: "-9223372036854775808"
+    proto {
+      single_int64: -9223372036854775808
+      value_field_name: "single_int64"
+    }
+    proto {
+      single_sint64: -9223372036854775808
+      value_field_name: "single_sint64"
+    }
+    proto {
+      single_sfixed64: -9223372036854775808
+      value_field_name: "single_sfixed64"
+    }
+    proto {
+      wrapped_int64 {
+        value: -9223372036854775808
+      }
+      value_field_name: "wrapped_int64"
+    }
+    v1beta1 {
+      value {
+        int64_value: -9223372036854775808
+      }
+    }
+  }
+  values {
+    name: "int(max_double_int-1)"
+    expr: "-9007199254740993"
+    proto {
+      single_int64: -9007199254740993
+      value_field_name: "single_int64"
+    }
+    proto {
+      single_sint64: -9007199254740993
+      value_field_name: "single_sint64"
+    }
+    proto {
+      single_sfixed64: -9007199254740993
+      value_field_name: "single_sfixed64"
+    }
+    proto {
+      wrapped_int64 {
+        value: -9007199254740993
+      }
+      value_field_name: "wrapped_int64"
+    }
+    v1beta1 {
+      value {
+        int64_value: -9007199254740993
+      }
+    }
+  }
+  values {
+    name: "int(max_double_int)"
+    expr: "-9007199254740992"
+    proto {
+      single_int64: -9007199254740992
+      value_field_name: "single_int64"
+    }
+    proto {
+      single_sint64: -9007199254740992
+      value_field_name: "single_sint64"
+    }
+    proto {
+      single_sfixed64: -9007199254740992
+      value_field_name: "single_sfixed64"
+    }
+    proto {
+      wrapped_int64 {
+        value: -9007199254740992
+      }
+      value_field_name: "wrapped_int64"
+    }
+    v1beta1 {
+      value {
+        int64_value: -9007199254740992
+      }
+    }
+  }
+  values {
+    name: "int(-1)"
+    expr: "-1"
+    proto {
+      single_int64: -1
+      value_field_name: "single_int64"
+    }
+    proto {
+      single_sint64: -1
+      value_field_name: "single_sint64"
+    }
+    proto {
+      single_sfixed64: -1
+      value_field_name: "single_sfixed64"
+    }
+    proto {
+      single_int32: -1
+      value_field_name: "single_int32"
+    }
+    proto {
+      single_sint32: -1
+      value_field_name: "single_sint32"
+    }
+    proto {
+      single_sfixed32: -1
+      value_field_name: "single_sfixed32"
+    }
+    proto {
+      wrapped_int32 {
+        value: -1
+      }
+      value_field_name: "wrapped_int32"
+    }
+    proto {
+      wrapped_int64 {
+        value: -1
+      }
+      value_field_name: "wrapped_int64"
+    }
+    proto {
+      wrapped_int32 {
+        value: -1
+      }
+      value_field_name: "wrapped_int32"
+    }
+    v1beta1 {
+      value {
+        int64_value: -1
+      }
+    }
+  }
+  values {
+    name: "int(0)"
+    expr: "0"
+    proto {
+      value_field_name: "single_int64"
+    }
+    proto {
+      value_field_name: "single_sint64"
+    }
+    proto {
+      value_field_name: "single_sfixed64"
+    }
+    proto {
+      value_field_name: "single_int32"
+    }
+    proto {
+      value_field_name: "single_sint32"
+    }
+    proto {
+      value_field_name: "single_sfixed32"
+    }
+    proto {
+      wrapped_int32 {
+      }
+      value_field_name: "wrapped_int32"
+    }
+    proto {
+      wrapped_int64 {
+      }
+      value_field_name: "wrapped_int64"
+    }
+    proto {
+      wrapped_int32 {
+      }
+      value_field_name: "wrapped_int32"
+    }
+    v1beta1 {
+      value {
+        int64_value: 0
+      }
+    }
+  }
+  values {
+    name: "int(1)"
+    expr: "1"
+    proto {
+      single_int64: 1
+      value_field_name: "single_int64"
+    }
+    proto {
+      single_sint64: 1
+      value_field_name: "single_sint64"
+    }
+    proto {
+      single_sfixed64: 1
+      value_field_name: "single_sfixed64"
+    }
+    proto {
+      single_int32: 1
+      value_field_name: "single_int32"
+    }
+    proto {
+      single_sint32: 1
+      value_field_name: "single_sint32"
+    }
+    proto {
+      single_sfixed32: 1
+      value_field_name: "single_sfixed32"
+    }
+    proto {
+      wrapped_int32 {
+        value: 1
+      }
+      value_field_name: "wrapped_int32"
+    }
+    proto {
+      wrapped_int64 {
+        value: 1
+      }
+      value_field_name: "wrapped_int64"
+    }
+    proto {
+      wrapped_int32 {
+        value: 1
+      }
+      value_field_name: "wrapped_int32"
+    }
+    v1beta1 {
+      value {
+        int64_value: 1
+      }
+    }
+  }
+  values {
+    name: "int(max_double_int)"
+    expr: "9007199254740992"
+    proto {
+      single_int64: 9007199254740992
+      value_field_name: "single_int64"
+    }
+    proto {
+      single_sint64: 9007199254740992
+      value_field_name: "single_sint64"
+    }
+    proto {
+      single_sfixed64: 9007199254740992
+      value_field_name: "single_sfixed64"
+    }
+    proto {
+      wrapped_int64 {
+        value: 9007199254740992
+      }
+      value_field_name: "wrapped_int64"
+    }
+    v1beta1 {
+      value {
+        int64_value: 9007199254740992
+      }
+    }
+  }
+  values {
+    name: "int(max_double_int+1)"
+    expr: "9007199254740993"
+    proto {
+      single_int64: 9007199254740993
+      value_field_name: "single_int64"
+    }
+    proto {
+      single_sint64: 9007199254740993
+      value_field_name: "single_sint64"
+    }
+    proto {
+      single_sfixed64: 9007199254740993
+      value_field_name: "single_sfixed64"
+    }
+    proto {
+      wrapped_int64 {
+        value: 9007199254740993
+      }
+      value_field_name: "wrapped_int64"
+    }
+    v1beta1 {
+      value {
+        int64_value: 9007199254740993
+      }
+    }
+  }
+  values {
+    name: "int(max)"
+    expr: "9223372036854775807"
+    proto {
+      single_int64: 9223372036854775807
+      value_field_name: "single_int64"
+    }
+    proto {
+      single_sint64: 9223372036854775807
+      value_field_name: "single_sint64"
+    }
+    proto {
+      single_sfixed64: 9223372036854775807
+      value_field_name: "single_sfixed64"
+    }
+    proto {
+      wrapped_int64 {
+        value: 9223372036854775807
+      }
+      value_field_name: "wrapped_int64"
+    }
+    v1beta1 {
+      value {
+        int64_value: 9223372036854775807
+      }
+    }
+  }
+  values {
+    name: "uint(0)"
+    expr: "0u"
+    proto {
+      value_field_name: "single_uint64"
+    }
+    proto {
+      value_field_name: "single_fixed64"
+    }
+    proto {
+      wrapped_uint64 {
+      }
+      value_field_name: "wrapped_uint64"
+    }
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.UInt64Value"
+      }
+      value_field_name: "single_any"
+    }
+    v1beta1 {
+      value {
+        uint64_value: 0
+      }
+    }
+  }
+  values {
+    name: "uint(1)"
+    expr: "1u"
+    proto {
+      single_uint64: 1
+      value_field_name: "single_uint64"
+    }
+    proto {
+      single_fixed64: 1
+      value_field_name: "single_fixed64"
+    }
+    proto {
+      wrapped_uint64 {
+        value: 1
+      }
+      value_field_name: "wrapped_uint64"
+    }
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.UInt64Value"
+        value: "\010\001"
+      }
+      value_field_name: "single_any"
+    }
+    v1beta1 {
+      value {
+        uint64_value: 1
+      }
+    }
+  }
+  values {
+    name: "uint(max_double_int)"
+    expr: "9007199254740992u"
+    proto {
+      single_uint64: 9007199254740992
+      value_field_name: "single_uint64"
+    }
+    proto {
+      single_fixed64: 9007199254740992
+      value_field_name: "single_fixed64"
+    }
+    proto {
+      wrapped_uint64 {
+        value: 9007199254740992
+      }
+      value_field_name: "wrapped_uint64"
+    }
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.UInt64Value"
+        value: "\010\200\200\200\200\200\200\200\020"
+      }
+      value_field_name: "single_any"
+    }
+    v1beta1 {
+      value {
+        uint64_value: 9007199254740992
+      }
+    }
+  }
+  values {
+    name: "uint(max_double_int+1)"
+    expr: "9007199254740993u"
+    proto {
+      single_uint64: 9007199254740993
+      value_field_name: "single_uint64"
+    }
+    proto {
+      single_fixed64: 9007199254740993
+      value_field_name: "single_fixed64"
+    }
+    proto {
+      wrapped_uint64 {
+        value: 9007199254740993
+      }
+      value_field_name: "wrapped_uint64"
+    }
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.UInt64Value"
+        value: "\010\201\200\200\200\200\200\200\020"
+      }
+      value_field_name: "single_any"
+    }
+    v1beta1 {
+      value {
+        uint64_value: 9007199254740993
+      }
+    }
+  }
+  values {
+    name: "uint(max)"
+    expr: "18446744073709551615u"
+    proto {
+      single_uint64: 18446744073709551615
+      value_field_name: "single_uint64"
+    }
+    proto {
+      single_fixed64: 18446744073709551615
+      value_field_name: "single_fixed64"
+    }
+    proto {
+      wrapped_uint64 {
+        value: 18446744073709551615
+      }
+      value_field_name: "wrapped_uint64"
+    }
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.UInt64Value"
+        value: "\010\377\377\377\377\377\377\377\377\377\001"
+      }
+      value_field_name: "single_any"
+    }
+    v1beta1 {
+      value {
+        uint64_value: 18446744073709551615
+      }
+    }
+  }
+  values {
+    name: "double(NaN)"
+    expr: "nan"
+    proto {
+      single_double: nan
+      value_field_name: "single_double"
+    }
+    proto {
+      single_value {
+        number_value: nan
+      }
+      value_field_name: "single_value"
+    }
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.Value"
+        value: "\021\000\000\000\000\000\000\370\177"
+      }
+      value_field_name: "single_any"
+    }
+    proto {
+      wrapped_double {
+        value: nan
+      }
+      value_field_name: "wrapped_double"
+    }
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.DoubleValue"
+        value: "\t\000\000\000\000\000\000\370\177"
+      }
+      value_field_name: "single_any"
+    }
+    v1beta1 {
+      value {
+        double_value: nan
+      }
+    }
+  }
+  values {
+    name: "double(-inf)"
+    expr: "-inf"
+    proto {
+      single_double: -inf
+      value_field_name: "single_double"
+    }
+    proto {
+      single_value {
+        number_value: -inf
+      }
+      value_field_name: "single_value"
+    }
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.Value"
+        value: "\021\000\000\000\000\000\000\360\377"
+      }
+      value_field_name: "single_any"
+    }
+    proto {
+      wrapped_double {
+        value: -inf
+      }
+      value_field_name: "wrapped_double"
+    }
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.DoubleValue"
+        value: "\t\000\000\000\000\000\000\360\377"
+      }
+      value_field_name: "single_any"
+    }
+    v1beta1 {
+      value {
+        double_value: -inf
+      }
+    }
+  }
+  values {
+    name: "double(min)"
+    expr: "2.22507e-308"
+    proto {
+      single_double: 2.2250738585072014e-308
+      value_field_name: "single_double"
+    }
+    proto {
+      single_value {
+        number_value: 2.2250738585072014e-308
+      }
+      value_field_name: "single_value"
+    }
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.Value"
+        value: "\021\000\000\000\000\000\000\020\000"
+      }
+      value_field_name: "single_any"
+    }
+    proto {
+      wrapped_double {
+        value: 2.2250738585072014e-308
+      }
+      value_field_name: "wrapped_double"
+    }
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.DoubleValue"
+        value: "\t\000\000\000\000\000\000\020\000"
+      }
+      value_field_name: "single_any"
+    }
+    v1beta1 {
+      value {
+        double_value: 2.2250738585072014e-308
+      }
+    }
+  }
+  values {
+    name: "double(max_double_int-2)"
+    expr: "-9.0072e+15.0"
+    proto {
+      single_double: -9007199254740994
+      value_field_name: "single_double"
+    }
+    proto {
+      single_value {
+        number_value: -9007199254740994
+      }
+      value_field_name: "single_value"
+    }
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.Value"
+        value: "\021\001\000\000\000\000\000@\303"
+      }
+      value_field_name: "single_any"
+    }
+    proto {
+      wrapped_double {
+        value: -9007199254740994
+      }
+      value_field_name: "wrapped_double"
+    }
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.DoubleValue"
+        value: "\t\001\000\000\000\000\000@\303"
+      }
+      value_field_name: "single_any"
+    }
+    v1beta1 {
+      value {
+        double_value: -9007199254740994
+      }
+    }
+  }
+  values {
+    name: "double(max_double_int)"
+    expr: "-9.0072e+15.0"
+    proto {
+      single_double: -9007199254740992
+      value_field_name: "single_double"
+    }
+    proto {
+      single_value {
+        number_value: -9007199254740992
+      }
+      value_field_name: "single_value"
+    }
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.Value"
+        value: "\021\000\000\000\000\000\000@\303"
+      }
+      value_field_name: "single_any"
+    }
+    proto {
+      wrapped_double {
+        value: -9007199254740992
+      }
+      value_field_name: "wrapped_double"
+    }
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.DoubleValue"
+        value: "\t\000\000\000\000\000\000@\303"
+      }
+      value_field_name: "single_any"
+    }
+    v1beta1 {
+      value {
+        double_value: -9007199254740992
+      }
+    }
+  }
+  values {
+    name: "double(-1)"
+    expr: "-1.0"
+    proto {
+      single_double: -1
+      value_field_name: "single_double"
+    }
+    proto {
+      single_value {
+        number_value: -1
+      }
+      value_field_name: "single_value"
+    }
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.Value"
+        value: "\021\000\000\000\000\000\000\360\277"
+      }
+      value_field_name: "single_any"
+    }
+    proto {
+      wrapped_double {
+        value: -1
+      }
+      value_field_name: "wrapped_double"
+    }
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.DoubleValue"
+        value: "\t\000\000\000\000\000\000\360\277"
+      }
+      value_field_name: "single_any"
+    }
+    v1beta1 {
+      value {
+        double_value: -1
+      }
+    }
+  }
+  values {
+    name: "double(0)"
+    expr: "0.0"
+    proto {
+      value_field_name: "single_double"
+    }
+    proto {
+      single_value {
+        number_value: 0
+      }
+      value_field_name: "single_value"
+    }
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.Value"
+        value: "\021\000\000\000\000\000\000\000\000"
+      }
+      value_field_name: "single_any"
+    }
+    proto {
+      wrapped_double {
+      }
+      value_field_name: "wrapped_double"
+    }
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.DoubleValue"
+      }
+      value_field_name: "single_any"
+    }
+    v1beta1 {
+      value {
+        double_value: 0
+      }
+    }
+  }
+  values {
+    name: "double(1)"
+    expr: "1.0"
+    proto {
+      single_double: 1
+      value_field_name: "single_double"
+    }
+    proto {
+      single_float: 1
+      value_field_name: "single_float"
+    }
+    proto {
+      single_value {
+        number_value: 1
+      }
+      value_field_name: "single_value"
+    }
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.Value"
+        value: "\021\000\000\000\000\000\000\360?"
+      }
+      value_field_name: "single_any"
+    }
+    proto {
+      wrapped_double {
+        value: 1
+      }
+      value_field_name: "wrapped_double"
+    }
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.DoubleValue"
+        value: "\t\000\000\000\000\000\000\360?"
+      }
+      value_field_name: "single_any"
+    }
+    proto {
+      wrapped_float {
+        value: 1
+      }
+      value_field_name: "wrapped_float"
+    }
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.DoubleValue"
+        value: "\t\000\000\000\000\000\000\360?"
+      }
+      value_field_name: "single_any"
+    }
+    v1beta1 {
+      value {
+        double_value: 1
+      }
+    }
+  }
+  values {
+    name: "double(max_double_int)"
+    expr: "9.0072e+15.0"
+    proto {
+      single_double: 9007199254740992
+      value_field_name: "single_double"
+    }
+    proto {
+      single_float: 9.007199e+15
+      value_field_name: "single_float"
+    }
+    proto {
+      single_value {
+        number_value: 9007199254740992
+      }
+      value_field_name: "single_value"
+    }
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.Value"
+        value: "\021\000\000\000\000\000\000@C"
+      }
+      value_field_name: "single_any"
+    }
+    proto {
+      wrapped_double {
+        value: 9007199254740992
+      }
+      value_field_name: "wrapped_double"
+    }
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.DoubleValue"
+        value: "\t\000\000\000\000\000\000@C"
+      }
+      value_field_name: "single_any"
+    }
+    proto {
+      wrapped_float {
+        value: 9.007199e+15
+      }
+      value_field_name: "wrapped_float"
+    }
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.DoubleValue"
+        value: "\t\000\000\000\000\000\000@C"
+      }
+      value_field_name: "single_any"
+    }
+    v1beta1 {
+      value {
+        double_value: 9007199254740992
+      }
+    }
+  }
+  values {
+    name: "double(max_double_int+2)"
+    expr: "9.0072e+15.0"
+    proto {
+      single_double: 9007199254740994
+      value_field_name: "single_double"
+    }
+    proto {
+      single_value {
+        number_value: 9007199254740994
+      }
+      value_field_name: "single_value"
+    }
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.Value"
+        value: "\021\001\000\000\000\000\000@C"
+      }
+      value_field_name: "single_any"
+    }
+    proto {
+      wrapped_double {
+        value: 9007199254740994
+      }
+      value_field_name: "wrapped_double"
+    }
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.DoubleValue"
+        value: "\t\001\000\000\000\000\000@C"
+      }
+      value_field_name: "single_any"
+    }
+    v1beta1 {
+      value {
+        double_value: 9007199254740994
+      }
+    }
+  }
+  values {
+    name: "double(max)"
+    expr: "1.79769e+308.0"
+    proto {
+      single_double: 1.7976931348623157e+308
+      value_field_name: "single_double"
+    }
+    proto {
+      single_value {
+        number_value: 1.7976931348623157e+308
+      }
+      value_field_name: "single_value"
+    }
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.Value"
+        value: "\021\377\377\377\377\377\377\357\177"
+      }
+      value_field_name: "single_any"
+    }
+    proto {
+      wrapped_double {
+        value: 1.7976931348623157e+308
+      }
+      value_field_name: "wrapped_double"
+    }
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.DoubleValue"
+        value: "\t\377\377\377\377\377\377\357\177"
+      }
+      value_field_name: "single_any"
+    }
+    v1beta1 {
+      value {
+        double_value: 1.7976931348623157e+308
+      }
+    }
+  }
+  values {
+    name: "double(+inf)"
+    expr: "inf"
+    proto {
+      single_double: inf
+      value_field_name: "single_double"
+    }
+    proto {
+      single_value {
+        number_value: inf
+      }
+      value_field_name: "single_value"
+    }
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.Value"
+        value: "\021\000\000\000\000\000\000\360\177"
+      }
+      value_field_name: "single_any"
+    }
+    proto {
+      wrapped_double {
+        value: inf
+      }
+      value_field_name: "wrapped_double"
+    }
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.DoubleValue"
+        value: "\t\000\000\000\000\000\000\360\177"
+      }
+      value_field_name: "single_any"
+    }
+    v1beta1 {
+      value {
+        double_value: inf
+      }
+    }
+  }
+  values {
+    name: "string(empty)"
+    expr: "\"\""
+    proto {
+      value_field_name: "single_string"
+    }
+    proto {
+      single_value {
+        string_value: ""
+      }
+      value_field_name: "single_value"
+    }
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.Value"
+        value: "\032\000"
+      }
+      value_field_name: "single_any"
+    }
+    proto {
+      wrapped_string {
+      }
+      value_field_name: "wrapped_string"
+    }
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.StringValue"
+      }
+      value_field_name: "single_any"
+    }
+    v1beta1 {
+      value {
+        string_value: ""
+      }
+    }
+  }
+  values {
+    name: "string(hi)"
+    expr: "\"hi\""
+    proto {
+      single_string: "hi"
+      value_field_name: "single_string"
+    }
+    proto {
+      single_value {
+        string_value: "hi"
+      }
+      value_field_name: "single_value"
+    }
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.Value"
+        value: "\032\002hi"
+      }
+      value_field_name: "single_any"
+    }
+    proto {
+      wrapped_string {
+        value: "hi"
+      }
+      value_field_name: "wrapped_string"
+    }
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.StringValue"
+        value: "\n\002hi"
+      }
+      value_field_name: "single_any"
+    }
+    v1beta1 {
+      value {
+        string_value: "hi"
+      }
+    }
+  }
+  values {
+    name: "bytes(empty)"
+    expr: "\"\""
+    proto {
+      value_field_name: "single_bytes"
+    }
+    proto {
+      wrapped_bytes {
+      }
+      value_field_name: "wrapped_bytes"
+    }
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.BytesValue"
+      }
+      value_field_name: "single_any"
+    }
+    v1beta1 {
+      value {
+        bytes_value: ""
+      }
+    }
+  }
+  values {
+    name: "bytes(hi)"
+    expr: "\"hi\""
+    proto {
+      single_bytes: "hi"
+      value_field_name: "single_bytes"
+    }
+    proto {
+      wrapped_bytes {
+        value: "hi"
+      }
+      value_field_name: "wrapped_bytes"
+    }
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.BytesValue"
+        value: "\n\002hi"
+      }
+      value_field_name: "single_any"
+    }
+    v1beta1 {
+      value {
+        bytes_value: "hi"
+      }
+    }
+  }
+  values {
+    name: "google.protobuf.Duration(min)"
+    expr: "google.protobuf.Duration(\"-87660000h0.999999999s\")"
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.Duration"
+        value: "\010\200\304\321\261\350\366\377\377\377\001\020\201\354\224\243\374\377\377\377\377\001"
+      }
+      value_field_name: "single_any"
+    }
+    proto {
+      single_duration {
+        seconds: -315576000000
+        nanos: -999999999
+      }
+      value_field_name: "single_duration"
+    }
+    v1beta1 {
+      value {
+        object_value {
+          type_url: "type.googleapis.com/google.protobuf.Duration"
+          value: "\010\200\304\321\261\350\366\377\377\377\001\020\201\354\224\243\374\377\377\377\377\001"
+        }
+      }
+    }
+  }
+  values {
+    name: "google.protobuf.Duration(min+1)"
+    expr: "google.protobuf.Duration(\"-87660000h0.999999998s\")"
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.Duration"
+        value: "\010\200\304\321\261\350\366\377\377\377\001\020\202\354\224\243\374\377\377\377\377\001"
+      }
+      value_field_name: "single_any"
+    }
+    proto {
+      single_duration {
+        seconds: -315576000000
+        nanos: -999999998
+      }
+      value_field_name: "single_duration"
+    }
+    v1beta1 {
+      value {
+        object_value {
+          type_url: "type.googleapis.com/google.protobuf.Duration"
+          value: "\010\200\304\321\261\350\366\377\377\377\001\020\202\354\224\243\374\377\377\377\377\001"
+        }
+      }
+    }
+  }
+  values {
+    name: "google.protobuf.Duration(-1)"
+    expr: "google.protobuf.Duration(\"-1ns\")"
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.Duration"
+        value: "\020\377\377\377\377\377\377\377\377\377\001"
+      }
+      value_field_name: "single_any"
+    }
+    proto {
+      single_duration {
+        nanos: -1
+      }
+      value_field_name: "single_duration"
+    }
+    v1beta1 {
+      value {
+        object_value {
+          type_url: "type.googleapis.com/google.protobuf.Duration"
+          value: "\020\377\377\377\377\377\377\377\377\377\001"
+        }
+      }
+    }
+  }
+  values {
+    name: "google.protobuf.Duration(0)"
+    expr: "google.protobuf.Duration(\"0\")"
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.Duration"
+      }
+      value_field_name: "single_any"
+    }
+    proto {
+      single_duration {
+      }
+      value_field_name: "single_duration"
+    }
+    v1beta1 {
+      value {
+        object_value {
+          type_url: "type.googleapis.com/google.protobuf.Duration"
+        }
+      }
+    }
+  }
+  values {
+    name: "google.protobuf.Duration(1)"
+    expr: "google.protobuf.Duration(\"1ns\")"
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.Duration"
+        value: "\020\001"
+      }
+      value_field_name: "single_any"
+    }
+    proto {
+      single_duration {
+        nanos: 1
+      }
+      value_field_name: "single_duration"
+    }
+    v1beta1 {
+      value {
+        object_value {
+          type_url: "type.googleapis.com/google.protobuf.Duration"
+          value: "\020\001"
+        }
+      }
+    }
+  }
+  values {
+    name: "google.protobuf.Duration(max-1)"
+    expr: "google.protobuf.Duration(\"87660000h0.999999998s\")"
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.Duration"
+        value: "\010\200\274\256\316\227\t\020\376\223\353\334\003"
+      }
+      value_field_name: "single_any"
+    }
+    proto {
+      single_duration {
+        seconds: 315576000000
+        nanos: 999999998
+      }
+      value_field_name: "single_duration"
+    }
+    v1beta1 {
+      value {
+        object_value {
+          type_url: "type.googleapis.com/google.protobuf.Duration"
+          value: "\010\200\274\256\316\227\t\020\376\223\353\334\003"
+        }
+      }
+    }
+  }
+  values {
+    name: "google.protobuf.Duration(max)"
+    expr: "google.protobuf.Duration(\"87660000h0.999999999s\")"
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.Duration"
+        value: "\010\200\274\256\316\227\t\020\377\223\353\334\003"
+      }
+      value_field_name: "single_any"
+    }
+    proto {
+      single_duration {
+        seconds: 315576000000
+        nanos: 999999999
+      }
+      value_field_name: "single_duration"
+    }
+    v1beta1 {
+      value {
+        object_value {
+          type_url: "type.googleapis.com/google.protobuf.Duration"
+          value: "\010\200\274\256\316\227\t\020\377\223\353\334\003"
+        }
+      }
+    }
+  }
+  values {
+    name: "google.protobuf.Timestamp(min)"
+    expr: "google.protobuf.Timestamp(\"1-01-01T00:00:00Z\")"
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.Timestamp"
+        value: "\010\200\222\270\303\230\376\377\377\377\001"
+      }
+      value_field_name: "single_any"
+    }
+    proto {
+      single_timestamp {
+        seconds: -62135596800
+      }
+      value_field_name: "single_timestamp"
+    }
+    v1beta1 {
+      value {
+        object_value {
+          type_url: "type.googleapis.com/google.protobuf.Timestamp"
+          value: "\010\200\222\270\303\230\376\377\377\377\001"
+        }
+      }
+    }
+  }
+  values {
+    name: "google.protobuf.Timestamp(min+1)"
+    expr: "google.protobuf.Timestamp(\"1-01-01T00:00:00.000000001Z\")"
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.Timestamp"
+        value: "\010\200\222\270\303\230\376\377\377\377\001\020\001"
+      }
+      value_field_name: "single_any"
+    }
+    proto {
+      single_timestamp {
+        seconds: -62135596800
+        nanos: 1
+      }
+      value_field_name: "single_timestamp"
+    }
+    v1beta1 {
+      value {
+        object_value {
+          type_url: "type.googleapis.com/google.protobuf.Timestamp"
+          value: "\010\200\222\270\303\230\376\377\377\377\001\020\001"
+        }
+      }
+    }
+  }
+  values {
+    name: "google.protobuf.Timestamp(-1)"
+    expr: "google.protobuf.Timestamp(\"1969-12-31T23:59:59.999999999Z\")"
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.Timestamp"
+        value: "\010\377\377\377\377\377\377\377\377\377\001\020\377\223\353\334\003"
+      }
+      value_field_name: "single_any"
+    }
+    proto {
+      single_timestamp {
+        seconds: -1
+        nanos: 999999999
+      }
+      value_field_name: "single_timestamp"
+    }
+    v1beta1 {
+      value {
+        object_value {
+          type_url: "type.googleapis.com/google.protobuf.Timestamp"
+          value: "\010\377\377\377\377\377\377\377\377\377\001\020\377\223\353\334\003"
+        }
+      }
+    }
+  }
+  values {
+    name: "google.protobuf.Timestamp(0)"
+    expr: "google.protobuf.Timestamp(\"1970-01-01T00:00:00Z\")"
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.Timestamp"
+      }
+      value_field_name: "single_any"
+    }
+    proto {
+      single_timestamp {
+      }
+      value_field_name: "single_timestamp"
+    }
+    v1beta1 {
+      value {
+        object_value {
+          type_url: "type.googleapis.com/google.protobuf.Timestamp"
+        }
+      }
+    }
+  }
+  values {
+    name: "google.protobuf.Timestamp(1)"
+    expr: "google.protobuf.Timestamp(\"1970-01-01T00:00:00.000000001Z\")"
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.Timestamp"
+        value: "\020\001"
+      }
+      value_field_name: "single_any"
+    }
+    proto {
+      single_timestamp {
+        nanos: 1
+      }
+      value_field_name: "single_timestamp"
+    }
+    v1beta1 {
+      value {
+        object_value {
+          type_url: "type.googleapis.com/google.protobuf.Timestamp"
+          value: "\020\001"
+        }
+      }
+    }
+  }
+  values {
+    name: "google.protobuf.Timestamp(max-1)"
+    expr: "google.protobuf.Timestamp(\"9999-12-31T23:59:59.999999998Z\")"
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.Timestamp"
+        value: "\010\377\202\321\377\257\007\020\376\223\353\334\003"
+      }
+      value_field_name: "single_any"
+    }
+    proto {
+      single_timestamp {
+        seconds: 253402300799
+        nanos: 999999998
+      }
+      value_field_name: "single_timestamp"
+    }
+    v1beta1 {
+      value {
+        object_value {
+          type_url: "type.googleapis.com/google.protobuf.Timestamp"
+          value: "\010\377\202\321\377\257\007\020\376\223\353\334\003"
+        }
+      }
+    }
+  }
+  values {
+    name: "google.protobuf.Timestamp(max)"
+    expr: "google.protobuf.Timestamp(\"9999-12-31T23:59:59.999999999Z\")"
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.Timestamp"
+        value: "\010\377\202\321\377\257\007\020\377\223\353\334\003"
+      }
+      value_field_name: "single_any"
+    }
+    proto {
+      single_timestamp {
+        seconds: 253402300799
+        nanos: 999999999
+      }
+      value_field_name: "single_timestamp"
+    }
+    v1beta1 {
+      value {
+        object_value {
+          type_url: "type.googleapis.com/google.protobuf.Timestamp"
+          value: "\010\377\202\321\377\257\007\020\377\223\353\334\003"
+        }
+      }
+    }
+  }
+  values {
+    name: "google.protobuf.Empty(empty)"
+    expr: "google.protobuf.Empty{}"
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.protobuf.Empty"
+      }
+      value_field_name: "single_any"
+    }
+    v1beta1 {
+      value {
+        object_value {
+          type_url: "type.googleapis.com/google.protobuf.Empty"
+        }
+      }
+    }
+  }
+  values {
+    name: "google.type.Money(empty)"
+    expr: "google.type.Money{currency_code=\"\", units=0, nanos=0}"
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.type.Money"
+      }
+      value_field_name: "single_any"
+    }
+    v1beta1 {
+      value {
+        object_value {
+          type_url: "type.googleapis.com/google.type.Money"
+        }
+      }
+    }
+  }
+  values {
+    name: "google.type.Money(100)"
+    expr: "google.type.Money{currency_code=\"\", units=0, nanos=100}"
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.type.Money"
+        value: "\030d"
+      }
+      value_field_name: "single_any"
+    }
+    v1beta1 {
+      value {
+        object_value {
+          type_url: "type.googleapis.com/google.type.Money"
+          value: "\030d"
+        }
+      }
+    }
+  }
+  values {
+    name: "google.type.Money(5)"
+    expr: "google.type.Money{currency_code=\"\", units=0, nanos=5}"
+    proto {
+      single_any {
+        type_url: "type.googleapis.com/google.type.Money"
+        value: "\030\005"
+      }
+      value_field_name: "single_any"
+    }
+    v1beta1 {
+      value {
+        object_value {
+          type_url: "type.googleapis.com/google.type.Money"
+          value: "\030\005"
+        }
+      }
+    }
+  }
+  values {
+    name: "list(empty)"
+    expr: "[]"
+    proto {
+      single_list {
+      }
+      value_field_name: "single_list"
+    }
+    proto {
+      value_field_name: "repeated_int32"
+    }
+    proto {
+      value_field_name: "repeated_int64"
+    }
+    proto {
+      value_field_name: "repeated_uint32"
+    }
+    proto {
+      value_field_name: "repeated_uint64"
+    }
+    proto {
+      value_field_name: "repeated_sint32"
+    }
+    proto {
+      value_field_name: "repeated_sint64"
+    }
+    proto {
+      value_field_name: "repeated_fixed32"
+    }
+    proto {
+      value_field_name: "repeated_fixed64"
+    }
+    proto {
+      value_field_name: "repeated_sfixed32"
+    }
+    proto {
+      value_field_name: "repeated_sfixed64"
+    }
+    proto {
+      value_field_name: "repeated_float"
+    }
+    proto {
+      value_field_name: "repeated_double"
+    }
+    proto {
+      value_field_name: "repeated_bool"
+    }
+    proto {
+      value_field_name: "repeated_string"
+    }
+    proto {
+      value_field_name: "repeated_bytes"
+    }
+    proto {
+      value_field_name: "repeated_nested_message"
+    }
+    proto {
+      value_field_name: "repeated_nested_enum"
+    }
+    proto {
+      value_field_name: "repeated_duration"
+    }
+    proto {
+      value_field_name: "repeated_timestamp"
+    }
+    proto {
+      value_field_name: "repeated_any"
+    }
+    proto {
+      value_field_name: "repeated_struct"
+    }
+    proto {
+      value_field_name: "repeated_value"
+    }
+    proto {
+      value_field_name: "repeated_null"
+    }
+    proto {
+      value_field_name: "repeated_list"
+    }
+    proto {
+      value_field_name: "repeated_wrapped_bool"
+    }
+    proto {
+      value_field_name: "repeated_wrapped_bytes"
+    }
+    proto {
+      value_field_name: "repeated_wrapped_double"
+    }
+    proto {
+      value_field_name: "repeated_wrapped_float"
+    }
+    proto {
+      value_field_name: "repeated_wrapped_int32"
+    }
+    proto {
+      value_field_name: "repeated_wrapped_int64"
+    }
+    proto {
+      value_field_name: "repeated_wrapped_string"
+    }
+    proto {
+      value_field_name: "repeated_wrapped_uint32"
+    }
+    proto {
+      value_field_name: "repeated_wrapped_uint64"
+    }
+    v1beta1 {
+      value {
+        list_value {
+        }
+      }
+    }
+  }
+  values {
+    name: "list<int>"
+    expr: "[1]"
+    proto {
+      repeated_int32: 1
+      value_field_name: "repeated_int32"
+    }
+    proto {
+      repeated_int64: 1
+      value_field_name: "repeated_int64"
+    }
+    proto {
+      repeated_sint32: 1
+      value_field_name: "repeated_sint32"
+    }
+    proto {
+      repeated_sint64: 1
+      value_field_name: "repeated_sint64"
+    }
+    proto {
+      repeated_sfixed32: 1
+      value_field_name: "repeated_sfixed32"
+    }
+    proto {
+      repeated_sfixed64: 1
+      value_field_name: "repeated_sfixed64"
+    }
+    v1beta1 {
+      value {
+        list_value {
+          values {
+            int64_value: 1
+          }
+        }
+      }
+    }
+  }
+  values {
+    name: "list<bool>"
+    expr: "[true, true, false]"
+    proto {
+      single_list {
+        values {
+          bool_value: true
+        }
+        values {
+          bool_value: true
+        }
+        values {
+          bool_value: false
+        }
+      }
+      value_field_name: "single_list"
+    }
+    proto {
+      repeated_bool: true
+      repeated_bool: true
+      repeated_bool: false
+      value_field_name: "repeated_bool"
+    }
+    proto {
+      repeated_any {
+        type_url: "type.googleapis.com/google.protobuf.Value"
+        value: " \001"
+      }
+      repeated_any {
+        type_url: "type.googleapis.com/google.protobuf.Value"
+        value: " \001"
+      }
+      repeated_any {
+        type_url: "type.googleapis.com/google.protobuf.Value"
+        value: " \000"
+      }
+      value_field_name: "repeated_any"
+    }
+    proto {
+      repeated_value {
+        bool_value: true
+      }
+      repeated_value {
+        bool_value: true
+      }
+      repeated_value {
+        bool_value: false
+      }
+      value_field_name: "repeated_value"
+    }
+    v1beta1 {
+      value {
+        list_value {
+          values {
+            bool_value: true
+          }
+          values {
+            bool_value: true
+          }
+          values {
+            bool_value: false
+          }
+        }
+      }
+    }
+  }
+  values {
+    name: "list<null>"
+    expr: "[null, null]"
+    proto {
+      single_list {
+        values {
+          null_value: NULL_VALUE
+        }
+        values {
+          null_value: NULL_VALUE
+        }
+      }
+      value_field_name: "single_list"
+    }
+    proto {
+      repeated_value {
+        null_value: NULL_VALUE
+      }
+      repeated_value {
+        null_value: NULL_VALUE
+      }
+      value_field_name: "repeated_value"
+    }
+    proto {
+      repeated_null: NULL_VALUE
+      repeated_null: NULL_VALUE
+      value_field_name: "repeated_null"
+    }
+    v1beta1 {
+      value {
+        list_value {
+          values {
+            null_value: NULL_VALUE
+          }
+          values {
+            null_value: NULL_VALUE
+          }
+        }
+      }
+    }
+  }
+  values {
+    name: "list<duration>"
+    expr: "[google.protobuf.Duration(\"1s\"), google.protobuf.Duration(\"2s\")]"
+    proto {
+      repeated_duration {
+        seconds: 1
+      }
+      repeated_duration {
+        seconds: 2
+      }
+      value_field_name: "repeated_duration"
+    }
+    proto {
+      repeated_any {
+        type_url: "type.googleapis.com/google.protobuf.Duration"
+        value: "\010\001"
+      }
+      repeated_any {
+        type_url: "type.googleapis.com/google.protobuf.Duration"
+        value: "\010\002"
+      }
+      value_field_name: "repeated_any"
+    }
+    v1beta1 {
+      value {
+        list_value {
+          values {
+            object_value {
+              type_url: "type.googleapis.com/google.protobuf.Duration"
+              value: "\010\001"
+            }
+          }
+          values {
+            object_value {
+              type_url: "type.googleapis.com/google.protobuf.Duration"
+              value: "\010\002"
+            }
+          }
+        }
+      }
+    }
+  }
+  values {
+    name: "list<money>"
+    expr: "[google.type.Money{currency_code=\"\", units=0, nanos=5}, google.type.Money{currency_code=\"\", units=0, nanos=5}]"
+    proto {
+      repeated_any {
+        type_url: "type.googleapis.com/google.type.Money"
+        value: "\030\005"
+      }
+      repeated_any {
+        type_url: "type.googleapis.com/google.type.Money"
+        value: "\030\005"
+      }
+      value_field_name: "repeated_any"
+    }
+    v1beta1 {
+      value {
+        list_value {
+          values {
+            object_value {
+              type_url: "type.googleapis.com/google.type.Money"
+              value: "\030\005"
+            }
+          }
+          values {
+            object_value {
+              type_url: "type.googleapis.com/google.type.Money"
+              value: "\030\005"
+            }
+          }
+        }
+      }
+    }
+  }
+  values {
+    name: "list<uint>"
+    expr: "[1u]"
+    proto {
+      repeated_uint64: 1
+      value_field_name: "repeated_uint64"
+    }
+    proto {
+      repeated_fixed64: 1
+      value_field_name: "repeated_fixed64"
+    }
+    proto {
+      repeated_any {
+        type_url: "type.googleapis.com/google.protobuf.UInt64Value"
+        value: "\010\001"
+      }
+      value_field_name: "repeated_any"
+    }
+    v1beta1 {
+      value {
+        list_value {
+          values {
+            uint64_value: 1
+          }
+        }
+      }
+    }
+  }
+  values {
+    name: "list<double>"
+    expr: "[1.0]"
+    proto {
+      single_list {
+        values {
+          number_value: 1
+        }
+      }
+      value_field_name: "single_list"
+    }
+    proto {
+      repeated_float: 1
+      value_field_name: "repeated_float"
+    }
+    proto {
+      repeated_double: 1
+      value_field_name: "repeated_double"
+    }
+    proto {
+      repeated_any {
+        type_url: "type.googleapis.com/google.protobuf.Value"
+        value: "\021\000\000\000\000\000\000\360?"
+      }
+      value_field_name: "repeated_any"
+    }
+    proto {
+      repeated_value {
+        number_value: 1
+      }
+      value_field_name: "repeated_value"
+    }
+    v1beta1 {
+      value {
+        list_value {
+          values {
+            double_value: 1
+          }
+        }
+      }
+    }
+  }
+  values {
+    name: "list<double>"
+    expr: "[1.0, 2.0]"
+    proto {
+      single_list {
+        values {
+          number_value: 1
+        }
+        values {
+          number_value: 2
+        }
+      }
+      value_field_name: "single_list"
+    }
+    proto {
+      repeated_float: 1
+      repeated_float: 2
+      value_field_name: "repeated_float"
+    }
+    proto {
+      repeated_double: 1
+      repeated_double: 2
+      value_field_name: "repeated_double"
+    }
+    proto {
+      repeated_any {
+        type_url: "type.googleapis.com/google.protobuf.Value"
+        value: "\021\000\000\000\000\000\000\360?"
+      }
+      repeated_any {
+        type_url: "type.googleapis.com/google.protobuf.Value"
+        value: "\021\000\000\000\000\000\000\000@"
+      }
+      value_field_name: "repeated_any"
+    }
+    proto {
+      repeated_value {
+        number_value: 1
+      }
+      repeated_value {
+        number_value: 2
+      }
+      value_field_name: "repeated_value"
+    }
+    v1beta1 {
+      value {
+        list_value {
+          values {
+            double_value: 1
+          }
+          values {
+            double_value: 2
+          }
+        }
+      }
+    }
+  }
+  values {
+    name: "list<double>"
+    expr: "[2.0, 1.0]"
+    proto {
+      single_list {
+        values {
+          number_value: 2
+        }
+        values {
+          number_value: 1
+        }
+      }
+      value_field_name: "single_list"
+    }
+    proto {
+      repeated_float: 2
+      repeated_float: 1
+      value_field_name: "repeated_float"
+    }
+    proto {
+      repeated_double: 2
+      repeated_double: 1
+      value_field_name: "repeated_double"
+    }
+    proto {
+      repeated_any {
+        type_url: "type.googleapis.com/google.protobuf.Value"
+        value: "\021\000\000\000\000\000\000\000@"
+      }
+      repeated_any {
+        type_url: "type.googleapis.com/google.protobuf.Value"
+        value: "\021\000\000\000\000\000\000\360?"
+      }
+      value_field_name: "repeated_any"
+    }
+    proto {
+      repeated_value {
+        number_value: 2
+      }
+      repeated_value {
+        number_value: 1
+      }
+      value_field_name: "repeated_value"
+    }
+    v1beta1 {
+      value {
+        list_value {
+          values {
+            double_value: 2
+          }
+          values {
+            double_value: 1
+          }
+        }
+      }
+    }
+  }
+  values {
+    name: "list<string>"
+    expr: "[\"hi\", \"bye\"]"
+    proto {
+      single_list {
+        values {
+          string_value: "hi"
+        }
+        values {
+          string_value: "bye"
+        }
+      }
+      value_field_name: "single_list"
+    }
+    proto {
+      repeated_string: "hi"
+      repeated_string: "bye"
+      value_field_name: "repeated_string"
+    }
+    proto {
+      repeated_any {
+        type_url: "type.googleapis.com/google.protobuf.Value"
+        value: "\032\002hi"
+      }
+      repeated_any {
+        type_url: "type.googleapis.com/google.protobuf.Value"
+        value: "\032\003bye"
+      }
+      value_field_name: "repeated_any"
+    }
+    proto {
+      repeated_value {
+        string_value: "hi"
+      }
+      repeated_value {
+        string_value: "bye"
+      }
+      value_field_name: "repeated_value"
+    }
+    v1beta1 {
+      value {
+        list_value {
+          values {
+            string_value: "hi"
+          }
+          values {
+            string_value: "bye"
+          }
+        }
+      }
+    }
+  }
+  values {
+    name: "list<double|string>"
+    expr: "[1.0, \"hi\"]"
+    proto {
+      single_list {
+        values {
+          number_value: 1
+        }
+        values {
+          string_value: "hi"
+        }
+      }
+      value_field_name: "single_list"
+    }
+    proto {
+      repeated_any {
+        type_url: "type.googleapis.com/google.protobuf.Value"
+        value: "\021\000\000\000\000\000\000\360?"
+      }
+      repeated_any {
+        type_url: "type.googleapis.com/google.protobuf.Value"
+        value: "\032\002hi"
+      }
+      value_field_name: "repeated_any"
+    }
+    proto {
+      repeated_value {
+        number_value: 1
+      }
+      repeated_value {
+        string_value: "hi"
+      }
+      value_field_name: "repeated_value"
+    }
+    v1beta1 {
+      value {
+        list_value {
+          values {
+            double_value: 1
+          }
+          values {
+            string_value: "hi"
+          }
+        }
+      }
+    }
+  }
+  values {
+    name: "list<string|double>"
+    expr: "[\"hi\", 1.0]"
+    proto {
+      single_list {
+        values {
+          string_value: "hi"
+        }
+        values {
+          number_value: 1
+        }
+      }
+      value_field_name: "single_list"
+    }
+    proto {
+      repeated_any {
+        type_url: "type.googleapis.com/google.protobuf.Value"
+        value: "\032\002hi"
+      }
+      repeated_any {
+        type_url: "type.googleapis.com/google.protobuf.Value"
+        value: "\021\000\000\000\000\000\000\360?"
+      }
+      value_field_name: "repeated_any"
+    }
+    proto {
+      repeated_value {
+        string_value: "hi"
+      }
+      repeated_value {
+        number_value: 1
+      }
+      value_field_name: "repeated_value"
+    }
+    v1beta1 {
+      value {
+        list_value {
+          values {
+            string_value: "hi"
+          }
+          values {
+            double_value: 1
+          }
+        }
+      }
+    }
+  }
+  values {
+    name: "list<int|string>"
+    expr: "[1, \"hi\"]"
+    v1beta1 {
+      value {
+        list_value {
+          values {
+            int64_value: 1
+          }
+          values {
+            string_value: "hi"
+          }
+        }
+      }
+    }
+  }
+  values {
+    name: "list<string|int>"
+    expr: "[\"hi\", 1]"
+    v1beta1 {
+      value {
+        list_value {
+          values {
+            string_value: "hi"
+          }
+          values {
+            int64_value: 1
+          }
+        }
+      }
+    }
+  }
+  values {
+    name: "list<uint|string>"
+    expr: "[1u, \"hi\"]"
+    proto {
+      repeated_any {
+        type_url: "type.googleapis.com/google.protobuf.UInt64Value"
+        value: "\010\001"
+      }
+      repeated_any {
+        type_url: "type.googleapis.com/google.protobuf.Value"
+        value: "\032\002hi"
+      }
+      value_field_name: "repeated_any"
+    }
+    v1beta1 {
+      value {
+        list_value {
+          values {
+            uint64_value: 1
+          }
+          values {
+            string_value: "hi"
+          }
+        }
+      }
+    }
+  }
+  values {
+    name: "list<bool|string>"
+    expr: "[true, \"hi\"]"
+    proto {
+      single_list {
+        values {
+          bool_value: true
+        }
+        values {
+          string_value: "hi"
+        }
+      }
+      value_field_name: "single_list"
+    }
+    proto {
+      repeated_any {
+        type_url: "type.googleapis.com/google.protobuf.Value"
+        value: " \001"
+      }
+      repeated_any {
+        type_url: "type.googleapis.com/google.protobuf.Value"
+        value: "\032\002hi"
+      }
+      value_field_name: "repeated_any"
+    }
+    proto {
+      repeated_value {
+        bool_value: true
+      }
+      repeated_value {
+        string_value: "hi"
+      }
+      value_field_name: "repeated_value"
+    }
+    v1beta1 {
+      value {
+        list_value {
+          values {
+            bool_value: true
+          }
+          values {
+            string_value: "hi"
+          }
+        }
+      }
+    }
+  }
+  values {
+    name: "map(empty)"
+    expr: "{}"
+    proto {
+      single_struct {
+      }
+      value_field_name: "single_struct"
+    }
+    proto {
+      value_field_name: "map_int64_string"
+    }
+    proto {
+      value_field_name: "map_uint64_string"
+    }
+    proto {
+      value_field_name: "map_bool_string"
+    }
+    proto {
+      value_field_name: "map_string_int64"
+    }
+    proto {
+      value_field_name: "map_string_uint64"
+    }
+    proto {
+      value_field_name: "map_string_bool"
+    }
+    proto {
+      value_field_name: "map_string_string"
+    }
+    v1beta1 {
+      value {
+        map_value {
+        }
+      }
+    }
+  }
+  values {
+    name: "map<int, string>"
+    expr: "{1: \"hi\"}"
+    proto {
+      map_int64_string {
+        key: 1
+        value: "hi"
+      }
+      value_field_name: "map_int64_string"
+    }
+    v1beta1 {
+      value {
+        map_value {
+          entries {
+            key {
+              int64_value: 1
+            }
+            value {
+              string_value: "hi"
+            }
+          }
+        }
+      }
+    }
+  }
+  values {
+    name: "map<uint, string>"
+    expr: "{1u: \"hi\"}"
+    proto {
+      map_uint64_string {
+        key: 1
+        value: "hi"
+      }
+      value_field_name: "map_uint64_string"
+    }
+    v1beta1 {
+      value {
+        map_value {
+          entries {
+            key {
+              uint64_value: 1
+            }
+            value {
+              string_value: "hi"
+            }
+          }
+        }
+      }
+    }
+  }
+  values {
+    name: "map<double, string>"
+    expr: "{1.0: \"hi\"}"
+    v1beta1 {
+      value {
+        map_value {
+          entries {
+            key {
+              double_value: 1
+            }
+            value {
+              string_value: "hi"
+            }
+          }
+        }
+      }
+    }
+  }
+  values {
+    name: "map<bool, string>"
+    expr: "{true: \"hi\"}"
+    proto {
+      map_bool_string {
+        key: true
+        value: "hi"
+      }
+      value_field_name: "map_bool_string"
+    }
+    v1beta1 {
+      value {
+        map_value {
+          entries {
+            key {
+              bool_value: true
+            }
+            value {
+              string_value: "hi"
+            }
+          }
+        }
+      }
+    }
+  }
+  values {
+    name: "map<string, int>"
+    expr: "{\"hi\": 1}"
+    proto {
+      map_string_int64 {
+        key: "hi"
+        value: 1
+      }
+      value_field_name: "map_string_int64"
+    }
+    v1beta1 {
+      value {
+        map_value {
+          entries {
+            key {
+              string_value: "hi"
+            }
+            value {
+              int64_value: 1
+            }
+          }
+        }
+      }
+    }
+  }
+  values {
+    name: "map<string, uint>"
+    expr: "{\"hi\": 1u}"
+    proto {
+      map_string_uint64 {
+        key: "hi"
+        value: 1
+      }
+      value_field_name: "map_string_uint64"
+    }
+    v1beta1 {
+      value {
+        map_value {
+          entries {
+            key {
+              string_value: "hi"
+            }
+            value {
+              uint64_value: 1
+            }
+          }
+        }
+      }
+    }
+  }
+  values {
+    name: "map<string, double>"
+    expr: "{\"hi\": 1.0}"
+    proto {
+      single_struct {
+        fields {
+          key: "hi"
+          value {
+            number_value: 1
+          }
+        }
+      }
+      value_field_name: "single_struct"
+    }
+    v1beta1 {
+      value {
+        map_value {
+          entries {
+            key {
+              string_value: "hi"
+            }
+            value {
+              double_value: 1
+            }
+          }
+        }
+      }
+    }
+  }
+  values {
+    name: "map<string, bool>"
+    expr: "{\"hi\": true}"
+    proto {
+      single_struct {
+        fields {
+          key: "hi"
+          value {
+            bool_value: true
+          }
+        }
+      }
+      value_field_name: "single_struct"
+    }
+    proto {
+      map_string_bool {
+        key: "hi"
+        value: true
+      }
+      value_field_name: "map_string_bool"
+    }
+    v1beta1 {
+      value {
+        map_value {
+          entries {
+            key {
+              string_value: "hi"
+            }
+            value {
+              bool_value: true
+            }
+          }
+        }
+      }
+    }
+  }
+  values {
+    name: "map<string, string>"
+    expr: "{\"hi\": \"bye\"}"
+    proto {
+      single_struct {
+        fields {
+          key: "hi"
+          value {
+            string_value: "bye"
+          }
+        }
+      }
+      value_field_name: "single_struct"
+    }
+    proto {
+      map_string_string {
+        key: "hi"
+        value: "bye"
+      }
+      value_field_name: "map_string_string"
+    }
+    v1beta1 {
+      value {
+        map_value {
+          entries {
+            key {
+              string_value: "hi"
+            }
+            value {
+              string_value: "bye"
+            }
+          }
+        }
+      }
+    }
+  }
+  values {
+    name: "multiple_orderings"
+    expr: "{\"hi\": \"bye\", \"foo\": \"bar\"}"
+    expr: "{\"foo\": \"bar\", \"hi\": \"bye\"}"
+    proto {
+      single_struct {
+        fields {
+          key: "foo"
+          value {
+            string_value: "bar"
+          }
+        }
+        fields {
+          key: "hi"
+          value {
+            string_value: "bye"
+          }
+        }
+      }
+      value_field_name: "single_struct"
+    }
+    proto {
+      map_string_string {
+        key: "foo"
+        value: "bar"
+      }
+      map_string_string {
+        key: "hi"
+        value: "bye"
+      }
+      value_field_name: "map_string_string"
+    }
+    proto {
+      single_struct {
+        fields {
+          key: "foo"
+          value {
+            string_value: "bar"
+          }
+        }
+        fields {
+          key: "hi"
+          value {
+            string_value: "bye"
+          }
+        }
+      }
+      value_field_name: "single_struct"
+    }
+    proto {
+      map_string_string {
+        key: "foo"
+        value: "bar"
+      }
+      map_string_string {
+        key: "hi"
+        value: "bye"
+      }
+      value_field_name: "map_string_string"
+    }
+    v1beta1 {
+      value {
+        map_value {
+          entries {
+            key {
+              string_value: "hi"
+            }
+            value {
+              string_value: "bye"
+            }
+          }
+          entries {
+            key {
+              string_value: "foo"
+            }
+            value {
+              string_value: "bar"
+            }
+          }
+        }
+      }
+    }
+    v1beta1 {
+      value {
+        map_value {
+          entries {
+            key {
+              string_value: "foo"
+            }
+            value {
+              string_value: "bar"
+            }
+          }
+          entries {
+            key {
+              string_value: "hi"
+            }
+            value {
+              string_value: "bye"
+            }
+          }
+        }
+      }
+    }
+  }
+  values {
+    expr: "int"
+    v1beta1 {
+      value {
+        type_value: "int"
+      }
+    }
+  }
+  values {
+    expr: "google.protobuf.Duration"
+    v1beta1 {
+      value {
+        type_value: "google.protobuf.Duration"
+      }
+    }
+  }
+  values {
+    expr: "type(\"unknown.type\")"
+    v1beta1 {
+      value {
+        type_value: "unknown.type"
+      }
+    }
+  }
+}

@@ -12,8 +12,8 @@ http_archive(
 
 new_http_archive(
     name = "com_google_googleapis",
-    url = "https://github.com/googleapis/googleapis/archive/common-protos-1_3_1.zip",
-    strip_prefix = "googleapis-common-protos-1_3_1/",
+    url = "https://github.com/googleapis/googleapis/archive/master.zip",
+    strip_prefix = "googleapis-master/",
     build_file_content = """
 load('@io_bazel_rules_go//proto:def.bzl', 'go_proto_library')
 
@@ -33,6 +33,20 @@ proto_library(
     visibility = ['//visibility:public'],
 )
 
+proto_library(
+    name = 'expr_v1beta1',
+    srcs = [
+        'google/api/expr/v1beta1/eval.proto',
+        'google/api/expr/v1beta1/value.proto',
+        ],
+    deps = [
+        '@com_google_protobuf//:any_proto',
+        '@com_google_googleapis//:rpc_status',
+        '@com_google_protobuf//:struct_proto',
+    ],
+    visibility = ['//visibility:public'],
+)
+
 cc_proto_library(
     name = 'cc_rpc_status',
     deps = [':rpc_status'],
@@ -45,6 +59,12 @@ cc_proto_library(
     visibility = ['//visibility:public'],
 )
 
+cc_proto_library(
+    name = 'cc_expr_v1beta1',
+    deps = [':expr_v1beta1'],
+    visibility = ['//visibility:public'],
+)
+
 go_proto_library(
     name = 'rpc_status_go_proto',
     # TODO: Switch to the correct import path when bazel rules fixed.
@@ -52,6 +72,14 @@ go_proto_library(
     importpath = 'github.com/googleapis/googleapis/google/rpc',
     proto = ':rpc_status',
     visibility = ['//visibility:public'],
+)
+
+go_proto_library(
+    name = 'expr_v1beta1_go_proto',
+    importpath = 'google.golang.org/genproto/googleapis/api/expr/v1beta1',
+    proto = 'expr_v1beta1',
+    visibility = ['//visibility:public'],
+    deps = ['@com_google_googleapis//:rpc_status_go_proto'],
 )
 """
 )
