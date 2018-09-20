@@ -17,4 +17,3 @@ message TestData {
     TestValues test_values = 2;
   }
 }
-
