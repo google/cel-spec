@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package google.api.expr.testdata;
+
+import "testdata/test_value.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "TestDataProto";
+option java_package = "com.google.api.expr.testdata";
+
+// The contents of a test data file.
+message TestData {
+  // A description of the test data include.
+  string description = 1;
+
+  oneof data_type {
+    TestValues test_values = 2;
+  }
+}

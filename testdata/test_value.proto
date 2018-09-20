@@ -1,0 +1,152 @@
+syntax = "proto3";
+
+package google.api.expr.testdata;
+
+import "google/api/expr/v1beta1/eval.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "TestValueProto";
+option java_package = "com.google.api.expr.testdata";
+
+// A set of representations for a value.
+//
+// All representations are 'equivalent', in that there is no expression that
+// would evaluate to a different result for any representation contained in
+// the test value.
+//
+// May include multiple representations for each API version in addition to
+// representations for different API versions as long as all are 'equivalent'.
+// For example, map values are order independent, so all map values with the
+// same entries are equivalent.
+//
+// Useful when testing a semantic property that should be preserved across
+// representations, or when testing conversions.
+message TestValue {
+  // The name for the value, e.g. `zero`.
+  string name = 1;
+
+  // Set of cel expressions that evaluate to the value.
+  repeated string expr = 2;
+
+  // Set of native proto representations.
+  repeated TestProtoValue proto = 3;
+
+  // The set of v1beta1 representations.
+  repeated google.api.expr.v1beta1.ExprValue v1beta1 = 4;
+}
+
+// This proto includes every type of field in both singular and repeated
+// forms.
+message TestProtoValue {
+  // The name of the field from which the value should be retrieved.
+  string value_field_name = 1000;
+
+  message NestedMessage {
+    int32 bb = 1;
+  }
+
+  enum NestedEnum {
+    NESTED_ENUM_UNSPECIFIED = 0;
+    FOO = 1;
+    BAR = 2;
+    BAZ = 3;
+    NEG = -1;  // Intentionally negative.
+  }
+
+  // Singular
+  int32 single_int32 = 1;
+  int64 single_int64 = 2;
+  uint32 single_uint32 = 3;
+  uint64 single_uint64 = 4;
+  sint32 single_sint32 = 5;
+  sint64 single_sint64 = 6;
+  fixed32 single_fixed32 = 7;
+  fixed64 single_fixed64 = 8;
+  sfixed32 single_sfixed32 = 9;
+  sfixed64 single_sfixed64 = 10;
+  float single_float = 11;
+  double single_double = 12;
+  bool single_bool = 13;
+  string single_string = 14;
+  bytes single_bytes = 15;
+  NestedMessage single_nested_message = 16;
+  NestedEnum single_nested_enum = 17;
+  google.protobuf.Duration single_duration = 18;
+  google.protobuf.Timestamp single_timestamp = 19;
+  google.protobuf.Any single_any = 20;
+  google.protobuf.Struct single_struct = 21;
+  google.protobuf.Value single_value = 22;
+  google.protobuf.NullValue single_null = 23;
+  google.protobuf.ListValue single_list = 24;
+  // next single_* id = 25
+
+  // Wrapped
+  google.protobuf.BoolValue wrapped_bool = 101;
+  google.protobuf.BytesValue wrapped_bytes = 102;
+  google.protobuf.DoubleValue wrapped_double = 103;
+  google.protobuf.FloatValue wrapped_float = 104;
+  google.protobuf.Int32Value wrapped_int32 = 105;
+  google.protobuf.Int64Value wrapped_int64 = 106;
+  google.protobuf.StringValue wrapped_string = 107;
+  google.protobuf.UInt32Value wrapped_uint32 = 108;
+  google.protobuf.UInt64Value wrapped_uint64 = 109;
+  // next wrapped_* id = 110
+
+  // Repeated
+  repeated int32 repeated_int32 = 201;
+  repeated int64 repeated_int64 = 202;
+  repeated uint32 repeated_uint32 = 203;
+  repeated uint64 repeated_uint64 = 204;
+  repeated sint32 repeated_sint32 = 205;
+  repeated sint64 repeated_sint64 = 206;
+  repeated fixed32 repeated_fixed32 = 207;
+  repeated fixed64 repeated_fixed64 = 208;
+  repeated sfixed32 repeated_sfixed32 = 209;
+  repeated sfixed64 repeated_sfixed64 = 210;
+  repeated float repeated_float = 211;
+  repeated double repeated_double = 212;
+  repeated bool repeated_bool = 213;
+  repeated string repeated_string = 214;
+  repeated bytes repeated_bytes = 215;
+  repeated NestedMessage repeated_nested_message = 216;
+  repeated NestedEnum repeated_nested_enum = 217;
+  repeated google.protobuf.Duration repeated_duration = 218;
+  repeated google.protobuf.Timestamp repeated_timestamp = 219;
+  repeated google.protobuf.Any repeated_any = 220;
+  repeated google.protobuf.Struct repeated_struct = 221;
+  repeated google.protobuf.Value repeated_value = 222;
+  repeated google.protobuf.NullValue repeated_null = 223;
+  repeated google.protobuf.ListValue repeated_list = 224;
+  // next repeated_* id = 225
+
+  // Wrapped and repeated
+  repeated google.protobuf.BoolValue repeated_wrapped_bool = 301;
+  repeated google.protobuf.BytesValue repeated_wrapped_bytes = 302;
+  repeated google.protobuf.DoubleValue repeated_wrapped_double = 303;
+  repeated google.protobuf.FloatValue repeated_wrapped_float = 304;
+  repeated google.protobuf.Int32Value repeated_wrapped_int32 = 305;
+  repeated google.protobuf.Int64Value repeated_wrapped_int64 = 306;
+  repeated google.protobuf.StringValue repeated_wrapped_string = 307;
+  repeated google.protobuf.UInt32Value repeated_wrapped_uint32 = 308;
+  repeated google.protobuf.UInt64Value repeated_wrapped_uint64 = 309;
+  // next repeated_wrapped_* id = 310
+
+  // Map
+  map<int64, string> map_int64_string = 401;
+  map<uint64, string> map_uint64_string = 402;
+  map<bool, string> map_bool_string = 403;
+  map<string, int64> map_string_int64 = 404;
+  map<string, uint64> map_string_uint64 = 405;
+  map<string, bool> map_string_bool = 406;
+  map<string, string> map_string_string = 407;
+  // next map_* id = 408
+}
+
+message TestValues {
+  repeated TestValue values = 1;
+}
