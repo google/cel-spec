@@ -1,4 +1,4 @@
-load("@io_bazel_rules_go//go:def.bzl", "go_library")
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
 
 package(
     default_visibility = ["//visibility:public"],
@@ -6,7 +6,7 @@ package(
 
 licenses(["notice"])  # Apache 2.0
 
-exports_files(["LICENSE"])
+exports_files(["LICENSE"] + glob(["testdata/*.textproto"]))
 
 go_library(
     name = "go_default_library",
@@ -19,5 +19,18 @@ go_library(
         "//tools/celrpc:go_default_library",
         "@com_github_golang_protobuf//proto:go_default_library",
         "@org_golang_google_genproto//googleapis/api/expr/v1alpha1:go_default_library",
+    ],
+)
+
+go_test(
+    name = "simple_test",
+    srcs = ["simple_test.go"],
+#    args = ["$(location :fakeserver)"],
+#    data = [":fakeserver"],
+    embed = [":go_default_library"],
+    deps = [
+        "@com_github_golang_protobuf//proto:go_default_library",
+        "//proto/test/v1:conformance_test_go_proto",
+        "//tools/celrpc:go_default_library",
     ],
 )

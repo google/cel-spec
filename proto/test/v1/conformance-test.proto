@@ -61,11 +61,11 @@ message SimpleEvalTest {
 message SimpleEvalTestSection {
   string name = 1;
   string description = 2;
-  repeated SimpleEvalTest tests = 3;
+  repeated SimpleEvalTest test = 3;
 }
 
 message SimpleEvalTestFile {
   string name = 1;
   string description = 2;
-  repeated SimpleEvalTestSection sections = 3;
+  repeated SimpleEvalTestSection section = 3;
 }

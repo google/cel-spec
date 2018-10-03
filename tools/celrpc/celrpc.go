@@ -20,13 +20,14 @@ type ConfClient struct {
 	conn *grpc.ClientConn
 }
 
-// New creates a new ConformanceService gRPC client, connecting to a server
-// which is launched by the binary at the given serverPath.
-// The spawned server shares the current process's stderr,
-// so its log messages will be visible.
-// The caller must call Shutdown() on the retured ConfClient,
-// even if NewClient() returns a non-nil error.
-func NewClient(serverPath string) (*ConfClient, error) {
+// NewClientFromPath creates a new ConformanceService gRPC client,
+// connecting to a server which is launched by the binary at the given
+// serverPath.  The spawned server shares the current process's stderr,
+// so its log messages will be visible.  The caller must call Shutdown()
+// on the retured ConfClient, even if NewClientFromPath() returns a
+// non-nil error.
+
+func NewClientFromPath(serverPath string) (*ConfClient, error) {
 	c := ConfClient{}
 
 	cmd := exec.Command(serverPath)
@@ -60,8 +61,8 @@ func NewClient(serverPath string) (*ConfClient, error) {
 	return &c, nil
 }
 
-func ExampleNewClient() {
-	c, err := NewClient("/path/to/server/binary")
+func ExampleNewClientFromPath() {
+	c, err := NewClientFromPath("/path/to/server/binary")
 	defer c.Shutdown()
 	if err != nil {
 		log.Fatal("Couldn't create client")
@@ -86,7 +87,7 @@ func ExampleNewClient() {
 
 // Shutdown deallocates all resources associated with the client.
 // No further calls should be made on the client after shutdown.
-// Shutdown should be called even on an error return from NewClient().
+// Shutdown should be called even on an error return from NewClientFromPath().
 func (c *ConfClient) Shutdown() {
 	if c.conn != nil {
 		c.conn.Close()

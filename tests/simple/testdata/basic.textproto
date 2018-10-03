@@ -1,0 +1,15 @@
+name: "basic"
+description: "Basic conformance tests that all implementations should pass."
+section {
+  name: "self_eval"
+  description: "Simple self-evaluating forms"
+  test {
+    name: "self_eval_zero"
+    expr: "0"
+    expected: {
+      value: {
+        int64_value: 0
+      }
+    }
+  }
+}
