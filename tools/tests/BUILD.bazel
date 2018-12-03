@@ -10,7 +10,7 @@ proto_library(
         "test_value.proto",
     ],
     deps = [
-        "//proto/v1:value_protos",
+        "@com_google_googleapis//google/api/expr/v1alpha1:value_proto",
     ],
 )
 

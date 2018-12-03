@@ -6,7 +6,7 @@
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "absl/strings/str_cat.h"
-#include "proto/v1/value.pb.h"
+#include "google/api/expr/v1alpha1/value.pb.h"
 #include "tools/tests/test_message1.pb.h"
 #include "tools/tests/test_value.pb.h"
 
