@@ -93,6 +93,7 @@ STRING_LIT     ::= [rR]? ( "    ~( " | NEWLINE )*  "
                          )
 BYTES_LIT      ::= [bB] STRING_LIT
 ESCAPE         ::= \ [bfnrt"'\]
+                 | \ x HEXDIGIT HEXDIGIT
                  | \ u HEXDIGIT HEXDIGIT HEXDIGIT HEXDIGIT
                  | \ [0-3] [0-7] [0-7]
 NEWLINE        ::= \r\n | \r | \n
@@ -242,6 +243,8 @@ Escape sequences are a backslash (`\`) followed by one of the following:
 *   A `u` followed by four hexadecimal characters, encoding a Unicode code point
     in the BMP. Characters in other Unicode planes can be represented with
     surrogate pairs.
+*   A `x` followed by two hexadecimal characters. For strings, it denotes the
+    unicode code point. For bytes, it represents an octet value.
 *   Three octal digits, in the range `000` to `377`. For strings, it denotes the
     unicode code point. For bytes, it represents an octet value.
 
@@ -261,6 +264,8 @@ CEL Literal  | Meaning
 `"\303\277"` | String of "&Atilde;&iquest;" (code points 195, 191)
 `"\377"`     | String of "&yuml;" (code point 255)
 `b"\377"`    | Sequence of byte 255 (_not_ UTF-8 of &yuml;)
+`"\xFF"`     | String of "&yuml;" (code point 255)
+`b"\xFF"`    | Sequence of byte 255 (_not_ UTF-8 of &yuml;)
 
 ### Aggregate Values
 
