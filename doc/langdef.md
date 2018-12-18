@@ -170,7 +170,7 @@ Type          | Description
 `uint`        | 64-bit unsigned integers
 `double`      | 64-bit IEEE floating-point numbers
 `bool`        | Booleans (`true` or `false`)
-`string`      | Strings of UTF-8 code points
+`string`      | Strings of Unicode code points
 `bytes`       | Byte sequences
 `list`        | Lists of values
 `map`         | Associative arrays with `int`, `uint`, `bool`, or `string` keys
