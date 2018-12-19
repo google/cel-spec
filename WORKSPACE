@@ -1,67 +1,44 @@
-http_archive(
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository", "new_git_repository")
+
+git_repository(
     name = "com_google_protobuf",
-    strip_prefix = "protobuf-3.5.0",
-    urls = ["https://github.com/google/protobuf/archive/v3.5.0.zip"],
+    remote = "https://github.com/protocolbuffers/protobuf.git",
+    tag = "v3.6.1.2",
 )
 
-http_archive(
-    name = "com_google_protobuf_javalite",
-    strip_prefix = "protobuf-javalite",
-    urls = ["https://github.com/google/protobuf/archive/javalite.zip"],
+# Required to use embedded BUILD.bazel file in googleapis/google/rpc
+git_repository(
+    name = "io_grpc_grpc_java",
+    remote = "https://github.com/grpc/grpc-java.git",
+    tag = "v1.13.1",
 )
 
-new_http_archive(
+new_git_repository(
     name = "com_google_googleapis",
-    url = "https://github.com/googleapis/googleapis/archive/master.zip",
-    strip_prefix = "googleapis-master/",
+    remote = "https://github.com/googleapis/googleapis.git",
+    commit = "980cdfa876e54b1db4395617e14037612af25466",
     build_file_content = """
 load('@io_bazel_rules_go//proto:def.bzl', 'go_proto_library')
 
-proto_library(
-    name = 'rpc_status',
-    srcs = ['google/rpc/status.proto'],
-    deps = [
-        '@com_google_protobuf//:any_proto',
-        '@com_google_protobuf//:empty_proto',
-    ],
-    visibility = ['//visibility:public'],
-)
-
-proto_library(
-    name = 'rpc_code',
-    srcs = ['google/rpc/code.proto'],
-    visibility = ['//visibility:public'],
-)
-
-proto_library(
-    name = 'expr_v1beta1',
-    srcs = [
-        'google/api/expr/v1beta1/eval.proto',
-        'google/api/expr/v1beta1/value.proto',
-        ],
-    deps = [
-        '@com_google_protobuf//:any_proto',
-        '@com_google_googleapis//:rpc_status',
-        '@com_google_protobuf//:struct_proto',
-    ],
-    visibility = ['//visibility:public'],
-)
-
 cc_proto_library(
     name = 'cc_rpc_status',
-    deps = [':rpc_status'],
+    deps = ['//google/rpc:status_proto'],
     visibility = ['//visibility:public'],
 )
 
 cc_proto_library(
     name = 'cc_rpc_code',
-    deps = [':rpc_code'],
+    deps = ['//google/rpc:code_proto'],
     visibility = ['//visibility:public'],
 )
 
 cc_proto_library(
     name = 'cc_expr_v1beta1',
-    deps = [':expr_v1beta1'],
+    deps = [
+        '//google/api/expr/v1beta1/eval_proto',
+        '//google/api/expr/v1beta1/value_proto',
+    ],
     visibility = ['//visibility:public'],
 )
 
@@ -70,14 +47,14 @@ go_proto_library(
     # TODO: Switch to the correct import path when bazel rules fixed.
     #importpath = 'google.golang.org/genproto/googleapis/rpc/status',
     importpath = 'github.com/googleapis/googleapis/google/rpc',
-    proto = ':rpc_status',
+    proto = '//google/rpc:status_proto',
     visibility = ['//visibility:public'],
 )
 
 go_proto_library(
     name = 'expr_v1beta1_go_proto',
     importpath = 'google.golang.org/genproto/googleapis/api/expr/v1beta1',
-    proto = 'expr_v1beta1',
+    proto = '//google/api/expr/v1beta1',
     visibility = ['//visibility:public'],
     deps = ['@com_google_googleapis//:rpc_status_go_proto'],
 )
@@ -120,9 +97,10 @@ http_archive(
 
 http_archive(
     name = "io_bazel_rules_go",
-    url = "https://github.com/bazelbuild/rules_go/releases/download/0.12.0/rules_go-0.12.0.tar.gz",
-    sha256 = "c1f52b8789218bb1542ed362c4f7de7052abcf254d865d96fb7ba6d44bc15ee3",
+    urls = ["https://github.com/bazelbuild/rules_go/releases/download/0.16.3/rules_go-0.16.3.tar.gz"],
+    sha256 = "b7a62250a3a73277ade0ce306d22f122365b513f5402222403e507f2f997d421",
 )
+
 load("@io_bazel_rules_go//go:def.bzl", "go_rules_dependencies", "go_register_toolchains")
 go_rules_dependencies()
 go_register_toolchains()

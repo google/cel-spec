@@ -9,7 +9,7 @@ licenses(["notice"])  # Apache 2.0
 # TODO: Check if the generated path is correct.
 # Generated via:
 #    bazel build cel-spec/testutil:test_data_gen &&
-#        bazel-bin/cel-cpp/testutil/test_data_gen 
+#        bazel-bin/cel-cpp/testutil/test_data_gen
 filegroup(
     name = "testdata",
     srcs = glob([
@@ -24,7 +24,7 @@ proto_library(
         "test_value.proto",
     ],
     deps = [
-        "@com_google_googleapis//:expr_v1beta1",
+        "@com_google_googleapis//google/api/expr/v1beta1:eval_proto",
         '@com_google_protobuf//:any_proto',
         '@com_google_protobuf//:duration_proto',
         '@com_google_protobuf//:struct_proto',
@@ -39,7 +39,7 @@ proto_library(
         "test_data.proto",
     ],
     deps = [
-        "@com_google_googleapis//:expr_v1beta1",
+#        "@com_google_googleapis//:expr_v1beta1",
         ":test_value_proto",
     ],
 )
@@ -61,7 +61,7 @@ go_proto_library(
     deps = [
         "@com_google_googleapis//:expr_v1beta1_go_proto",
         ":test_value_go_proto",
-        ],
+    ],
 )
 
 go_proto_library(
@@ -78,15 +78,5 @@ java_proto_library(
 
 java_proto_library(
     name = "test_value_java_proto",
-    deps = [":test_value_proto"],
-)
-
-java_lite_proto_library(
-    name = "test_data_java_proto_lite",
-    deps = [":test_data_proto"],
-)
-
-java_lite_proto_library(
-    name = "test_value_java_proto_lite",
     deps = [":test_value_proto"],
 )
