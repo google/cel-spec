@@ -1,16 +1,10 @@
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
-load("@bazel_tools//tools/build_defs/repo:git.bzl", "new_git_repository")
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository", "new_git_repository")
 
-http_archive(
+git_repository(
     name = "com_google_protobuf",
-    strip_prefix = "protobuf-3.5.0",
-    urls = ["https://github.com/google/protobuf/archive/v3.5.0.zip"],
-)
-
-http_archive(
-    name = "com_google_protobuf_javalite",
-    strip_prefix = "protobuf-javalite",
-    urls = ["https://github.com/google/protobuf/archive/javalite.zip"],
+    remote = "https://github.com/protocolbuffers/protobuf.git",
+    tag = "v3.6.1.2",
 )
 
 # Required to use embedded BUILD.bazel file in googleapis/google/rpc
