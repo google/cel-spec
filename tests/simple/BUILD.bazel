@@ -30,12 +30,13 @@ go_library(
 go_test(
     name = "simple_test",
     srcs = ["simple_test.go"],
-#    args = ["$(location :fakeserver)"],
-#    data = [":fakeserver"],
     embed = [":go_default_library"],
     deps = [
         "@com_github_golang_protobuf//proto:go_default_library",
         "//proto/test/v1:conformance_test_go_proto",
         "//tools/celrpc:go_default_library",
     ],
+    # This is the magic setting that lets external invokers see
+    # files in their expected locations.
+    rundir = "../..",
 )

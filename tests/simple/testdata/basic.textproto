@@ -14,7 +14,7 @@ section {
   }
   test {
     name: "one plus one"
-    expr: "1 + 1 == 3"
+    expr: "1 + 1 == 2"
     expected { trueval: {} }
   }
 }
