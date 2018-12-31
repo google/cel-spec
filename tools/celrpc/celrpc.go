@@ -26,7 +26,6 @@ type ConfClient struct {
 // so its log messages will be visible.  The caller must call Shutdown()
 // on the retured ConfClient, even if NewClientFromPath() returns a
 // non-nil error.
-
 func NewClientFromPath(serverPath string) (*ConfClient, error) {
 	c := ConfClient{}
 
@@ -105,11 +104,16 @@ func (c *ConfClient) Shutdown() {
 // a gRPC server on the socket with the given service callbacks.
 // Note that this call doesn't return until ther server exits.
 func RunServer(service exprpb.ConformanceServiceServer) {
-        lis, err := net.Listen("tcp", "127.0.0.1:")
+        lis, err := net.Listen("tcp4", "127.0.0.1:")
         if err != nil {
-                log.Fatalf("failed to listen: %v", err)
+                lis, err = net.Listen("tcp6", "[::1]:0")
+                if err != nil {
+                        log.Fatalf("failed to listen: %v", err)
+                }
         }
 
+	// Must print to stdout, so the client can find the port.
+        // So, no, this must be 'fmt', not 'log'.
         fmt.Printf("Listening on %v\n", lis.Addr())
         os.Stdout.Sync()
 

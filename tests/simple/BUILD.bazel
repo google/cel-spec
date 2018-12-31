@@ -22,6 +22,11 @@ go_library(
     ],
 )
 
+# This test target is meant to be called from the repositories
+# of various CEL implementations, passing their own conformance
+# server as an argument.  However, this test must be exposed as
+# a go_test target.  So when called without arguments, the test
+# will simply exit with success.
 go_test(
     name = "simple_test",
     srcs = ["simple_test.go"],

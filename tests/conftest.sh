@@ -2,7 +2,7 @@
 echo "Running test binary as " "$@"
 echo "Current directory " "$(pwd)"
 echo "Path is" "$PATH"
-echo "Server binary:" "$(ls -l server/cel_server)"
+echo "Server binary:" "$(ls -l server/main/cel_server)"
 echo "Contents are" "$(find -L -type f | xargs namei)"
 echo "Basic textproto:"
 echo =====

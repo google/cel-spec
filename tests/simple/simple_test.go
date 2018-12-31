@@ -96,6 +96,13 @@ func parseSimpleFile(filename string) (*testpb.SimpleEvalTestFile, error) {
 
 // Usage: --server=<path-to-binary> testfile1 ...
 func TestMain(m *testing.M) {
+	if len(os.Args) == 1 {
+		// Special case for no args beyond Arg[0].  When being
+		// run as a test target within cel-spec, there is no
+		// conformance server to test.  Exit cleanly in order
+		// to keep the tests green.
+		os.Exit(0)
+	}
 	flag.Parse()
 	var err error
 	rc, err = initRunConfig()
