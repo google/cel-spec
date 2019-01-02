@@ -31,7 +31,7 @@ example, given an instance of the `Account` type assigned to the variable
 ```proto
 has(account.user_id) || has(account.gaia_id)    // true if either one is set
 size(account.emails) > 0                        // true if emails is non-empty
-matches("[0-9-]+", account.phone_number)        // true if number matches regexp
+matches(account.phone_number, "[0-9-]+")        // true if number matches regexp
 ```
 
 CEL expressions support most operators and functions one would expect when
