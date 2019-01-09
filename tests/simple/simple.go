@@ -28,31 +28,31 @@ func Match(m *ctpb.EvalResponseMatcher, actual *exprpb.ExprValue) error {
 		case *exprpb.ExprValue_Value:
 			return MatchValue(m.GetValue(), actual.GetValue())
 		}
-		return fmt.Errorf("Expected value, got %v", actual)
+		return fmt.Errorf("Got %v, want value", actual)
 	case *ctpb.EvalResponseMatcher_Errors:
 		switch actual.Kind.(type) {
 		case *exprpb.ExprValue_Error:
 			// TODO match errors
 			return nil
 		}
-		return fmt.Errorf("Expected error, got %v", actual)
+		return fmt.Errorf("Got %v, want error", actual)
 	case *ctpb.EvalResponseMatcher_Unknowns:
 		switch actual.Kind.(type) {
 		case *exprpb.ExprValue_Error:
 			// TODO match unknowns
 			return nil
 		}
-		return fmt.Errorf("Expected unknown, got %v", actual)
+		return fmt.Errorf("Got %v, want unknown", actual)
 	case *ctpb.EvalResponseMatcher_ParseFailureRegex:
-		return fmt.Errorf("parse succeeded but expected failure: %v", actual)
+		return fmt.Errorf("Got %v, want parse failure", actual)
 	case *ctpb.EvalResponseMatcher_CheckFailureRegex:
-		return fmt.Errorf("check succeeded but expected failure: %v", actual)
+		return fmt.Errorf("Got %v, want check failure", actual)
 	case *ctpb.EvalResponseMatcher_Trueval:
 		switch actual.Kind.(type) {
 		case *exprpb.ExprValue_Value:
 			return MatchValue(trueval, actual.GetValue())
 		}
-		return fmt.Errorf("Expected true, got %v", actual)
+		return fmt.Errorf("Got %v, want true", actual)
 	}
 	return fmt.Errorf("Unsupported matcher kind")
 }
@@ -64,7 +64,7 @@ func Match(m *ctpb.EvalResponseMatcher, actual *exprpb.ExprValue) error {
 func MatchValue(expected *exprpb.Value, actual *exprpb.Value) error {
 	// XXX for now, just compare the protos.
 	if !proto.Equal(expected, actual) {
-		return fmt.Errorf("Expected [%v], Actual [%v]", expected, actual)
+		return fmt.Errorf("Got [%v], want [%v]", actual, expected)
 	}
 	return nil
 }
@@ -106,10 +106,10 @@ func (r *runConfig) RunTest(t *ctpb.SimpleEvalTest) error {
 	}
 	switch m.Kind.(type) {
 	case *ctpb.EvalResponseMatcher_ParseFailureRegex:
-		return fmt.Errorf("%s: parse succeeded but expected failure: %v", t.Name)
+		return fmt.Errorf("%s: wanted parse failure", t.Name)
 	}
 	if parsedExpr.Expr == nil {
-		return fmt.Errorf("%s: Empty root expression", t.Name)
+		return fmt.Errorf("%s: parse returned empty root expression", t.Name)
 	}
 	rootId := parsedExpr.Expr.Id
 
@@ -138,7 +138,7 @@ func (r *runConfig) RunTest(t *ctpb.SimpleEvalTest) error {
 		}
 		switch m.Kind.(type) {
 		case *ctpb.EvalResponseMatcher_CheckFailureRegex:
-			return fmt.Errorf("%s: check succeeded but expected failure: %v", t.Name, checkedExpr)
+			return fmt.Errorf("%s: Got %v, wanted check failure", t.Name, checkedExpr)
 		}
 		_, present := checkedExpr.TypeMap[rootId]
 		if !present {
