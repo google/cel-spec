@@ -1,3 +1,40 @@
+/*
+Package simple runs end-to-end CEL conformance tests against
+ConformanceService servers.  The "simple" tests run the
+Parse / Check (optional) / Eval pipeline and compare the
+result against an expected value or an expected error at one
+of the phases.  To validate the intermediate results from the
+Parse or Check phases, use a different test driver.
+
+Each phase can be sent to a different ConformanceService
+server.  Thus a partial implementation can be tested by
+using other implementations for the missing phases.  This
+also validates the interoperativity.
+
+Example test data:
+
+	name: "basic"
+	description: "Basic tests that all implementations should pass."
+	section {
+	  name: "self_eval"
+	  description: "Simple self-evaluating forms."
+	  test {
+	    name: "self_eval_zero"
+	    expr: "0"
+	    value: { int64_value: 0 }
+	  }
+	}
+	section {
+	  name: "arithmetic"
+	  description: "Numeric arithmetic checks."
+	  test {
+	    name: "one plus one"
+	    description: "Uses implicit match against 'true'."
+	    expr: "1 + 1 == 2"
+	  }
+	}
+
+*/
 package simple
 
 import (
@@ -15,72 +52,79 @@ var (
 	trueval = &exprpb.Value{ Kind: &exprpb.Value_BoolValue{true} }
 )
 
-// Match checks the expectation in the response matcher against the
+// Match checks the expectation in the result matcher against the
 // actual result of evaluation.  Returns nil if the expectation
 // matches the actual, otherwise returns an error describing the difference.
 // Calling this function implies that the interpretation succeeded
 // in the parse and check phases.  See MatchValue() for the normalization
 // applied to values for matching.
-func Match(m *ctpb.EvalResponseMatcher, actual *exprpb.ExprValue) error {
-	switch m.Kind.(type) {
-	case *ctpb.EvalResponseMatcher_Value:
+func Match(t *ctpb.SimpleEvalTest, actual *exprpb.ExprValue) error {
+	switch t.ResultMatcher.(type) {
+	case *ctpb.SimpleEvalTest_Value:
+		want := t.GetValue()
 		switch actual.Kind.(type) {
 		case *exprpb.ExprValue_Value:
-			return MatchValue(m.GetValue(), actual.GetValue())
+			return MatchValue(t.Name, want, actual.GetValue())
 		}
-		return fmt.Errorf("Got %v, want value", actual)
-	case *ctpb.EvalResponseMatcher_Errors:
+		return fmt.Errorf("Got %v, want value %v", actual, want)
+	case *ctpb.SimpleEvalTest_EvalError:
 		switch actual.Kind.(type) {
 		case *exprpb.ExprValue_Error:
 			// TODO match errors
 			return nil
 		}
 		return fmt.Errorf("Got %v, want error", actual)
-	case *ctpb.EvalResponseMatcher_Unknowns:
+	case *ctpb.SimpleEvalTest_Unknown:
 		switch actual.Kind.(type) {
 		case *exprpb.ExprValue_Error:
 			// TODO match unknowns
 			return nil
 		}
 		return fmt.Errorf("Got %v, want unknown", actual)
-	case *ctpb.EvalResponseMatcher_ParseFailureRegex:
+	case *ctpb.SimpleEvalTest_ParseFailureRegex:
 		return fmt.Errorf("Got %v, want parse failure", actual)
-	case *ctpb.EvalResponseMatcher_CheckFailureRegex:
+	case *ctpb.SimpleEvalTest_CheckFailureRegex:
 		return fmt.Errorf("Got %v, want check failure", actual)
-	case *ctpb.EvalResponseMatcher_Trueval:
+	case nil:
+		// Defaults to a match against a true value.
 		switch actual.Kind.(type) {
-		case *exprpb.ExprValue_Value:
-			return MatchValue(trueval, actual.GetValue())
-		}
-		return fmt.Errorf("Got %v, want true", actual)
+                case *exprpb.ExprValue_Value:
+                        return MatchValue(t.Name, trueval, actual.GetValue())
+                }
+                return fmt.Errorf("Got %v, want true", actual)
 	}
 	return fmt.Errorf("Unsupported matcher kind")
 }
 
 // MatchValue returns whether the actual value is equal to the
 // expected value, modulo the following normalization:
-// 1) All floating-point NaN values are equal.
-// 2) Map comparisons ignore order.
-func MatchValue(expected *exprpb.Value, actual *exprpb.Value) error {
-	// XXX for now, just compare the protos.
+//	1) All floating-point NaN values are equal.
+//	2) Map comparisons ignore order.
+func MatchValue(tag string, expected *exprpb.Value, actual *exprpb.Value) error {
+	// TODO write normalized comparator.
+	// For now, just compare the protos.
 	if !proto.Equal(expected, actual) {
-		return fmt.Errorf("Got [%v], want [%v]", actual, expected)
+		return fmt.Errorf("%s: Eval got [%v], want [%v]", tag, actual, expected)
 	}
 	return nil
 }
 
+// runConfig holds client stubs for the servers to use
+// for the various phases.  Some phases might use the
+// same server.
 type runConfig struct {
 	parseClient *celrpc.ConfClient
 	checkClient *celrpc.ConfClient
 	evalClient *celrpc.ConfClient
 }
 
+// RunTest runs the test described by t, returning an error for any
+// violation of expectations.
 func (r *runConfig) RunTest(t *ctpb.SimpleEvalTest) error {
 	err := ValidateTest(t)
 	if err != nil {
 		return err
 	}
-	m := t.Expected
 
 	// Parse
 	preq := exprpb.ParseRequest{
@@ -97,16 +141,14 @@ func (r *runConfig) RunTest(t *ctpb.SimpleEvalTest) error {
 	}
 	parsedExpr := pres.ParsedExpr
 	if parsedExpr == nil {
-		switch m.Kind.(type) {
-		case *ctpb.EvalResponseMatcher_ParseFailureRegex:
+		if t.GetParseFailureRegex() != "" {
 			// TODO interpret regex
 			return nil
 		}
 		return fmt.Errorf("%s: Fatal parse errors: %v", t.Name, pres.Issues)
 	}
-	switch m.Kind.(type) {
-	case *ctpb.EvalResponseMatcher_ParseFailureRegex:
-		return fmt.Errorf("%s: wanted parse failure", t.Name)
+	if t.GetParseFailureRegex() != "" {
+		return fmt.Errorf("%s: got parse success, want parse failure", t.Name)
 	}
 	if parsedExpr.Expr == nil {
 		return fmt.Errorf("%s: parse returned empty root expression", t.Name)
@@ -129,22 +171,23 @@ func (r *runConfig) RunTest(t *ctpb.SimpleEvalTest) error {
 		}
 		checkedExpr = cres.CheckedExpr
 		if checkedExpr == nil {
-			switch m.Kind.(type) {
-			case *ctpb.EvalResponseMatcher_CheckFailureRegex:
+			if t.GetCheckFailureRegex() != "" {
 				// TODO interpret regex
 				return nil
 			}
 			return fmt.Errorf("%s: Fatal check errors: %v", t.Name, cres.Issues)
 		}
-		switch m.Kind.(type) {
-		case *ctpb.EvalResponseMatcher_CheckFailureRegex:
+		if t.GetCheckFailureRegex() != "" {
 			return fmt.Errorf("%s: Got %v, wanted check failure", t.Name, checkedExpr)
 		}
 		_, present := checkedExpr.TypeMap[rootId]
 		if !present {
 			return fmt.Errorf("%s: No type for top level expression: %v", t.Name, cres)
 		}
+		// TODO: validate that the inferred type is compatible
+		// with the expected value, if any, in the eval matcher.
 	}
+	// TODO: if check phase disabled, check anyhow and ensure it fails.
 
 	// Eval
 	var ereq exprpb.EvalRequest
@@ -166,21 +209,16 @@ func (r *runConfig) RunTest(t *ctpb.SimpleEvalTest) error {
 	if eres == nil || eres.Result == nil {
 		return fmt.Errorf("%s: empty eval response", t.Name)
 	}
-	return Match(m, eres.Result)
+	return Match(t, eres.Result)
 }
 
+// ValidateTest checks whether a simple test has the required fields.
 func ValidateTest(t *ctpb.SimpleEvalTest) error {
 	if t.Name == "" {
 		return fmt.Errorf("Simple test has no name")
 	}
 	if t.Expr == "" {
 		return fmt.Errorf("%s: no expression", t.Name)
-	}
-	if t.Expected == nil {
-		return fmt.Errorf("%s: no expected result", t.Name)
-	}
-	if t.Expected.GetKind() == nil {
-		return fmt.Errorf("%s: no expected result kind", t.Name)
 	}
 	return nil
 }

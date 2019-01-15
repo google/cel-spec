@@ -6,15 +6,19 @@ section {
   test {
     name: "self_eval_zero"
     expr: "0"
-    expected: {
-      value: {
-        int64_value: 0
-      }
-    }
+    value: { int64_value: 0 }
   }
+  test {
+    name: "self_eval_string"
+    expr: "''"
+    value: { string_value: "" }
+  }
+}
+section {
+  name: "arithmetic"
+  description: "numeric arithmetic checks"
   test {
     name: "one plus one"
     expr: "1 + 1 == 2"
-    expected { trueval: {} }
   }
 }
