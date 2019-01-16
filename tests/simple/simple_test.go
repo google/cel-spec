@@ -11,7 +11,7 @@ import (
 	"github.com/golang/protobuf/proto"
 	"github.com/google/cel-spec/tools/celrpc"
 
-	testpb "github.com/google/cel-spec/proto/test/v1/conformanceTest"
+	spb "github.com/google/cel-spec/proto/test/v1/simple"
 )
 
 var (
@@ -80,13 +80,13 @@ func initRunConfig() (*runConfig, error) {
 // TODO(jimlarson) use the utility filter to do text to binary
 // proto conversion, since the C++ implementation understands Any
 // messages.
-func parseSimpleFile(filename string) (*testpb.SimpleEvalTestFile, error) {
+func parseSimpleFile(filename string) (*spb.SimpleTestFile, error) {
 	bytes, err := ioutil.ReadFile(filename)
 	if err != nil {
 		return nil, err
 	}
 	s := string(bytes)
-	var pb testpb.SimpleEvalTestFile
+	var pb spb.SimpleTestFile
 	err = proto.UnmarshalText(s, &pb)
 	if err != nil {
 		return nil, err
@@ -125,7 +125,8 @@ func TestSimpleFile(t *testing.T) {
 		for _, section := range testFile.Section {
 			t.Logf("Running tests in section %v\n", section.Name)
 			for _, test := range section.Test {
-				t.Run(test.Name, func(t *testing.T) {
+				desc := fmt.Sprintf("%s/%s/%s", testFile.Name, section.Name, test.Name)
+				t.Run(desc, func(t *testing.T) {
 					err := rc.RunTest(test)
 					if err != nil {
 						t.Fatal(err)

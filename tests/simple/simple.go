@@ -44,7 +44,7 @@ import (
 	"github.com/golang/protobuf/proto"
 	"github.com/google/cel-spec/tools/celrpc"
 
-	ctpb "github.com/google/cel-spec/proto/test/v1/conformanceTest"
+	spb "github.com/google/cel-spec/proto/test/v1/simple"
 	exprpb "google.golang.org/genproto/googleapis/api/expr/v1alpha1"
 )
 
@@ -58,32 +58,32 @@ var (
 // Calling this function implies that the interpretation succeeded
 // in the parse and check phases.  See MatchValue() for the normalization
 // applied to values for matching.
-func Match(t *ctpb.SimpleEvalTest, actual *exprpb.ExprValue) error {
+func Match(t *spb.SimpleTest, actual *exprpb.ExprValue) error {
 	switch t.ResultMatcher.(type) {
-	case *ctpb.SimpleEvalTest_Value:
+	case *spb.SimpleTest_Value:
 		want := t.GetValue()
 		switch actual.Kind.(type) {
 		case *exprpb.ExprValue_Value:
 			return MatchValue(t.Name, want, actual.GetValue())
 		}
 		return fmt.Errorf("Got %v, want value %v", actual, want)
-	case *ctpb.SimpleEvalTest_EvalError:
+	case *spb.SimpleTest_EvalError:
 		switch actual.Kind.(type) {
 		case *exprpb.ExprValue_Error:
 			// TODO match errors
 			return nil
 		}
 		return fmt.Errorf("Got %v, want error", actual)
-	case *ctpb.SimpleEvalTest_Unknown:
+	case *spb.SimpleTest_Unknown:
 		switch actual.Kind.(type) {
 		case *exprpb.ExprValue_Error:
 			// TODO match unknowns
 			return nil
 		}
 		return fmt.Errorf("Got %v, want unknown", actual)
-	case *ctpb.SimpleEvalTest_ParseFailureRegex:
+	case *spb.SimpleTest_ParseFailureRegex:
 		return fmt.Errorf("Got %v, want parse failure", actual)
-	case *ctpb.SimpleEvalTest_CheckFailureRegex:
+	case *spb.SimpleTest_CheckFailureRegex:
 		return fmt.Errorf("Got %v, want check failure", actual)
 	case nil:
 		// Defaults to a match against a true value.
@@ -120,7 +120,7 @@ type runConfig struct {
 
 // RunTest runs the test described by t, returning an error for any
 // violation of expectations.
-func (r *runConfig) RunTest(t *ctpb.SimpleEvalTest) error {
+func (r *runConfig) RunTest(t *spb.SimpleTest) error {
 	err := ValidateTest(t)
 	if err != nil {
 		return err
@@ -213,7 +213,7 @@ func (r *runConfig) RunTest(t *ctpb.SimpleEvalTest) error {
 }
 
 // ValidateTest checks whether a simple test has the required fields.
-func ValidateTest(t *ctpb.SimpleEvalTest) error {
+func ValidateTest(t *spb.SimpleTest) error {
 	if t.Name == "" {
 		return fmt.Errorf("Simple test has no name")
 	}

@@ -9,9 +9,9 @@ licenses(["notice"])  # Apache 2.0
 exports_files(["LICENSE"])
 
 proto_library(
-    name = "conformance_test_protos",
+    name = "simple_protos",
     srcs = [
-        "conformance-test.proto",
+        "simple.proto",
     ],
     deps = [
         "@com_google_googleapis//google/api/expr/v1alpha1:checked_proto",
@@ -22,14 +22,14 @@ proto_library(
 )
 
 cc_proto_library(
-    name = "conformance_test_cc_proto",
-    deps = [":conformance_test_protos",],
+    name = "simple_cc_proto",
+    deps = [":simple_protos",],
 )
 
 go_proto_library(
-    name = "conformance_test_go_proto",
-    proto = ":conformance_test_protos",
-    importpath = "github.com/google/cel-spec/proto/test/v1/conformanceTest",
+    name = "simple_go_proto",
+    proto = ":simple_protos",
+    importpath = "github.com/google/cel-spec/proto/test/v1/simple",
     deps = [
         "@org_golang_google_genproto//googleapis/api/expr/v1alpha1:go_default_library",
     ],

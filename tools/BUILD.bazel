@@ -55,6 +55,6 @@ cc_binary(
         "@com_google_absl//absl/strings",
         "@com_google_googleapis//:cc_rpc_status",
         "@com_google_protobuf//:protobuf",
-        "//proto/test/v1:conformance_test_cc_proto",
+        "//proto/test/v1:simple_cc_proto",
     ],
 )

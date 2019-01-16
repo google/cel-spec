@@ -12,7 +12,7 @@ import "google/protobuf/empty.proto";
 // The format of a simple test file, expected to be stored in text format.
 // A file is the unit of granularity for selecting conformance tests,
 // so tests of optional features should be segregated into separate files.
-message SimpleEvalTestFile {
+message SimpleTestFile {
   // Required.  The name of the file.  Should match the filename.
   string name = 1;
 
@@ -20,14 +20,14 @@ message SimpleEvalTestFile {
   string description = 2;
 
   // The contained sections.
-  repeated SimpleEvalTestSection section = 3;
+  repeated SimpleTestSection section = 3;
 }
 
-// A collection of related SimpleEvalTests.
+// A collection of related SimpleTests.
 //
 // The section is the unit of organization within a test file, and should
 // guide where new tests are added.
-message SimpleEvalTestSection {
+message SimpleTestSection {
   // Required.  The name of the section.
   string name = 1;
 
@@ -35,13 +35,13 @@ message SimpleEvalTestSection {
   string description = 2;
 
   // The contained tests.
-  repeated SimpleEvalTest test = 3;
+  repeated SimpleTest test = 3;
 }
 
 // A test which should run the given CEL program through parsing,
 // optionally through checking, then evaluation, with the results
 // of the pipeline validated by the given EvalResponseMatcher.
-message SimpleEvalTest {
+message SimpleTest {
   // Required.  The name of the test, which should be unique in the test file.
   string name = 1;
 
