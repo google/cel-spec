@@ -1,10 +1,10 @@
 name: "basic"
 description: "Basic conformance tests that all implementations should pass."
 section {
-  name: "self_eval"
-  description: "Simple self-evaluating forms"
+  name: "self_eval_zeroish"
+  description: "Simple self-evaluating forms to zero-ish values."
   test {
-    name: "self_eval_zero"
+    name: "self_eval_int_zero"
     expr: "0"
     value: { int64_value: 0 }
   }
@@ -15,10 +15,19 @@ section {
   }
 }
 section {
-  name: "arithmetic"
-  description: "numeric arithmetic checks"
+  name: "self_eval_nonzeroish"
+  description: "Simple self-evaluating forms to non-zero-ish values."
   test {
-    name: "one plus one"
-    expr: "1 + 1 == 2"
+    name: "self_eval_int_nonzero"
+    expr: "17"
+    value: { int64_value: 17 }
   }
+}
+section {
+  name: "variables"
+  description: "Variable lookups."
+}
+section {
+  name: "namespace"
+  description: "Namespaced identifiers."
 }
