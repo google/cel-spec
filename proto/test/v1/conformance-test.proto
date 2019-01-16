@@ -9,16 +9,33 @@ import "google/api/expr/v1alpha1/eval.proto";
 import "google/api/expr/v1alpha1/value.proto";
 import "google/protobuf/empty.proto";
 
-// Matches error results from Eval.
-message ErrorSetMatcher {
-  // Success if we match any of these sets.
-  repeated google.api.expr.v1alpha1.ErrorSet errors = 1;
+// The format of a simple test file, expected to be stored in text format.
+// A file is the unit of granularity for selecting conformance tests,
+// so tests of optional features should be segregated into separate files.
+message SimpleEvalTestFile {
+  // Required.  The name of the file.  Should match the filename.
+  string name = 1;
+
+  // A description of the file.
+  string description = 2;
+
+  // The contained sections.
+  repeated SimpleEvalTestSection section = 3;
 }
 
-// Matches unknown results from Eval.
-message UnknownSetMatcher {
-  // Success if we match any of these sets.
-  repeated google.api.expr.v1alpha1.UnknownSet unknowns = 1;
+// A collection of related SimpleEvalTests.
+//
+// The section is the unit of organization within a test file, and should
+// guide where new tests are added.
+message SimpleEvalTestSection {
+  // Required.  The name of the section.
+  string name = 1;
+
+  // A description of the section.
+  string description = 2;
+
+  // The contained tests.
+  repeated SimpleEvalTest test = 3;
 }
 
 // A test which should run the given CEL program through parsing,
@@ -81,31 +98,14 @@ message SimpleEvalTest {
   }
 }
 
-// A collection of related SimpleEvalTests.
-//
-// The section is the unit of organization within a test file, and should
-// guide where new tests are added.
-message SimpleEvalTestSection {
-  // Required.  The name of the section.
-  string name = 1;
-
-  // A description of the section.
-  string description = 2;
-
-  // The contained tests.
-  repeated SimpleEvalTest test = 3;
+// Matches error results from Eval.
+message ErrorSetMatcher {
+  // Success if we match any of these sets.
+  repeated google.api.expr.v1alpha1.ErrorSet errors = 1;
 }
 
-// The format of a simple test file, expected to be stored in text format.
-// A file is the unit of granularity for selecting conformance tests,
-// so tests of optional features should be segregated into separate files.
-message SimpleEvalTestFile {
-  // Required.  The name of the file.  Should match the filename.
-  string name = 1;
-
-  // A description of the file.
-  string description = 2;
-
-  // The contained sections.
-  repeated SimpleEvalTestSection section = 3;
+// Matches unknown results from Eval.
+message UnknownSetMatcher {
+  // Success if we match any of these sets.
+  repeated google.api.expr.v1alpha1.UnknownSet unknowns = 1;
 }
