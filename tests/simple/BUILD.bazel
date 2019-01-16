@@ -1,0 +1,42 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+package(
+    default_visibility = ["//visibility:public"],
+)
+
+licenses(["notice"])  # Apache 2.0
+
+exports_files(["LICENSE"] + glob(["testdata/*.textproto"]))
+
+go_library(
+    name = "go_default_library",
+    srcs = [
+        "simple.go",
+    ],
+    importpath = "github.com/google/cel-spec/tests/simple",
+    deps = [
+        "//proto/test/v1:simple_go_proto",
+        "//tools/celrpc:go_default_library",
+        "@com_github_golang_protobuf//proto:go_default_library",
+        "@org_golang_google_genproto//googleapis/api/expr/v1alpha1:go_default_library",
+    ],
+)
+
+# This test target is meant to be called from the repositories
+# of various CEL implementations, passing their own conformance
+# server as an argument.  However, this test must be exposed as
+# a go_test target.  So when called without arguments, the test
+# will simply exit with success.
+go_test(
+    name = "simple_test",
+    srcs = ["simple_test.go"],
+    embed = [":go_default_library"],
+    deps = [
+        "@com_github_golang_protobuf//proto:go_default_library",
+        "//proto/test/v1:simple_go_proto",
+        "//tools/celrpc:go_default_library",
+    ],
+    # This is the magic setting that lets external invokers see
+    # files in their expected locations.
+    rundir = "../..",
+)

@@ -1,0 +1,36 @@
+load("@io_bazel_rules_go//proto:def.bzl", "go_proto_library")
+
+package(
+    default_visibility = ["//visibility:public"],
+)
+
+licenses(["notice"])  # Apache 2.0
+
+exports_files(["LICENSE"])
+
+proto_library(
+    name = "simple_protos",
+    srcs = [
+        "simple.proto",
+    ],
+    deps = [
+        "@com_google_googleapis//google/api/expr/v1alpha1:checked_proto",
+        "@com_google_googleapis//google/api/expr/v1alpha1:eval_proto",
+        "@com_google_googleapis//google/api/expr/v1alpha1:value_proto",
+        "@com_google_protobuf//:empty_proto",
+    ],
+)
+
+cc_proto_library(
+    name = "simple_cc_proto",
+    deps = [":simple_protos",],
+)
+
+go_proto_library(
+    name = "simple_go_proto",
+    proto = ":simple_protos",
+    importpath = "github.com/google/cel-spec/proto/test/v1/simple",
+    deps = [
+        "@org_golang_google_genproto//googleapis/api/expr/v1alpha1:go_default_library",
+    ],
+)
