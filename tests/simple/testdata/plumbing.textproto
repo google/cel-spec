@@ -1,0 +1,54 @@
+name: "plumbing"
+description: "Check that the ConformanceService server can accept all arguments and return all responses."
+section {
+  name: "min"
+  description: "Minimal programs."
+  test {
+    name: "min_program"
+    description: "Smallest functionality: expr in, result out."
+    expr: "17"
+    value: { int64_value: 17 }
+  }
+}
+section {
+  name: "eval results"
+  description: "All evaluation result kinds."
+  test {
+    name: "error_result"
+    description: "Check that error results go through. Currently fails for cel-go!"
+    expr: "1 / 0"
+    eval_error: {
+      errors: { message: "foo" }
+    }
+  }
+}
+section {
+  name: "check_inputs"
+  description: "All inputs to Check phase."
+  test {
+    name: "skip_check"
+    description: "Make sure we can skip type checking."
+    expr: "[17, 'pancakes']"
+    disable_check: true
+    value: {
+      list_value {
+        values: { int64_value: 17 }
+        values: { string_value: "pancakes" }
+      }
+    }
+  }
+}
+section {
+  name: "eval_inputs"
+  description: "All inputs to Eval phase."
+  test {
+    name: "one_ignored_value_arg"
+    description: "Check that value bindings can be given, even if ignored."
+    expr: "'foo'"
+    bindings: {
+      key: "x"
+      value: { value: { int64_value: 17 } }
+    }
+    value: { string_value: "foo" }
+  }
+}
