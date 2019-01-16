@@ -1,15 +1,14 @@
 /*
 Package simple runs end-to-end CEL conformance tests against
-ConformanceService servers.  The "simple" tests run the
-Parse / Check (optional) / Eval pipeline and compare the
-result against an expected value or an expected error at one
-of the phases.  To validate the intermediate results from the
-Parse or Check phases, use a different test driver.
+ConformanceService servers.  The "simple" tests run the Parse /
+Check (optional) / Eval pipeline and compare the result against an
+expected value, error, or unknown from the Eval phase.  To validate the
+intermediate results from the Parse or Check phases, use a different
+test driver.
 
-Each phase can be sent to a different ConformanceService
-server.  Thus a partial implementation can be tested by
-using other implementations for the missing phases.  This
-also validates the interoperativity.
+Each phase can be sent to a different ConformanceService server.  Thus a
+partial implementation can be tested by using other implementations for
+the missing phases.  This also validates the interoperativity.
 
 Example test data:
 
@@ -74,6 +73,7 @@ func Match(t *spb.SimpleTest, actual *exprpb.ExprValue) error {
 			return nil
 		}
 		return fmt.Errorf("Got %v, want error", actual)
+	// TODO support any_eval_errors
 	case *spb.SimpleTest_Unknown:
 		switch actual.Kind.(type) {
 		case *exprpb.ExprValue_Error:
@@ -81,10 +81,7 @@ func Match(t *spb.SimpleTest, actual *exprpb.ExprValue) error {
 			return nil
 		}
 		return fmt.Errorf("Got %v, want unknown", actual)
-	case *spb.SimpleTest_ParseFailureRegex:
-		return fmt.Errorf("Got %v, want parse failure", actual)
-	case *spb.SimpleTest_CheckFailureRegex:
-		return fmt.Errorf("Got %v, want check failure", actual)
+	// TODO support any_unknowns
 	case nil:
 		// Defaults to a match against a true value.
 		switch actual.Kind.(type) {
@@ -141,14 +138,7 @@ func (r *runConfig) RunTest(t *spb.SimpleTest) error {
 	}
 	parsedExpr := pres.ParsedExpr
 	if parsedExpr == nil {
-		if t.GetParseFailureRegex() != "" {
-			// TODO interpret regex
-			return nil
-		}
 		return fmt.Errorf("%s: Fatal parse errors: %v", t.Name, pres.Issues)
-	}
-	if t.GetParseFailureRegex() != "" {
-		return fmt.Errorf("%s: got parse success, want parse failure", t.Name)
 	}
 	if parsedExpr.Expr == nil {
 		return fmt.Errorf("%s: parse returned empty root expression", t.Name)
@@ -157,7 +147,7 @@ func (r *runConfig) RunTest(t *spb.SimpleTest) error {
 
 	// Check (optional)
 	var checkedExpr *exprpb.CheckedExpr
-	if t.EnableCheck {
+	if !t.DisableCheck {
 		creq := exprpb.CheckRequest{
 			ParsedExpr: parsedExpr,
 			TypeEnv: t.TypeEnv,
@@ -171,14 +161,7 @@ func (r *runConfig) RunTest(t *spb.SimpleTest) error {
 		}
 		checkedExpr = cres.CheckedExpr
 		if checkedExpr == nil {
-			if t.GetCheckFailureRegex() != "" {
-				// TODO interpret regex
-				return nil
-			}
 			return fmt.Errorf("%s: Fatal check errors: %v", t.Name, cres.Issues)
-		}
-		if t.GetCheckFailureRegex() != "" {
-			return fmt.Errorf("%s: Got %v, wanted check failure", t.Name, checkedExpr)
 		}
 		_, present := checkedExpr.TypeMap[rootId]
 		if !present {

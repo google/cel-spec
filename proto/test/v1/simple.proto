@@ -1,4 +1,4 @@
-// Protocol buffer definitions for conformance testing.
+// Simple end-to-end conformance tests.
 
 syntax = "proto3";
 
@@ -40,7 +40,7 @@ message SimpleTestSection {
 
 // A test which should run the given CEL program through parsing,
 // optionally through checking, then evaluation, with the results
-// of the pipeline validated by the given EvalResponseMatcher.
+// of the pipeline validated by the given result matcher.
 message SimpleTest {
   // Required.  The name of the test, which should be unique in the test file.
   string name = 1;
@@ -54,8 +54,8 @@ message SimpleTest {
   // Disables all macro expansion in parsing.
   bool disable_macros = 4;
 
-  // Enables the check phase.
-  bool enable_check = 5;
+  // Disables the check phase.
+  bool disable_check = 5;
 
   // The type environment to use for the check phase.
   repeated google.api.expr.v1alpha1.Decl type_env = 6;
@@ -85,16 +85,6 @@ message SimpleTest {
     // Matches one of several unknown results.
     // (Using explicit message since oneof can't handle repeated.)
     UnknownSetMatcher any_unknowns = 12;
-
-    // A regexp which should match against the string representation
-    // of a parse error.  Can match against any one of multiple errors.
-    // Use "." until we standardize error strings.
-    string parse_failure_regex = 13;
-
-    // A regexp which should match against the string representation
-    // of a check error.  Can match against any one of multiple errors.
-    // Use "." until we standardize error strings.
-    string check_failure_regex = 14;
   }
 }
 
