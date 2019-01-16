@@ -60,6 +60,7 @@ func NewClientFromPath(serverPath string) (*ConfClient, error) {
 	return &c, nil
 }
 
+// TODO Run from celrpc_test.go.
 func ExampleNewClientFromPath() {
 	c, err := NewClientFromPath("/path/to/server/binary")
 	defer c.Shutdown()
@@ -99,7 +100,7 @@ func (c *ConfClient) Shutdown() {
 	}
 }
 
-// StartServer listens on a dynamically-allocated port on the loopback
+// RunServer listens on a dynamically-allocated port on the loopback
 // network device, prints its address and port to stdout, then starts
 // a gRPC server on the socket with the given service callbacks.
 // Note that this call doesn't return until ther server exits.
