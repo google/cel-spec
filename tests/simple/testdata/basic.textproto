@@ -106,7 +106,7 @@ section {
     name: "self_eval_list_singleitem"
     expr: "[-1]"
     value: {
-      list_value { 
+      list_value {
         values: { int64_value: -1 }
       }
     }
