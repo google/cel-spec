@@ -9,9 +9,59 @@ section {
     value: { int64_value: 0 }
   }
   test {
-    name: "self_eval_string"
+    name: "self_eval_uint_zero"
+    expr: "0u"
+    value: { uint64_value: 0 }
+  }
+  test {
+    name: "self_eval_double_zero"
+    expr: "0.0"
+    value: { double_value: 0 }
+  }
+  test {
+    name: "self_eval_double_zerowithexp"
+    expr: "0e+0"
+    value: { double_value: 0 }
+  }
+  test {
+    name: "self_eval_string_empty"
     expr: "''"
     value: { string_value: "" }
+  }
+  test {
+    name: "self_eval_string_empty_quotes"
+    expr: '""'
+    value: { string_value: "" }
+  }
+  test {
+    name: "self_eval_string_raw_prefix"
+    expr: 'r""'
+    value: { string_value: "" }
+  }
+  test {
+    name: "self_eval_byte_empty"
+    expr: 'b""'
+    value: { bytes_value: "" }
+  }
+  test {
+    name: "self_eval_bool_false"
+    expr: "false"
+    value: { bool_value: false }
+  }
+  test {
+    name: "self_eval_null"
+    expr: "null"
+    value: { null_value: NULL_VALUE }
+  }
+  test {
+    name: "self_eval_empty_list"
+    expr: '[]'
+    value: { list_value: {} }
+  }
+  test {
+    name: "self_eval_empty_map"
+    expr: '{}'
+    value: { map_value: {} }
   }
 }
 section {
@@ -21,6 +71,62 @@ section {
     name: "self_eval_int_nonzero"
     expr: "17"
     value: { int64_value: 17 }
+  }
+  test {
+    name: "self_eval_uint_nonzero"
+    expr: "123456789u"
+    value: { uint64_value: 123456789 }
+  }
+  test {
+    name: "self_eval_int_negative_min"
+    expr: "-9223372036854775808"
+    value: { int64_value: -9223372036854775808 }
+  }
+  test {
+    name: "self_eval_double_negative_exp"
+    expr: "-2.3e+1"
+    value: { double_value: -23.0 }
+  }
+  test {
+    name: "self_eval_string_excl"
+    expr: '"!"'
+    value: { string_value: "!" }
+  }
+  test {
+    name: "self_eval_string_escape"
+    expr: "'\\''"
+    value: { string_value: "'" }
+  }
+  test {
+    name: "self_eval_binary_escape"
+    expr: "b'\\u00FF'"
+    value: { bytes_value: "\303\277" }
+  }
+  test {
+    name: "self_eval_list_singleitem"
+    expr: "[-1]"
+    value: {
+      list_value {
+        values: { int64_value: -1 }
+      }
+    }
+  }
+  test {
+    name: "self_eval_map_singleitem"
+    expr: '{"k":"v"}'
+    value: {
+      map_value {
+        entries {
+          key: { string_value: "k" }
+          value: { string_value: "v" }
+        }
+      }
+    }
+  }
+  test {
+    name: "self_eval_bool_true"
+    expr: "true"
+    value: { bool_value: true }
   }
 }
 section {
