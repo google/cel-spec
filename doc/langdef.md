@@ -259,7 +259,7 @@ CEL Literal  | Meaning
 `"\\"`       | String of one backslash character
 `r"\\"`      | String of two backslash characters
 `b"abc"`     | Byte sequence of 61, 62, 63
-`b"&yuml;"`  | Sequence of bytes 195 and 191 (UTF-8 of &yuml;)
+`b"ÿ"`       | Sequence of bytes 195 and 191 (UTF-8 of &yuml;)
 `b"\303\277"`| Also sequence of bytes 195 and 191
 `"\303\277"` | String of "&Atilde;&iquest;" (code points 195, 191)
 `"\377"`     | String of "&yuml;" (code point 255)
