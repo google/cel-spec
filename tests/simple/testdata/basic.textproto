@@ -34,7 +34,7 @@ section {
     value: { string_value: "" }
   }
   test {
-    name: "self_eval_string_r_prefix"
+    name: "self_eval_string_raw_prefix"
     expr: 'r""'
     value: { string_value: "" }
   }
@@ -99,8 +99,8 @@ section {
   }
   test {
     name: "self_eval_binary_escape"
-    expr: "b'&yuml;'"
-    value: { bytes_value: "&yuml;" } # Shouldn't this escape?
+    expr: "b'\\u00FF'"
+    value: { bytes_value: "\303\277" }
   }
   test {
     name: "self_eval_list_singleitem"
