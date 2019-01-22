@@ -1,0 +1,42 @@
+name: "broken"
+description:
+  "Conformance tests that are not currently working on at least one of the standard implementations."
+  "Each section here will be named with filename.textproto/sectionname, to know where it should go once fixed."
+section {
+  name: "basic.textproto/variables"
+  test {
+    name: "self_eval_unbound_lookup"
+    description: "An unbound variable should be marked as an error during execution. {BugID TBD}"
+    expr: "x"
+    disable_check: true
+    ## Expected behavior
+    eval_error: {
+      errors: { message: "undeclared reference to 'x' (in container '')" }
+    }
+    ## Current behavior as expressed by the cel-go implementation
+    #unknown: {
+    #  exprs: 1
+    #}
+  }
+}
+section {
+  name: "comparisons.textproto/Literal Comparison"
+  test {
+    name: "self_test_equals_mixed_types"
+    description: "A mix of types fails during type checks but can't be captured in the conformance tests yet {BugID TBD}. Also, if you disable checks it yields {bool_value: false} where it should also yield an error"
+    expr: "1.0 == 1"
+    disable_check: true # need to make it fail in the evaluation phase
+    eval_error : {
+      errors: { message: "found no matching overload for '_==_' applied to '(double, int)'" }
+    }
+  }
+  test {
+    name: "self_test_not_equals_data_type"
+    description: "A mix of types in a list fails during type checks. See #self_test_equals_mixed_types"
+    expr: "[1] == [1.0]"
+    disable_check: true # need to make it fail in the evaluation phase
+    eval_error: {
+      errors: { message: "found no matching overload for '_==_' applied to '(list(int), list(double))'" }
+    }
+  }
+}

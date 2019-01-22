@@ -132,6 +132,32 @@ section {
 section {
   name: "variables"
   description: "Variable lookups."
+  test {
+    name: "self_eval_bound_lookup"
+    expr: "x"
+    type_env: {
+      name: "x",
+      ident: { type: { primitive: INT64 } }
+    }
+    bindings: {
+      key: "x",
+      value: { value: { int64_value: 123 } }
+    }
+    value: { int64_value: 123 }
+  }
+  test {
+    name: "self_eval_container_lookup"
+    expr: "x.y"
+    value: { bool_value: true }
+    type_env: {
+      name: "x.y",
+      ident: { type: { primitive: BOOL } }
+    }
+    bindings: {
+      key: "x.y",
+      value: { value: { bool_value: true } }
+    }
+  }
 }
 section {
   name: "namespace"

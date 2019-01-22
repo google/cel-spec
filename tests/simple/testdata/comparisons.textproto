@@ -1,2 +1,131 @@
 name: "comparisons"
 description: "Tests for boolean-valued functions and operators."
+section {
+  name: "Literal comparison"
+  description: "Comparing literals (no bindings)"
+  test {
+    name: "self_test_equals_int64"
+    expr: "1 == 1"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_not_equals_int64"
+    expr: "-1 == 1"
+    value: { bool_value: false }
+  }
+  test {
+    name: "self_test_equals_uint64"
+    expr: "2u == 2u"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_not_equals_uint64"
+    expr: "1u == 2u"
+    value: { bool_value: false }
+  }
+  test {
+    name: "self_test_equals_double"
+    expr: "1.0 == 1.0e+0"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_not_equals_double"
+    expr: "-1.0 == 1.0"
+    value: { bool_value: false }
+  }
+  test {
+    name: "self_test_equals_string"
+    expr: "'' == \"\""
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_not_equals_string"
+    expr: "'a' == 'b'"
+    value: { bool_value: false }
+  }
+  test {
+    name: "self_test_equals_string_raw"
+    expr: "'a' == r'a'"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_equals_null"
+    expr: "null == null"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_equals_bool"
+    expr: "true == true"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_not_equals_bool"
+    expr: "false == true"
+    value: { bool_value: false }
+  }
+  test {
+    name: "self_test_equals_byte"
+    description: "Test bytes literal equality with encoding"
+    expr: "b'\\u00FF' == b'\303\277'"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_not_equals_byte"
+    expr: "b'abc' == b'abcd'"
+    value: { bool_value: false }
+  }
+  test {
+    name: "self_test_equals_list_empty"
+    expr: "[] == []"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_equals_list_numbers"
+    expr: "[1, 2, 3] == [1, 2, 3]"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_not_equals_list_order"
+    expr: "[1, 2, 3] == [1, 3, 2]"
+    value: { bool_value: false }
+  }
+  test {
+    name: "self_test_not_equals_list_string_case"
+    expr: "['case'] == ['cAse']"
+    value: { bool_value: false }
+  }
+  test {
+    name: "self_test_equals_map_empty"
+    expr: "{} == {}"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_equals_map_onekey"
+    expr: "{'k':'v'} == {\"k\":\"v\"}"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_equals_map_floatvalue"
+    expr: "{'k':1.0} == {'k':1e+0}"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_not_equals_map_value"
+    expr: "{'k':'v'} == {'k':'v1'}"
+    value: { bool_value: false }
+  }
+  test {
+    name: "self_test_not_equals_map_extrakey"
+    expr: "{'k':'v','k1':'v1'} == {'k':'v'}"
+    value: { bool_value: false }
+  }
+  test {
+    name: "self_test_not_equals_map_key_casing"
+    expr: "{'key':'value'} == {'Key':'value'}"
+    value: { bool_value: false }
+  }
+}
+section {
+  name: "Bound comparison"
+  description: "Comparing bound variables with literals or other variables"
+}
