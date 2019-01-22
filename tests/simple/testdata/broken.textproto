@@ -6,7 +6,7 @@ section {
   name: "basic.textproto/variables"
   test {
     name: "self_eval_unbound_lookup"
-    description: "An unbound variable should be marked as an error during execution. {BugID TBD}"
+    description: "An unbound variable should be marked as an error during execution. See google/cel-go#154"
     expr: "x"
     disable_check: true
     ## Expected behavior
@@ -23,7 +23,7 @@ section {
   name: "comparisons.textproto/Literal Comparison"
   test {
     name: "self_test_equals_mixed_types"
-    description: "A mix of types fails during type checks but can't be captured in the conformance tests yet {BugID TBD}. Also, if you disable checks it yields {bool_value: false} where it should also yield an error"
+    description: "A mix of types fails during type checks but can't be captured in the conformance tests yet (See google/cel-go#155). Also, if you disable checks it yields {bool_value: false} where it should also yield an error"
     expr: "1.0 == 1"
     disable_check: true # need to make it fail in the evaluation phase
     eval_error : {
