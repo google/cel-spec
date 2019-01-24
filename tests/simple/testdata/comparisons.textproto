@@ -1,8 +1,8 @@
 name: "comparisons"
 description: "Tests for boolean-valued functions and operators."
 section {
-  name: "Literal comparison"
-  description: "Comparing literals (no bindings)"
+  name: "Literal comparison for _==_"
+  description: "Comparing literals for equality"
   test {
     name: "self_test_equals_int64"
     expr: "1 == 1"
@@ -45,8 +45,13 @@ section {
   }
   test {
     name: "self_test_equals_string_raw"
-    expr: "'a' == r'a'"
+    expr: "'abc' == r'abc'"
     value: { bool_value: true }
+  }
+  test {
+    name: "self_test_not_equals_case"
+    expr: "'abc' == 'ABC'"
+    value: { bool_value: false }
   }
   test {
     name: "self_test_equals_null"
@@ -120,10 +125,19 @@ section {
     value: { bool_value: false }
   }
   test {
+    name: "self_test_equals_map_keyorder"
+    expr: "{'k1':'v1','k2':'v2'} == {'k2':'v2','k1':'v1'}"
+    value: { bool_value: true }
+  }
+  test {
     name: "self_test_not_equals_map_key_casing"
     expr: "{'key':'value'} == {'Key':'value'}"
     value: { bool_value: false }
   }
+}
+section {
+  name: "Literal comparison for _!=_"
+  description: "Comparing literals for inequality"
 }
 section {
   name: "Bound comparison"

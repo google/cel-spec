@@ -36,7 +36,8 @@ section {
     expr: "[1] == [1.0]"
     disable_check: true # need to make it fail in the evaluation phase
     eval_error: {
-      errors: { message: "found no matching overload for '_==_' applied to '(list(int), list(double))'" }
+      # Note: The type checker error shows (list(int), list(double)) instead
+      errors: { message: "found no matching overload for '_==_' applied to '(list, list)'" }
     }
   }
 }
