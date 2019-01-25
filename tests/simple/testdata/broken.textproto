@@ -20,6 +20,26 @@ section {
   }
 }
 section {
+  name: "basic.textproto/self_eval_nonzeroish"
+  test {
+    name: "self_eval_map_twoitems"
+    description: "Map literals should be order independent for the checker. google/cel-go#156"
+    expr: '{"k1":"v1","k":"v"}'
+    value: {
+      map_value {
+        entries {
+          key: { string_value: "k" }
+          value: { string_value: "v" }
+        }
+        entries {
+          key: { string_value: "k1" }
+          value: { string_value: "v1" }
+        }
+      }
+    }
+  }
+}
+section {
   name: "comparisons.textproto/Literal Comparison"
   test {
     name: "self_test_equals_mixed_types"
