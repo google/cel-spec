@@ -220,6 +220,11 @@ section {
     value: { bool_value: true }
   }
   test {
+    name: "self_test_not_ne_list_bool"
+    expr: "[false, true] != [false, true]"
+    value: { bool_value: false }
+  }
+  test {
     name: "self_test_not_ne_list_of_list"
     expr: "[[]] != [[]]"
     value: { bool_value: false }
