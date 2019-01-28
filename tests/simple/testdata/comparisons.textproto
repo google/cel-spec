@@ -471,6 +471,120 @@ section {
 section {
   name: "Literal comparison for _<=_"
   description: "Comparing literals for the 'less than or equal' operator"
+  test {
+    name: "self_test_lte_int64_lt"
+    expr: "0 <= 1"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_lte_int64_eq"
+    expr: "1 <= 1"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_not_lte_int64_gt"
+    expr: "1 <= -1"
+    value: { bool_value: false }
+  }
+  test {
+    name: "self_test_lte_uint64_lt"
+    expr: "0u <= 1u"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_lte_uint64_eq"
+    expr: "1u <= 1u"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_not_lte_uint64_gt"
+    expr: "1u <= 0u"
+    value: { bool_value: false }
+  }
+  test {
+    name: "self_test_lte_float_lt"
+    expr: "0.0 <= 0.1e-31"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_lte_float_eq"
+    expr: "0.0 <= 0e-1"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_not_lte_float_gt"
+    expr: "1.0 <= 0.99"
+    value: { bool_value: false }
+  }
+  test {
+    name: "self_test_lte_string_empty"
+    expr: "'' <= ''"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_lte_string_empty_to_nonempty"
+    expr: "'' <= 'a'"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_not_lte_string_to_empty"
+    expr: "'a' <= ''"
+    value: { bool_value: false }
+  }
+  test {
+    name: "self_test_lte_string_lexicographical"
+    expr: "'aBc' <= 'abc'"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_lte_bytes_empty"
+    expr: "b'' <= b'\x00'"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_not_lte_bytes_length"
+    expr: "b'\x01\x00' <= b'\x01'"
+    value: { bool_value: false }
+  }
+  test {
+    name: "self_test_lte_bool_false_true"
+    expr: "false <= true"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_lte_bool_false_false"
+    expr: "false <= false"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_lte_bool_true_false"
+    expr: "true <= false"
+    value: { bool_value: false }
+  }
+  test {
+    name: "self_test_lte_null_unsupported"
+    expr: "null <= null"
+    disable_check: true
+    eval_error: {
+      errors: { message: "no such overload" }
+    }
+  }
+  test {
+    name: "self_test_lte_list_unsupported"
+    expr: "[0] <= [0]"
+    disable_check: true
+    eval_error: {
+      errors: { message: "no such overload" }
+    }
+  }
+  test {
+    name: "self_test_lte_map_unsupported"
+    expr: "{0:'a'} <= {1:'b'}"
+    disable_check: true
+    eval_error: {
+      errors: { message: "no such overload" }
+    }
+  }
 }
 section {
   name: "Literal comparison for _>=_"
