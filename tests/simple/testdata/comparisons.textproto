@@ -251,6 +251,143 @@ section {
   }
 }
 section {
+  name: "Literal comparison for _<_"
+  description: "Comparing literals for the 'less than' operator"
+  test {
+    name: "self_test_lt_int64"
+    expr: "-1 < 0"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_not_lt_int64"
+    expr: "0 < 0"
+    value: { bool_value: false }
+  }
+  test {
+    name: "self_test_lt_uint64"
+    expr: "0u < 1u"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_not_lt_uint64"
+    expr: "2u < 2u"
+    value: { bool_value: false }
+  }
+  test {
+    name: "self_test_lt_float"
+    expr: "1.0 < 1.0000001"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_not_lt_float"
+    expr: "-0.0 < 0.0"
+    value: { bool_value: false }
+  }
+  test {
+    name: "self_test_lt_string"
+    expr: "'a' < 'b'"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_lt_string_case"
+    expr: "'Abc' < 'aBC'"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_lt_string_length"
+    expr: "'abc' < 'abcd'"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_lt_string_acute"
+    description: "Verifies that the string comparison distinguishes diacritical marks"
+    expr: "'a' < 'á'"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_not_lt_string_empty"
+    expr: "'' < ''"
+    value: { bool_value: false }
+  }
+  test {
+    name: "self_test_not_lt_string_same"
+    expr: "'abc' < 'abc'"
+    value: { bool_value: false }
+  }
+  test {
+    name: "self_test_not_lt_string_case_length"
+    expr: "'a' < 'AB'"
+    value: { bool_value: false }
+  }
+  test {
+    name: "self_test_lt_bytes"
+    expr: "b'a' < b'b'"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_not_lt_bytes_same"
+    expr: "b'abc' < b'abc'"
+    value: { bool_value: false }
+  }
+  test {
+    name: "self_test_not_lt_bytes_width"
+    expr: "b'á' < b'b'"
+    value: { bool_value: false }
+  }
+  test {
+    name: "self_test_lt_bool_false_first"
+    expr: "false < true"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_not_lt_bool_same"
+    expr: "true < true"
+    value: { bool_value: false }
+  }
+  test {
+    name: "self_test_not_lt_bool_true_first"
+    expr: "true < false"
+    value: { bool_value: false }
+  }
+  test {
+    name: "self_test_lt_list_unsupported"
+    expr: "[0] < [1]"
+    disable_check: true
+    eval_error: {
+      errors: { message: "no such overload" }
+    }
+  }
+  test {
+    name: "self_test_lt_map_unsupported"
+    expr: "{0:'a'} < {1:'b'}"
+    disable_check: true
+    eval_error: {
+      errors: { message: "no such overload" }
+    }
+  }
+  test {
+    name: "self_test_lt_null_unsupported"
+    description: "Ensure _<_ doesn't have a binding for null"
+    expr: "null < null"
+    disable_check: true
+    eval_error: {
+      errors: { message: "no such overload" }
+    }
+  }
+}
+section {
+  name: "Literal comparison for _>_"
+  description: "Comparing literals for the 'greater than' operator"
+}
+section {
+  name: "Literal comparison for _<=_"
+  description: "Comparing literals for the 'less than or equal' operator"
+}
+section {
+  name: "Literal comparison for _>=_"
+  description: "Comparing literals for the 'greater than or equal' operator"
+}
+section {
   name: "Bound comparison"
   description: "Comparing bound variables with literals or other variables"
 }
