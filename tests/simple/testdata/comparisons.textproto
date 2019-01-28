@@ -24,12 +24,12 @@ section {
     value: { bool_value: false }
   }
   test {
-    name: "self_test_equals_double"
+    name: "self_test_equals_float"
     expr: "1.0 == 1.0e+0"
     value: { bool_value: true }
   }
   test {
-    name: "self_test_not_equals_double"
+    name: "self_test_not_equals_float"
     expr: "-1.0 == 1.0"
     value: { bool_value: false }
   }
@@ -138,6 +138,117 @@ section {
 section {
   name: "Literal comparison for _!=_"
   description: "Comparing literals for inequality"
+  test {
+    name: "self_test_ne_int64"
+    expr: "24 != 42"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_not_ne_int64"
+    expr: "1 != 1"
+    value: { bool_value: false }
+  }
+  test {
+    name: "self_test_ne_uint64"
+    expr: "1u != 2u"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_not_ne_uint64"
+    expr: "99u != 99u"
+    value: { bool_value: false }
+  }
+  test {
+    name: "self_test_ne_float"
+    expr: "9.0e+3 != 9001.0"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_not_ne_float"
+    expr: "1.0 != 1e+0"
+    value: { bool_value: false }
+  }
+  test {
+    name: "self_test_ne_string"
+    expr: "'abc' != ''"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_not_ne_string"
+    expr: "'abc' != 'abc'"
+    value: { bool_value: false }
+  }
+  test {
+    name: "self_test_ne_bytes"
+    expr: "b'\\x00\\xFF' != b'\\u00FF'"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_not_ne_bytes"
+    expr: "b'\303\277' != b'\\u00FF'"
+    value: { bool_value: false }
+  }
+  test {
+    name: "self_test_ne_bool"
+    expr: "false != true"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_not_ne_bool"
+    expr: "true != true"
+    value: { bool_value: false }
+  }
+  test {
+    name: "self_test_not_ne_null"
+    description: "null can only be equal to null, or else it won't match"
+    expr: "null != null"
+    value: { bool_value: false }
+  }
+  test {
+    name: "self_test_ne_list_empty"
+    expr: "[] != [1]"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_not_ne_list_empty"
+    expr: "[] != []"
+    value: { bool_value: false }
+  }
+  test {
+    name: "self_test_ne_list_bool"
+    expr: "[true, false, true] != [true, true, false]"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_not_ne_list_bool"
+    expr: "[false, true] != [false, true]"
+    value: { bool_value: false }
+  }
+  test {
+    name: "self_test_not_ne_list_of_list"
+    expr: "[[]] != [[]]"
+    value: { bool_value: false }
+  }
+  test {
+    name: "self_test_ne_map_by_value"
+    expr: "{'k':'v'} != {'k':'v1'}"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_ne_map_by_key"
+    expr: "{'k':true} != {'k1':true}"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_not_ne_map_int_to_float"
+    expr: "{1:1.0} != {1:1.0}"
+    value: { bool_value: false }
+  }
+  test {
+    name: "self_test_not_ne_map_key_order"
+    expr: "{'a':'b','c':'d'} != {'c':'d','a':'b'}"
+    value: { bool_value: false }
+  }
 }
 section {
   name: "Bound comparison"
