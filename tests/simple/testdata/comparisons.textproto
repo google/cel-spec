@@ -589,6 +589,130 @@ section {
 section {
   name: "Literal comparison for _>=_"
   description: "Comparing literals for the 'greater than or equal' operator"
+  test {
+    name: "self_test_gte_int64_gt"
+    expr: "0 >= -1"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_gte_int64_eq"
+    expr: "999 >= 999"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_not_gte_int64_lt"
+    expr: "999 >= 1000"
+    value: { bool_value: false }
+  }
+  test {
+    name: "self_test_gte_uint64_gt"
+    expr: "1u >= 0u"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_gte_uint64_eq"
+    expr: "0u >= 0u"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_not_gte_uint64_lt"
+    expr: "1u >= 10u"
+    value: { bool_value: false }
+  }
+  test {
+    name: "self_test_gte_float_gt"
+    expr: "1e+1 >= 1e+0"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_gte_float_eq"
+    expr: "9.80665 >= 9.80665e+0"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_not_gte_float_lt"
+    expr: "0.9999 >= 1.0"
+    value: { bool_value: false }
+  }
+  test {
+    name: "self_test_gte_string_empty"
+    expr: "'' >= ''"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_gte_string_to_empty"
+    expr: "'a' >= ''"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_gte_string_empty_to_nonempty"
+    expr: "'' >= 'a'"
+    value: { bool_value: false }
+  }
+  test {
+    name: "self_test_gte_string_length"
+    expr: "'abcd' >= 'abc'"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_not_gte_string_lexicographical"
+    expr: "'abc' >= 'abd'"
+    value: { bool_value: false }
+  }
+  test {
+    name: "self_test_gte_bytes_to_empty"
+    expr: "b'\x00' >= b''"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_not_gte_bytes_empty_to_nonempty"
+    expr: "b'' >= b'\x00'"
+    value: { bool_value: false }
+  }
+  test {
+    name: "self_test_gte_bytes_samelength"
+    expr: "b'\x00\x01' >= b'\x01\x00'"
+    value: { bool_value: false }
+  }
+  test {
+    name: "self_test_gte_bool_gt"
+    expr: "true >= false"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_gte_bool_eq"
+    expr: "true >= true"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_not_gte_bool_lt"
+    expr: "false >= true"
+    value: { bool_value: false }
+  }
+  test {
+    name: "self_test_gte_null_unsupported"
+    expr: "null >= null"
+    disable_check: true
+    eval_error: {
+      errors: { message: "no such overload" }
+    }
+  }
+  test {
+    name: "self_test_gte_list_unsupported"
+    expr: "['y'] >= ['x']"
+    disable_check: true
+    eval_error: {
+      errors: { message: "no such overload" }
+    }
+  }
+  test {
+    name: "self_test_gte_map_unsupported"
+    expr: "{1:'b'} >= {0:'a'}"
+    disable_check: true
+    eval_error: {
+      errors: { message: "no such overload" }
+    }
+  }
 }
 section {
   name: "Bound comparison"
