@@ -378,6 +378,95 @@ section {
 section {
   name: "Literal comparison for _>_"
   description: "Comparing literals for the 'greater than' operator"
+  test {
+    name: "self_test_gt_int64"
+    expr: "42 > -42"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_not_gt_int"
+    expr: "0 > 0"
+    value: { bool_value: false }
+  }
+  test {
+    name: "self_test_gt_float"
+    expr: "1e+1 > 1e+0"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_not_gt_float"
+    expr: ".99 > 9.9e-1"
+    value: { bool_value: false }
+  }
+  test {
+    name: "self_test_gt_string_case"
+    expr: "'abc' > 'aBc'"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_gt_string_to_empty"
+    expr: "'A' > ''"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_not_gt_string_empty_to_empty"
+    expr: "'' > ''"
+    value: { bool_value: false }
+  }
+  test {
+    name: "self_test_gt_bytes_one"
+    expr: "b'\x01' > b'\x00'"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_gt_bytes_one_to_empty"
+    expr: "b'\x00' > b''"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_not_gt_bytes_sorting"
+    expr: "b'\x00\x01' > b'\x01'"
+    value: { bool_value: false }
+  }
+  test {
+    name: "self_test_gt_bool_true_false"
+    expr: "true > false"
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_test_not_gt_bool_false_true"
+    expr: "false > true"
+    value: { bool_value: false }
+  }
+  test {
+    name: "self_test_not_gt_bool_same"
+    expr: "true > true"
+    value: { bool_value: false }
+  }
+  test {
+    name: "self_test_gt_null_unsupported"
+    expr: "null > null"
+    disable_check: true
+    eval_error: {
+      errors: { message: "no such overload" }
+    }
+  }
+  test {
+    name: "self_test_gt_list_unsupported"
+    expr: "[1] > [0]"
+    disable_check: true
+    eval_error: {
+      errors: { message: "no such overload" }
+    }
+  }
+  test {
+    name: "self_test_gt_map_unsupported"
+    expr: "{1:'b'} > {0:'a'}"
+    disable_check: true
+    eval_error: {
+      errors: { message: "no such overload" }
+    }
+  }
 }
 section {
   name: "Literal comparison for _<=_"
