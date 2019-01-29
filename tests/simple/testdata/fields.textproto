@@ -1,2 +1,264 @@
 name: "fields"
 description: "Tests for field access in maps."
+section {
+  name: "map fields"
+  description: "selection an element in a map"
+  test {
+    name: "map_key_int64"
+    expr: "{0:1,2:2,5:3}[5]"
+    value: { int64_value: 3 }
+  }
+  test {
+    name: "map_key_uint64"
+    expr: "{0u:1u,2u:2u,5u:3u}[2u]"
+    value: { uint64_value: 2 }
+  }
+  test {
+    name: "map_key_string"
+    expr: "{'name':'xmas'}['name']"
+    value: { string_value: 'xmas' }
+  }
+  test {
+    name: "map_field_access"
+    expr: "x.name"
+    type_env: {
+      name: "x",
+      ident: {
+        type: {
+          map_type: {
+            key_type: {primitive: STRING}
+            value_type: {primitive: STRING}
+          }
+        }
+      }
+    }
+    bindings: {
+      key: "x",
+      value: {
+        value: {
+          map_value: {
+            entries {
+              key: { string_value: "name" }
+              value: { string_value: "xmas" }
+            }
+          }
+        }
+      }
+    }
+    value: { string_value: 'xmas' }
+  }
+  test {
+    name: "map_key_bool"
+    expr: '{true:false}[true]'
+    value: { bool_value: false }
+  }
+  test {
+    name: "map_no_such_key"
+    expr: "{0:1,2:2,5:3}[1]"
+    eval_error: {
+      errors: { message: "no such key" }
+    }
+  }
+  test {
+    name: "map_selection_no_such_key"
+    expr: "x.name"
+    type_env: {
+      name: "x",
+      ident: {
+        type: {
+          map_type: {
+            key_type: {primitive: STRING}
+            value_type: {primitive: STRING}
+          }
+        }
+      }
+    }
+    bindings: {
+      key: "x",
+      value: {
+        value: {
+          map_value: {
+            entries {
+              key: { string_value: "holiday" }
+              value: { string_value: "xmas" }
+            }
+          }
+        }
+      }
+    }
+    eval_error: {
+      errors: { message:"no such key: 'name'" }
+    }
+  }
+  test {
+    name: "map_value_null"
+    expr: '{true:null}[true]'
+    value: { null_value: NULL_VALUE }
+  }
+  test {
+    name: "map_value_bool"
+    expr: '{27:false}[27]'
+    value: { bool_value: false }
+  }
+  test {
+    name: "map_value_string"
+    expr: "{'n':'x'}['n']"
+    value: { string_value: 'x' }
+  }
+  test {
+    name: "map_value_float"
+    expr: "{3.3:15.15}[3.3]"
+    value: { double_value: 15.15 }
+  }
+  test {
+    name: "map_value_uint64"
+    expr: "{0u:1u,2u:2u,5u:3u}[0u]"
+    value: { uint64_value: 1 }
+  }
+  test {
+    name: "map_value_int64"
+    expr: "{0:1,2:2,5:3}[0]"
+    value: { int64_value: 1 }
+  }
+  test {
+    name: "map_value_bytes"
+    expr: '{0:b""}[0]'
+    value: { bytes_value: "" }
+  }
+  test {
+    name: "map_value_list"
+    expr: '{0:[1]}[0]'
+    value: {
+      list_value: {
+        values: { int64_value: 1 }
+      }
+    }
+  }
+  test {
+    name: "map_value_map"
+    expr: '{0: {"k": "v"}}[0]'
+    value: {
+      map_value {
+        entries {
+          key: { string_value: "k" }
+          value: { string_value: "v" }
+        }
+      }
+    }
+  }
+}
+section {
+  name: "namespace fields"
+  description: "namespace resolution test for fields"
+  test {
+    name: "ident"
+    expr: "a.b.c"
+    type_env: {
+      name: "a.b.c",
+      ident: { type: { primitive: STRING } }
+    }
+    bindings: {
+      key: "a.b.c",
+      value: { value: { string_value: "yeah" } }
+    }
+    value: { string_value: "yeah" }
+  }
+  test {
+    name: "self_ident"
+    expr: "a.b.c"
+    type_env: {
+      name: "a.b.c",
+      ident: { type: { primitive: STRING } }
+    }
+    bindings: {
+      key: "a.b.c",
+      value: { value: { string_value: "yeah" } }
+    }
+    value: { string_value: "yeah" }
+  }
+  test {
+    name: "ident_with_map_selection"
+    expr: "a.b.c"
+    type_env: {
+      name: "a.b",
+      ident: {
+        type: {
+          map_type: {
+            key_type: {primitive: STRING}
+            value_type: {primitive: STRING}
+          }
+        }
+      }
+    }
+    bindings: {
+      key: "a.b",
+      value: {
+        value: {
+          map_value: {
+            entries {
+              key: { string_value: "c" }
+              value: { string_value: "yeah" }
+            }
+          }
+        }
+      }
+    }
+    value: { string_value: "yeah" }
+  }
+  test {
+    name: "field_selection_with_list"
+    expr: "a.b.pancakes"
+    disable_check: true
+    type_env: {
+      name: "a.b",
+      ident: {
+        type: {
+          list_type: {
+            elem_type: {primitive: STRING}
+          }
+        }
+      }
+    }
+    bindings: {
+      key: "a.b",
+      value: {
+        value: {
+          list_value: {
+            values: { string_value: "pancakes" }
+          }
+        }
+      }
+    }
+    eval_error: {
+      errors: {
+        message:"type 'list_type:<elem_type:<primitive:STRING > > ' does not support field selection"
+      }
+    }
+  }
+  test {
+    name: "field_selection_with_no_support_type"
+    expr: "a.pancakes"
+    disable_check: true
+    type_env: {
+      name: "a",
+      ident: {
+        type: {
+          primitive: INT64
+        }
+      }
+    }
+    bindings: {
+      key: "a",
+      value: {
+        value: {
+          int64_value: 15
+        }
+      }
+    }
+    eval_error: {
+      errors: {
+        message:"type 'int64_type:<primitive:STRING > ' does not support field selection"
+      }
+    }
+  }
+}
