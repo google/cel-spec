@@ -42,7 +42,7 @@ section {
   }
 }
 section {
-  name: "fields.textproto/Literal Selection"
+  name: "fields.textproto/Fields Selection"
   test {
     name: "map_key_float"
     description: "map should not support float as the key."

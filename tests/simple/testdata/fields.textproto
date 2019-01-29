@@ -15,8 +15,8 @@ section {
   }
   test {
     name: "map_key_string"
-    expr: "{'name':'xmas'}['name']"
-    value: { string_value: 'xmas' }
+    expr: "{'name':'field'}['name']"
+    value: { string_value: 'field' }
   }
   test {
     name: "map_field_access"
@@ -39,13 +39,13 @@ section {
           map_value: {
             entries {
               key: { string_value: "name" }
-              value: { string_value: "xmas" }
+              value: { string_value: "field" }
             }
           }
         }
       }
     }
-    value: { string_value: 'xmas' }
+    value: { string_value: 'field' }
   }
   test {
     name: "map_key_bool"
@@ -80,7 +80,7 @@ section {
           map_value: {
             entries {
               key: { string_value: "holiday" }
-              value: { string_value: "xmas" }
+              value: { string_value: "field" }
             }
           }
         }
@@ -148,21 +148,8 @@ section {
   }
 }
 section {
-  name: "namespace fields"
+  name: "namespace resolution"
   description: "namespace resolution test for fields"
-  test {
-    name: "ident"
-    expr: "a.b.c"
-    type_env: {
-      name: "a.b.c",
-      ident: { type: { primitive: STRING } }
-    }
-    bindings: {
-      key: "a.b.c",
-      value: { value: { string_value: "yeah" } }
-    }
-    value: { string_value: "yeah" }
-  }
   test {
     name: "self_ident"
     expr: "a.b.c"
@@ -257,7 +244,7 @@ section {
     }
     eval_error: {
       errors: {
-        message:"type 'int64_type:<primitive:STRING > ' does not support field selection"
+        message:"type 'int64_type' does not support field selection"
       }
     }
   }
