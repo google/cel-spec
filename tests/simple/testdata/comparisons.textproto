@@ -252,7 +252,7 @@ section {
 }
 section {
   name: "lt_literal"
-  description: "Literals comparison on _<_"
+  description: "Literals comparison on _<_. (a < b) == (b > a) == !(a >= b) == !(b <= a)"
   test {
     name: "lt_int"
     expr: "-1 < 0"
@@ -280,12 +280,18 @@ section {
   }
   test {
     name: "not_lt_double"
+    description: "Following IEEE 754, negative zero compares equal to zero"
     expr: "-0.0 < 0.0"
     value: { bool_value: false }
   }
   test {
     name: "lt_string"
     expr: "'a' < 'b'"
+    value: { bool_value: true }
+  }
+  test {
+    name: "lt_string_empty_to_nonempty"
+    expr: "'' < 'a'"
     value: { bool_value: true }
   }
   test {
@@ -299,9 +305,9 @@ section {
     value: { bool_value: true }
   }
   test {
-    name: "lt_string_acute"
-    description: "Verifies that the string comparison distinguishes diacritical marks"
-    expr: "'a' < 'á'"
+    name: "lt_string_diacritical_mark_sensitive"
+    description: "Verifies that the we're not using a string comparison function that strips diacritical marks (á)"
+    expr: "'a' < '\\u00E1'"
     value: { bool_value: true }
   }
   test {
@@ -331,7 +337,7 @@ section {
   }
   test {
     name: "not_lt_bytes_width"
-    expr: "b'á' < b'b'"
+    expr: "b'\u00E1' < b'b'"
     value: { bool_value: false }
   }
   test {
