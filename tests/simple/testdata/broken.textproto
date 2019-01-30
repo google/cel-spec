@@ -42,7 +42,7 @@ section {
   }
 }
 section {
-  name: "fields.textproto/Fields Selection"
+  name: "fields.textproto/fields"
   test {
     name: "map_key_float"
     description: "map should not support float as the key."
@@ -68,7 +68,7 @@ section {
     value: { bool_value: false }
   }
   test {
-    name: "fail_to_resolve_ident_with_the_longest_prefix_check"
+    name: "ident_with_longest_prefix_check"
     description: "namespace resolution should try to find the longest prefix for the checker."
     expr: "a.b.c"
     type_env: {
@@ -107,7 +107,7 @@ section {
     value: { string_value: "oops" }
   }
   test {
-    name: "fail_to_resolve_ident_with_the_longest_prefix_eval"
+    name: "ident_with_longest_prefix_eval"
     description: "namespace resolution should try to find the longest prefix for the evaluator."
     expr: "a.b.c"
     type_env: {
