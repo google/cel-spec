@@ -1,22 +1,37 @@
 name: "fields"
 description: "Tests for field access in maps."
 section {
-  name: "map fields"
+  name: "map_fields"
   description: "selection an element in a map"
   test {
     name: "map_key_int64"
-    expr: "{0:1,2:2,5:3}[5]"
-    value: { int64_value: 3 }
+    expr: "{0:1,2:2,5:true}[5]"
+    value: { bool_value: true }
   }
   test {
     name: "map_key_uint64"
-    expr: "{0u:1u,2u:2u,5u:3u}[2u]"
-    value: { uint64_value: 2 }
+    expr: "{0u:1u,2u:'happy',5u:3u}[2u]"
+    value: { string_value: "happy" }
   }
   test {
     name: "map_key_string"
-    expr: "{'name':'field'}['name']"
-    value: { string_value: 'field' }
+    expr: "{'name':100u}['name']"
+    value: { uint64_value: 100 }
+  }
+  test {
+    name: "map_key_bool"
+    expr: '{true:5}[true]'
+    value: { int64_value: 5 }
+  }
+  test {
+    name: "map_key_mix_type"
+    expr: "{true:1,2:2,5u:3}[true]"
+    value: { int64_value: 1 }
+  }
+  test {
+    name: "map_value_repeat_key"
+    expr: "{true:1,false:2,true:3}[true]"
+    value: { int64_value: 3 }
   }
   test {
     name: "map_field_access"
@@ -27,7 +42,7 @@ section {
         type: {
           map_type: {
             key_type: {primitive: STRING}
-            value_type: {primitive: STRING}
+            value_type: {primitive: INT64}
           }
         }
       }
@@ -39,18 +54,13 @@ section {
           map_value: {
             entries {
               key: { string_value: "name" }
-              value: { string_value: "field" }
+              value: { int64_value: 1024 }
             }
           }
         }
       }
     }
-    value: { string_value: 'field' }
-  }
-  test {
-    name: "map_key_bool"
-    expr: '{true:false}[true]'
-    value: { bool_value: false }
+    value: { int64_value: 1024 }
   }
   test {
     name: "map_no_such_key"
@@ -60,7 +70,7 @@ section {
     }
   }
   test {
-    name: "map_selection_no_such_key"
+    name: "map_field_selection_no_such_key"
     expr: "x.name"
     type_env: {
       name: "x",
@@ -107,7 +117,7 @@ section {
   }
   test {
     name: "map_value_float"
-    expr: "{3.3:15.15}[3.3]"
+    expr: "{3:15.15}[3]"
     value: { double_value: 15.15 }
   }
   test {
@@ -117,7 +127,7 @@ section {
   }
   test {
     name: "map_value_int64"
-    expr: "{0:1,2:2,5:3}[0]"
+    expr: "{true:1,false:2}[true]"
     value: { int64_value: 1 }
   }
   test {
@@ -127,7 +137,7 @@ section {
   }
   test {
     name: "map_value_list"
-    expr: '{0:[1]}[0]'
+    expr: '{0u:[1]}[0u]'
     value: {
       list_value: {
         values: { int64_value: 1 }
@@ -136,7 +146,19 @@ section {
   }
   test {
     name: "map_value_map"
-    expr: '{0: {"k": "v"}}[0]'
+    expr: '{"map": {"k": "v"}}["map"]'
+    value: {
+      map_value {
+        entries {
+          key: { string_value: "k" }
+          value: { string_value: "v" }
+        }
+      }
+    }
+  }
+  test {
+    name: "map_value_mix_type"
+    expr: '{"map": {"k": "v"}, "list": [1]}["map"]'
     value: {
       map_value {
         entries {
@@ -148,10 +170,10 @@ section {
   }
 }
 section {
-  name: "namespace resolution"
-  description: "namespace resolution test for fields"
+  name: "qualified_identifier_resolution"
+  description: "Tests for qualified identifier resolution."
   test {
-    name: "self_ident"
+    name: "qualified_ident"
     expr: "a.b.c"
     type_env: {
       name: "a.b.c",
@@ -164,7 +186,7 @@ section {
     value: { string_value: "yeah" }
   }
   test {
-    name: "ident_with_map_selection"
+    name: "map_field_select"
     expr: "a.b.c"
     type_env: {
       name: "a.b",
@@ -193,7 +215,7 @@ section {
     value: { string_value: "yeah" }
   }
   test {
-    name: "field_selection_with_list"
+    name: "list_field_select_unsupported"
     expr: "a.b.pancakes"
     disable_check: true
     type_env: {
@@ -223,7 +245,7 @@ section {
     }
   }
   test {
-    name: "field_selection_with_no_support_type"
+    name: "int64_field_select_unsupported"
     expr: "a.pancakes"
     disable_check: true
     type_env: {
