@@ -67,7 +67,7 @@ section {
   test {
     name: "int64_overflow"
     expr: "9223372036854775807 + 1"
-    ## Expected behavior: return error for underflow.
+    ## Expected behavior: return error for overflow.
     value: { int64_value: -9223372036854775808 }
   }
   test {
