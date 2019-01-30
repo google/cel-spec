@@ -1,253 +1,723 @@
 name: "comparisons"
 description: "Tests for boolean-valued functions and operators."
 section {
-  name: "Literal comparison for _==_"
-  description: "Comparing literals for equality"
+  name: "eq_literal"
+  description: "Literals comparison on _=_"
   test {
-    name: "self_test_equals_int64"
+    name: "eq_int"
     expr: "1 == 1"
     value: { bool_value: true }
   }
   test {
-    name: "self_test_not_equals_int64"
+    name: "not_eq_int"
     expr: "-1 == 1"
     value: { bool_value: false }
   }
   test {
-    name: "self_test_equals_uint64"
+    name: "eq_uint"
     expr: "2u == 2u"
     value: { bool_value: true }
   }
   test {
-    name: "self_test_not_equals_uint64"
+    name: "not_eq_uint"
     expr: "1u == 2u"
     value: { bool_value: false }
   }
   test {
-    name: "self_test_equals_float"
+    name: "eq_double"
     expr: "1.0 == 1.0e+0"
     value: { bool_value: true }
   }
   test {
-    name: "self_test_not_equals_float"
+    name: "not_eq_double"
     expr: "-1.0 == 1.0"
     value: { bool_value: false }
   }
   test {
-    name: "self_test_equals_string"
+    name: "eq_string"
     expr: "'' == \"\""
     value: { bool_value: true }
   }
   test {
-    name: "self_test_not_equals_string"
+    name: "not_eq_string"
     expr: "'a' == 'b'"
     value: { bool_value: false }
   }
   test {
-    name: "self_test_equals_string_raw"
+    name: "eq_raw_string"
     expr: "'abc' == r'abc'"
     value: { bool_value: true }
   }
   test {
-    name: "self_test_not_equals_case"
+    name: "not_eq_string_case"
     expr: "'abc' == 'ABC'"
     value: { bool_value: false }
   }
   test {
-    name: "self_test_equals_null"
+    name: "eq_null"
     expr: "null == null"
     value: { bool_value: true }
   }
   test {
-    name: "self_test_equals_bool"
+    name: "eq_bool"
     expr: "true == true"
     value: { bool_value: true }
   }
   test {
-    name: "self_test_not_equals_bool"
+    name: "not_eq_bool"
     expr: "false == true"
     value: { bool_value: false }
   }
   test {
-    name: "self_test_equals_byte"
+    name: "eq_bytes"
     description: "Test bytes literal equality with encoding"
     expr: "b'\\u00FF' == b'\303\277'"
     value: { bool_value: true }
   }
   test {
-    name: "self_test_not_equals_byte"
+    name: "not_eq_bytes"
     expr: "b'abc' == b'abcd'"
     value: { bool_value: false }
   }
   test {
-    name: "self_test_equals_list_empty"
+    name: "eq_list_empty"
     expr: "[] == []"
     value: { bool_value: true }
   }
   test {
-    name: "self_test_equals_list_numbers"
+    name: "eq_list_numbers"
     expr: "[1, 2, 3] == [1, 2, 3]"
     value: { bool_value: true }
   }
   test {
-    name: "self_test_not_equals_list_order"
+    name: "not_eq_list_order"
     expr: "[1, 2, 3] == [1, 3, 2]"
     value: { bool_value: false }
   }
   test {
-    name: "self_test_not_equals_list_string_case"
+    name: "not_eq_list_string_case"
     expr: "['case'] == ['cAse']"
     value: { bool_value: false }
   }
   test {
-    name: "self_test_equals_map_empty"
+    name: "eq_map_empty"
     expr: "{} == {}"
     value: { bool_value: true }
   }
   test {
-    name: "self_test_equals_map_onekey"
+    name: "eq_map_onekey"
     expr: "{'k':'v'} == {\"k\":\"v\"}"
     value: { bool_value: true }
   }
   test {
-    name: "self_test_equals_map_floatvalue"
+    name: "eq_map_doublevalue"
     expr: "{'k':1.0} == {'k':1e+0}"
     value: { bool_value: true }
   }
   test {
-    name: "self_test_not_equals_map_value"
+    name: "not_eq_map_value"
     expr: "{'k':'v'} == {'k':'v1'}"
     value: { bool_value: false }
   }
   test {
-    name: "self_test_not_equals_map_extrakey"
+    name: "not_eq_map_extrakey"
     expr: "{'k':'v','k1':'v1'} == {'k':'v'}"
     value: { bool_value: false }
   }
   test {
-    name: "self_test_equals_map_keyorder"
+    name: "eq_map_keyorder"
     expr: "{'k1':'v1','k2':'v2'} == {'k2':'v2','k1':'v1'}"
     value: { bool_value: true }
   }
   test {
-    name: "self_test_not_equals_map_key_casing"
+    name: "not_eq_map_key_casing"
     expr: "{'key':'value'} == {'Key':'value'}"
     value: { bool_value: false }
   }
 }
 section {
-  name: "Literal comparison for _!=_"
-  description: "Comparing literals for inequality"
+  name: "ne_literal"
+  description: "Literals comparison on _!=_"
   test {
-    name: "self_test_ne_int64"
+    name: "ne_int"
     expr: "24 != 42"
     value: { bool_value: true }
   }
   test {
-    name: "self_test_not_ne_int64"
+    name: "not_ne_int"
     expr: "1 != 1"
     value: { bool_value: false }
   }
   test {
-    name: "self_test_ne_uint64"
+    name: "ne_uint"
     expr: "1u != 2u"
     value: { bool_value: true }
   }
   test {
-    name: "self_test_not_ne_uint64"
+    name: "not_ne_uint"
     expr: "99u != 99u"
     value: { bool_value: false }
   }
   test {
-    name: "self_test_ne_float"
+    name: "ne_double"
     expr: "9.0e+3 != 9001.0"
     value: { bool_value: true }
   }
   test {
-    name: "self_test_not_ne_float"
+    name: "not_ne_double"
     expr: "1.0 != 1e+0"
     value: { bool_value: false }
   }
   test {
-    name: "self_test_ne_string"
+    name: "ne_string"
     expr: "'abc' != ''"
     value: { bool_value: true }
   }
   test {
-    name: "self_test_not_ne_string"
+    name: "not_ne_string"
     expr: "'abc' != 'abc'"
     value: { bool_value: false }
   }
   test {
-    name: "self_test_ne_bytes"
+    name: "ne_bytes"
     expr: "b'\\x00\\xFF' != b'\\u00FF'"
     value: { bool_value: true }
   }
   test {
-    name: "self_test_not_ne_bytes"
+    name: "not_ne_bytes"
     expr: "b'\303\277' != b'\\u00FF'"
     value: { bool_value: false }
   }
   test {
-    name: "self_test_ne_bool"
+    name: "ne_bool"
     expr: "false != true"
     value: { bool_value: true }
   }
   test {
-    name: "self_test_not_ne_bool"
+    name: "not_ne_bool"
     expr: "true != true"
     value: { bool_value: false }
   }
   test {
-    name: "self_test_not_ne_null"
+    name: "not_ne_null"
     description: "null can only be equal to null, or else it won't match"
     expr: "null != null"
     value: { bool_value: false }
   }
   test {
-    name: "self_test_ne_list_empty"
+    name: "ne_list_empty"
     expr: "[] != [1]"
     value: { bool_value: true }
   }
   test {
-    name: "self_test_not_ne_list_empty"
+    name: "not_ne_list_empty"
     expr: "[] != []"
     value: { bool_value: false }
   }
   test {
-    name: "self_test_ne_list_bool"
+    name: "ne_list_bool"
     expr: "[true, false, true] != [true, true, false]"
     value: { bool_value: true }
   }
   test {
-    name: "self_test_not_ne_list_bool"
+    name: "not_ne_list_bool"
     expr: "[false, true] != [false, true]"
     value: { bool_value: false }
   }
   test {
-    name: "self_test_not_ne_list_of_list"
+    name: "not_ne_list_of_list"
     expr: "[[]] != [[]]"
     value: { bool_value: false }
   }
   test {
-    name: "self_test_ne_map_by_value"
+    name: "ne_map_by_value"
     expr: "{'k':'v'} != {'k':'v1'}"
     value: { bool_value: true }
   }
   test {
-    name: "self_test_ne_map_by_key"
+    name: "ne_map_by_key"
     expr: "{'k':true} != {'k1':true}"
     value: { bool_value: true }
   }
   test {
-    name: "self_test_not_ne_map_int_to_float"
+    name: "not_ne_map_int_to_float"
     expr: "{1:1.0} != {1:1.0}"
     value: { bool_value: false }
   }
   test {
-    name: "self_test_not_ne_map_key_order"
+    name: "not_ne_map_key_order"
     expr: "{'a':'b','c':'d'} != {'c':'d','a':'b'}"
     value: { bool_value: false }
+  }
+}
+section {
+  name: "lt_literal"
+  description: "Literals comparison on _<_. (a < b) == (b > a) == !(a >= b) == !(b <= a)"
+  test {
+    name: "lt_int"
+    expr: "-1 < 0"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_lt_int"
+    expr: "0 < 0"
+    value: { bool_value: false }
+  }
+  test {
+    name: "lt_uint"
+    expr: "0u < 1u"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_lt_uint"
+    expr: "2u < 2u"
+    value: { bool_value: false }
+  }
+  test {
+    name: "lt_double"
+    expr: "1.0 < 1.0000001"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_lt_double"
+    description: "Following IEEE 754, negative zero compares equal to zero"
+    expr: "-0.0 < 0.0"
+    value: { bool_value: false }
+  }
+  test {
+    name: "lt_string"
+    expr: "'a' < 'b'"
+    value: { bool_value: true }
+  }
+  test {
+    name: "lt_string_empty_to_nonempty"
+    expr: "'' < 'a'"
+    value: { bool_value: true }
+  }
+  test {
+    name: "lt_string_case"
+    expr: "'Abc' < 'aBC'"
+    value: { bool_value: true }
+  }
+  test {
+    name: "lt_string_length"
+    expr: "'abc' < 'abcd'"
+    value: { bool_value: true }
+  }
+  test {
+    name: "lt_string_diacritical_mark_sensitive"
+    description: "Verifies that the we're not using a string comparison function that strips diacritical marks (á)"
+    expr: "'a' < '\\u00E1'"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_lt_string_empty"
+    expr: "'' < ''"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_lt_string_same"
+    expr: "'abc' < 'abc'"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_lt_string_case_length"
+    expr: "'a' < 'AB'"
+    value: { bool_value: false }
+  }
+  test {
+    name: "lt_bytes"
+    expr: "b'a' < b'b'"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_lt_bytes_same"
+    expr: "b'abc' < b'abc'"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_lt_bytes_width"
+    expr: "b'\u00E1' < b'b'"
+    value: { bool_value: false }
+  }
+  test {
+    name: "lt_bool_false_first"
+    expr: "false < true"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_lt_bool_same"
+    expr: "true < true"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_lt_bool_true_first"
+    expr: "true < false"
+    value: { bool_value: false }
+  }
+  test {
+    name: "lt_list_unsupported"
+    expr: "[0] < [1]"
+    disable_check: true
+    eval_error: {
+      errors: { message: "no such overload" }
+    }
+  }
+  test {
+    name: "lt_map_unsupported"
+    expr: "{0:'a'} < {1:'b'}"
+    disable_check: true
+    eval_error: {
+      errors: { message: "no such overload" }
+    }
+  }
+  test {
+    name: "lt_null_unsupported"
+    description: "Ensure _<_ doesn't have a binding for null"
+    expr: "null < null"
+    disable_check: true
+    eval_error: {
+      errors: { message: "no such overload" }
+    }
+  }
+}
+section {
+  name: "gt_literal"
+  description: "Literals comparison on _>_"
+  test {
+    name: "gt_int"
+    expr: "42 > -42"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_gt_int"
+    expr: "0 > 0"
+    value: { bool_value: false }
+  }
+  test {
+    name: "gt_double"
+    expr: "1e+1 > 1e+0"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_gt_double"
+    expr: ".99 > 9.9e-1"
+    value: { bool_value: false }
+  }
+  test {
+    name: "gt_string_case"
+    expr: "'abc' > 'aBc'"
+    value: { bool_value: true }
+  }
+  test {
+    name: "gt_string_to_empty"
+    expr: "'A' > ''"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_gt_string_empty_to_empty"
+    expr: "'' > ''"
+    value: { bool_value: false }
+  }
+  test {
+    name: "gt_bytes_one"
+    expr: "b'\x01' > b'\x00'"
+    value: { bool_value: true }
+  }
+  test {
+    name: "gt_bytes_one_to_empty"
+    expr: "b'\x00' > b''"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_gt_bytes_sorting"
+    expr: "b'\x00\x01' > b'\x01'"
+    value: { bool_value: false }
+  }
+  test {
+    name: "gt_bool_true_false"
+    expr: "true > false"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_gt_bool_false_true"
+    expr: "false > true"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_gt_bool_same"
+    expr: "true > true"
+    value: { bool_value: false }
+  }
+  test {
+    name: "gt_null_unsupported"
+    expr: "null > null"
+    disable_check: true
+    eval_error: {
+      errors: { message: "no such overload" }
+    }
+  }
+  test {
+    name: "gt_list_unsupported"
+    expr: "[1] > [0]"
+    disable_check: true
+    eval_error: {
+      errors: { message: "no such overload" }
+    }
+  }
+  test {
+    name: "gt_map_unsupported"
+    expr: "{1:'b'} > {0:'a'}"
+    disable_check: true
+    eval_error: {
+      errors: { message: "no such overload" }
+    }
+  }
+}
+section {
+  name: "lte_literal"
+  description: "Literals comparison on _<=_"
+  test {
+    name: "lte_int_lt"
+    expr: "0 <= 1"
+    value: { bool_value: true }
+  }
+  test {
+    name: "lte_int_eq"
+    expr: "1 <= 1"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_lte_int_gt"
+    expr: "1 <= -1"
+    value: { bool_value: false }
+  }
+  test {
+    name: "lte_uint_lt"
+    expr: "0u <= 1u"
+    value: { bool_value: true }
+  }
+  test {
+    name: "lte_uint_eq"
+    expr: "1u <= 1u"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_lte_uint_gt"
+    expr: "1u <= 0u"
+    value: { bool_value: false }
+  }
+  test {
+    name: "lte_double_lt"
+    expr: "0.0 <= 0.1e-31"
+    value: { bool_value: true }
+  }
+  test {
+    name: "lte_double_eq"
+    expr: "0.0 <= 0e-1"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_lte_double_gt"
+    expr: "1.0 <= 0.99"
+    value: { bool_value: false }
+  }
+  test {
+    name: "lte_string_empty"
+    expr: "'' <= ''"
+    value: { bool_value: true }
+  }
+  test {
+    name: "lte_string_from_empty"
+    expr: "'' <= 'a'"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_lte_string_to_empty"
+    expr: "'a' <= ''"
+    value: { bool_value: false }
+  }
+  test {
+    name: "lte_string_lexicographical"
+    expr: "'aBc' <= 'abc'"
+    value: { bool_value: true }
+  }
+  test {
+    name: "lte_bytes_empty"
+    expr: "b'' <= b'\x00'"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_lte_bytes_length"
+    expr: "b'\x01\x00' <= b'\x01'"
+    value: { bool_value: false }
+  }
+  test {
+    name: "lte_bool_false_true"
+    expr: "false <= true"
+    value: { bool_value: true }
+  }
+  test {
+    name: "lte_bool_false_false"
+    expr: "false <= false"
+    value: { bool_value: true }
+  }
+  test {
+    name: "lte_bool_true_false"
+    expr: "true <= false"
+    value: { bool_value: false }
+  }
+  test {
+    name: "lte_null_unsupported"
+    expr: "null <= null"
+    disable_check: true
+    eval_error: {
+      errors: { message: "no such overload" }
+    }
+  }
+  test {
+    name: "lte_list_unsupported"
+    expr: "[0] <= [0]"
+    disable_check: true
+    eval_error: {
+      errors: { message: "no such overload" }
+    }
+  }
+  test {
+    name: "lte_map_unsupported"
+    expr: "{0:'a'} <= {1:'b'}"
+    disable_check: true
+    eval_error: {
+      errors: { message: "no such overload" }
+    }
+  }
+}
+section {
+  name: "gte_literal"
+  description: "Literals comparison on _>=_"
+  test {
+    name: "gte_int_gt"
+    expr: "0 >= -1"
+    value: { bool_value: true }
+  }
+  test {
+    name: "gte_int_eq"
+    expr: "999 >= 999"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_gte_int_lt"
+    expr: "999 >= 1000"
+    value: { bool_value: false }
+  }
+  test {
+    name: "gte_uint_gt"
+    expr: "1u >= 0u"
+    value: { bool_value: true }
+  }
+  test {
+    name: "gte_uint_eq"
+    expr: "0u >= 0u"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_gte_uint_lt"
+    expr: "1u >= 10u"
+    value: { bool_value: false }
+  }
+  test {
+    name: "gte_double_gt"
+    expr: "1e+1 >= 1e+0"
+    value: { bool_value: true }
+  }
+  test {
+    name: "gte_double_eq"
+    expr: "9.80665 >= 9.80665e+0"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_gte_double_lt"
+    expr: "0.9999 >= 1.0"
+    value: { bool_value: false }
+  }
+  test {
+    name: "gte_string_empty"
+    expr: "'' >= ''"
+    value: { bool_value: true }
+  }
+  test {
+    name: "gte_string_to_empty"
+    expr: "'a' >= ''"
+    value: { bool_value: true }
+  }
+  test {
+    name: "gte_string_empty_to_nonempty"
+    expr: "'' >= 'a'"
+    value: { bool_value: false }
+  }
+  test {
+    name: "gte_string_length"
+    expr: "'abcd' >= 'abc'"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_gte_string_lexicographical"
+    expr: "'abc' >= 'abd'"
+    value: { bool_value: false }
+  }
+  test {
+    name: "gte_bytes_to_empty"
+    expr: "b'\x00' >= b''"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_gte_bytes_empty_to_nonempty"
+    expr: "b'' >= b'\x00'"
+    value: { bool_value: false }
+  }
+  test {
+    name: "gte_bytes_samelength"
+    expr: "b'\x00\x01' >= b'\x01\x00'"
+    value: { bool_value: false }
+  }
+  test {
+    name: "gte_bool_gt"
+    expr: "true >= false"
+    value: { bool_value: true }
+  }
+  test {
+    name: "gte_bool_eq"
+    expr: "true >= true"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_gte_bool_lt"
+    expr: "false >= true"
+    value: { bool_value: false }
+  }
+  test {
+    name: "gte_null_unsupported"
+    expr: "null >= null"
+    disable_check: true
+    eval_error: {
+      errors: { message: "no such overload" }
+    }
+  }
+  test {
+    name: "gte_list_unsupported"
+    expr: "['y'] >= ['x']"
+    disable_check: true
+    eval_error: {
+      errors: { message: "no such overload" }
+    }
+  }
+  test {
+    name: "gte_map_unsupported"
+    expr: "{1:'b'} >= {0:'a'}"
+    disable_check: true
+    eval_error: {
+      errors: { message: "no such overload" }
+    }
   }
 }
 section {
