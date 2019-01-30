@@ -101,16 +101,6 @@ section {
     value: { int64_value: 42 }
   }
   test {
-    name: "overflow"
-    expr: "9223372036854775807 + 1"
-    value: { int64_value: -9223372036854775808 }
-  }
-  test {
-    name: "underflow"
-    expr: "-9223372036854775808 - 1"
-    value: { int64_value: 9223372036854775807 }
-  }
-  test {
     name: "devide_zero"
     expr: "15 / 0"
     eval_error: {
@@ -157,16 +147,6 @@ section {
     eval_error: {
       errors: { message:"modulus by zero" }
     }
-  }
-  test {
-    name: "overflow"
-    expr: "18446744073709551615u + 1u"
-    value: { uint64_value: 0 }
-  }
-  test {
-    name: "underflow"
-    expr: "0u - 1u"
-    value: { uint64_value: 18446744073709551615 }
   }
   test {
     name: "devide_zero"

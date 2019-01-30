@@ -61,3 +61,31 @@ section {
     }
   }
 }
+section {
+  name: "integer _math.textproto/Literal Integer Math"
+  description: "tests for integer math."
+  test {
+    name: "int64_overflow"
+    expr: "9223372036854775807 + 1"
+    ## Expected behavior: return error for underflow.
+    value: { int64_value: -9223372036854775808 }
+  }
+  test {
+    name: "int64_underflow"
+    expr: "-9223372036854775808 - 1"
+    ## Expected behavior: return error for underflow.
+    value: { int64_value: 9223372036854775807 }
+  }
+  test {
+    name: "uint64_overflow"
+    expr: "18446744073709551615u + 1u"
+    ## Expected behavior: return error for overflow.
+    value: { uint64_value: 0 }
+  }
+  test {
+    name: "uint64_underflow"
+    expr: "0u - 1u"
+    ## Expected behavior: return error for underflow.
+    value: { uint64_value: 18446744073709551615 }
+  }
+}
