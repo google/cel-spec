@@ -105,6 +105,11 @@ section {
       errors: { message:"divide by zero" }
     }
   }
+  test {
+    name: "multiply_zero"
+    expr: "15 * 0"
+    value: { int64_value: 0 }
+  }
 }
 section {
   name: "uint64_math"
@@ -118,5 +123,42 @@ section {
     name: "simple_sub"
     expr: "42u - 2u"
     value: { uint64_value: 40 }
+  }
+  test {
+    name: "simple_multiply"
+    expr: "42u * 2u"
+    value: { uint64_value: 84 }
+  }
+  test {
+    name: "simple_devide"
+    expr: "42u / 2u"
+    value: { uint64_value: 21 }
+  }
+  test {
+    name: "simple_mod"
+    expr: "42u % 5u"
+    value: { uint64_value: 2 }
+  }
+  test {
+    name: "overflow"
+    expr: "18446744073709551615u + 1u"
+    value: { uint64_value: 0 }
+  }
+  test {
+    name: "underflow"
+    expr: "0u - 1u"
+    value: { uint64_value: 18446744073709551615 }
+  }
+  test {
+    name: "devide_zero"
+    expr: "15u / 0u"
+    eval_error: {
+      errors: { message:"divide by zero" }
+    }
+  }
+  test {
+    name: "multiply_zero"
+    expr: "15u * 0u"
+    value: { uint64_value: 0 }
   }
 }
