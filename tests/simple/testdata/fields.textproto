@@ -2,7 +2,7 @@ name: "fields"
 description: "Tests for field access in maps."
 section {
   name: "map_fields"
-  description: "selection an element in a map"
+  description: "select an element in a map"
   test {
     name: "map_key_int64"
     expr: "{0:1,2:2,5:true}[5]"
@@ -70,7 +70,7 @@ section {
     }
   }
   test {
-    name: "map_field_selection_no_such_key"
+    name: "map_field_select_no_such_key"
     expr: "x.name"
     type_env: {
       name: "x",
