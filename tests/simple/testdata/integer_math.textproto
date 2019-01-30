@@ -1,2 +1,67 @@
 name: "integer_math"
 description: "Tests for int and uint math."
+section {
+  name: "int64_math"
+  description: "Simple tests for int64."
+  test {
+    name: "simple_add"
+    expr: "42 + 2"
+    value: { int64_value: 44 }
+  }
+  test {
+    name: "simple_sub"
+    expr: "42 - 2"
+    value: { int64_value: 40 }
+  }
+  test {
+    name: "simple_multiply"
+    expr: "42 * 2"
+    value: { int64_value: 84 }
+  }
+  test {
+    name: "simple_devide"
+    expr: "42 / 2"
+    value: { int64_value: 21 }
+  }
+  test {
+    name: "simple_mod"
+    expr: "42 % 5"
+    value: { int64_value: 2 }
+  }
+  test {
+    name: "simple_negtive"
+    expr: "-(42)"
+    value: { int64_value: -42 }
+  }
+  test {
+    name: "overflow"
+    expr: "42 + 2"
+    value: { int64_value: 44 }
+  }
+  test {
+    name: "overflow"
+    expr: "9223372036854775807 + 1"
+    value: { int64_value: -9223372036854775808 }
+  }
+  test {
+    name: "underflow"
+    expr: "-9223372036854775808 - 1"
+    value: { int64_value: 9223372036854775807 }
+  }
+  test {
+    name: "devide_zero"
+    expr: "15 / 0"
+    eval_error: {
+      errors: { message:"divide by zero" }
+    }
+  }
+}
+section {
+  name: "uint64_math"
+  description: "Simple tests for uint64."
+  test {
+    name: "simple_add"
+    expr: "42u + 2u"
+    value: { uint64_value: 44 }
+  }
+}
