@@ -79,9 +79,21 @@ section {
     value: { int64_value: -2 }
   }
   test {
+    name: "simple_mod_zero"
+    expr: "42 % 0"
+    eval_error: {
+      errors: { message:"modulus by zero" }
+    }
+  }
+  test {
     name: "simple_negtive"
     expr: "-(42)"
     value: { int64_value: -42 }
+  }
+  test {
+    name: "simple_negtive_zero"
+    expr: "-(0)"
+    value: { int64_value: 0 }
   }
   test {
     name: "double_negtive"
@@ -140,6 +152,13 @@ section {
     value: { uint64_value: 2 }
   }
   test {
+    name: "simple_mod_zero"
+    expr: "42u % 0u"
+    eval_error: {
+      errors: { message:"modulus by zero" }
+    }
+  }
+  test {
     name: "overflow"
     expr: "18446744073709551615u + 1u"
     value: { uint64_value: 0 }
@@ -160,5 +179,13 @@ section {
     name: "multiply_zero"
     expr: "15u * 0u"
     value: { uint64_value: 0 }
+  }
+  test {
+    name: "negtive_uint64"
+    expr: "-(5u)"
+    disable_check: true
+    eval_error: {
+      errors: {  message:"no such overload" }
+    }
   }
 }
