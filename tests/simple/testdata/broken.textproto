@@ -62,7 +62,7 @@ section {
   }
 }
 section {
-  name: "integer _math.textproto/Literal Integer Math"
+  name: "integer _math.textproto/simple_math"
   description: "tests for integer math."
   test {
     name: "int64_overflow"
