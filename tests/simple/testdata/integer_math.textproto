@@ -4,29 +4,79 @@ section {
   name: "int64_math"
   description: "Simple tests for int64."
   test {
-    name: "simple_add"
+    name: "simple_add_positive_positive"
     expr: "42 + 2"
     value: { int64_value: 44 }
   }
   test {
-    name: "simple_sub"
+    name: "simple_add_positive_negative"
+    expr: "42 + (-2)"
+    value: { int64_value: 40 }
+  }
+  test {
+    name: "simple_add_negative_negative"
+    expr: "-42 + (-2)"
+    value: { int64_value: -44 }
+  }
+  test {
+    name: "simple_sub_positive_positive"
     expr: "42 - 2"
     value: { int64_value: 40 }
   }
   test {
-    name: "simple_multiply"
+    name: "simple_sub_positive_negative"
+    expr: "42 - (-2)"
+    value: { int64_value: 44 }
+  }
+  test {
+    name: "simple_sub_negative_negative"
+    expr: "-42 - (-2)"
+    value: { int64_value: -40 }
+  }
+  test {
+    name: "simple_multiply_positive_positive"
     expr: "42 * 2"
     value: { int64_value: 84 }
   }
   test {
-    name: "simple_devide"
+    name: "simple_multiply_positive_negative"
+    expr: "42 * (-2)"
+    value: { int64_value: -84 }
+  }
+  test {
+    name: "simple_multiply_negative_negative"
+    expr: "-42 * (-2)"
+    value: { int64_value: 84 }
+  }
+  test {
+    name: "simple_devide_positive_positive"
     expr: "42 / 2"
     value: { int64_value: 21 }
   }
   test {
-    name: "simple_mod"
+    name: "simple_devide_positive_negative"
+    expr: "-42 / 2"
+    value: { int64_value: -21 }
+  }
+  test {
+    name: "simple_devide_negative_negative"
+    expr: "-42 / (-2)"
+    value: { int64_value: 21 }
+  }
+  test {
+    name: "simple_mod_positive_positive"
     expr: "42 % 5"
     value: { int64_value: 2 }
+  }
+  test {
+    name: "simple_mod_positive_negative"
+    expr: "42 % (-5)"
+    value: { int64_value: 2 }
+  }
+  test {
+    name: "simple_mod_negative_negative"
+    expr: "-42 % (-5)"
+    value: { int64_value: -2 }
   }
   test {
     name: "simple_negtive"
@@ -34,9 +84,9 @@ section {
     value: { int64_value: -42 }
   }
   test {
-    name: "overflow"
-    expr: "42 + 2"
-    value: { int64_value: 44 }
+    name: "double_negtive"
+    expr: "-(-42)"
+    value: { int64_value: 42 }
   }
   test {
     name: "overflow"
@@ -63,5 +113,10 @@ section {
     name: "simple_add"
     expr: "42u + 2u"
     value: { uint64_value: 44 }
+  }
+  test {
+    name: "simple_sub"
+    expr: "42u - 2u"
+    value: { uint64_value: 40 }
   }
 }
