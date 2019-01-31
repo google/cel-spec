@@ -20,6 +20,52 @@ section {
   }
 }
 section {
+  name: "basic.textproto/self_eval_nonzeroish"
+  test {
+    name: "self_eval_map_twoitems"
+    description: "Map literals should be order independent for the checker. google/cel-go#156"
+    expr: '{"k1":"v1","k":"v"}'
+    value: {
+      map_value {
+        entries {
+          key: { string_value: "k" }
+          value: { string_value: "v" }
+        }
+        entries {
+          key: { string_value: "k1" }
+          value: { string_value: "v1" }
+        }
+      }
+    }
+  }
+}
+section {
+  name: "basic.textproto/variables"
+  test {
+    name: "self_eval_container_lookup"
+    expr: "y"
+    container: "x"
+    type_env: {
+      name: "x.y",
+      ident: { type: { primitive: BOOL } }
+    }
+    type_env: {
+      name: "y",
+      ident: { type: { primitive: BOOL } }
+    }
+    bindings: {
+      key: "x.y",
+      value: { value: { bool_value: true } }
+    }
+    bindings: {
+      key: "y",
+      value: { value: { bool_value: false } }
+    }
+    value: { bool_value: true }
+    # Current behavior in cel-go: unknown:<exprs:1 >
+  }
+}
+section {
   name: "comparisons.textproto/Literal Comparison"
   test {
     name: "self_test_equals_mixed_types"
@@ -153,5 +199,37 @@ section {
     disable_check: true ## when check is disabled, the evaluator should evaluate it in the correct order
     ## Expected behavior: "yeah"
     value: { string_value: "oops" }
+  }
+}
+section {
+  name: "integer_math.textproto/simple_math"
+  description: "tests for integer math."
+  test {
+    name: "int64_overflow"
+    description: "LLONG_MAX plus one."
+    expr: "9223372036854775807 + 1"
+    ## Expected behavior: return error for overflow.
+    value: { int64_value: -9223372036854775808 }
+  }
+  test {
+    name: "int64_underflow"
+    description: "LLONG_MIN minus one."
+    expr: "-9223372036854775808 - 1"
+    ## Expected behavior: return error for underflow.
+    value: { int64_value: 9223372036854775807 }
+  }
+  test {
+    name: "uint64_overflow"
+    description: "ULLONG_MAX plus one."
+    expr: "18446744073709551615u + 1u"
+    ## Expected behavior: return error for overflow.
+    value: { uint64_value: 0 }
+  }
+  test {
+    name: "uint64_underflow"
+    description: "zero minus one."
+    expr: "0u - 1u"
+    ## Expected behavior: return error for underflow.
+    value: { uint64_value: 18446744073709551615 }
   }
 }

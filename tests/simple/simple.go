@@ -151,6 +151,7 @@ func (r *runConfig) RunTest(t *spb.SimpleTest) error {
 		creq := exprpb.CheckRequest{
 			ParsedExpr: parsedExpr,
 			TypeEnv: t.TypeEnv,
+			Container: t.Container,
 		}
 		cres, err := r.checkClient.Check(context.Background(), &creq)
 		if err != nil {
@@ -178,11 +179,13 @@ func (r *runConfig) RunTest(t *spb.SimpleTest) error {
 		ereq = exprpb.EvalRequest{
 			ExprKind: &exprpb.EvalRequest_ParsedExpr{parsedExpr},
 			Bindings: t.Bindings,
+			Container: t.Container,
 		}
 	} else {
 		ereq = exprpb.EvalRequest{
 			ExprKind: &exprpb.EvalRequest_CheckedExpr{checkedExpr},
 			Bindings: t.Bindings,
+			Container: t.Container,
 		}
 	}
 	eres, err := r.evalClient.Eval(context.Background(), &ereq)

@@ -14,12 +14,12 @@ section {
     value: { uint64_value: 0 }
   }
   test {
-    name: "self_eval_double_zero"
+    name: "self_eval_float_zero"
     expr: "0.0"
     value: { double_value: 0 }
   }
   test {
-    name: "self_eval_double_zerowithexp"
+    name: "self_eval_float_zerowithexp"
     expr: "0e+0"
     value: { double_value: 0 }
   }
@@ -39,7 +39,7 @@ section {
     value: { string_value: "" }
   }
   test {
-    name: "self_eval_byte_empty"
+    name: "self_eval_bytes_empty"
     expr: 'b""'
     value: { bytes_value: "" }
   }
@@ -69,8 +69,8 @@ section {
   description: "Simple self-evaluating forms to non-zero-ish values."
   test {
     name: "self_eval_int_nonzero"
-    expr: "17"
-    value: { int64_value: 17 }
+    expr: "42"
+    value: { int64_value: 42 }
   }
   test {
     name: "self_eval_uint_nonzero"
@@ -83,7 +83,7 @@ section {
     value: { int64_value: -9223372036854775808 }
   }
   test {
-    name: "self_eval_double_negative_exp"
+    name: "self_eval_float_negative_exp"
     expr: "-2.3e+1"
     value: { double_value: -23.0 }
   }
@@ -98,7 +98,7 @@ section {
     value: { string_value: "'" }
   }
   test {
-    name: "self_eval_binary_escape"
+    name: "self_eval_bytes_escape"
     expr: "b'\\u00FF'"
     value: { bytes_value: "\303\277" }
   }
@@ -146,7 +146,7 @@ section {
     value: { int64_value: 123 }
   }
   test {
-    name: "self_eval_container_lookup"
+    name: "self_eval_qualified_lookup"
     expr: "x.y"
     value: { bool_value: true }
     type_env: {
