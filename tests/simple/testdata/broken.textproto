@@ -40,6 +40,32 @@ section {
   }
 }
 section {
+  name: "basic.textproto/variables"
+  test {
+    name: "self_eval_container_lookup"
+    expr: "y"
+    container: "x"
+    type_env: {
+      name: "x.y",
+      ident: { type: { primitive: BOOL } }
+    }
+    type_env: {
+      name: "y",
+      ident: { type: { primitive: BOOL } }
+    }
+    bindings: {
+      key: "x.y",
+      value: { value: { bool_value: true } }
+    }
+    bindings: {
+      key: "y",
+      value: { value: { bool_value: false } }
+    }
+    value: { bool_value: true }
+    # Current behavior in cel-go: unknown:<exprs:1 >
+  }
+}
+section {
   name: "comparisons.textproto/Literal Comparison"
   test {
     name: "self_test_equals_mixed_types"
