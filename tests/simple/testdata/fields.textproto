@@ -29,11 +29,6 @@ section {
     value: { int64_value: 1 }
   }
   test {
-    name: "map_value_repeat_key"
-    expr: "{true:1,false:2,true:3}[true]"
-    value: { int64_value: 3 }
-  }
-  test {
     name: "map_field_access"
     expr: "x.name"
     type_env: {

@@ -68,6 +68,14 @@ section {
     value: { bool_value: false }
   }
   test {
+    name: "map_value_repeat_key"
+    description: "map should not support repeated key."
+    expr: "{true:1,false:2,true:3}[true]"
+    ## Expected behavior: Failed with repeated key.
+    ## Current behavior:
+    value: { int64_value: 1 }
+  }
+  test {
     name: "ident_with_longest_prefix_check"
     description: "namespace resolution should try to find the longest prefix for the checker."
     expr: "a.b.c"
