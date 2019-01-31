@@ -724,7 +724,7 @@ section {
   name: "bound"
   description: "Comparing bound variables with literals or other variables"
   test {
-    name: "self_test_bound_bytes_gt_left_false"
+    name: "bytes_gt_left_false"
     expr: "x > b'\x00'"
     value: { bool_value: false }
     type_env: {
@@ -737,7 +737,7 @@ section {
     }
   }
   test {
-    name: "self_test_bound_int_lte_right_true"
+    name: "int_lte_right_true"
     expr: "123 <= x"
     value: { bool_value: true }
     type_env: {
@@ -750,7 +750,7 @@ section {
     }
   }
   test {
-    name: "self_test_bound_bool_lt_right_true"
+    name: "bool_lt_right_true"
     expr: "false < x"
     value: { bool_value: true }
     type_env: {
@@ -763,7 +763,7 @@ section {
     }
   }
   test {
-    name: "self_test_bound_float_ne_left_false"
+    name: "double_ne_left_false"
     expr: "x != 9.8"
     value: { bool_value: false }
     type_env: {
@@ -776,7 +776,7 @@ section {
     }
   }
   test {
-    name: "self_test_bound_map_ne_right_false"
+    name: "map_ne_right_false"
     expr: "{'a':'b','c':'d'} != x"
     value: { bool_value: false }
     type_env: {
@@ -809,7 +809,7 @@ section {
     }
   }
   test {
-    name: "self_test_bound_null_eq_left_true"
+    name: "null_eq_left_true"
     description: "A comparison _==_ against null only binds if the type is determined to be null or we skip the type checking"
     expr: "x == null"
     value: { bool_value: true }
@@ -823,7 +823,7 @@ section {
     }
   }
   test {
-    name: "self_test_bound_list_eq_right_false"
+    name: "list_eq_right_false"
     expr: "[1, 2] == x"
     value: { bool_value: false }
     type_env: {
@@ -849,7 +849,7 @@ section {
     }
   }
   test {
-    name: "self_test_bound_string_gte_right_true"
+    name: "string_gte_right_true"
     expr: "'abcd' >= x"
     value: { bool_value: true }
     type_env: {
@@ -864,7 +864,7 @@ section {
     }
   }
   test {
-    name: "self_test_bound_uint_eq_right_false"
+    name: "uint_eq_right_false"
     expr: "999u == x"
     value: { bool_value: false }
     type_env: {
@@ -879,7 +879,7 @@ section {
     }
   }
   test {
-    name: "self_test_bound_null_lt_right_no_such_overload"
+    name: "null_lt_right_no_such_overload"
     description: "There is no _<_ operation for null, even if both operands are null"
     expr: "null < x"
     eval_error: {
