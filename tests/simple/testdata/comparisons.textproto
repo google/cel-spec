@@ -721,6 +721,177 @@ section {
   }
 }
 section {
-  name: "Bound comparison"
+  name: "bound"
   description: "Comparing bound variables with literals or other variables"
+  test {
+    name: "bytes_gt_left_false"
+    expr: "x > b'\x00'"
+    value: { bool_value: false }
+    type_env: {
+      name: "x",
+      ident: { type: { primitive: BYTES } }
+    }
+    bindings: {
+      key: "x",
+      value: { value: { bytes_value: "\x00" } }
+    }
+  }
+  test {
+    name: "int_lte_right_true"
+    expr: "123 <= x"
+    value: { bool_value: true }
+    type_env: {
+      name: "x",
+      ident: { type: { primitive: INT64 } }
+    }
+    bindings: {
+      key: "x",
+      value: { value: { int64_value: 124 } }
+    }
+  }
+  test {
+    name: "bool_lt_right_true"
+    expr: "false < x"
+    value: { bool_value: true }
+    type_env: {
+      name: "x",
+      ident: { type: { primitive: BOOL } }
+    }
+    bindings: {
+      key: "x",
+      value: { value: { bool_value: true } }
+    }
+  }
+  test {
+    name: "double_ne_left_false"
+    expr: "x != 9.8"
+    value: { bool_value: false }
+    type_env: {
+      name: "x",
+      ident: { type: { primitive: DOUBLE } }
+    }
+    bindings: {
+      key: "x",
+      value: { value: { double_value: 9.8 } }
+    }
+  }
+  test {
+    name: "map_ne_right_false"
+    expr: "{'a':'b','c':'d'} != x"
+    value: { bool_value: false }
+    type_env: {
+      name: "x",
+      ident: {
+        type: {
+          map_type: {
+            key_type: { primitive: STRING }
+            value_type: { primitive: STRING }
+          }
+        }
+      }
+    }
+    bindings: {
+      key: "x",
+      value: {
+        value: {
+          map_value {
+            entries {
+              key: { string_value: "c" }
+              value: { string_value: "d" }
+            }
+            entries {
+              key: { string_value: "a" }
+              value: { string_value: "b" }
+            }
+          }
+        }
+      }
+    }
+  }
+  test {
+    name: "null_eq_left_true"
+    description: "A comparison _==_ against null only binds if the type is determined to be null or we skip the type checking"
+    expr: "x == null"
+    value: { bool_value: true }
+    type_env: {
+      name: "x",
+      ident: { type: { null: NULL_VALUE } }
+    }
+    bindings: {
+      key: "x",
+      value: { value: { null_value: NULL_VALUE } }
+    }
+  }
+  test {
+    name: "list_eq_right_false"
+    expr: "[1, 2] == x"
+    value: { bool_value: false }
+    type_env: {
+      name: "x"
+      ident: {
+        type: {
+          list_type: {
+            elem_type: { primitive: INT64 }
+          }
+        }
+      }
+    }
+    bindings: {
+      key: "x"
+      value: {
+        value: {
+          list_value {
+            values: { int64_value: 2 }
+            values: { int64_value: 1 }
+          }
+        }
+      }
+    }
+  }
+  test {
+    name: "string_gte_right_true"
+    expr: "'abcd' >= x"
+    value: { bool_value: true }
+    type_env: {
+      name: "x"
+      ident: {
+        type: { primitive: STRING }
+      }
+    }
+    bindings: {
+      key: "x"
+      value: { value: { string_value: "abc" } }
+    }
+  }
+  test {
+    name: "uint_eq_right_false"
+    expr: "999u == x"
+    value: { bool_value: false }
+    type_env: {
+      name: "x"
+      ident: {
+        type: { primitive: UINT64 }
+      }
+    }
+    bindings: {
+      key: "x"
+      value: { value: { uint64_value: 1000 } }
+    }
+  }
+  test {
+    name: "null_lt_right_no_such_overload"
+    description: "There is no _<_ operation for null, even if both operands are null"
+    expr: "null < x"
+    eval_error: {
+      errors: { message: "no such overload" }
+    }
+    type_env: {
+      name: "x",
+      ident: { type: { null: NULL_VALUE } }
+    }
+    bindings: {
+      key: "x",
+      value: { value: { null_value: NULL_VALUE } }
+    }
+  }
 }
