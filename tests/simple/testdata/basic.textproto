@@ -146,7 +146,7 @@ section {
     value: { int64_value: 123 }
   }
   test {
-    name: "self_eval_container_lookup"
+    name: "self_eval_qualified_lookup"
     expr: "x.y"
     value: { bool_value: true }
     type_env: {
