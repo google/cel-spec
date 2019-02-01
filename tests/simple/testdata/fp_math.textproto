@@ -141,17 +141,18 @@ section {
   test {
     name: "add_mul_distribute"
     expr: "5.75 * (1.5 + 2.5)  == 5.75 * 1.5 + 5.75 * 2.5"
+    ## overflow or underflow may cause this not equal.
     value: { bool_value: true }
   }
   test {
-    name: "fp_overflow"
-    description: "DBL_MAX times two"
+    name: "fp_overflow_positive"
+    description: "DBL_MAX(2^1023) times two"
     expr: "2.0 * 8.988466e+307 "
     value: {double_value: inf}
   }
   test {
-    name: "fp_underflow"
-    description: "DBL_MAX times two"
+    name: "fp_overflow_negative"
+    description: "-DBL_MAX(-2^1023) times two"
     expr: "2.0 * -8.988466e+307 "
     value: {double_value: -inf}
   }
