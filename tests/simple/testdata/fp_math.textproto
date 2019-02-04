@@ -158,7 +158,7 @@ section {
   }
   test {
     name: "fp_underflow"
-    description: DBL_MIN(2^-1074) divided by two"
+    description: "DBL_MIN(2^-1074) divided by two"
     expr: "1e-324  / 2.0"
     ## Expect it to be the closest number to the exact result.
     value: {double_value: 0}
