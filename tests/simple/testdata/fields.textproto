@@ -265,4 +265,42 @@ section {
       }
     }
   }
+  test {
+    name: "ident_with_longest_prefix_check"
+    description: "namespace resolution should try to find the longest prefix for the checker."
+    expr: "a.b.c"
+    type_env: {
+      name: "a.b.c",
+      ident: { type: { primitive: STRING } }
+    }
+    bindings: {
+      key: "a.b.c",
+      value: { value: { string_value: "yeah" } }
+    }
+    type_env: {
+      name: "a.b",
+      ident: {
+        type: {
+          map_type: {
+            key_type: {primitive: STRING}
+            value_type: {primitive: STRING}
+          }
+        }
+      }
+    }
+    bindings: {
+      key: "a.b"
+      value: {
+        value: {
+          map_value: {
+            entries {
+              key: { string_value: "c" }
+              value: { string_value: "oops" }
+            }
+          }
+        }
+      }
+    }
+    value: { string_value: "yeah" }
+  }
 }
