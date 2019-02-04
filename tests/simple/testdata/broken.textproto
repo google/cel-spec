@@ -118,11 +118,4 @@ section {
     ## Expected behavior: return error for overflow.
     value: { uint64_value: 18446744073709551615 }
   }
-  test {
-    name: "fp_underflow"
-    description: DBL_MIN(2^-1074) divided by two"
-    expr: "1e-324  / 2.0"
-    ## Expected behavior: return error for underflow.
-    value: {double_value: 0}
-  }
 }
