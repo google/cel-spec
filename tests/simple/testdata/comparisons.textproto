@@ -135,7 +135,7 @@ section {
     value: { bool_value: false }
   }
   test {
-    name: "self_test_equals_mixed_types"
+    name: "not_eq_mixed_types"
     description: "A mix of types fails during type checks but can't be captured in the conformance tests yet (See google/cel-go#155). Also, if you disable checks it yields {bool_value: false} where it should also yield an error"
     expr: "1.0 == 1"
     disable_check: true # need to make it fail in the evaluation phase
@@ -144,12 +144,11 @@ section {
     }
   }
   test {
-    name: "self_test_not_equals_data_type"
+    name: "not_eq_list_data_types"
     description: "A mix of types in a list fails during type checks. See #self_test_equals_mixed_types"
     expr: "[1] == [1.0]"
     disable_check: true # need to make it fail in the evaluation phase
     eval_error: {
-      # Note: The type checker error shows (list(int), list(double)) instead
       errors: { message: "found no matching overload for '_==_' applied to '(list, list)'" }
     }
   }
