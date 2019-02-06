@@ -33,7 +33,7 @@ without arguments, the server should listen on an arbitrary available TCP
 port on the local loopback address (`127.0.0.1` or `::1`), then write its
 address on `stdout` in the format
 
-    `Listening on `_address_`:`_port_
+> `Listening on `_address_`:`_port_
 
 See the [celrpc
 library](https://github.com/google/cel-spec/tree/master/tools/celrpc) for an

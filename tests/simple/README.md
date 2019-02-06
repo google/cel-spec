@@ -11,9 +11,12 @@ This binary is invoked with one or more of the following flags:
 - `--server` Path to the default ConformanceService server binary, to be used
   when no phase-specific server is specified.
 - `--parse_server` Path to the ConformanceService server binary to use for
+  parsing.
 - `--check_server` Path to the ConformanceService server binary to use for
+  checking.
 - `--eval_server` Path to the ConformanceService server binary to use for
   evaluation.
+
 The remaining arguments are paths to data files containing the test
 inputs and expected outputs.
 
@@ -22,7 +25,7 @@ the `testdata/` subdirectory for its data files.
 
 Implementations which use the [bazel](https://bazel.build) build system
 can invoke the simple test suite as their own unit tests with the following
-entry in a `BUILD.bazel` file, subtituting their own conformance server
+entry in a `BUILD.bazel` file, substituting their own conformance server
 binary target for `//server/main:cel_server`:
 
 ```
