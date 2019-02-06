@@ -6,11 +6,11 @@ implementations which pass the conformance tests should give valid CEL
 expressions the same meaning.
 
 A language-independent gRPC protocol allows the tests to run against CEL
-interpreters in any language which implement a server for the protocol.
+components in any language which implement a server for the protocol.
 
 As much as possible, the tests are driven by data files.  Implementations
 which do not provide a ConformanceService server are welcome to write
-their own drivers which read the same tesdata files.
+their own drivers which read the same `testdata` files.
 
 ## Test Suites
 
@@ -18,7 +18,8 @@ We currently have the following test suites:
 - *[simple](simple)* The _simple_ tests check the end-to-end
   parse-(check)-eval pipeline for fully-specified expressions,
   inputs, and output without parse or check failures.
-- More to come...
+- Test suites more suitable for other kinds of validation may be introduced
+  later.
 
 ## Integrating with the Tests
 
@@ -28,7 +29,7 @@ API](https://github.com/googleapis/googleapis/blob/master/google/api/expr/v1alph
 See [the cel-go server](https://github.com/google/cel-go/tree/master/server)
 as an example.
 
-The server should be availabe as an executable file.  When invoked without
+The server should be available as an executable file.  When invoked without
 without arguments, the server should listen on an arbitrary available TCP
 port on the local loopback address (`127.0.0.1` or `::1`), then write its
 address on `stdout` in the format
