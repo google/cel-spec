@@ -96,16 +96,14 @@ func parseSimpleFile(filename string) (*spb.SimpleTestFile, error) {
 
 // Usage: --server=<path-to-binary> testfile1 ...
 func TestMain(m *testing.M) {
-	if len(os.Args) == 1 {
-		// Special case for no args beyond Arg[0].  When being
-		// run as a test target within cel-spec, there is no
-		// conformance server to test.  Exit cleanly in order
-		// to keep the tests green.
-		os.Exit(0)
-	}
 	flag.Parse()
 	var err error
-	rc, err = initRunConfig()
+	// When flags are specified construct the run config object. When no
+	// flags have been specified, the run config will be nil and the tests
+	// will early return.
+	if len(os.Args) > 1 {
+		rc, err = initRunConfig()
+	}
 	if err != nil {
 		// Silly Go has no method in M to log errors or abort,
 		// so we'll have to do it outside of the testing module.
@@ -116,6 +114,12 @@ func TestMain(m *testing.M) {
 }
 
 func TestSimpleFile(t *testing.T) {
+	// Special case to handle test invocation without args. See TestMain()
+	// early return comment.
+	if rc == nil {
+		return
+	}
+	// Run the flag-configured tests.
 	for _, filename := range flag.Args() {
 		testFile, err := parseSimpleFile(filename)
 		if err != nil {
