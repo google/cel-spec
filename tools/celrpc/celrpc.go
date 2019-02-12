@@ -18,7 +18,7 @@ import (
 // ConfClient manages calls to conformance test services.
 type ConfClient struct {
 	exprpb.ConformanceServiceClient
-	cmd *exec.Cmd
+	cmd  *exec.Cmd
 	conn *grpc.ClientConn
 }
 
@@ -79,7 +79,7 @@ func ExampleNewClientFromPath() {
 	}
 	parsedExpr := parseResponse.ParsedExpr
 	evalRequest := exprpb.EvalRequest{
-		ExprKind: &exprpb.EvalRequest_ParsedExpr{ ParsedExpr: parsedExpr },
+		ExprKind: &exprpb.EvalRequest_ParsedExpr{ParsedExpr: parsedExpr},
 	}
 	evalResponse, err := c.Eval(context.Background(), &evalRequest)
 	if err != nil {
@@ -108,23 +108,23 @@ func (c *ConfClient) Shutdown() {
 // a gRPC server on the socket with the given service callbacks.
 // Note that this call doesn't return until ther server exits.
 func RunServer(service exprpb.ConformanceServiceServer) {
-        lis, err := net.Listen("tcp4", "127.0.0.1:")
-        if err != nil {
-                lis, err = net.Listen("tcp6", "[::1]:0")
-                if err != nil {
-                        log.Fatalf("failed to listen: %v", err)
-                }
-        }
+	lis, err := net.Listen("tcp4", "127.0.0.1:")
+	if err != nil {
+		lis, err = net.Listen("tcp6", "[::1]:0")
+		if err != nil {
+			log.Fatalf("failed to listen: %v", err)
+		}
+	}
 
 	// Must print to stdout, so the client can find the port.
-        // So, no, this must be 'fmt', not 'log'.
-        fmt.Printf("Listening on %v\n", lis.Addr())
-        os.Stdout.Sync()
+	// So, no, this must be 'fmt', not 'log'.
+	fmt.Printf("Listening on %v\n", lis.Addr())
+	os.Stdout.Sync()
 
-        s := grpc.NewServer()
-        exprpb.RegisterConformanceServiceServer(s, service)
-        reflection.Register(s)
-        if err := s.Serve(lis); err != nil {
-                log.Fatalf("failed to serve: %v", err)
-        }
+	s := grpc.NewServer()
+	exprpb.RegisterConformanceServiceServer(s, service)
+	reflection.Register(s)
+	if err := s.Serve(lis); err != nil {
+		log.Fatalf("failed to serve: %v", err)
+	}
 }

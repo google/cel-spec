@@ -15,14 +15,14 @@ import (
 )
 
 var (
-	flagServerCmd string
+	flagServerCmd      string
 	flagParseServerCmd string
 	flagCheckServerCmd string
-	flagEvalServerCmd string
-	rc *runConfig
+	flagEvalServerCmd  string
+	rc                 *runConfig
 )
 
-func init () {
+func init() {
 	flag.StringVar(&flagServerCmd, "server", "", "path to binary for server when no phase-specific server defined")
 	flag.StringVar(&flagParseServerCmd, "parse_server", "", "path to binary for parse server")
 	flag.StringVar(&flagCheckServerCmd, "check_server", "", "path to binary for check server")

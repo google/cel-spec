@@ -48,7 +48,7 @@ import (
 )
 
 var (
-	trueval = &exprpb.Value{ Kind: &exprpb.Value_BoolValue{ BoolValue: true } }
+	trueval = &exprpb.Value{Kind: &exprpb.Value_BoolValue{BoolValue: true}}
 )
 
 // Match checks the expectation in the result matcher against the
@@ -85,10 +85,10 @@ func Match(t *spb.SimpleTest, actual *exprpb.ExprValue) error {
 	case nil:
 		// Defaults to a match against a true value.
 		switch actual.Kind.(type) {
-                case *exprpb.ExprValue_Value:
-                        return MatchValue(t.Name, trueval, actual.GetValue())
-                }
-                return fmt.Errorf("Got %v, want true", actual)
+		case *exprpb.ExprValue_Value:
+			return MatchValue(t.Name, trueval, actual.GetValue())
+		}
+		return fmt.Errorf("Got %v, want true", actual)
 	}
 	return fmt.Errorf("Unsupported matcher kind")
 }
@@ -112,7 +112,7 @@ func MatchValue(tag string, expected *exprpb.Value, actual *exprpb.Value) error 
 type runConfig struct {
 	parseClient *celrpc.ConfClient
 	checkClient *celrpc.ConfClient
-	evalClient *celrpc.ConfClient
+	evalClient  *celrpc.ConfClient
 }
 
 // RunTest runs the test described by t, returning an error for any
@@ -125,9 +125,9 @@ func (r *runConfig) RunTest(t *spb.SimpleTest) error {
 
 	// Parse
 	preq := exprpb.ParseRequest{
-		CelSource: t.Expr,
+		CelSource:      t.Expr,
 		SourceLocation: t.Name,
-		DisableMacros: t.DisableMacros,
+		DisableMacros:  t.DisableMacros,
 	}
 	pres, err := r.parseClient.Parse(context.Background(), &preq)
 	if err != nil {
@@ -150,8 +150,8 @@ func (r *runConfig) RunTest(t *spb.SimpleTest) error {
 	if !t.DisableCheck {
 		creq := exprpb.CheckRequest{
 			ParsedExpr: parsedExpr,
-			TypeEnv: t.TypeEnv,
-			Container: t.Container,
+			TypeEnv:    t.TypeEnv,
+			Container:  t.Container,
 		}
 		cres, err := r.checkClient.Check(context.Background(), &creq)
 		if err != nil {
@@ -177,14 +177,14 @@ func (r *runConfig) RunTest(t *spb.SimpleTest) error {
 	var ereq exprpb.EvalRequest
 	if checkedExpr == nil {
 		ereq = exprpb.EvalRequest{
-			ExprKind: &exprpb.EvalRequest_ParsedExpr{ ParsedExpr: parsedExpr },
-			Bindings: t.Bindings,
+			ExprKind:  &exprpb.EvalRequest_ParsedExpr{ParsedExpr: parsedExpr},
+			Bindings:  t.Bindings,
 			Container: t.Container,
 		}
 	} else {
 		ereq = exprpb.EvalRequest{
-			ExprKind: &exprpb.EvalRequest_CheckedExpr{ CheckedExpr: checkedExpr },
-			Bindings: t.Bindings,
+			ExprKind:  &exprpb.EvalRequest_CheckedExpr{CheckedExpr: checkedExpr},
+			Bindings:  t.Bindings,
 			Container: t.Container,
 		}
 	}
