@@ -1,3 +1,4 @@
+// Package celrpc defines CEL conformance service RPC helpers.
 package celrpc
 
 import (
@@ -14,6 +15,7 @@ import (
 	exprpb "google.golang.org/genproto/googleapis/api/expr/v1alpha1"
 )
 
+// ConfClient manages calls to conformance test services.
 type ConfClient struct {
 	exprpb.ConformanceServiceClient
 	cmd *exec.Cmd
@@ -60,6 +62,7 @@ func NewClientFromPath(serverPath string) (*ConfClient, error) {
 	return &c, nil
 }
 
+// ExampleNewClientFromPath creates a new CEL RPC client using a path to a server binary.
 // TODO Run from celrpc_test.go.
 func ExampleNewClientFromPath() {
 	c, err := NewClientFromPath("/path/to/server/binary")
@@ -76,13 +79,13 @@ func ExampleNewClientFromPath() {
 	}
 	parsedExpr := parseResponse.ParsedExpr
 	evalRequest := exprpb.EvalRequest{
-		ExprKind: &exprpb.EvalRequest_ParsedExpr{parsedExpr},
+		ExprKind: &exprpb.EvalRequest_ParsedExpr{ ParsedExpr: parsedExpr },
 	}
 	evalResponse, err := c.Eval(context.Background(), &evalRequest)
 	if err != nil {
 		log.Fatal("Couldn't eval")
 	}
-	fmt.Println("1 + 1 is %v", evalResponse.Result.GetValue().GetInt64Value())
+	fmt.Printf("1 + 1 is %v\n", evalResponse.Result.GetValue().GetInt64Value())
 }
 
 // Shutdown deallocates all resources associated with the client.

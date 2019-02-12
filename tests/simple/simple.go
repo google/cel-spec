@@ -48,7 +48,7 @@ import (
 )
 
 var (
-	trueval = &exprpb.Value{ Kind: &exprpb.Value_BoolValue{true} }
+	trueval = &exprpb.Value{ Kind: &exprpb.Value_BoolValue{ BoolValue: true } }
 )
 
 // Match checks the expectation in the result matcher against the
@@ -143,7 +143,7 @@ func (r *runConfig) RunTest(t *spb.SimpleTest) error {
 	if parsedExpr.Expr == nil {
 		return fmt.Errorf("%s: parse returned empty root expression", t.Name)
 	}
-	rootId := parsedExpr.Expr.Id
+	rootID := parsedExpr.Expr.Id
 
 	// Check (optional)
 	var checkedExpr *exprpb.CheckedExpr
@@ -164,7 +164,7 @@ func (r *runConfig) RunTest(t *spb.SimpleTest) error {
 		if checkedExpr == nil {
 			return fmt.Errorf("%s: Fatal check errors: %v", t.Name, cres.Issues)
 		}
-		_, present := checkedExpr.TypeMap[rootId]
+		_, present := checkedExpr.TypeMap[rootID]
 		if !present {
 			return fmt.Errorf("%s: No type for top level expression: %v", t.Name, cres)
 		}
@@ -177,13 +177,13 @@ func (r *runConfig) RunTest(t *spb.SimpleTest) error {
 	var ereq exprpb.EvalRequest
 	if checkedExpr == nil {
 		ereq = exprpb.EvalRequest{
-			ExprKind: &exprpb.EvalRequest_ParsedExpr{parsedExpr},
+			ExprKind: &exprpb.EvalRequest_ParsedExpr{ ParsedExpr: parsedExpr },
 			Bindings: t.Bindings,
 			Container: t.Container,
 		}
 	} else {
 		ereq = exprpb.EvalRequest{
-			ExprKind: &exprpb.EvalRequest_CheckedExpr{checkedExpr},
+			ExprKind: &exprpb.EvalRequest_CheckedExpr{ CheckedExpr: checkedExpr },
 			Bindings: t.Bindings,
 			Container: t.Container,
 		}

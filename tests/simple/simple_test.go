@@ -15,52 +15,52 @@ import (
 )
 
 var (
-	flag_server_cmd string
-	flag_parse_server_cmd string
-	flag_check_server_cmd string
-	flag_eval_server_cmd string
+	flagServerCmd string
+	flagParseServerCmd string
+	flagCheckServerCmd string
+	flagEvalServerCmd string
 	rc *runConfig
 )
 
 func init () {
-	flag.StringVar(&flag_server_cmd, "server", "", "path to binary for server when no phase-specific server defined")
-	flag.StringVar(&flag_parse_server_cmd, "parse_server", "", "path to binary for parse server")
-	flag.StringVar(&flag_check_server_cmd, "check_server", "", "path to binary for check server")
-	flag.StringVar(&flag_eval_server_cmd, "eval_server", "", "path to binary for eval server")
+	flag.StringVar(&flagServerCmd, "server", "", "path to binary for server when no phase-specific server defined")
+	flag.StringVar(&flagParseServerCmd, "parse_server", "", "path to binary for parse server")
+	flag.StringVar(&flagCheckServerCmd, "check_server", "", "path to binary for check server")
+	flag.StringVar(&flagEvalServerCmd, "eval_server", "", "path to binary for eval server")
 }
 
 // Server binaries specified by flags
 func initRunConfig() (*runConfig, error) {
 	// Find the server binary for each phase
-	p_cmd := flag_server_cmd
-	if flag_parse_server_cmd != "" {
-		p_cmd = flag_parse_server_cmd
+	pCmd := flagServerCmd
+	if flagParseServerCmd != "" {
+		pCmd = flagParseServerCmd
 	}
-	if p_cmd == "" {
+	if pCmd == "" {
 		return nil, fmt.Errorf("no parse server defined")
 	}
 
-	c_cmd := flag_server_cmd
-	if flag_check_server_cmd != "" {
-		c_cmd = flag_check_server_cmd
+	cCmd := flagServerCmd
+	if flagCheckServerCmd != "" {
+		cCmd = flagCheckServerCmd
 	}
-	if c_cmd == "" {
+	if cCmd == "" {
 		return nil, fmt.Errorf("no check server defined")
 	}
 
-	e_cmd := flag_server_cmd
-	if flag_eval_server_cmd != "" {
-		e_cmd = flag_eval_server_cmd
+	eCmd := flagServerCmd
+	if flagEvalServerCmd != "" {
+		eCmd = flagEvalServerCmd
 	}
-	if e_cmd == "" {
+	if eCmd == "" {
 		return nil, fmt.Errorf("no eval server defined")
 	}
 
 	// Only launch each required binary once
 	servers := make(map[string]*celrpc.ConfClient)
-	servers[p_cmd] = nil
-	servers[c_cmd] = nil
-	servers[e_cmd] = nil
+	servers[pCmd] = nil
+	servers[cCmd] = nil
+	servers[eCmd] = nil
 	for cmd, _ := range servers {
 		cli, err := celrpc.NewClientFromPath(cmd)
 		if err != nil {
@@ -70,9 +70,9 @@ func initRunConfig() (*runConfig, error) {
 	}
 
 	var rc runConfig
-	rc.parseClient = servers[p_cmd]
-	rc.checkClient = servers[c_cmd]
-	rc.evalClient = servers[e_cmd]
+	rc.parseClient = servers[pCmd]
+	rc.checkClient = servers[cCmd]
+	rc.evalClient = servers[eCmd]
 	return &rc, nil
 }
 
