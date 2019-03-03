@@ -7,9 +7,12 @@ implementations.
 
 This page is a summary of the CEL release history and plans for future releases.
 For details on prior releases, see individual release notes and announcements.
-For future releases, **do not dates and feature lists firm** as plans are likely to change.
-Feedback and feature
-requests should be made on the buglist for either the language overall on [cel-spec GitHub issues][], or the Go implementation on [cel-go GitHub issues][]. Issues or discussed on the [cel-go-discuss][] public forum.
+For future releases, **do not consider dates and feature lists firm**.
+
+Feedback and feature requests should be made on the buglist for either the
+language overall on [cel-spec GitHub issues][], or the Go implementation on
+[cel-go GitHub issues][]. Or ask a question or propose a change on the
+[cel-go-discuss][] public forum.
 
 [cel-spec GitHub issues]: https://github.com/google/cel-spec/issues
 [cel-go GitHub issues]: https://github.com/google/cel-go/issues
