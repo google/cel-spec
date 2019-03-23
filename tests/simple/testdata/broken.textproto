@@ -41,6 +41,7 @@ section {
 }
 section {
   name: "basic.textproto/variables"
+  description: "Namespaced identifiers."
   test {
     name: "self_eval_container_lookup"
     expr: "y"
@@ -62,7 +63,7 @@ section {
       value: { value: { bool_value: false } }
     }
     value: { bool_value: true }
-    # Current behavior in cel-go: unknown:<exprs:1 >
+    # Current behavior in cel-go: value: { bool_value: false }
   }
 }
 section {
@@ -98,46 +99,6 @@ section {
     ## Expected behavior: Failed with repeated key.
     ## Current behavior:
     value: { int64_value: 1 }
-  }
-  test {
-    name: "ident_with_longest_prefix_eval"
-    description: "namespace resolution should try to find the longest prefix for the evaluator."
-    expr: "a.b.c"
-    type_env: {
-      name: "a.b.c",
-      ident: { type: { primitive: STRING } }
-    }
-    bindings: {
-      key: "a.b.c",
-      value: { value: { string_value: "yeah" } }
-    }
-    type_env: {
-      name: "a.b",
-      ident: {
-        type: {
-          map_type: {
-            key_type: {primitive: STRING}
-            value_type: {primitive: STRING}
-          }
-        }
-      }
-    }
-    bindings: {
-      key: "a.b"
-      value: {
-        value: {
-          map_value: {
-            entries {
-              key: { string_value: "c" }
-              value: { string_value: "oops" }
-            }
-          }
-        }
-      }
-    }
-    disable_check: true ## when check is disabled, the evaluator should evaluate it in the correct order
-    ## Expected behavior: "yeah"
-    value: { string_value: "oops" }
   }
 }
 section {

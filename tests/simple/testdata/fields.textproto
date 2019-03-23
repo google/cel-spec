@@ -210,6 +210,45 @@ section {
     value: { string_value: "yeah" }
   }
   test {
+    name: "qualified_identifier_resolution_unchecked"
+    description: "namespace resolution should try to find the longest prefix for the evaluator."
+    expr: "a.b.c"
+    type_env: {
+      name: "a.b.c",
+      ident: { type: { primitive: STRING } }
+    }
+    bindings: {
+      key: "a.b.c",
+      value: { value: { string_value: "yeah" } }
+    }
+    type_env: {
+      name: "a.b",
+      ident: {
+        type: {
+          map_type: {
+            key_type: {primitive: STRING}
+            value_type: {primitive: STRING}
+          }
+        }
+      }
+    }
+    bindings: {
+      key: "a.b"
+      value: {
+        value: {
+          map_value: {
+            entries {
+              key: { string_value: "c" }
+              value: { string_value: "oops" }
+            }
+          }
+        }
+      }
+    }
+    disable_check: true ## when check is disabled, the evaluator should evaluate it in the correct order
+    value: { string_value: "yeah" }
+  }  
+  test {
     name: "list_field_select_unsupported"
     expr: "a.b.pancakes"
     disable_check: true
