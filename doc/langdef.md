@@ -698,6 +698,26 @@ notation like `_+_` where `_` is a placeholder for an argument.
 TODO https://issuetracker.google.com/67014381 : have better descriptions. The
 table is auto-generated so the descriptions need to be updated in the code.
 
+### Timezones
+
+Timezones are expressed in the following grammar:
+```grammar
+TimeZone = "UTC" | LongTZ | FixedTZ ;
+LongTZ = ? list available at http://joda-time.sourceforge.net/timezones.html ? ;
+FixedTZ = ( "+" | "-" ) Digit Digit ":" Digit Digit ;
+Digit = "0" | "1" | ... | "9" ;
+```
+
+Fixed timezones are explicit hour and minute offsets from UTC.  Long timezone
+names are like `Europe/Paris`, `CET`, or `US/Central`.
+
+### Regular Expressions
+
+Regular expressions follow the [RE2 syntax](https://github.com/google/re2/wiki/Syntax).
+
+
+### List of Standard Definitions
+
 <!-- BEGIN GENERATED DECL TABLE; DO NOT EDIT BELOW -->
 
 <table style="width=100%" border="1">
