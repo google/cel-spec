@@ -1,0 +1,99 @@
+name: "string"
+description: "Tests for string operations."
+section {
+  name: "starts_with"
+  description: "Tests for the startsWith() function."
+  test {
+    name: "basic_true"
+    expr: "'foobar'.startsWith('foo')"
+    value: { bool_value: true }
+  }
+  test {
+    name: "basic_false"
+    expr: "'foobar'.startsWith('bar')"
+    value: { bool_value: false }
+  }
+  test {
+    name: "empty_target"
+    expr: "''.startsWith('foo')"
+    value: { bool_value: false }
+  }
+  test {
+    name: "empty_arg"
+    expr: "'foobar'.startsWith('')"
+    value: { bool_value: true }
+  }
+  test {
+    name: "empty_empty"
+    expr: "''.startsWith('')"
+    value: { bool_value: true }
+  }
+}
+section {
+  name: "ends_with"
+  description: "Tests for the endsWith() function."
+  test {
+    name: "basic_true"
+    expr: "'foobar'.endsWith('bar')"
+    value: { bool_value: true }
+  }
+  test {
+    name: "basic_false"
+    expr: "'foobar'.endsWith('foo')"
+    value: { bool_value: false }
+  }
+  test {
+    name: "empty_target"
+    expr: "''.endsWith('foo')"
+    value: { bool_value: false }
+  }
+  test {
+    name: "empty_arg"
+    expr: "'foobar'.endsWith('')"
+    value: { bool_value: true }
+  }
+  test {
+    name: "empty_empty"
+    expr: "''.endsWith('')"
+    value: { bool_value: true }
+  }
+}
+section {
+  name: "matches"
+  description: "Tests for regexp matching.  For now, we will only test the subset of regular languages."
+  test {
+    name: "basic"
+    expr: "'hubba'.matches('ubb')"
+    value: { bool_value: true }
+  }
+  test {
+    name: "empty_target"
+    expr: "''.matches('foo|bar')"
+    value: { bool_value: false }
+  }
+  test {
+    name: "empty_arg"
+    expr: "'cows'.matches('')"
+    value: { bool_value: true }
+  }
+  test {
+    name: "empty_empty"
+    expr: "''.matches('')"
+    value: { bool_value: true }
+  }
+  test {
+    name: "re_concat"
+    expr: "'abcd'.matches('bc')"
+    value: { bool_value: true }
+  }
+  test {
+    name: "re_alt"
+    expr: "'grey'.matches('gr(a|e)y')"
+    value: { bool_value: true }
+  }
+  test {
+    name: "re_rep"
+    expr: "'banana'.matches('ba(na)*')"
+    value: { bool_value: true }
+  }
+}

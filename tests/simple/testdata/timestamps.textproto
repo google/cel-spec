@@ -1,0 +1,90 @@
+name: "timestamps"
+description: "Timestamp and duration tests."
+section {
+  name: "timestamp_conversions"
+  description: "Conversions of timestamps to other types."
+  test {
+    name: "toInt"
+    expr: "int(timestamp('2009-02-13T23:31:30Z'))"
+    value: { int64_value: 1234567890 }
+  }
+  test {
+    name: "toString"
+    expr: "string(timestamp('2009-02-13T23:31:30Z'))"
+    value: { string_value: "2009-02-13T23:31:30Z" }
+  }
+  test {
+    name: "toType"
+    expr: "type(timestamp('2009-02-13T23:31:30Z'))"
+    value: { type_value: "google.protobuf.Timestamp" }
+  }
+}
+section {
+  name: "timestamp_selectors"
+  description: "Timestamp selection operators with and without timezones"
+  # 1234567890 -> Fri 2009-02-13 23:31:30 UTC
+  test {
+    name: "getDate"
+    expr: "timestamp('2009-02-13T23:31:30Z').getDate()"
+    value: { int64_value: 13 }
+  }
+  test {
+    name: "getDayOfMonth"
+    expr: "timestamp('2009-02-13T23:31:30Z').getDayOfMonth()"
+    value: { int64_value: 12 }
+  }
+  test {
+    name: "getDayOfWeek"
+    expr: "timestamp('2009-02-13T23:31:30Z').getDayOfWeek()"
+    value: { int64_value: 5 }
+  }
+  test {
+    name: "getDayOfYear"
+    expr: "timestamp('2009-02-13T23:31:30Z').getDayOfYear()"
+    value: { int64_value: 44 }
+  }
+  test {
+    name: "getFullYear"
+    expr: "timestamp('2009-02-13T23:31:30Z').getFullYear()"
+    value: { int64_value: 2009 }
+  }
+  test {
+    name: "getHours"
+    expr: "timestamp('2009-02-13T23:31:30Z').getHours()"
+    value: { int64_value: 23 }
+  }
+  test {
+    name: "getMilliseconds"
+    expr: "timestamp('2009-02-13T23:31:20.123456789Z').getMilliseconds()"
+    value: { int64_value: 123 }
+  }
+  test {
+    name: "getMinutes"
+    expr: "timestamp('2009-02-13T23:31:30Z').getMinutes()"
+    value: { int64_value: 31 }
+  }
+  test {
+    name: "getMonth"
+    expr: "timestamp('2009-02-13T23:31:30Z').getMonth()"
+    value: { int64_value: 1 }
+  }
+  test {
+    name: "getSeconds"
+    expr: "timestamp('2009-02-13T23:31:30Z').getSeconds()"
+    value: { int64_value: 30 }
+  }
+}
+section {
+  name: "timestamp_comparisons"
+  description: "Comparison operations on timestamps."
+  test {
+    name: "equal_same"
+    expr: "timestamp('2009-02-13T23:31:30Z') == timestamp('2009-02-13T23:31:30Z')"
+    value: { bool_value: true }
+  }
+  test {
+    name: "equal_diff"
+    expr: "timestamp('2009-02-13T23:31:29Z') == timestamp('2009-02-13T23:31:30Z')"
+    value: { bool_value: false }
+  }
+}
