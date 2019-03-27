@@ -41,6 +41,8 @@ The available test files are:
 
 - [`integer_math.textproto`](integer_math.textproto) Checks integer arithmetic.
 
+- [`logic.textproto`](logic.textproto) Checks special logical operators.
+
 - [`macros.textproto`](macros.textproto) Checks use of CEL macros.
 
 - [`proto2.textproto`](proto2.textproto) Checks use of protocol buffers version
@@ -48,6 +50,11 @@ The available test files are:
 
 - [`proto3.textproto`](proto3.textproto) Checks use of protocol buffers version
   3.
+
+- [`string.textproto`](string.textproto) Checks functions on strings.
+
+- [`timestamps.proto`](timestamps.proto) Checks `timestamp` and `duration`
+  values and operations.
 
 - [`unknowns.textproto`](unknowns.textproto) Checks evaluation where some
   inputs are marked as unknown.
