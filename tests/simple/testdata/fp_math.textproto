@@ -89,9 +89,7 @@ section {
   test {
     name: "divide_zero"
     expr: "15.75 / 0.0"
-    eval_error: {
-      errors: { message:"divide by zero" }
-    }
+    value: { double_value: Infinity }
   }
   test {
     name: "multiply_zero"
