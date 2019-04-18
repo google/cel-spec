@@ -9,6 +9,23 @@ licenses(["notice"])  # Apache 2.0
 exports_files(["LICENSE"])
 
 proto_library(
+    name = "envcheck_protos",
+    srcs = [ "envcheck.proto" ],
+    deps = [
+        "@com_google_googleapis//google/api/expr/v1alpha1:checked_proto",
+    ],
+)
+
+go_proto_library(
+    name = "envcheck_go_proto",
+    proto = ":envcheck_protos",
+    importpath = "github.com/google/cel-spec/proto/test/v1/envcheck",
+    deps = [
+        "@org_golang_google_genproto//googleapis/api/expr/v1alpha1:go_default_library",
+    ],
+)
+
+proto_library(
     name = "simple_protos",
     srcs = [
         "simple.proto",
