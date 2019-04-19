@@ -51,7 +51,6 @@ package envcheck
 import (
 	"context"
 	"fmt"
-	"regexp"
 	"testing"
 
 	"github.com/golang/protobuf/proto"
@@ -67,8 +66,7 @@ import (
 // for the various phases.  Some phases might use the
 // same server.
 type runConfig struct {
-	parseClient *celrpc.ConfClient
-	evalClient  *celrpc.ConfClient
+	client  *celrpc.ConfClient
 }
 
 var (
@@ -91,44 +89,148 @@ func verifyOverload(result *exprpb.ExprValue) bool {
 	return !proto.Equal(result, noOverload)
 }
 
-func zeroValuePrimitive(p exprpb.Type_PrimitiveType) (string, error) {
+type exprGen func(int64) (*exprpb.Expr, int64)
+
+func genExpr(gen exprGen) *exprpb.Expr {
+	e, _ := gen(int64(0))
+	return e
+}
+
+var exprNil exprGen = func(id int64) (*exprpb.Expr, int64) {
+	return nil, id
+}
+
+func exprIdent(name string) exprGen {
+	return func (id int64) (*exprpb.Expr, int64) {
+		return &exprpb.Expr{
+			Id: id,
+			ExprKind: &exprpb.Expr_IdentExpr{
+				IdentExpr: &exprpb.Expr_Ident{
+					Name: name,
+				},
+			},
+		}, id + 1
+	}
+}
+
+func exprConst(c *exprpb.Constant) exprGen {
+	return func (id int64) (*exprpb.Expr, int64) {
+		return &exprpb.Expr{
+			Id: id,
+			ExprKind: &exprpb.Expr_ConstExpr{ConstExpr: c},
+		}, id + 1
+	}
+}
+
+func exprCallInternal(f string, target exprGen, args ...exprGen) exprGen {
+	return func (id int64) (*exprpb.Expr, int64) {
+		tExp, id := target(id)
+		var argExp []*exprpb.Expr
+		for _, arg := range args {
+			e, i := arg(id)
+			argExp = append(argExp, e)
+			id = i
+		}
+		return &exprpb.Expr{
+			Id: id,
+			ExprKind: &exprpb.Expr_CallExpr{
+				CallExpr: &exprpb.Expr_Call{
+					Target: tExp,
+					Function: f,
+					Args: argExp,
+				},
+			},
+		}, id + 1
+	}
+}
+
+func exprCall(f string, args ...exprGen) exprGen {
+	return exprCallInternal(f, exprNil, args...)
+}
+
+func exprCallTarget(f string, target exprGen,  args ...exprGen) exprGen {
+	return exprCallInternal(f, target, args...)
+}
+
+var emptyList exprGen = func(id int64) (*exprpb.Expr, int64) {
+	return &exprpb.Expr{
+		Id: id,
+		ExprKind: &exprpb.Expr_ListExpr{
+			ListExpr: &exprpb.Expr_CreateList{},
+		},
+	}, id + 1
+}
+
+func exprCreateEmptyStruct(messageName string) exprGen {
+	return func(id int64) (*exprpb.Expr, int64) {
+		return &exprpb.Expr{
+			Id: id,
+			ExprKind: &exprpb.Expr_StructExpr{
+				StructExpr: &exprpb.Expr_CreateStruct{
+					MessageName: messageName,
+				},
+			},
+		}, id + 1
+	}
+}
+
+var emptyMap = exprCreateEmptyStruct("")
+
+var (
+	zeroConstBool =
+		exprConst(&exprpb.Constant{ConstantKind: &exprpb.Constant_BoolValue{}})
+	zeroConstInt =
+		exprConst(&exprpb.Constant{ConstantKind: &exprpb.Constant_Int64Value{}})
+	zeroConstUint =
+		exprConst(&exprpb.Constant{ConstantKind: &exprpb.Constant_Uint64Value{}})
+	zeroConstDouble =
+		exprConst(&exprpb.Constant{ConstantKind: &exprpb.Constant_DoubleValue{}})
+	zeroConstString =
+		exprConst(&exprpb.Constant{ConstantKind: &exprpb.Constant_StringValue{}})
+	zeroConstBytes =
+		exprConst(&exprpb.Constant{ConstantKind: &exprpb.Constant_BytesValue{}})
+	zeroConstNull =
+		exprConst(&exprpb.Constant{ConstantKind: &exprpb.Constant_NullValue{}})
+)
+
+func zeroValuePrimitive(p exprpb.Type_PrimitiveType) (exprGen, error) {
 	switch p {
 	case exprpb.Type_BOOL:
-		return "false", nil
+		return zeroConstBool, nil
 	case exprpb.Type_INT64:
-		return "0", nil
+		return zeroConstInt, nil
 	case exprpb.Type_UINT64:
-		return "0u", nil
+		return zeroConstUint, nil
 	case exprpb.Type_DOUBLE:
-		return "0.0", nil
+		return zeroConstDouble, nil
 	case exprpb.Type_STRING:
-		return "''", nil
+		return zeroConstString, nil
 	case exprpb.Type_BYTES:
-		return "b''", nil
+		return zeroConstBytes, nil
 	default:
-		return "", fmt.Errorf("unknown primitive type: %v", p)
+		return nil, fmt.Errorf("unknown primitive type: %v", p)
 	}
 }
 
-func zeroValueWellKnown(w exprpb.Type_WellKnownType) (string, error) {
+func zeroValueWellKnown(w exprpb.Type_WellKnownType) (exprGen, error) {
 	switch w {
 	case exprpb.Type_ANY:
-		return "0", nil
+		return zeroConstInt, nil
 	case exprpb.Type_TIMESTAMP:
-		return "timestamp(0)", nil
+		return exprCall("timestamp", zeroConstInt), nil
 	case exprpb.Type_DURATION:
-		return "duration(0)", nil
+		return exprCall("duration", zeroConstInt), nil
 	default:
-		return "", fmt.Errorf("unknown well known type: %v", w)
+		return nil, fmt.Errorf("unknown well known type: %v", w)
 	}
 }
 
-func zeroValue(tp *exprpb.Type) (string, error) {
+func zeroValue(tp *exprpb.Type) (exprGen, error) {
 	switch t := tp.TypeKind.(type) {
 	case *exprpb.Type_Dyn:
-		return "0", nil
+		return zeroConstInt, nil
 	case *exprpb.Type_Null:
-		return "null", nil
+		return zeroConstNull, nil
 	case *exprpb.Type_Primitive:
 		return zeroValuePrimitive(t.Primitive)
 	case *exprpb.Type_Wrapper:
@@ -136,121 +238,58 @@ func zeroValue(tp *exprpb.Type) (string, error) {
 	case *exprpb.Type_WellKnown:
 		return zeroValueWellKnown(t.WellKnown)
 	case *exprpb.Type_ListType_:
-		return "[]", nil
+		return emptyList, nil
 	case *exprpb.Type_MapType_:
-		return "{}", nil
+		return emptyMap, nil
 	case *exprpb.Type_Function:
-		return "", fmt.Errorf("bad_type_function")
+		return nil, fmt.Errorf("bad_type_function")
 	case *exprpb.Type_MessageType:
-		return t.MessageType + "{}", nil
+		return exprCreateEmptyStruct(t.MessageType), nil
 	case *exprpb.Type_TypeParam:
-		return "0", nil
+		return zeroConstInt, nil
 	case *exprpb.Type_Type:
-		return "type", nil
+		return exprIdent("type"), nil
 	case *exprpb.Type_Error:
-		return "", fmt.Errorf("error type")
+		return nil, fmt.Errorf("error type")
 	case *exprpb.Type_AbstractType_:
-		return "", fmt.Errorf("abstract type %s", t.AbstractType.Name)
+		return nil, fmt.Errorf("abstract type %s", t.AbstractType.Name)
 	default:
-		return "", fmt.Errorf("unknown type kind: %v", tp.GetTypeKind())
+		return nil, fmt.Errorf("unknown type kind: %v", tp.GetTypeKind())
 	}
 }
 
-func genParams(params []*exprpb.Type) ([]string, error) {
-	var args []string
-	for _, param := range params {
+func overloadExpr(name string, o *exprpb.Decl_FunctionDecl_Overload) (exprGen, error) {
+	var args []exprGen
+	for _, param := range o.Params {
 		arg, err := zeroValue(param)
 		if err != nil {
 			return nil, err
 		}
 		args = append(args, arg)
 	}
-	return args, nil
-}
-
-func isIdentifier(s string) bool {
-	match, err := regexp.Match("^[_a-zA-Z][_a-zA-Z0-9]*$", []byte(s))
-	return err == nil && match && s != "_in_"
-}
-
-var operators = []string {
-	"!_", "-_", "_!=_", "_%_", "_&&_", "_*_", "_+_", "_-_", "_/_",
-	"_<=_", "_<_", "_==_", "_>=_", "_>_", "_?_:_", "_[_]", "_||_",
-}
-
-func genExprOverload(name string, o *exprpb.Decl_FunctionDecl_Overload) (string, error) {
-	if len(o.Params) == 0 {
-		return name + "()", nil
+	if o.IsInstanceFunction && len(args) > 0 {
+		return exprCallTarget(name, args[0], args[1:]...), nil
 	}
-	args, err := genParams(o.Params)
-	if err != nil {
-		return "", err
-	}
-	if isIdentifier(name) {
-		var prog string
-		first := true
-		if o.IsInstanceFunction {
-			prog = args[0] + "." + name + "("
-		} else {
-			prog = name + "(" + args[0]
-			first = false
-		}
-		for i := 1; i < len(args); i++ {
-			if !first {
-				prog += ", "
-			}
-			first = false
-			prog += args[i]
-		}
-		prog += ")"
-		return prog, nil
-	}
-	for _, op := range operators {
-		if op == name {
-			var prog string
-			i := 0
-			for _, c := range op {
-				if c == '_' {
-					if i >= len(args) {
-						return "", fmt.Errorf("not enough params: %v", o)
-					}
-					prog += "(" + args[i] + ")"
-					i++
-				} else {
-					prog += string(c)
-				}
-			}
-			if i != len(args) {
-				return "", fmt.Errorf("too many params: %v", o)
-			}
-			return prog, nil
-		}
-	}
-	if name == "@in" {
-		if len(args) != 2 {
-			return "", fmt.Errorf("wrong number params: %v", o)
-		}
-		return args[0] + " in " + args[1], nil
-	}
-	return "", fmt.Errorf("function %s neither identifier nor operator", name)
+	return exprCall(name, args...), nil
 }
 
 func (r *runConfig) TestDecl(t *testing.T, decl *exprpb.Decl) {
 	switch d := decl.DeclKind.(type) {
 	case *exprpb.Decl_Ident:
 		// For identifiers, the name itself is a suitable program.
-		err := r.runProg(decl.Name, decl.Name, verifyIdentifier)
+		prog := genExpr(exprIdent(decl.Name))
+		err := r.runProg(decl.Name, prog, verifyIdentifier)
 		if err != nil {
 			t.Error(err)
 		}
 	case *exprpb.Decl_Function:
 		for _, o := range d.Function.Overloads {
 			t.Run(o.OverloadId, func (tt *testing.T) {
-				prog, err := genExprOverload(decl.Name, o)
+				g, err := overloadExpr(decl.Name, o)
 				if err != nil {
 					tt.Fatal(err)
 				}
-				err = r.runProg(o.OverloadId, prog, verifyOverload)
+				err = r.runProg(o.OverloadId, genExpr(g), verifyOverload)
 				if err != nil {
 					tt.Error(err)
 				}
@@ -261,34 +300,15 @@ func (r *runConfig) TestDecl(t *testing.T, decl *exprpb.Decl) {
 	}
 }
 
-func (r *runConfig) runProg(name, prog string, ok verifier) error {
-	// Parse
-	preq := exprpb.ParseRequest{
-		CelSource:	prog,
-		SourceLocation:	"test",
+func (r *runConfig) runProg(name string, prog *exprpb.Expr, ok verifier) error {
+	parsedExpr := &exprpb.ParsedExpr{
+		Expr: prog,
+		SourceInfo: &exprpb.SourceInfo{},
 	}
-	pres, err := r.parseClient.Parse(context.Background(), &preq)
-	if err != nil {
-		return fmt.Errorf("%s: Fatal parse RPC error: %s %v", name, prog, err)
-	}
-	if pres == nil {
-		return fmt.Errorf("%s: Empty parse RPC response", name)
-	}
-	parsedExpr := pres.ParsedExpr
-	if parsedExpr == nil {
-		return fmt.Errorf("%s: Fatal parse errors: %s %v", name, prog, pres.Issues)
-	}
-	if parsedExpr.Expr == nil {
-		return fmt.Errorf("%s: parse returned empty root expression", name)
-	}
-
-	// Skip the check phase - we're not testing the checker.
-
-	// Eval
 	ereq := exprpb.EvalRequest{
 		ExprKind:  &exprpb.EvalRequest_ParsedExpr{ParsedExpr: parsedExpr},
 	}
-	eres, err := r.evalClient.Eval(context.Background(), &ereq)
+	eres, err := r.client.Eval(context.Background(), &ereq)
 	if err != nil {
 		return fmt.Errorf("fatal eval RPC error for %s: %v", name, err)
 	}
