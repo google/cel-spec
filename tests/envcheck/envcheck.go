@@ -65,7 +65,7 @@ import (
 
 // runConfig holds the client stub for the server for the runtime.
 type runConfig struct {
-	client  *celrpc.ConfClient
+	client *celrpc.ConfClient
 }
 
 var (
@@ -95,7 +95,7 @@ var exprNil exprGen = func(id int64) (*exprpb.Expr, int64) {
 
 // exprIdent generates an Ident expression.
 func exprIdent(name string) exprGen {
-	return func (id int64) (*exprpb.Expr, int64) {
+	return func(id int64) (*exprpb.Expr, int64) {
 		return &exprpb.Expr{
 			Id: id,
 			ExprKind: &exprpb.Expr_IdentExpr{
@@ -109,9 +109,9 @@ func exprIdent(name string) exprGen {
 
 // exprConst generates a Constant (literal) expression.
 func exprConst(c *exprpb.Constant) exprGen {
-	return func (id int64) (*exprpb.Expr, int64) {
+	return func(id int64) (*exprpb.Expr, int64) {
 		return &exprpb.Expr{
-			Id: id,
+			Id:       id,
 			ExprKind: &exprpb.Expr_ConstExpr{ConstExpr: c},
 		}, id + 1
 	}
@@ -123,8 +123,8 @@ func exprCall(f string, args ...exprGen) exprGen {
 }
 
 // exprCallTarget generates a Call expression with the given target and arguments.
-func exprCallTarget(f string, target exprGen,  args ...exprGen) exprGen {
-	return func (id int64) (*exprpb.Expr, int64) {
+func exprCallTarget(f string, target exprGen, args ...exprGen) exprGen {
+	return func(id int64) (*exprpb.Expr, int64) {
 		tExp, id := target(id)
 		var argExp []*exprpb.Expr
 		for _, arg := range args {
@@ -136,9 +136,9 @@ func exprCallTarget(f string, target exprGen,  args ...exprGen) exprGen {
 			Id: id,
 			ExprKind: &exprpb.Expr_CallExpr{
 				CallExpr: &exprpb.Expr_Call{
-					Target: tExp,
+					Target:   tExp,
 					Function: f,
-					Args: argExp,
+					Args:     argExp,
 				},
 			},
 		}, id + 1
@@ -175,20 +175,13 @@ var emptyMap = exprEmptyStruct("")
 
 // Generators for zero-ish constants.
 var (
-	zeroConstBool =
-		exprConst(&exprpb.Constant{ConstantKind: &exprpb.Constant_BoolValue{}})
-	zeroConstInt =
-		exprConst(&exprpb.Constant{ConstantKind: &exprpb.Constant_Int64Value{}})
-	zeroConstUint =
-		exprConst(&exprpb.Constant{ConstantKind: &exprpb.Constant_Uint64Value{}})
-	zeroConstDouble =
-		exprConst(&exprpb.Constant{ConstantKind: &exprpb.Constant_DoubleValue{}})
-	zeroConstString =
-		exprConst(&exprpb.Constant{ConstantKind: &exprpb.Constant_StringValue{}})
-	zeroConstBytes =
-		exprConst(&exprpb.Constant{ConstantKind: &exprpb.Constant_BytesValue{}})
-	zeroConstNull =
-		exprConst(&exprpb.Constant{ConstantKind: &exprpb.Constant_NullValue{}})
+	zeroConstBool   = exprConst(&exprpb.Constant{ConstantKind: &exprpb.Constant_BoolValue{}})
+	zeroConstInt    = exprConst(&exprpb.Constant{ConstantKind: &exprpb.Constant_Int64Value{}})
+	zeroConstUint   = exprConst(&exprpb.Constant{ConstantKind: &exprpb.Constant_Uint64Value{}})
+	zeroConstDouble = exprConst(&exprpb.Constant{ConstantKind: &exprpb.Constant_DoubleValue{}})
+	zeroConstString = exprConst(&exprpb.Constant{ConstantKind: &exprpb.Constant_StringValue{}})
+	zeroConstBytes  = exprConst(&exprpb.Constant{ConstantKind: &exprpb.Constant_BytesValue{}})
+	zeroConstNull   = exprConst(&exprpb.Constant{ConstantKind: &exprpb.Constant_NullValue{}})
 )
 
 // zeroValuePrimitive returns a generator for the zero-ish value of a primitive type.
@@ -294,7 +287,7 @@ func (r *runConfig) TestDecl(t *testing.T, decl *exprpb.Decl) {
 
 	case *exprpb.Decl_Function:
 		for _, o := range d.Function.Overloads {
-			t.Run(o.OverloadId, func (tt *testing.T) {
+			t.Run(o.OverloadId, func(tt *testing.T) {
 				g, err := overloadExpr(decl.Name, o)
 				if err != nil {
 					tt.Fatal(err)
@@ -317,11 +310,11 @@ func (r *runConfig) TestDecl(t *testing.T, decl *exprpb.Decl) {
 // runProg evaluates a given expression on the runtime server and returns the result.
 func (r *runConfig) runProg(name string, prog *exprpb.Expr) (*exprpb.ExprValue, error) {
 	parsedExpr := &exprpb.ParsedExpr{
-		Expr: prog,
+		Expr:       prog,
 		SourceInfo: &exprpb.SourceInfo{},
 	}
 	ereq := exprpb.EvalRequest{
-		ExprKind:  &exprpb.EvalRequest_ParsedExpr{ParsedExpr: parsedExpr},
+		ExprKind: &exprpb.EvalRequest_ParsedExpr{ParsedExpr: parsedExpr},
 	}
 	eres, err := r.client.Eval(context.Background(), &ereq)
 	if err != nil {

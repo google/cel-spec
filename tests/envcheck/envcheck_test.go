@@ -15,8 +15,8 @@ import (
 )
 
 var (
-	flagServerCmd      string
-	rc                 *runConfig
+	flagServerCmd string
+	rc            *runConfig
 )
 
 func init() {
@@ -89,7 +89,7 @@ func TestEnv(t *testing.T) {
 		}
 		t.Logf("Running tests in file %v\n", envFile.Name)
 		for _, decl := range envFile.Decl {
-			t.Run(decl.Name, func (tt *testing.T) {
+			t.Run(decl.Name, func(tt *testing.T) {
 				rc.TestDecl(tt, decl)
 			})
 		}
