@@ -1,52 +1,66 @@
-/*
-Package envcheck runs CEL conformance tests to check that the runtime
-supports a set of functions.  A set of checker declarations is scanned
-to produce a set of CEL parse trees, each of which is then sent to
-the runtime.
+// Copyright 2019 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
-Identifier declarations are compiled to an expression of just that
-identifiers.  For instance, the "int" type identifier produces:
-
-	int
-
-Function declarations are compiled to a separate expression for each
-overload.  The expression is an invocation of the overload with "zeroish"
-arguments of the appropriate type.  The zeroish arguments are:
-
-	int		0
-	uint		0u
-	double		0.0
-	bool		false
-	string		""
-	bytes		b""
-	null_type	null
-	type		type
-	list<A>		[]
-	map<A,B>	{}
-	enum E		0
-	message M	M{}
-
-For instance, the "_/_" function with overloads
-
-	_/_: (int, int) -> int
-	_/_: (uint, uint) -> uint
-	_/_: (double, double) -> double
-
-compiles to the expressions
-
-	(0)/(0)
-	(0u)/(0u)
-	(0.0)/(0.0)
-
-which are then evaluated.
-
-This test suite does not check that the overloads are implemented
-correctly, only that they are implemented at all.  The test will pass
-unless the expression evaluates (with no bindings) to any result or
-error other than "no_matching_overload".  For instance, the first two
-expressions for _/_ will generate division-by-zero errors, but this will
-pass the test.
-*/
+// Package envcheck checks runtime support of declarations.
+//
+// A set of checker declarations is scanned to produce a set of CEL
+// parse trees, each of which is then sent to the runtime.
+//
+// Identifier declarations are compiled to an expression of just that
+// identifiers.  For instance, the "int" type identifier produces:
+//
+// 	int
+//
+// Function declarations are compiled to a separate expression for
+// each overload.  The expression is an invocation of the overload with
+// "zeroish" arguments of the appropriate type.  The zeroish arguments
+// are:
+//
+// 	int		0
+// 	uint		0u
+// 	double		0.0
+// 	bool		false
+// 	string		""
+// 	bytes		b""
+// 	null_type	null
+// 	type		type
+// 	list<A>		[]
+// 	map<A,B>	{}
+// 	enum E		0
+// 	message M	M{}
+//
+// For instance, the "_/_" function with overloads
+//
+// 	_/_: (int, int) -> int
+// 	_/_: (uint, uint) -> uint
+// 	_/_: (double, double) -> double
+//
+// compiles to the expressions
+//
+// 	(0)/(0)
+// 	(0u)/(0u)
+// 	(0.0)/(0.0)
+//
+// which are then evaluated.
+//
+// This test suite does not check that the overloads are implemented
+// correctly, only that they are implemented at all.  The test will pass
+// unless the expression evaluates (with no bindings) to any result or
+// error other than "no_matching_overload".  For instance, the first
+// two expressions for _/_ will generate division-by-zero errors, but
+// this will pass the test.
+//
 package envcheck
 
 import (
