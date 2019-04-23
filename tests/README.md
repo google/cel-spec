@@ -18,6 +18,9 @@ We currently have the following test suites:
 - *[simple](simple)* The _simple_ tests check the end-to-end
   parse-(check)-eval pipeline for fully-specified expressions,
   inputs, and output without parse or check failures.
+- *[envcheck](envcheck)* The _envcheck_ suite confirms that the checker and
+  runtime support a set of functions and overloads (though we don't check
+  the behavior of these functions in this suite).
 - Test suites more suitable for other kinds of validation may be introduced
   later.
 
