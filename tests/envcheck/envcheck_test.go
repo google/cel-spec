@@ -16,16 +16,14 @@ import (
 
 var (
 	flagServerCmd      string
-	flagParseServerCmd string
-	flagEvalServerCmd  string
 	rc                 *runConfig
 )
 
 func init() {
-	flag.StringVar(&flagServerCmd, "server", "", "path to binary for server when no phase-specific server defined")
+	flag.StringVar(&flagServerCmd, "server", "", "path to binary for eval-phase server")
 }
 
-// Server binaries specified by flags
+// initRunConfig launches the server binaries specified by the flag.
 func initRunConfig() (*runConfig, error) {
 	// Find the server binary for each phase
 	cmd := flagServerCmd
@@ -41,7 +39,7 @@ func initRunConfig() (*runConfig, error) {
 	return &runConfig{client: cli}, nil
 }
 
-// File path specified by flag
+// parseEnvFile parses the given file which should be the textproto of an Env message.
 func parseEnvFile(filename string) (*envpb.Env, error) {
 	bytes, err := ioutil.ReadFile(filename)
 	if err != nil {
@@ -56,6 +54,7 @@ func parseEnvFile(filename string) (*envpb.Env, error) {
 	return &pb, nil
 }
 
+// TestMain sets up the conformance test server.
 // Usage: --server=<path-to-binary> testfile1 ...
 func TestMain(m *testing.M) {
 	flag.Parse()
@@ -75,6 +74,7 @@ func TestMain(m *testing.M) {
 	os.Exit(m.Run())
 }
 
+// TestEnv runs the envcheck test files specified no the command line.
 func TestEnv(t *testing.T) {
 	// Special case to handle test invocation without args. See TestMain()
 	// early return comment.

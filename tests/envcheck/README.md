@@ -8,12 +8,8 @@ for a runtime.
 
 The envcheck suite is executed by the _driver_ binary in `envcheck_test.go`.
 This binary is invoked with one or more of the following flags:
-- `--server` Path to the default ConformanceService server binary, to be used
-  when no phase-specific server is specified.
-- `--parse_server` Path to the ConformanceService server binary to use for
-  parsing.
-- `--eval_server` Path to the ConformanceService server binary to use for
-  evaluation.
+- `--server` Path to the default ConformanceService server binary, which must
+  support the Eval phase.
 
 The remaining arguments are paths to data files containing the declarations.
 
@@ -32,12 +28,12 @@ sh_test(
     args = [
         "$(location @com_google_cel_spec//tests/envcheck:envcheck_test)",
         "--server=$(location //server/main:cel_server)",
-        "$(location @com_google_cel_spec//tests/envcheck:testdata/cel-0.1.0.textproto)",
+        "$(location @com_google_cel_spec//tests/envcheck:testdata/go-0.1.0.textproto)",
     ],
     data = [
         "@com_google_cel_spec//tests/simple:simple_test",
         "//server/main:cel_server",
-        "@com_google_cel_spec//tests/envcheck:testdata/cel-0.1.0.textproto",
+        "@com_google_cel_spec//tests/envcheck:testdata/go-0.1.0.textproto",
     ],
 )
 ```
@@ -47,4 +43,5 @@ see what functions or constants might have slipped between the cracks and
 implement them.  Other test suites will have more detailed tests that actually
 verify behavior and contents.  These more detailed suites should be used
 in the long run.
+
 See [testdata](testdata) for a description of the individual test files.

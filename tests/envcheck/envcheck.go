@@ -1,8 +1,8 @@
 /*
-Package envcheck runs CEL conformance tests to check that the
-runtime supports a set of functions.  A set of checker declarations
-is scanned to produce a set of CEL expressions, each of which is then
-compiled and sent to the runtime.
+Package envcheck runs CEL conformance tests to check that the runtime
+supports a set of functions.  A set of checker declarations is scanned
+to produce a set of CEL parse trees, each of which is then sent to
+the runtime.
 
 Identifier declarations are compiled to an expression of just that
 identifiers.  For instance, the "int" type identifier produces:
@@ -40,11 +40,12 @@ compiles to the expressions
 
 which are then evaluated.
 
-This test suite does not check that the overloads are implemented correctly,
-only that they are implemented at all.  The test will pass unless the
-expression evaluates (with no bindings) to any result or error other than
-"no_matching_overload".  For instance, the first two expressions for _/_
-will generate division-by-zero errors, but this will pass the test.
+This test suite does not check that the overloads are implemented
+correctly, only that they are implemented at all.  The test will pass
+unless the expression evaluates (with no bindings) to any result or
+error other than "no_matching_overload".  For instance, the first two
+expressions for _/_ will generate division-by-zero errors, but this will
+pass the test.
 */
 package envcheck
 
@@ -62,14 +63,13 @@ import (
 	spb "google.golang.org/genproto/googleapis/rpc/status"
 )
 
-// runConfig holds client stubs for the servers to use
-// for the various phases.  Some phases might use the
-// same server.
+// runConfig holds the client stub for the server for the runtime.
 type runConfig struct {
 	client  *celrpc.ConfClient
 }
 
 var (
+	// noOverload holds the proto representation of the "no_matching_overload" error.
 	noOverload = &exprpb.ExprValue{Kind: &exprpb.ExprValue_Error{
 		Error: &exprpb.ErrorSet{Errors: []*spb.Status{
 			status.New(codes.InvalidArgument, "no_matching_overload").Proto(),
@@ -77,29 +77,23 @@ var (
 	}}
 )
 
-// A verifier returns true if the overload or identifier is supported.
-type verifier func(*exprpb.ExprValue) bool
-
-func verifyIdentifier(result *exprpb.ExprValue) bool {
-	_, ok := result.Kind.(*exprpb.ExprValue_Value)
-	return ok
-}
-
-func verifyOverload(result *exprpb.ExprValue) bool {
-	return !proto.Equal(result, noOverload)
-}
-
+// exprGen is an expression generator.  It accepts the next expression Id to use and returns
+// an Expr proto and the next unused expression Id.
 type exprGen func(int64) (*exprpb.Expr, int64)
 
+// genExpr runs an expression generator with 0 as the first expression Id.
 func genExpr(gen exprGen) *exprpb.Expr {
 	e, _ := gen(int64(0))
 	return e
 }
 
+// exprNil generates a nil pointer as its Expr, not consuming any expression Ids.
+// It's useful for uniform handling of nil values when construction Exprs.
 var exprNil exprGen = func(id int64) (*exprpb.Expr, int64) {
 	return nil, id
 }
 
+// exprIdent generates an Ident expression.
 func exprIdent(name string) exprGen {
 	return func (id int64) (*exprpb.Expr, int64) {
 		return &exprpb.Expr{
@@ -113,6 +107,7 @@ func exprIdent(name string) exprGen {
 	}
 }
 
+// exprConst generates a Constant (literal) expression.
 func exprConst(c *exprpb.Constant) exprGen {
 	return func (id int64) (*exprpb.Expr, int64) {
 		return &exprpb.Expr{
@@ -122,7 +117,13 @@ func exprConst(c *exprpb.Constant) exprGen {
 	}
 }
 
-func exprCallInternal(f string, target exprGen, args ...exprGen) exprGen {
+// exprCall generates a Call expression with the given arguments.
+func exprCall(f string, args ...exprGen) exprGen {
+	return exprCallTarget(f, exprNil, args...)
+}
+
+// exprCallTarget generates a Call expression with the given target and arguments.
+func exprCallTarget(f string, target exprGen,  args ...exprGen) exprGen {
 	return func (id int64) (*exprpb.Expr, int64) {
 		tExp, id := target(id)
 		var argExp []*exprpb.Expr
@@ -144,14 +145,7 @@ func exprCallInternal(f string, target exprGen, args ...exprGen) exprGen {
 	}
 }
 
-func exprCall(f string, args ...exprGen) exprGen {
-	return exprCallInternal(f, exprNil, args...)
-}
-
-func exprCallTarget(f string, target exprGen,  args ...exprGen) exprGen {
-	return exprCallInternal(f, target, args...)
-}
-
+// emptyList generates an empty CreateList expression.
 var emptyList exprGen = func(id int64) (*exprpb.Expr, int64) {
 	return &exprpb.Expr{
 		Id: id,
@@ -161,7 +155,9 @@ var emptyList exprGen = func(id int64) (*exprpb.Expr, int64) {
 	}, id + 1
 }
 
-func exprCreateEmptyStruct(messageName string) exprGen {
+// exprEmptyStruct generates an empty CreateStruct expression.  The messageName may be nil,
+// indicating an empty map.
+func exprEmptyStruct(messageName string) exprGen {
 	return func(id int64) (*exprpb.Expr, int64) {
 		return &exprpb.Expr{
 			Id: id,
@@ -174,8 +170,10 @@ func exprCreateEmptyStruct(messageName string) exprGen {
 	}
 }
 
-var emptyMap = exprCreateEmptyStruct("")
+// emptyMap generates a CreateStruct expression for an empty map.
+var emptyMap = exprEmptyStruct("")
 
+// Generators for zero-ish constants.
 var (
 	zeroConstBool =
 		exprConst(&exprpb.Constant{ConstantKind: &exprpb.Constant_BoolValue{}})
@@ -193,6 +191,7 @@ var (
 		exprConst(&exprpb.Constant{ConstantKind: &exprpb.Constant_NullValue{}})
 )
 
+// zeroValuePrimitive returns a generator for the zero-ish value of a primitive type.
 func zeroValuePrimitive(p exprpb.Type_PrimitiveType) (exprGen, error) {
 	switch p {
 	case exprpb.Type_BOOL:
@@ -212,6 +211,7 @@ func zeroValuePrimitive(p exprpb.Type_PrimitiveType) (exprGen, error) {
 	}
 }
 
+// zeroValueWellKnown returns a generator for the zero-ish value of a well-known type.
 func zeroValueWellKnown(w exprpb.Type_WellKnownType) (exprGen, error) {
 	switch w {
 	case exprpb.Type_ANY:
@@ -225,6 +225,7 @@ func zeroValueWellKnown(w exprpb.Type_WellKnownType) (exprGen, error) {
 	}
 }
 
+// zeroValue returns a generator for the zero-ish value of a Type.
 func zeroValue(tp *exprpb.Type) (exprGen, error) {
 	switch t := tp.TypeKind.(type) {
 	case *exprpb.Type_Dyn:
@@ -244,7 +245,7 @@ func zeroValue(tp *exprpb.Type) (exprGen, error) {
 	case *exprpb.Type_Function:
 		return nil, fmt.Errorf("bad_type_function")
 	case *exprpb.Type_MessageType:
-		return exprCreateEmptyStruct(t.MessageType), nil
+		return exprEmptyStruct(t.MessageType), nil
 	case *exprpb.Type_TypeParam:
 		return zeroConstInt, nil
 	case *exprpb.Type_Type:
@@ -258,6 +259,7 @@ func zeroValue(tp *exprpb.Type) (exprGen, error) {
 	}
 }
 
+// overloadExpr returns the generator for a call to a given overload with zero-ish arguments.
 func overloadExpr(name string, o *exprpb.Decl_FunctionDecl_Overload) (exprGen, error) {
 	var args []exprGen
 	for _, param := range o.Params {
@@ -273,15 +275,23 @@ func overloadExpr(name string, o *exprpb.Decl_FunctionDecl_Overload) (exprGen, e
 	return exprCall(name, args...), nil
 }
 
+// TestDecl checks whether the runtime supports a given declaration by generating
+// a test expression and running it.
 func (r *runConfig) TestDecl(t *testing.T, decl *exprpb.Decl) {
 	switch d := decl.DeclKind.(type) {
 	case *exprpb.Decl_Ident:
 		// For identifiers, the name itself is a suitable program.
 		prog := genExpr(exprIdent(decl.Name))
-		err := r.runProg(decl.Name, prog, verifyIdentifier)
+		result, err := r.runProg(decl.Name, prog)
 		if err != nil {
-			t.Error(err)
+			t.Fatal(err)
 		}
+		// Any value is okay, any error is a problem.
+		_, ok := result.Kind.(*exprpb.ExprValue_Value)
+		if !ok {
+			t.Errorf("got %v, want value", result)
+		}
+
 	case *exprpb.Decl_Function:
 		for _, o := range d.Function.Overloads {
 			t.Run(o.OverloadId, func (tt *testing.T) {
@@ -289,9 +299,13 @@ func (r *runConfig) TestDecl(t *testing.T, decl *exprpb.Decl) {
 				if err != nil {
 					tt.Fatal(err)
 				}
-				err = r.runProg(o.OverloadId, genExpr(g), verifyOverload)
+				result, err := r.runProg(o.OverloadId, genExpr(g))
 				if err != nil {
-					tt.Error(err)
+					tt.Fatal(err)
+				}
+				// Only the "no_matching_overload" error is a problem.
+				if proto.Equal(result, noOverload) {
+					tt.Error("no matching overload")
 				}
 			})
 		}
@@ -300,7 +314,8 @@ func (r *runConfig) TestDecl(t *testing.T, decl *exprpb.Decl) {
 	}
 }
 
-func (r *runConfig) runProg(name string, prog *exprpb.Expr, ok verifier) error {
+// runProg evaluates a given expression on the runtime server and returns the result.
+func (r *runConfig) runProg(name string, prog *exprpb.Expr) (*exprpb.ExprValue, error) {
 	parsedExpr := &exprpb.ParsedExpr{
 		Expr: prog,
 		SourceInfo: &exprpb.SourceInfo{},
@@ -310,13 +325,10 @@ func (r *runConfig) runProg(name string, prog *exprpb.Expr, ok verifier) error {
 	}
 	eres, err := r.client.Eval(context.Background(), &ereq)
 	if err != nil {
-		return fmt.Errorf("fatal eval RPC error for %s: %v", name, err)
+		return nil, fmt.Errorf("fatal eval RPC error for %s: %v", name, err)
 	}
 	if eres == nil || eres.Result == nil {
-		return fmt.Errorf("empty eval response for %s", name)
+		return nil, fmt.Errorf("empty eval response for %s", name)
 	}
-	if !ok(eres.Result) {
-		return fmt.Errorf("unsupported: %s", name)
-	}
-	return nil
+	return eres.Result, nil
 }
