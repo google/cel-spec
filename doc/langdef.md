@@ -719,7 +719,6 @@ Regular expressions follow the [RE2 syntax](https://github.com/google/re2/wiki/S
 ### List of Standard Definitions
 
 <!-- BEGIN GENERATED DECL TABLE; DO NOT EDIT BELOW -->
-
 <table style="width=100%" border="1">
   <col width="15%">
   <col width="40%">
@@ -828,7 +827,7 @@ Regular expressions follow the [RE2 syntax](https://github.com/google/re2/wiki/S
     </td>
   </tr>
   <tr>
-    <th rowspan="6">
+    <th rowspan="9">
       _+_
     </th>
     <td>
@@ -879,7 +878,31 @@ Regular expressions follow the [RE2 syntax](https://github.com/google/re2/wiki/S
     </td>
   </tr>
   <tr>
-    <th rowspan="3">
+    <td>
+      (google.protobuf.Timestamp, google.protobuf.Duration) -> google.protobuf.Timestamp
+    </td>
+    <td>
+      arithmetic
+    </td>
+  </tr>
+  <tr>
+    <td>
+      (google.protobuf.Duration, google.protobuf.Timestamp) -> google.protobuf.Timestamp
+    </td>
+    <td>
+      arithmetic
+    </td>
+  </tr>
+  <tr>
+    <td>
+      (google.protobuf.Duration, google.protobuf.Duration) -> google.protobuf.Duration
+    </td>
+    <td>
+      arithmetic
+    </td>
+  </tr>
+  <tr>
+    <th rowspan="6">
       _-_
     </th>
     <td>
@@ -900,6 +923,30 @@ Regular expressions follow the [RE2 syntax](https://github.com/google/re2/wiki/S
   <tr>
     <td>
       (double, double) -> double
+    </td>
+    <td>
+      arithmetic
+    </td>
+  </tr>
+  <tr>
+    <td>
+      (google.protobuf.Timestamp, google.protobuf.Timestamp) -> google.protobuf.Duration
+    </td>
+    <td>
+      arithmetic
+    </td>
+  </tr>
+  <tr>
+    <td>
+      (google.protobuf.Timestamp, google.protobuf.Duration) -> google.protobuf.Timestamp
+    </td>
+    <td>
+      arithmetic
+    </td>
+  </tr>
+  <tr>
+    <td>
+      (google.protobuf.Duration, google.protobuf.Duration) -> google.protobuf.Duration
     </td>
     <td>
       arithmetic
@@ -933,7 +980,7 @@ Regular expressions follow the [RE2 syntax](https://github.com/google/re2/wiki/S
     </td>
   </tr>
   <tr>
-    <th rowspan="6">
+    <th rowspan="8">
       _<=_
     </th>
     <td>
@@ -984,7 +1031,23 @@ Regular expressions follow the [RE2 syntax](https://github.com/google/re2/wiki/S
     </td>
   </tr>
   <tr>
-    <th rowspan="6">
+    <td>
+      (google.protobuf.Timestamp, google.protobuf.Timestamp) -> bool
+    </td>
+    <td>
+      ordering
+    </td>
+  </tr>
+  <tr>
+    <td>
+      (google.protobuf.Duration, google.protobuf.Duration) -> bool
+    </td>
+    <td>
+      ordering
+    </td>
+  </tr>
+  <tr>
+    <th rowspan="8">
       _<_
     </th>
     <td>
@@ -1035,6 +1098,22 @@ Regular expressions follow the [RE2 syntax](https://github.com/google/re2/wiki/S
     </td>
   </tr>
   <tr>
+    <td>
+      (google.protobuf.Timestamp, google.protobuf.Timestamp) -> bool
+    </td>
+    <td>
+      ordering
+    </td>
+  </tr>
+  <tr>
+    <td>
+      (google.protobuf.Duration, google.protobuf.Duration) -> bool
+    </td>
+    <td>
+      ordering
+    </td>
+  </tr>
+  <tr>
     <th rowspan="1">
       _==_
     </th>
@@ -1046,7 +1125,7 @@ Regular expressions follow the [RE2 syntax](https://github.com/google/re2/wiki/S
     </td>
   </tr>
   <tr>
-    <th rowspan="6">
+    <th rowspan="8">
       _>=_
     </th>
     <td>
@@ -1097,7 +1176,23 @@ Regular expressions follow the [RE2 syntax](https://github.com/google/re2/wiki/S
     </td>
   </tr>
   <tr>
-    <th rowspan="6">
+    <td>
+      (google.protobuf.Timestamp, google.protobuf.Timestamp) -> bool
+    </td>
+    <td>
+      ordering
+    </td>
+  </tr>
+  <tr>
+    <td>
+      (google.protobuf.Duration, google.protobuf.Duration) -> bool
+    </td>
+    <td>
+      ordering
+    </td>
+  </tr>
+  <tr>
+    <th rowspan="8">
       _>_
     </th>
     <td>
@@ -1148,6 +1243,22 @@ Regular expressions follow the [RE2 syntax](https://github.com/google/re2/wiki/S
     </td>
   </tr>
   <tr>
+    <td>
+      (google.protobuf.Timestamp, google.protobuf.Timestamp) -> bool
+    </td>
+    <td>
+      ordering
+    </td>
+  </tr>
+  <tr>
+    <td>
+      (google.protobuf.Duration, google.protobuf.Duration) -> bool
+    </td>
+    <td>
+      ordering
+    </td>
+  </tr>
+  <tr>
     <th rowspan="1">
       _?_:_
     </th>
@@ -1178,8 +1289,19 @@ Regular expressions follow the [RE2 syntax](https://github.com/google/re2/wiki/S
     </td>
   </tr>
   <tr>
+    <th rowspan="1">
+      @not_strictly_false
+    </th>
+    <td>
+      (bool) -> bool
+    </td>
+    <td>
+      false if argument is false, true otherwise (including errors and unknowns)
+    </td>
+  </tr>
+  <tr>
     <th rowspan="2">
-      _in_
+      @in
     </th>
     <td>
       (A, list(A)) -> bool
@@ -1238,6 +1360,17 @@ Regular expressions follow the [RE2 syntax](https://github.com/google/re2/wiki/S
     </td>
   </tr>
   <tr>
+    <th rowspan="1">
+      contains
+    </th>
+    <td>
+      string.(string) -> bool
+    </td>
+    <td>
+      tests whether the string operand contains the substring
+    </td>
+  </tr>
+  <tr>
     <th rowspan="4">
       double
     </th>
@@ -1274,13 +1407,43 @@ Regular expressions follow the [RE2 syntax](https://github.com/google/re2/wiki/S
   </tr>
   <tr>
     <th rowspan="1">
+      duration
+    </th>
+    <td>
+      (string) -> google.protobuf.Duration
+    </td>
+    <td>
+      type conversion, duration should be end with "s", which stands for seconds
+    </td>
+  </tr>
+  <tr>
+    <th rowspan="2">
       dyn
     </th>
+    <td>
+      type(dyn)
+    </td>
+    <td>
+      type denotation
+    </td>
+  </tr>
+  <tr>
     <td>
       (A) -> dyn
     </td>
     <td>
       type conversion
+    </td>
+  </tr>
+  <tr>
+    <th rowspan="1">
+      endsWith
+    </th>
+    <td>
+      string.(string) -> bool
+    </td>
+    <td>
+      tests whether the string operand ends with the suffix argument
     </td>
   </tr>
   <tr>
@@ -1299,7 +1462,7 @@ Regular expressions follow the [RE2 syntax](https://github.com/google/re2/wiki/S
       google.protobuf.Timestamp.(string) -> int
     </td>
     <td>
-      get day of month from the date with timezone, zero-based indexing
+      get day of month from the date with timezone, one-based indexing
     </td>
   </tr>
   <tr>
@@ -1421,7 +1584,7 @@ Regular expressions follow the [RE2 syntax](https://github.com/google/re2/wiki/S
       google.protobuf.Timestamp.(string) -> int
     </td>
     <td>
-      get milliseconds from the date in UTC, 0-999
+      get milliseconds from the date with timezone, 0-999
     </td>
   </tr>
   <tr>
@@ -1506,26 +1669,7 @@ Regular expressions follow the [RE2 syntax](https://github.com/google/re2/wiki/S
     </td>
   </tr>
   <tr>
-    <th rowspan="2">
-      in
-    </th>
-    <td>
-      (A, list(A)) -> bool
-    </td>
-    <td>
-      list membership
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (A, map(A, B)) -> bool
-    </td>
-    <td>
-      map key membership
-    </td>
-  </tr>
-  <tr>
-    <th rowspan="4">
+    <th rowspan="5">
       int
     </th>
     <td>
@@ -1560,11 +1704,19 @@ Regular expressions follow the [RE2 syntax](https://github.com/google/re2/wiki/S
     </td>
   </tr>
   <tr>
+    <td>
+      (google.protobuf.Timestamp) -> int
+    </td>
+    <td>
+      Convert timestamp to int64 in seconds since Unix epoch.
+    </td>
+  </tr>
+  <tr>
     <th rowspan="2">
       list
     </th>
     <td>
-      (type(A)) -> type(list(A))
+      type(list(dyn))
     </td>
     <td>
       type denotation
@@ -1583,7 +1735,7 @@ Regular expressions follow the [RE2 syntax](https://github.com/google/re2/wiki/S
       map
     </th>
     <td>
-      (type(A), type(B)) -> type(map(A, B))
+      type(map(dyn, dyn))
     </td>
     <td>
       type denotation
@@ -1598,7 +1750,7 @@ Regular expressions follow the [RE2 syntax](https://github.com/google/re2/wiki/S
     </td>
   </tr>
   <tr>
-    <th rowspan="1">
+    <th rowspan="2">
       matches
     </th>
     <td>
@@ -1606,6 +1758,25 @@ Regular expressions follow the [RE2 syntax](https://github.com/google/re2/wiki/S
     </td>
     <td>
       matches first argument against regular expression in second argument
+    </td>
+  </tr>
+  <tr>
+    <td>
+      string.(string) -> bool
+    </td>
+    <td>
+      matches the self argument against regular expression in first argument
+    </td>
+  </tr>
+  <tr>
+    <th rowspan="1">
+      null_type
+    </th>
+    <td>
+      type(null)
+    </td>
+    <td>
+      type denotation
     </td>
   </tr>
   <tr>
@@ -1641,6 +1812,17 @@ Regular expressions follow the [RE2 syntax](https://github.com/google/re2/wiki/S
     </td>
     <td>
       map size
+    </td>
+  </tr>
+  <tr>
+    <th rowspan="1">
+      startsWith
+    </th>
+    <td>
+      string.(string) -> bool
+    </td>
+    <td>
+      tests whether the string operand starts with the prefix argument
     </td>
   </tr>
   <tr>
@@ -1688,10 +1870,29 @@ Regular expressions follow the [RE2 syntax](https://github.com/google/re2/wiki/S
   </tr>
   <tr>
     <th rowspan="1">
+      timestamp
+    </th>
+    <td>
+      (string) -> google.protobuf.Timestamp
+    </td>
+    <td>
+      Type conversion of strings to timestamps according to RFC3339. Example: "1972-01-01T10:00:20.021-05:00"
+    </td>
+  </tr>
+  <tr>
+    <th rowspan="2">
       type
     </th>
     <td>
-      (A) -> type(A)
+      type(dyn)
+    </td>
+    <td>
+      type denotation
+    </td>
+  </tr>
+  <tr>
+    <td>
+      (A) -> type(dyn)
     </td>
     <td>
       returns type of value
@@ -1733,5 +1934,4 @@ Regular expressions follow the [RE2 syntax](https://github.com/google/re2/wiki/S
     </td>
   </tr>
 </table>
-
 <!-- END GENERATED DECL TABLE; DO NOT EDIT ABOVE -->
