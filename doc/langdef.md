@@ -1289,19 +1289,8 @@ Regular expressions follow the [RE2 syntax](https://github.com/google/re2/wiki/S
     </td>
   </tr>
   <tr>
-    <th rowspan="1">
-      @not_strictly_false
-    </th>
-    <td>
-      (bool) -> bool
-    </td>
-    <td>
-      false if argument is false, true otherwise (including errors and unknowns)
-    </td>
-  </tr>
-  <tr>
     <th rowspan="2">
-      @in
+      in
     </th>
     <td>
       (A, list(A)) -> bool
