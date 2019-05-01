@@ -20,53 +20,6 @@ section {
   }
 }
 section {
-  name: "basic.textproto/self_eval_nonzeroish"
-  test {
-    name: "self_eval_map_twoitems"
-    description: "Map literals should be order independent for the checker. google/cel-go#156"
-    expr: '{"k1":"v1","k":"v"}'
-    value: {
-      map_value {
-        entries {
-          key: { string_value: "k" }
-          value: { string_value: "v" }
-        }
-        entries {
-          key: { string_value: "k1" }
-          value: { string_value: "v1" }
-        }
-      }
-    }
-  }
-}
-section {
-  name: "basic.textproto/variables"
-  description: "Namespaced identifiers."
-  test {
-    name: "self_eval_container_lookup"
-    expr: "y"
-    container: "x"
-    type_env: {
-      name: "x.y",
-      ident: { type: { primitive: BOOL } }
-    }
-    type_env: {
-      name: "y",
-      ident: { type: { primitive: BOOL } }
-    }
-    bindings: {
-      key: "x.y",
-      value: { value: { bool_value: true } }
-    }
-    bindings: {
-      key: "y",
-      value: { value: { bool_value: false } }
-    }
-    value: { bool_value: true }
-    # Current behavior in cel-go: value: { bool_value: false }
-  }
-}
-section {
   name: "comparisons.textproto/in_map_literal"
   test {
     name: "key_in_mixed_key_type_map_error"

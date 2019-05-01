@@ -124,6 +124,23 @@ section {
     }
   }
   test {
+    name: "self_eval_map_twoitems"
+    description: "Map literals should be order independent for the checker. google/cel-go#156"
+    expr: '{"k1":"v1","k":"v"}'
+    value: {
+      map_value {
+        entries {
+          key: { string_value: "k" }
+          value: { string_value: "v" }
+        }
+        entries {
+          key: { string_value: "k1" }
+          value: { string_value: "v1" }
+        }
+      }
+    }
+  }
+  test {
     name: "self_eval_bool_true"
     expr: "true"
     value: { bool_value: true }
@@ -162,4 +179,49 @@ section {
 section {
   name: "namespace"
   description: "Namespaced identifiers."
+  test {
+    name: "self_eval_container_lookup"
+    expr: "y"
+    container: "x"
+    type_env: {
+      name: "x.y",
+      ident: { type: { primitive: BOOL } }
+    }
+    type_env: {
+      name: "y",
+      ident: { type: { primitive: BOOL } }
+    }
+    bindings: {
+      key: "x.y",
+      value: { value: { bool_value: true } }
+    }
+    bindings: {
+      key: "y",
+      value: { value: { bool_value: false } }
+    }
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_eval_container_lookup_unchecked"
+    expr: "y"
+    container: "x"    
+    type_env: {
+      name: "x.y",
+      ident: { type: { primitive: BOOL } }
+    }
+    type_env: {
+      name: "y",
+      ident: { type: { primitive: BOOL } }
+    }
+    bindings: {
+      key: "x.y",
+      value: { value: { bool_value: true } }
+    }
+    bindings: {
+      key: "y",
+      value: { value: { bool_value: false } }
+    }
+    disable_check: true ## ensure unchecked ASTs resolve the same as checked ASTs
+    value: { bool_value: true }
+  }
 }
