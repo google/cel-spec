@@ -135,21 +135,29 @@ section {
     value: { bool_value: false }
   }
   test {
-    name: "not_eq_mixed_types"
+    name: "eq_mixed_types_error"
     description: "A mix of types fails during type checks but can't be captured in the conformance tests yet (See google/cel-go#155). Also, if you disable checks it yields {bool_value: false} where it should also yield an error"
     expr: "1.0 == 1"
     disable_check: true # need to make it fail in the evaluation phase
     eval_error : {
-      errors: { message: "found no matching overload for '_==_' applied to '(double, int)'" }
+      errors: { message: "no such overload" }
     }
   }
   test {
-    name: "not_eq_list_data_types"
+    name: "eq_list_elem_mixed_types_error"
     description: "A mix of types in a list fails during type checks. See #self_test_equals_mixed_types"
     expr: "[1] == [1.0]"
     disable_check: true # need to make it fail in the evaluation phase
     eval_error: {
-      errors: { message: "found no matching overload for '_==_' applied to '(list, list)'" }
+      errors: { message: "no such overload" }
+    }
+  }
+  test {
+    name: "eq_map_value_mixed_types_error"
+    description: "Mixed map value types yields error as key '1' values differed by type."
+    expr: "{'k':'v', 1:1} == {'k':'v', 1:'v1'}"
+    eval_error: {
+      errors: { message: "no such overload" }
     }
   }
 }
@@ -736,6 +744,64 @@ section {
     eval_error: {
       errors: { message: "no such overload" }
     }
+  }
+}
+section {
+  name: "in_list_literal"
+  description: "Set membership tests using list literals and the 'in' operator"
+  test {
+    name: "elem_not_in_empty_list"
+    expr: "'empty' in []"
+    value { bool_value: false }
+  }
+  test {
+    name: "elem_in_list"
+    expr: "'elem' in ['elem', 'elemA', 'elemB']"
+    value { bool_value: true }
+  }
+  test {
+    name: "elem_not_in_list"
+    expr: "'not' in ['elem1', 'elem2', 'elem3']"
+    value { bool_value: false }
+  }
+  test {
+    name: "elem_in_mixed_type_list"
+        description: "List elems are of mixed type, and since the elem is absent the result is error."
+    expr: "'elem' in [1, 'elem', 2]"
+    value { bool_value: true }
+  }
+  test {
+    name: "elem_in_mixed_type_list_error"
+    description: "List elems are of mixed type, and since the elem is absent the result is error."
+    expr: "'elem' in [1u, 'str', 2, b'bytes']"
+    eval_error: {
+      errors: { message: "no such overload" }
+    }
+  }
+}
+section {
+  name: "in_map_literal"
+  description: "Set membership tests using map literals and the 'in' operator"
+  test {
+    name: "key_not_in_empty_map"
+    expr: "'empty' in {}"
+    value { bool_value: false }
+  }
+  test {
+    name: "key_in_map"
+    expr: "'key' in {'key':'1', 'other':'2'}"
+    value { bool_value: true }
+  }
+  test {
+    name: "key_not_in_map"
+    expr: "'key' in {'lock':1, 'gate':2}"
+    value { bool_value: false }
+  }
+  test {
+    name: "key_in_mixed_key_type_map"
+    description: "Map keys are of mixed type, but since the key is present the result is true."
+    expr: "'key' in {3:3.0, 'key':2u}"
+    value { bool_value: true }
   }
 }
 section {

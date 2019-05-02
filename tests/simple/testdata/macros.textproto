@@ -1,2 +1,54 @@
 name: "macros"
 description: "Tests for CEL macros."
+section {
+  name: "exists"
+  description: "Checks for the existence of a map key or list element"
+  test {
+    name: "list_elem_exists"
+    expr: "[1, 2, 3].exists(e, e == 2)"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_list_elem_exists"
+    expr: "![1, 2, 3].exists(e, e > 3)"
+    value: { bool_value: true }
+  }
+  test {
+    name: "list_elem_mixed_type_exists"
+    description: "Exists filter is true for the second element, thus short-circuits after 'err || true'"
+    expr: "[1, '2', 3].exists(e, e != '10')"
+    value: { bool_value: true }
+  }
+  test {
+    name: "list_elem_mixed_type_exists_error"
+    description: "Exists filter is never true, thus reduces to 'err || false || err' which is an error"
+    expr: "[1, '2', 3].exists(e, e == '10')"
+    eval_error: {
+      errors: { message: "no such overload" }
+    }
+  }
+  test {
+    name: "map_key_exists"
+    expr: "{'key1':1, 'key2':2}.exists(k, k == 'key2')"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_map_key_exists"
+    expr: "!{'key1':1, 'key2':2}.exists(k, k == 'key3')"
+    value: { bool_value: true }
+  }
+  test {
+    name: "map_key_mixed_type_exists"
+    description: "Exists filter is true for the second key, thus reduces to 'err || true' which is true"
+    expr: "{'key':1, 1:21}.exists(k, k != 2)"
+    value: { bool_value: true }
+  }
+  test {
+    name: "map_key_mixed_type_exists_error"
+    description: "Exists filter is never true, thus reduces to 'err || false' which is an error" 
+    expr: "!{'key':1, 1:42}.exists(k, k == 2)"
+    eval_error: {
+      errors: { message: "no such overload" }
+    }
+  }
+}
