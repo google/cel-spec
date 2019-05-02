@@ -130,14 +130,13 @@ func MatchValue(tag string, expected *exprpb.Value, actual *exprpb.Value) error 
 				return fmt.Errorf("%s: Eval got [%v], want [%v]", tag, actual, expected)
 			}
 		}
-		return nil
 	default:
 		// By default, just compare the protos.
-		if proto.Equal(expected, actual) {
-			return nil
+		if !proto.Equal(expected, actual) {
+			return fmt.Errorf("%s: Eval got [%v], want [%v]", tag, actual, expected)
 		}
 	}
-	return fmt.Errorf("%s: Eval got [%v], want [%v]", tag, actual, expected)
+	return nil
 }
 
 // runConfig holds client stubs for the servers to use
