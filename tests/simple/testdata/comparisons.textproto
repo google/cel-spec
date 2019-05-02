@@ -140,7 +140,7 @@ section {
     expr: "1.0 == 1"
     disable_check: true # need to make it fail in the evaluation phase
     eval_error : {
-      errors: { message: "found no matching overload for '_==_' applied to '(double, int)'" }
+      errors: { message: "no such overload" }
     }
   }
   test {
@@ -149,15 +149,15 @@ section {
     expr: "[1] == [1.0]"
     disable_check: true # need to make it fail in the evaluation phase
     eval_error: {
-      errors: { message: "found no matching overload for '_==_' applied to '(list, list)'" }
+      errors: { message: "no such overload" }
     }
   }
   test {
     name: "eq_map_value_mixed_types_error"
-    description: "Mixed map key value types should result in an error due to homogeneous equality restrictions"
-    expr: "{'k':'v', 1:1} == {1:'v1', 'k':'v'}"
+    description: "Mixed map value types yields error as key '1' values differed by type."
+    expr: "{'k':'v', 1:1} == {'k':'v', 1:'v1'}"
     eval_error: {
-      errors: { message: "found no matching overload for '_==_' applied to '(map, map)'" }
+      errors: { message: "no such overload" }
     }
   }
 }
@@ -756,22 +756,24 @@ section {
   }
   test {
     name: "elem_in_list"
-    expr: "'elem' in ['elem', 'el', 'em']"
+    expr: "'elem' in ['elem', 'elemA', 'elemB']"
     value { bool_value: true }
   }
   test {
     name: "elem_not_in_list"
-    expr: "'e' in ['elem', 'el', 'em']"
+    expr: "'not' in ['elem1', 'elem2', 'elem3']"
     value { bool_value: false }
   }
   test {
     name: "elem_in_mixed_type_list"
-    expr: "'el' in [1, 'el', 2]"
+        description: "List elems are of mixed type, and since the elem is absent the result is error."
+    expr: "'elem' in [1, 'elem', 2]"
     value { bool_value: true }
   }
   test {
     name: "elem_in_mixed_type_list_error"
-    expr: "'em' in [1u, 'el', 2, b'em']"
+    description: "List elems are of mixed type, and since the elem is absent the result is error."
+    expr: "'elem' in [1u, 'str', 2, b'bytes']"
     eval_error: {
       errors: { message: "no such overload" }
     }
@@ -787,17 +789,18 @@ section {
   }
   test {
     name: "key_in_map"
-    expr: "'elem' in {'elem':'el', 'em':'no'}"
+    expr: "'key' in {'key':'1', 'other':'2'}"
     value { bool_value: true }
   }
   test {
     name: "key_not_in_map"
-    expr: "'e' in {'f':1, 'g':2}"
+    expr: "'key' in {'lock':1, 'gate':2}"
     value { bool_value: false }
   }
   test {
     name: "key_in_mixed_key_type_map"
-    expr: "'el' in {'el':2u, 3:3.0}"
+    description: "Map keys are of mixed type, but since the key is present the result is true."
+    expr: "'key' in {3:3.0, 'key':2u}"
     value { bool_value: true }
   }
 }

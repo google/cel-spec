@@ -70,7 +70,7 @@ section {
   name: "comparisons.textproto/in_map_literal"
   test {
     name: "key_in_mixed_key_type_map_error"
-    expr: "'em' in {1u:'el', 2:b'em'}"
+    expr: "'key' in {1u:'str', 2:b'bytes'}"
     # Current behavior
     value: { bool_value: false }
     # This case is very hard to detect in implementations for a variety of
