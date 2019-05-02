@@ -106,12 +106,12 @@ func MatchValue(tag string, expected *exprpb.Value, actual *exprpb.Value) error 
 		expectedMap := expected.GetMapValue()
 		actualMap := actual.GetMapValue()
 		if actualMap == nil || expectedMap == nil {
-			break
+			return fmt.Errorf("%s: Eval got [%v], want [%v]", tag, actual, expected)
 		}
 		expectedEntries := expectedMap.GetEntries()
 		actualEntries := actualMap.GetEntries()
 		if len(expectedEntries) != len(actualEntries) {
-			break
+			return fmt.Errorf("%s: Eval got [%v], want [%v]", tag, actual, expected)
 		}
 		for _, expectedElem := range expectedEntries {
 			found := false
