@@ -14,10 +14,37 @@ section {
     value: { bool_value: true }
   }
   test {
-    name: "list_elem_exists_error"
+    name: "list_elem_mixed_type_exists"
+    expr: "[1, '2', 3].exists(e, e != '3')"
+    value: { bool_value: true }
+  }
+  test {
+    name: "list_elem_mixed_type_exists_error"
     expr: "[1, '2', 3].exists(e, e == '3')"
     eval_error: {
-      errors: { message: "found no matching overload for '_==_' applied to '(map, map)'" }
+      errors: { message: "no such overload" }
+    }
+  }
+  test {
+    name: "map_key_exists"
+    expr: "{'a':1, 'b':2}.exists(k, k == 'b')"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_map_key_exists"
+    expr: "!{'a':1, 'b':2}.exists(k, k == 'c')"
+    value: { bool_value: true }
+  }
+  test {
+    name: "map_key_mixed_type_exists"
+    expr: "!{'a':1, 1:2}.exists(k, k != 2)"
+    value: { bool_value: false }
+  }
+  test {
+    name: "map_key_mixed_type_exists_error"
+    expr: "!{'a':1, 1:2}.exists(k, k == 2)"
+    eval_error: {
+      errors: { message: "no such overload" }
     }
   }
 }
