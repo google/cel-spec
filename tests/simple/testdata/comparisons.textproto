@@ -766,13 +766,13 @@ section {
   }
   test {
     name: "elem_in_mixed_type_list"
-        description: "List elems are of mixed type, and since the elem is absent the result is error."
+    description: "Set membership tests should succeed if the 'elem' exists in a mixed element type list."
     expr: "'elem' in [1, 'elem', 2]"
     value { bool_value: true }
   }
   test {
     name: "elem_in_mixed_type_list_error"
-    description: "List elems are of mixed type, and since the elem is absent the result is error."
+    description: "Set membership tests should error if the 'elem' does not exist in a mixed element type list as containment is equivalen to the macro exists() behavior."
     expr: "'elem' in [1u, 'str', 2, b'bytes']"
     eval_error: {
       errors: { message: "no such overload" }

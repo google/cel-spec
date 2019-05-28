@@ -11,14 +11,31 @@ section {
   }
 }
 section {
-  name: "eval results"
+  name: "eval_results"
   description: "All evaluation result kinds."
   test {
     name: "error_result"
-    description: "Check that error results go through. Currently fails for cel-go!"
+    description: "Check that error results go through."
     expr: "1 / 0"
     eval_error: {
       errors: { message: "foo" }
+    }
+  }
+  test {
+    name: "eval_map_results"
+    description: "Check that map literals results are order independent."
+    expr: '{"k1":"v1","k":"v"}'
+    value: {
+      map_value {
+        entries {
+          key: { string_value: "k" }
+          value: { string_value: "v" }
+        }
+        entries {
+          key: { string_value: "k1" }
+          value: { string_value: "v1" }
+        }
+      }
     }
   }
 }
