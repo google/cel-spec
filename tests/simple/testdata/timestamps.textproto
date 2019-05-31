@@ -103,11 +103,11 @@ section {
     expr: "timestamp('2009-02-13T23:31:30Z').getDayOfMonth('US/Central')"
     value: { int64_value: 12 }
   }
-  test {
-    name: "getDayOfMonth"
-    expr: "timestamp('2009-02-13T23:31:30Z').getDayOfMonth('+11:00')"
-    value: { int64_value: 13 }
-  }
+#  test {
+#    name: "getDayOfMonth"
+#    expr: "timestamp('2009-02-13T23:31:30Z').getDayOfMonth('+11:00')"
+#    value: { int64_value: 13 }
+#  }
   test {
     name: "getDayOfWeek"
     expr: "timestamp('2009-02-13T23:31:30Z').getDayOfWeek('UTC')"
