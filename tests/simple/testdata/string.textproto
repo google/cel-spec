@@ -97,3 +97,36 @@ section {
     value: { bool_value: true }
   }
 }
+section {
+  name: "concatentation"
+  description: "Tests for string concatenation."
+  test {
+    name: "concat_true"
+    expr: "'he'+'llo'=='hello'"
+    value: { bool_value: true}
+  }
+  test {
+    name: "concat_with_spaces"
+    expr: "'hello'+' '=='hello'"
+    value: { bool_value: false}
+  }
+}
+section {
+  name: "contains"
+  description: "Tests for contains."
+  test {
+    name: "contains_true"
+    expr: "'hello'.contains('he')"
+    value: { bool_value: true }
+  }
+  test {
+    name: "contains_empty"
+    expr: "'hello'.contains('')"
+    value: { bool_value: true }
+  }
+  test {
+    name: "contains_false"
+    expr: "'hello'.contains('ol')"
+    value: { bool_value: false }
+  }
+}

@@ -143,3 +143,17 @@ section {
     }
   }
 }
+section {
+  name: "NOT"
+  description: "Tests for logical NOT."
+  test {
+    name: "not_true"
+    expr: "!true"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_false"
+    expr: "!false"
+    value: { bool_value: true }
+  }
+}
