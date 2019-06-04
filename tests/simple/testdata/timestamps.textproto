@@ -109,6 +109,16 @@ section {
     value: { int64_value: 13 }
   }
   test {
+    name: "getDay"
+    expr: "timestamp('2009-02-13T02:00:00Z').getDayOfMonth('-2:30')"
+    value: { int64_value: 11 }
+  }
+  test {
+    name: "getDay"
+    expr: "timestamp('2009-02-13T02:00:00Z').getDayOfMonth('America/St_Johns')"
+    value: { int64_value: 11 }
+  }
+  test {
     name: "getDayOfWeek"
     expr: "timestamp('2009-02-13T23:31:30Z').getDayOfWeek('UTC')"
     value: { int64_value: 5 }
