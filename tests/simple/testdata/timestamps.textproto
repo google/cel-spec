@@ -103,11 +103,11 @@ section {
     expr: "timestamp('2009-02-13T23:31:30Z').getDayOfMonth('US/Central')"
     value: { int64_value: 12 }
   }
-#  test {
-#    name: "getDayOfMonth"
-#    expr: "timestamp('2009-02-13T23:31:30Z').getDayOfMonth('+11:00')"
-#    value: { int64_value: 13 }
-#  }
+  test {
+    name: "getDayOfMonth"
+    expr: "timestamp('2009-02-13T23:31:30Z').getDayOfMonth('+11:00')"
+    value: { int64_value: 13 }
+  }
   test {
     name: "getDayOfWeek"
     expr: "timestamp('2009-02-13T23:31:30Z').getDayOfWeek('UTC')"
@@ -118,16 +118,16 @@ section {
     expr: "timestamp('2009-02-13T23:31:30Z').getDayOfYear('US/Central')"
     value: { int64_value: 44 }
   }
-#  test {
-#    name: "getFullYear"
-#    expr: "timestamp('2009-02-13T23:31:30Z').getFullYear('-9:30')"
-#    value: { int64_value: 2009 }
-#  }
-#  test {
-#    name: "getHours"
-#    expr: "timestamp('2009-02-13T23:31:30Z').getHours('2:00')"
-#    value: { int64_value: 1 }
-#  }
+  test {
+    name: "getFullYear"
+    expr: "timestamp('2009-02-13T23:31:30Z').getFullYear('-9:30')"
+    value: { int64_value: 2009 }
+  }
+  test {
+    name: "getHours"
+    expr: "timestamp('2009-02-13T23:31:30Z').getHours('2:00')"
+    value: { int64_value: 1 }
+  }
   test {
     name: "getMinutes"
     expr: "timestamp('2009-02-13T23:31:30Z').getMinutes('Asia/Kathmandu')"
@@ -138,11 +138,11 @@ section {
     expr: "timestamp('2009-02-13T23:31:30Z').getMonth('UTC')"
     value: { int64_value: 1 }
   }
-#  test {
-#    name: "getSeconds"
-#    expr: "timestamp('2009-02-13T23:31:30Z').getSeconds('-00:00')"
-#    value: { int64_value: 30 }
-#  }
+  test {
+    name: "getSeconds"
+    expr: "timestamp('2009-02-13T23:31:30Z').getSeconds('-00:00')"
+    value: { int64_value: 30 }
+  }
 }
 section {
   name: "timestamp_comparisons"
