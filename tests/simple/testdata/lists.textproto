@@ -5,17 +5,22 @@ section{
   description: "Tests for list concatenation."
   test {
     name: "list_append"
-    expr: "[0, 1, 2]+[3, 4, 5]==[0, 1, 2, 3, 4, 5]"
+    expr: "[0, 1, 2] + [3, 4, 5] == [0, 1, 2, 3, 4, 5]"
     value: { bool_value: true }
   }
   test {
     name: "list_not_commutative"
-    expr: "[0, 1, 2]+[3, 4, 5]==[3, 4, 5, 0, 1, 2]"
+    expr: "[0, 1, 2] + [3, 4, 5] == [3, 4, 5, 0, 1, 2]"
     value: { bool_value: false }
   }
   test {
     name: "list_repeat"
-    expr: "[2]+[2]==[2, 2]"
-    value: {bool_value: true}
+    expr: "[2] + [2]"
+    value: {
+      list_value {
+        values: { int64_value: 2 }
+        values: { int64_value: 2 }
+      }
+    }
   }
 }

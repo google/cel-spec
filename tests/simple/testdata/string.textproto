@@ -102,13 +102,28 @@ section {
   description: "Tests for string concatenation."
   test {
     name: "concat_true"
-    expr: "'he'+'llo'=='hello'"
-    value: { bool_value: true}
+    expr: "'he' + 'llo'"
+    value: { string_value: "hello"}
   }
   test {
     name: "concat_with_spaces"
-    expr: "'hello'+' '=='hello'"
+    expr: "'hello' + ' ' == 'hello'"
     value: { bool_value: false}
+  }
+  test {
+    name: "concat_empty_string_beginning"
+    expr: "'' + 'abc'"
+    value: { string_value: "abc" }
+  }
+  test {
+    name: "concat_empty_string_end"
+    expr: "'abc' + ''"
+    value: { string_value: "abc" }
+  }
+  test {
+    name: "concat_empty_with_empty"
+    expr: "'' + ''"
+    value: { string_value: "" }
   }
 }
 section {
@@ -128,5 +143,10 @@ section {
     name: "contains_false"
     expr: "'hello'.contains('ol')"
     value: { bool_value: false }
+  }
+  test {
+    name: "contains_multiple"
+    expr: "'abababc'.contains('ababc')"
+    value: { bool_value: true }
   }
 }
