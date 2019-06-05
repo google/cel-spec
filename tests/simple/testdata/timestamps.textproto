@@ -173,63 +173,33 @@ section {
   description: "Arithmetic operations on timestamps and/or durations."
   test {
     name: "add_duration_to_time"
-    expr: "timestamp('2009-02-13T23:00:00Z') + duration('240s')"
-    value: {
-      object_value {
-        type_url: "type.googleapis.com/google.protobuf.Timestamp"
-        value: "\010\340\370\327\314\004"
-      }
-    }
+    expr: "timestamp('2009-02-13T23:00:00Z') + duration('240s') == timestamp('2009-02-13T23:04:00Z')"
+    value: { bool_value: true}
   }
   test {
     name: "add_time_to_duration"
-    expr: "duration('120s') + timestamp('2009-02-13T23:01:00Z')"
-    value: {
-      object_value {
-        type_url: "type.googleapis.com/google.protobuf.Timestamp"
-        value: "\010\244\370\327\314\004"
-      }
-    }
+    expr: "duration('120s') + timestamp('2009-02-13T23:01:00Z') == timestamp('2009-02-13T23:03:00Z')"
+    value: { bool_value: true}
   }
   test {
     name: "add_duration_to_duration"
-    expr: "duration('600s') + duration('50s')"
-    value: {
-      object_value {
-        type_url: "type.googleapis.com/google.protobuf.Duration"
-        value: "\010\212\005"
-      }
-    }
+    expr: "duration('600s') + duration('50s') == duration('650s')"
+    value: { bool_value: true }
   }
   test {
     name: "subtract_duration_from_time"
-    expr: "timestamp('2009-02-13T23:10:00Z') - duration('600s')"
-    value: {
-      object_value {
-        type_url: "type.googleapis.com/google.protobuf.Timestamp"
-        value: "\010\360\366\327\314\004"
-      }
-    }
+    expr: "timestamp('2009-02-13T23:10:00Z') - duration('600s') == timestamp('2009-02-13T23:00:00Z')"
+    value: { bool_value: true}
   }
   test {
     name: "subtract_time_from_time"
-    expr: "timestamp('2009-02-13T23:31:00Z') - timestamp('2009-02-13T23:29:00Z')"
-    value: {
-      object_value {
-        type_url: "type.googleapis.com/google.protobuf.Duration"
-        value: "\010x"
-      }
-    }
+    expr: "timestamp('2009-02-13T23:31:00Z') - timestamp('2009-02-13T23:29:00Z') == duration('120s')"
+    value: { bool_value: true}
   }
   test {
     name: "subtract_duration_from_duration"
-    expr: "duration('900s') - duration('42s')"
-    value: {
-      object_value {
-        type_url: "type.googleapis.com/google.protobuf.Duration"
-        value: "\010\332\006"
-      }
-    }
+    expr: "duration('900s') - duration('42s') == duration('858s')"
+    value: { bool_value: true }
   }
 }
 section {
