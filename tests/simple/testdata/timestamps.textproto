@@ -4,21 +4,36 @@ section {
   name: "timestamp_conversions"
   description: "Conversions of timestamps to other types."
   test {
-    name: "toInt"
+    name: "toInt_timestamp"
     expr: "int(timestamp('2009-02-13T23:31:30Z'))"
     value: { int64_value: 1234567890 }
   }
   test {
-    name: "toString"
+    name: "toString_timestamp"
     expr: "string(timestamp('2009-02-13T23:31:30Z'))"
     value: { string_value: "2009-02-13T23:31:30Z" }
   }
   test {
-    name: "toType"
+    name: "toType_timestamp"
     expr: "type(timestamp('2009-02-13T23:31:30Z'))"
     value: { type_value: "google.protobuf.Timestamp" }
   }
 }
+section {
+  name: "duration_conversions"
+  description: "Conversions of durations to other types."
+  test {
+    name: "toString_duration"
+    expr: "string(duration('1000000s'))"
+    value: { string_value: "277h46m40s" }
+  }
+  test {
+    name: "toType_duration"
+    expr: "type(duration('1000000s'))"
+    value: { type_value: "google.protobuf.Duration" }
+  }
+}
+
 section {
   name: "timestamp_selectors"
   description: "Timestamp selection operators without timezones"
@@ -84,9 +99,24 @@ section {
     value: { int64_value: 14 }
   }
   test {
-    name: "getDayOfMonth"
+    name: "getDayOfMonth_name_pos"
+    expr: "timestamp('2009-02-13T23:31:30Z').getDayOfMonth('US/Central')"
+    value: { int64_value: 12 }
+  }
+  test {
+    name: "getDayOfMonth_numerical_pos"
     expr: "timestamp('2009-02-13T23:31:30Z').getDayOfMonth('+11:00')"
     value: { int64_value: 13 }
+  }
+  test {
+    name: "getDayOfMonth_numerical_neg"
+    expr: "timestamp('2009-02-13T02:00:00Z').getDayOfMonth('-2:30')"
+    value: { int64_value: 11 }
+  }
+  test {
+    name: "getDayOfMonth_name_neg"
+    expr: "timestamp('2009-02-13T02:00:00Z').getDayOfMonth('America/St_Johns')"
+    value: { int64_value: 11 }
   }
   test {
     name: "getDayOfWeek"
@@ -136,5 +166,103 @@ section {
     name: "equal_diff"
     expr: "timestamp('2009-02-13T23:31:29Z') == timestamp('2009-02-13T23:31:30Z')"
     value: { bool_value: false }
+  }
+}
+section {
+  name: "timestamp_arithmetic"
+  description: "Arithmetic operations on timestamps and/or durations."
+  test {
+    name: "add_duration_to_time"
+    expr: "timestamp('2009-02-13T23:00:00Z') + duration('240s') == timestamp('2009-02-13T23:04:00Z')"
+    value: { bool_value: true}
+  }
+  test {
+    name: "add_time_to_duration"
+    expr: "duration('120s') + timestamp('2009-02-13T23:01:00Z') == timestamp('2009-02-13T23:03:00Z')"
+    value: { bool_value: true}
+  }
+  test {
+    name: "add_duration_to_duration"
+    expr: "duration('600s') + duration('50s') == duration('650s')"
+    value: { bool_value: true }
+  }
+  test {
+    name: "subtract_duration_from_time"
+    expr: "timestamp('2009-02-13T23:10:00Z') - duration('600s') == timestamp('2009-02-13T23:00:00Z')"
+    value: { bool_value: true}
+  }
+  test {
+    name: "subtract_time_from_time"
+    expr: "timestamp('2009-02-13T23:31:00Z') - timestamp('2009-02-13T23:29:00Z') == duration('120s')"
+    value: { bool_value: true}
+  }
+  test {
+    name: "subtract_duration_from_duration"
+    expr: "duration('900s') - duration('42s') == duration('858s')"
+    value: { bool_value: true }
+  }
+}
+section {
+  name: "timestamp_comparisons"
+  description: "Comparisons on timestamps and/or durations."
+  test {
+    name: "leq_timestamp_true"
+    expr: "timestamp('2009-02-13T23:00:00Z') <= timestamp('2009-02-13T23:00:00Z')"
+    value: { bool_value: true }
+  }
+  test {
+    name: "leq_timestamp_false"
+    expr: "timestamp('2009-02-13T23:00:00Z') <= timestamp('2009-02-13T22:59:59Z')"
+    value: { bool_value: false }
+  }
+  test {
+    name: "leq_duration_true"
+    expr: "duration('200s') <= duration('200s')"
+    value: { bool_value: true }
+  }
+  test {
+    name: "leq_duration_false"
+    expr: "duration('300s') <= duration('200s')"
+    value: { bool_value: false }
+  }
+  test {
+    name: "less_timestamp_true"
+    expr: "timestamp('2009-02-13T23:00:00Z') < timestamp('2009-03-13T23:00:00Z')"
+    value: { bool_value: true }
+  }
+  test {
+    name: "less_duration_true"
+    expr: "duration('200s') < duration('300s')"
+    value: { bool_value: true }
+  }
+  test {
+    name: "geq_timestamp_true"
+    expr: "timestamp('2009-02-13T23:00:00Z') >= timestamp('2009-02-13T23:00:00Z')"
+    value: { bool_value: true }
+  }
+  test {
+    name: "geq_timestamp_false"
+    expr: "timestamp('2009-02-13T22:58:00Z') >= timestamp('2009-02-13T23:00:00Z')"
+    value: { bool_value: false }
+  }
+  test {
+    name: "geq_duration_true"
+    expr: "duration('200s') <= duration('200s')"
+    value: { bool_value: true }
+  }
+  test {
+    name: "geq_duration_false"
+    expr: "duration('120s') >= duration('200s')"
+    value: { bool_value: false }
+  }
+  test {
+    name: "greater_timestamp_true"
+    expr: "timestamp('2009-02-13T23:59:00Z') > timestamp('2009-02-13T23:00:00Z')"
+    value: { bool_value: true }
+  }
+  test {
+    name: "greater_duration_true"
+    expr: "duration('300s') > duration('200s')"
+    value: { bool_value: true }
   }
 }
