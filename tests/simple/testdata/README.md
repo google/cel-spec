@@ -55,7 +55,7 @@ The available test files are:
 
 - [`string.textproto`](string.textproto) Checks functions on strings.
 
-- [`timestamps.textproto`](timestamps.proto) Checks `timestamp` and `duration`
+- [`timestamps.textproto`](timestamps.textproto) Checks `timestamp` and `duration`
   values and operations.
 
 - [`unknowns.textproto`](unknowns.textproto) Checks evaluation where some
