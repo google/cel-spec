@@ -41,6 +41,8 @@ The available test files are:
 
 - [`integer_math.textproto`](integer_math.textproto) Checks integer arithmetic.
 
+- [`lists.textproto`](lists.textproto) Checks list operations.
+
 - [`logic.textproto`](logic.textproto) Checks special logical operators.
 
 - [`macros.textproto`](macros.textproto) Checks use of CEL macros.
@@ -53,7 +55,7 @@ The available test files are:
 
 - [`string.textproto`](string.textproto) Checks functions on strings.
 
-- [`timestamps.proto`](timestamps.proto) Checks `timestamp` and `duration`
+- [`timestamps.textproto`](timestamps.textproto) Checks `timestamp` and `duration`
   values and operations.
 
 - [`unknowns.textproto`](unknowns.textproto) Checks evaluation where some
