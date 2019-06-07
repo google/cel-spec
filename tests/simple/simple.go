@@ -94,9 +94,8 @@ func Match(t *spb.SimpleTest, actual *exprpb.ExprValue) error {
 }
 
 // MatchValue returns whether the actual value is equal to the
-// expected value, modulo the following normalization:
-//	1) All floating-point NaN values are equal.
-//	2) Map comparisons ignore order.
+// expected value, modulo ensuring all floating-point NaN values
+// are equal.
 func MatchValue(tag string, expected *exprpb.Value, actual *exprpb.Value) error {
 	// TODO write normalized comparator.
 	switch expected.GetKind().(type) {
@@ -113,8 +112,8 @@ func MatchValue(tag string, expected *exprpb.Value, actual *exprpb.Value) error 
 		if len(expectedEntries) != len(actualEntries) {
 			return fmt.Errorf("%s: Eval got [%v], want [%v]", tag, actual, expected)
 		}
+	NEXT_ELEM:
 		for _, expectedElem := range expectedEntries {
-			found := false
 			for _, actualElem := range actualEntries {
 				keyErr := MatchValue(tag, expectedElem.GetKey(), actualElem.GetKey())
 				if keyErr != nil {
@@ -122,13 +121,10 @@ func MatchValue(tag string, expected *exprpb.Value, actual *exprpb.Value) error 
 				}
 				valErr := MatchValue(tag, expectedElem.GetValue(), actualElem.GetValue())
 				if valErr == nil {
-					found = true
-					break
+					continue NEXT_ELEM
 				}
 			}
-			if !found {
-				return fmt.Errorf("%s: Eval got [%v], want [%v]", tag, actual, expected)
-			}
+			return fmt.Errorf("%s: Eval got [%v], want [%v]", tag, actual, expected)
 		}
 	default:
 		// By default, just compare the protos.
