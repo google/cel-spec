@@ -98,7 +98,7 @@ func Match(t *spb.SimpleTest, actual *exprpb.ExprValue) error {
 //	1) All floating-point NaN values are equal.
 //	2) Map comparisons ignore order.
 func MatchValue(tag string, expected *exprpb.Value, actual *exprpb.Value) error {
-	// TODO: normalize floating point NaN value comparisons.
+	// TODO: make floating point NaN values compare equal.
 	switch expected.GetKind().(type) {
 	case *exprpb.Value_MapValue:
 		// Maps are handled as repeated entries, but the entries need to be
