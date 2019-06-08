@@ -98,10 +98,45 @@ func Match(t *spb.SimpleTest, actual *exprpb.ExprValue) error {
 //	1) All floating-point NaN values are equal.
 //	2) Map comparisons ignore order.
 func MatchValue(tag string, expected *exprpb.Value, actual *exprpb.Value) error {
-	// TODO write normalized comparator.
-	// For now, just compare the protos.
-	if !proto.Equal(expected, actual) {
-		return fmt.Errorf("%s: Eval got [%v], want [%v]", tag, actual, expected)
+	// TODO: make floating point NaN values compare equal.
+	switch expected.GetKind().(type) {
+	case *exprpb.Value_MapValue:
+		// Maps are handled as repeated entries, but the entries need to be
+		// compared using set equality semantics.
+		expectedMap := expected.GetMapValue()
+		actualMap := actual.GetMapValue()
+		if actualMap == nil || expectedMap == nil {
+			return fmt.Errorf("%s: Eval got [%v], want [%v]", tag, actual, expected)
+		}
+		expectedEntries := expectedMap.GetEntries()
+		actualEntries := actualMap.GetEntries()
+		if len(expectedEntries) != len(actualEntries) {
+			return fmt.Errorf("%s: Eval got [%v], want [%v]", tag, actual, expected)
+		}
+	NEXT_ELEM:
+		for _, expectedElem := range expectedEntries {
+			for _, actualElem := range actualEntries {
+				keyErr := MatchValue(tag, expectedElem.GetKey(), actualElem.GetKey())
+				// keys and not equal, continue to the next element.
+				if keyErr != nil {
+					continue
+				}
+				valErr := MatchValue(tag, expectedElem.GetValue(), actualElem.GetValue())
+				// keys are equal, but their values are not.
+				if valErr != nil {
+					return fmt.Errorf("%s: Eval got [%v], want [%v]", tag, actual, expected)
+				}
+				// keys and their values are equal.
+				continue NEXT_ELEM
+			}
+			// The key was not found in the actual entries.
+			return fmt.Errorf("%s: Eval got [%v], want [%v]", tag, actual, expected)
+		}
+	default:
+		// By default, just compare the protos.
+		if !proto.Equal(expected, actual) {
+			return fmt.Errorf("%s: Eval got [%v], want [%v]", tag, actual, expected)
+		}
 	}
 	return nil
 }
