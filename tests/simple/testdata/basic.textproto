@@ -250,8 +250,4 @@ section {
     }
     value: { null_value: 0 }
   }
-  # TODO: other reserved identifiers should cause a parse error  and should
-  # be tested in another test suite ("simple" can't validate parse errors):
-  # as, break, const, continue, else, for, function, if, import, in,
-  # let, loop, package, namespace, return, var, void, while.
 }
