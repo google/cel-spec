@@ -39,4 +39,5 @@ go_test(
     # This is the magic setting that lets external invokers see
     # files in their expected locations.
     rundir = "../..",
+    args = ["-test.v"]
 )
