@@ -61,7 +61,7 @@ func initRunConfig() (*runConfig, error) {
 	servers[pCmd] = nil
 	servers[cCmd] = nil
 	servers[eCmd] = nil
-	for cmd, _ := range servers {
+	for cmd := range servers {
 		cli, err := celrpc.NewClientFromPath(cmd)
 		if err != nil {
 			return nil, err

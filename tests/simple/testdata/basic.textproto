@@ -140,7 +140,7 @@ section {
       ident: { type: { primitive: INT64 } }
     }
     bindings: {
-      key: "x",
+      key: "x"
       value: { value: { int64_value: 123 } }
     }
     value: { int64_value: 123 }
@@ -154,7 +154,7 @@ section {
       ident: { type: { primitive: BOOL } }
     }
     bindings: {
-      key: "x.y",
+      key: "x.y"
       value: { value: { bool_value: true } }
     }
   }
@@ -162,4 +162,92 @@ section {
 section {
   name: "namespace"
   description: "Namespaced identifiers."
+  test {
+    name: "self_eval_container_lookup"
+    expr: "y"
+    container: "x"
+    type_env: {
+      name: "x.y",
+      ident: { type: { primitive: BOOL } }
+    }
+    type_env: {
+      name: "y",
+      ident: { type: { primitive: STRING } }
+    }
+    bindings: {
+      key: "x.y"
+      value: { value: { bool_value: true } }
+    }
+    bindings: {
+      key: "y"
+      value: { value: { string_value: "false" } }
+    }
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_eval_container_lookup_unchecked"
+    expr: "y"
+    container: "x"
+    type_env: {
+      name: "x.y",
+      ident: { type: { primitive: BOOL } }
+    }
+    type_env: {
+      name: "y",
+      ident: { type: { primitive: BOOL } }
+    }
+    bindings: {
+      key: "x.y"
+      value: { value: { bool_value: true } }
+    }
+    bindings: {
+      key: "y"
+      value: { value: { bool_value: false } }
+    }
+    disable_check: true ## ensure unchecked ASTs resolve the same as checked ASTs
+    value: { bool_value: true }
+  }
+}
+section {
+  name: "reserved_const"
+  description: "Named constants should never be shadowed by identifiers."
+  test {
+    name: "false"
+    expr: "false"
+    type_env: {
+      name: "false"
+      ident: { type: { primitive: BOOL } }
+    }
+    bindings {
+      key: "false"
+      value: { value: { bool_value: true } }
+    }
+    value: { bool_value: false }
+  }
+  test {
+    name: "true"
+    expr: "true"
+    type_env: {
+      name: "true"
+      ident: { type: { primitive: BOOL } }
+    }
+    bindings {
+      key: "true"
+      value: { value: { bool_value: false } }
+    }
+    value: { bool_value: true }
+  }
+  test {
+    name: "null"
+    expr: "null"
+    type_env: {
+      name: "null"
+      ident: { type: { primitive: BOOL } }
+    }
+    bindings {
+      key: "null"
+      value: { value: { bool_value: true } }
+    }
+    value: { null_value: 0 }
+  }
 }
