@@ -71,7 +71,7 @@ section {
   test {
     name: "eq_bytes"
     description: "Test bytes literal equality with encoding"
-    expr: "b'\\u00FF' == b'\303\277'"
+    expr: "b'ÿ' == b'\\303\\277'"
     value: { bool_value: true }
   }
   test {
@@ -206,12 +206,12 @@ section {
   }
   test {
     name: "ne_bytes"
-    expr: "b'\\x00\\xFF' != b'\\u00FF'"
+    expr: "b'\\x00\\xFF' != b'ÿ'"
     value: { bool_value: true }
   }
   test {
     name: "not_ne_bytes"
-    expr: "b'\303\277' != b'\\u00FF'"
+    expr: "b'\\303\\277' != b'ÿ'"
     value: { bool_value: false }
   }
   test {
@@ -363,7 +363,7 @@ section {
   }
   test {
     name: "not_lt_bytes_width"
-    expr: "b'\u00E1' < b'b'"
+    expr: "b'á' < b'b'"
     value: { bool_value: false }
   }
   test {
