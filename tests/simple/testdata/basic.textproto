@@ -99,7 +99,7 @@ section {
   }
   test {
     name: "self_eval_bytes_escape"
-    expr: "b'\\u00FF'"
+    expr: "b'ÿ'"
     value: { bytes_value: "\303\277" }
   }
   test {

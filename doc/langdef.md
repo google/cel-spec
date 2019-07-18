@@ -232,19 +232,27 @@ multiline string literals can be used for byte literals.
 
 Escape sequences are a backslash (`\`) followed by one of the following:
 
-*   A single-quote(`'`), double-quote(`"`), or backslash(`\`), representing
-    itself.
+*   A punctuation mark representing itself:
+    *   `\`: backslash
+    *   `?`: question mark
+    *   `"`: double quote
+    *   `'`: single quote
+    *   `` ` ``: backtick
 *   A code for whitespace:
+    *   `a`: bell
     *   `b`: backspace
     *   `f`: form feed
     *   `n`: line feed
     *   `r`: carriage return
     *   `t`: horizontal tab
+    *   `v`: vertical tab
 *   A `u` followed by four hexadecimal characters, encoding a Unicode code point
     in the BMP. Characters in other Unicode planes can be represented with
-    surrogate pairs.
-*   A `x` followed by two hexadecimal characters. For strings, it denotes the
-    unicode code point. For bytes, it represents an octet value.
+    surrogate pairs.  Valid only for string literals.
+*   A `U` followed by eight hexadecimal characters, encoding a Unicode code
+    point.  Valid only for string literals.
+*   A `x` or `X` followed by two hexadecimal characters. For strings, it
+    denotes the unicode code point. For bytes, it represents an octet value.
 *   Three octal digits, in the range `000` to `377`. For strings, it denotes the
     unicode code point. For bytes, it represents an octet value.
 
