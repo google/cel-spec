@@ -26,7 +26,7 @@ section {
     expr: "'key' in {1u:'str', 2:b'bytes'}"
     # Current behavior
     value: { bool_value: false }
-    # This behavior is expected for homogeneous equality, but should break 
+    # This behavior is expected for homogeneous equality, but should break
     # with heterogeneous equality supported in CEL 0.1.0. This case should
     # be revisited when support for heterogeneous equality is added to CEL.
     #
