@@ -457,7 +457,7 @@ particular function overloads only use the coarser types of the dynamic values.
 
 The type checker also introduces the `dyn` type, which is the union of all other
 types. Therefore the type checker could accept a list of heterogeneous values as
-`dyn([1, 3.14, "foo"])`, which is tiven the type `list(dyn)`. The standard
+`dyn([1, 3.14, "foo"])`, which is given the type `list(dyn)`. The standard
 function `dyn` has no effect at runtime, but signals to the type checker that its
 argument should be considered of type `dyn`, `list(dyn)`, or a `dyn`-valued map.
 
