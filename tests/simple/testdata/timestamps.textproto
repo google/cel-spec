@@ -25,7 +25,7 @@ section {
   test {
     name: "toString_duration"
     expr: "string(duration('1000000s'))"
-    value: { string_value: "277h46m40s" }
+    value: { string_value: "1000000s" }
   }
   test {
     name: "toType_duration"
