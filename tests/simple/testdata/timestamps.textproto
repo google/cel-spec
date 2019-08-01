@@ -56,7 +56,7 @@ section {
   test {
     name: "getDayOfYear"
     expr: "timestamp('2009-02-13T23:31:30Z').getDayOfYear()"
-    value: { int64_value: 44 }
+    value: { int64_value: 43 }
   }
   test {
     name: "getFullYear"
@@ -126,7 +126,7 @@ section {
   test {
     name: "getDayOfYear"
     expr: "timestamp('2009-02-13T23:31:30Z').getDayOfYear('US/Central')"
-    value: { int64_value: 44 }
+    value: { int64_value: 43 }
   }
   test {
     name: "getFullYear"
