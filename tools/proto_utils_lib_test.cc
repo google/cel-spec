@@ -1,12 +1,12 @@
 #include "tools/proto_utils_lib.h"
 
 #include "gflags/gflags.h"
+#include "google/api/expr/v1alpha1/value.pb.h"
 #include "google/protobuf/any.pb.h"
 #include "google/rpc/status.pb.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "absl/strings/str_cat.h"
-#include "google/api/expr/v1alpha1/value.pb.h"
 #include "tools/tests/test_message1.pb.h"
 #include "tools/tests/test_value.pb.h"
 

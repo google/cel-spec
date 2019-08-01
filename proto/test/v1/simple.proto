@@ -7,7 +7,6 @@ package google.api.expr.test.v1;
 import "google/api/expr/v1alpha1/checked.proto";
 import "google/api/expr/v1alpha1/eval.proto";
 import "google/api/expr/v1alpha1/value.proto";
-import "google/protobuf/empty.proto";
 
 // The format of a simple test file, expected to be stored in text format.
 // A file is the unit of granularity for selecting conformance tests,
