@@ -153,37 +153,22 @@ func TestSimpleFile(t *testing.T) {
                                         subtest = subtest[:ind]
                                 }
                                 for _, section := range testFile.Section {
-                                        if subtest == section.Name {
-                                                if ind == -1 {
-                                                        t.Logf("Skipping all tests in section %v\n", section.Name)
-                                                } else {
-							tests := strings.Split(testName, ",")
-                                                        t.Logf("Running tests in section %v\n", section.Name)
-                                                        for _, test := range section.Test {
-                                                                if contains(tests, test.Name){
-									t.Logf("Skipping test name %v\n", test.Name)
-                                                                } else {
-                                                                        desc := fmt.Sprintf("%s/%s/%s", testFile.Name, section.Name, test.Name)
-                                                                        t.Run(desc, func(t *testing.T) {
-                                                                                err := rc.RunTest(test)
-                                                                                if err != nil {
-                                                                                        t.Fatal(err)
-                                                                                }
-                                                                        })
-                                                                }
-                                                        }
-                                                }
-
+					if ind == -1 && subtest == section.Name{
+						t.Logf("Skipping all tests in section %v\n", section.Name)
                                         } else {
-                                                t.Logf("Running tests in section %v\n", section.Name)
+						t.Logf("Running tests in section %v\n", section.Name)
                                                 for _, test := range section.Test {
-                                                        desc := fmt.Sprintf("%s/%s/%s", testFile.Name, section.Name, test.Name)
-                                                        t.Run(desc, func(t *testing.T) {
-                                                                err := rc.RunTest(test)
-                                                                if err != nil {
-                                                                        t.Fatal(err)
-                                                                }
-                                                        })
+                                                        if contains(strings.Split(testName, ","), test.Name){
+								t.Logf("Skipping test name %v\n", test.Name)
+                                                        } else {
+                                                                desc := fmt.Sprintf("%s/%s/%s", testFile.Name, section.Name, test.Name)
+                                                                t.Run(desc, func(t *testing.T) {
+                                                                        err := rc.RunTest(test)
+                                                                        if err != nil {
+                                                                                t.Fatal(err)
+                                                                        }
+                                                                })
+							}
                                                 }
                                         }
                                 }
