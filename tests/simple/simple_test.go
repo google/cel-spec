@@ -117,7 +117,7 @@ func TestMain(m *testing.M) {
 	os.Exit(m.Run())
 }
 
-func TestSimpleFile(t *testing.T) {
+ func TestSimpleFile(t *testing.T) {
         // Special case to handle test invocation without args. See TestMain()
         // early return comment.
         if rc == nil {
@@ -126,12 +126,14 @@ func TestSimpleFile(t *testing.T) {
         testArray := strings.Split(flagSkipTestCmd, ";")
         m := make(map[string]string)
         for _, fullTest := range testArray {
-                fmt.Println("skipping test", fullTest)
-                section := strings.Index(fullTest, "/")
-                if  (section != -1) {
-                        m[fullTest[:section]] = fullTest[section+1:]
-                } else {
+                sections := strings.Count(fullTest, "/")
+                if sections == 0 || sections == 1 {
                         m[fullTest] = "ALL"
+                } else if sections == 2 {
+                        ind := strings.LastIndex(fullTest, "/")
+                        m[fullTest[:ind]] = fullTest[ind+1:]
+               } else {
+                        log.Fatal ("Unable to parse skip_test flag, specifically for %v\n", fullTest)
                 }
         }
         // Run the flag-configured tests.
@@ -140,78 +142,36 @@ func TestSimpleFile(t *testing.T) {
                 if err != nil {
                         t.Fatalf("Can't parse input file %v: %v", filename, err)
                 }
-                if _, skip := m[testFile.Name]; skip {
-                        if m[testFile.Name] == "ALL"{
+                if skipFile, filePresent := m[testFile.Name]; filePresent {
+                        if skipFile == "ALL" {
                                 t.Logf("Skipping all tests in filename %v\n", testFile.Name)
                         } else {
-                                t.Logf("Running tests in file %v\n", testFile.Name)
-                                subtest := m[testFile.Name]
-				ind := strings.Index(subtest, "/")
-				var testName string
-                                if ind != -1 {
-					testName = subtest[ind+1:]
-                                        subtest = subtest[:ind]
-                                }
-                                for _, section := range testFile.Section {
-                                        if subtest == section.Name {
-                                                if ind == -1 {
-                                                        t.Logf("Skipping all tests in section %v\n", section.Name)
-                                                } else {
-							tests := strings.Split(testName, ",")
-                                                        t.Logf("Running tests in section %v\n", section.Name)
-                                                        for _, test := range section.Test {
-                                                                if contains(tests, test.Name){
-									t.Logf("Skipping test name %v\n", test.Name)
-                                                                } else {
-                                                                        desc := fmt.Sprintf("%s/%s/%s", testFile.Name, section.Name, test.Name)
-                                                                        t.Run(desc, func(t *testing.T) {
-                                                                                err := rc.RunTest(test)
-                                                                                if err != nil {
-                                                                                        t.Fatal(err)
-                                                                                }
-                                                                        })
-                                                                }
-                                                        }
-                                                }
-
-                                        } else {
-                                                t.Logf("Running tests in section %v\n", section.Name)
-                                                for _, test := range section.Test {
+                                log.Fatal ("Unable to parse test for %v, expected ALL, received %v\n", testFile.Name, skipFile)
+                        }
+                } else {
+                        t.Logf("Running tests in file %v\n", testFile.Name)
+                        for _, section := range testFile.Section {
+				sectionPath := testFile.Name + "/" + section.Name
+                                skipSection, _ := m[sectionPath]
+                                if skipSection == "ALL" {
+                                        t.Logf("Skipping all tests in section %v\n", section.Name)
+                                } else {
+                                        t.Logf("Running tests in section %v\n", section.Name)
+                                        for _, test := range section.Test {
+                                                if strings.Contains(skipSection, test.Name){
+							t.Logf("Skipping test name %v\n", test.Name)
+						} else {
                                                         desc := fmt.Sprintf("%s/%s/%s", testFile.Name, section.Name, test.Name)
                                                         t.Run(desc, func(t *testing.T) {
                                                                 err := rc.RunTest(test)
                                                                 if err != nil {
                                                                         t.Fatal(err)
                                                                 }
-                                                        })
+							})
                                                 }
-                                        }
-                                }
-                        }
-
-                } else {
-                        t.Logf("Running tests in file %v\n", testFile.Name)
-                        for _, section := range testFile.Section {
-                                t.Logf("Running tests in section %v\n", section.Name)
-                                for _, test := range section.Test {
-                                        desc := fmt.Sprintf("%s/%s/%s", testFile.Name, section.Name, test.Name)
-                                        t.Run(desc, func(t *testing.T) {
-                                                err := rc.RunTest(test)
-                                                if err != nil {
-                                                        t.Fatal(err)
-                                                }
-                                        })
-                                }
-                        }
+					}
+				}
+			}
                 }
-        }
-}
-
-func contains(s []string, e string) bool {
-        for _, a := range s {
-                if a == e {
-                        return true
-                }
-        }
-        return false
+	}
 }
