@@ -15,12 +15,23 @@ import (
 	spb "github.com/google/cel-spec/proto/test/v1/simple"
 )
 
+type arrayFlags []string
+
+func (i *arrayFlags) String() string {
+	return strings.Join(*i, " ")
+}
+
+func (i *arrayFlags) Set (value string) error {
+	*i = append(*i, value)
+	return nil
+}
+
 var (
 	flagServerCmd      string
 	flagParseServerCmd string
 	flagCheckServerCmd string
 	flagEvalServerCmd  string
-	flagSkipTestCmd    string
+	skipFlags	   arrayFlags
 	rc                 *runConfig
 )
 
@@ -29,7 +40,7 @@ func init() {
 	flag.StringVar(&flagParseServerCmd, "parse_server", "", "path to binary for parse server")
 	flag.StringVar(&flagCheckServerCmd, "check_server", "", "path to binary for check server")
 	flag.StringVar(&flagEvalServerCmd, "eval_server", "", "path to binary for eval server")
-	flag.StringVar(&flagSkipTestCmd, "skip_test", "", "name(s) of tests to skip in the format [name](/section(/test)?)?, multiple tests in same section delimited by , and different filenames delimited by ;")
+	flag.Var(&skipFlags, "skip_test", "name(s) of tests to skip. can be set multiple times. to skip the following tests: f1/s1/t1, f1/s1/t2, f1/s2/*, f2/s3/t3, you give the arguments --skip_test=f1/s1/t1,t2;s2 --skip_test=f2/s3/t3")
 	flag.Parse()
 }
 
@@ -123,19 +134,31 @@ func TestMain(m *testing.M) {
         if rc == nil {
                 return
         }
-        testArray := strings.Split(flagSkipTestCmd, ";")
-        m := make(map[string]string)
-        for _, fullTest := range testArray {
-                sections := strings.Count(fullTest, "/")
-                if sections == 0 || sections == 1 {
-                        m[fullTest] = "ALL"
-                } else if sections == 2 {
-                        ind := strings.LastIndex(fullTest, "/")
-                        m[fullTest[:ind]] = fullTest[ind+1:]
-               } else {
-                        log.Fatal ("Unable to parse skip_test flag, specifically for %v\n", fullTest)
-                }
-        }
+	m := make(map[string]string)
+	for _, arg := range skipFlags {
+		temp := strings.Split(arg, ";")
+		first := true
+		ind := strings.Index(arg, "/")
+		for _, subarg := range temp {
+			if !first {
+				if ind+1 > len(arg) {
+					log.Fatal("Unable to parse skip_test flag, specificially for %v\n", arg)
+				}
+				subarg = arg[:ind+1] + subarg
+			} else {
+				first = false
+			}
+			sections := strings.Count(subarg, "/")
+			if sections == 0 || sections == 1 {
+				m[subarg] = "ALL"
+			} else if sections == 2 {
+				ind := strings.LastIndex(subarg, "/")
+				m[subarg[:ind]] = subarg[ind+1:]
+			} else {
+				log.Fatal("Unable to parse skip_test flag, specifically for %v\n", arg)
+			}
+		}
+	}
         // Run the flag-configured tests.
         for _, filename := range flag.Args() {
                 testFile, err := parseSimpleFile(filename)
