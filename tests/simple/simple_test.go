@@ -15,13 +15,15 @@ import (
 	spb "github.com/google/cel-spec/proto/test/v1/simple"
 )
 
-type arrayFlags []string
+type stringArray []string
 
-func (i *arrayFlags) String() string {
+//String implements flag.Value.String()
+func (i *stringArray) String() string {
 	return strings.Join(*i, " ")
 }
 
-func (i *arrayFlags) Set (value string) error {
+//Set implements flag.Value.Set()
+func (i *stringArray) Set (value string) error {
 	*i = append(*i, value)
 	return nil
 }
@@ -31,7 +33,7 @@ var (
 	flagParseServerCmd string
 	flagCheckServerCmd string
 	flagEvalServerCmd  string
-	skipFlags	   arrayFlags
+	skipFlags	   stringArray
 	rc                 *runConfig
 )
 
@@ -135,33 +137,33 @@ func TestMain(m *testing.M) {
                 return
         }
 	var skipTests []string
-	first := true
-	for _, arg := range skipFlags {
-		if !strings.Contains(arg, "/") {
-			log.Fatal("Unable to parse skip_test flag, specifically for ", arg)
+	firstFlag := true
+	for _, flagVal := range skipFlags {
+		if !strings.Contains(flagVal, "/") {
+			log.Fatal("Unable to parse skip_test flag, specifically for ", flagVal)
 		}
-		ind := strings.Index(arg, "/")
-		if (arg[:ind] == ""){
+		fileInd := strings.Index(flagVal, "/")
+		if (flagVal[:fileInd] == ""){
 			log.Fatal("Empty filename")
 		}
-		allSections := strings.Split(arg, ";")
-		filename := arg[:ind+1]
-		for _, subarg := range allSections {
-			if first {
-				skipTests = append(skipTests, subarg)
-				first = false
+		allSections := strings.Split(flagVal, ";")
+		filename := flagVal[:fileInd+1]
+		for _, sectionVal := range allSections {
+			if firstFlag {
+				skipTests = append(skipTests, sectionVal)
+				firstFlag = false
 			} else {
-				sections := strings.Count(subarg, "/")
+				sections := strings.Count(sectionVal, "/")
 				if sections == 0 {
-					if subarg != "" {
-						skipTests = append(skipTests, filename + subarg)
+					if sectionVal != "" {
+						skipTests = append(skipTests, filename + sectionVal)
 					} else {
 						log.Fatal("Empty string where should be section name")
 					}
 				} else if sections == 1 {
-					lastInd := strings.LastIndex(subarg, "/")
-					sectionName := subarg[:lastInd+1]
-					testString := subarg[lastInd+1:]
+					lastInd := strings.LastIndex(sectionVal, "/")
+					sectionName := sectionVal[:lastInd+1]
+					testString := sectionVal[lastInd+1:]
 					if testString == "" {
 						log.Fatal("Empty string where should be test name")
 					} else {
@@ -175,11 +177,11 @@ func TestMain(m *testing.M) {
 						}
 					}
 				} else {
-					log.Fatal("Unable to parse skip_test flag, specifically for ", subarg)
+					log.Fatal("Unable to parse skip_test flag, specifically for ", sectionVal)
 				}
 			}
 		}
-		first = true
+		firstFlag = true
 	}
         // Run the flag-configured tests.
         for _, filename := range flag.Args() {
