@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"strings"
 	"testing"
 
 	"github.com/golang/protobuf/proto"
@@ -14,11 +15,25 @@ import (
 	spb "github.com/google/cel-spec/proto/test/v1/simple"
 )
 
+type stringArray []string
+
+//String implements flag.Value.String()
+func (i *stringArray) String() string {
+	return strings.Join(*i, " ")
+}
+
+//Set implements flag.Value.Set()
+func (i *stringArray) Set(value string) error {
+	*i = append(*i, value)
+	return nil
+}
+
 var (
 	flagServerCmd      string
 	flagParseServerCmd string
 	flagCheckServerCmd string
 	flagEvalServerCmd  string
+	skipFlags          stringArray
 	rc                 *runConfig
 )
 
@@ -27,6 +42,8 @@ func init() {
 	flag.StringVar(&flagParseServerCmd, "parse_server", "", "path to binary for parse server")
 	flag.StringVar(&flagCheckServerCmd, "check_server", "", "path to binary for check server")
 	flag.StringVar(&flagEvalServerCmd, "eval_server", "", "path to binary for eval server")
+	flag.Var(&skipFlags, "skip_test", "name(s) of tests to skip. can be set multiple times. to skip the following tests: f1/s1/t1, f1/s1/t2, f1/s2/*, f2/s3/t3, you give the arguments --skip_test=f1/s1/t1,t2;s2 --skip_test=f2/s3/t3")
+	flag.Parse()
 }
 
 // Server binaries specified by flags
@@ -119,6 +136,42 @@ func TestSimpleFile(t *testing.T) {
 	if rc == nil {
 		return
 	}
+	var skipTests []string
+	for _, flagVal := range skipFlags {
+		fileInd := strings.Index(flagVal, "/")
+		splitFile := strings.SplitN(flagVal, "/", 2)
+		fileName := splitFile[0]
+		sectionString := splitFile[1]
+		if fileInd < 1 || sectionString == "" {
+			log.Fatal("skip_test argument must contain at least <file>/<section>, received ", flagVal)
+		}
+		for _, sectionVal := range strings.Split(sectionString, ";") {
+			sections := strings.Count(sectionVal, "/")
+			if sections > 1 {
+				log.Fatal("Unable to parse skip_test flag for ", sectionVal)
+			}
+			if sections == 0 {
+				if sectionVal == "" {
+					log.Fatal("Empty string where should be section name")
+				}
+				skipTests = append(skipTests, fileName+"/"+sectionVal)
+			} else if sections == 1 {
+				splitSection := strings.SplitN(sectionVal, "/", 2)
+				sectionName := splitSection[0]
+				testString := splitSection[1]
+				if testString == "" {
+					log.Fatal("Empty string where should be test name")
+				}
+				tests := strings.Split(testString, ",")
+				for _, test := range tests {
+					if test == "" {
+						log.Fatal("Empty string where should be test name")
+					}
+					skipTests = append(skipTests, fileName+"/"+sectionName+"/"+test)
+				}
+			}
+		}
+	}
 	// Run the flag-configured tests.
 	for _, filename := range flag.Args() {
 		testFile, err := parseSimpleFile(filename)
@@ -127,8 +180,18 @@ func TestSimpleFile(t *testing.T) {
 		}
 		t.Logf("Running tests in file %v\n", testFile.Name)
 		for _, section := range testFile.Section {
+			sectionPath := testFile.Name + "/" + section.Name
+			if contains(skipTests, sectionPath) {
+				t.Logf("Skipping all tests in section %v\n", section.Name)
+				continue
+			}
 			t.Logf("Running tests in section %v\n", section.Name)
 			for _, test := range section.Test {
+				testPath := sectionPath + "/" + test.Name
+				if contains(skipTests, testPath) {
+					t.Logf("Skipping test name %v\n", test.Name)
+					continue
+				}
 				desc := fmt.Sprintf("%s/%s/%s", testFile.Name, section.Name, test.Name)
 				t.Run(desc, func(t *testing.T) {
 					err := rc.RunTest(test)
@@ -139,4 +202,14 @@ func TestSimpleFile(t *testing.T) {
 			}
 		}
 	}
+}
+
+// Strings can be stored in a sorted order to speed up checks if needed
+func contains(s []string, e string) bool {
+	for _, a := range s {
+		if a == e {
+			return true
+		}
+	}
+	return false
 }
