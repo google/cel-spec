@@ -154,7 +154,7 @@ func TestSimpleFile(t *testing.T) {
 				if sectionVal == "" {
 					log.Fatal("Empty string where should be section name")
 				}
-				 skipTests = append(skipTests, fileName+"/"+sectionVal)
+				skipTests = append(skipTests, fileName+"/"+sectionVal)
 			} else if sections == 1 {
 				splitSection := strings.SplitN(sectionVal, "/", 2)
 				sectionName := splitSection[0]
