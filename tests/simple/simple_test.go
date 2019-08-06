@@ -137,27 +137,29 @@ func TestSimpleFile(t *testing.T) {
 		return
 	}
 	var skipTests []string
-	firstFlag := true
 	for _, flagVal := range skipFlags {
 		fileInd := strings.Index(flagVal, "/")
-		splitFile = strings.SplitN(flagVal, "/", 2)
+		splitFile := strings.SplitN(flagVal, "/", 2)
 		fileName := splitFile[0]
 		sectionString := splitFile[1]
-		if fileInd > 0 || sectionString == "" {
+		if fileInd < 1 || sectionString == "" {
 			log.Fatal("skip_test argument must contain at least <file>/<section>, received ", flagVal)
 		}
 		for _, sectionVal := range strings.Split(sectionString, ";") {
 			sections := strings.Count(sectionVal, "/")
+			if sections > 1 {
+				log.Fatal("Unable to parse skip_test flag for ", sectionVal)
+			}
 			if sections == 0 {
 				if sectionVal != "" {
-					skipTests = append(skipTests, filename+"/"+sectionVal)
+					skipTests = append(skipTests, fileName+"/"+sectionVal)
 				} else {
 					log.Fatal("Empty string where should be section name")
 				}
 			} else if sections == 1 {
-				lastInd := strings.LastIndex(sectionVal, "/")
-				sectionName := sectionVal[:lastInd+1]
-				testString := sectionVal[lastInd+1:]
+				splitSection := strings.SplitN(sectionVal, "/", 2)
+				sectionName := splitSection[0]
+				testString := splitSection[1]
 				if testString == "" {
 					log.Fatal("Empty string where should be test name")
 				} else {
@@ -166,12 +168,10 @@ func TestSimpleFile(t *testing.T) {
 						if test == "" {
 							log.Fatal("Empty string where should be test name")
 						} else {
-							skipTests = append(skipTests, filename+"/"+sectionName+test)
+							skipTests = append(skipTests, fileName+"/"+sectionName+"/"+test)
 						}
 					}
 				}
-			} else {
-				log.Fatal("Unable to parse skip_test flag, specifically for ", sectionVal)
 			}
 		}
 	}
