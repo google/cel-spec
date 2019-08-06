@@ -23,7 +23,7 @@ func (i *stringArray) String() string {
 }
 
 //Set implements flag.Value.Set()
-func (i *stringArray) Set (value string) error {
+func (i *stringArray) Set(value string) error {
 	*i = append(*i, value)
 	return nil
 }
@@ -33,7 +33,7 @@ var (
 	flagParseServerCmd string
 	flagCheckServerCmd string
 	flagEvalServerCmd  string
-	skipFlags	   stringArray
+	skipFlags          stringArray
 	rc                 *runConfig
 )
 
@@ -130,95 +130,89 @@ func TestMain(m *testing.M) {
 	os.Exit(m.Run())
 }
 
- func TestSimpleFile(t *testing.T) {
-        // Special case to handle test invocation without args. See TestMain()
-        // early return comment.
-        if rc == nil {
-                return
-        }
+func TestSimpleFile(t *testing.T) {
+	// Special case to handle test invocation without args. See TestMain()
+	// early return comment.
+	if rc == nil {
+		return
+	}
 	var skipTests []string
 	firstFlag := true
 	for _, flagVal := range skipFlags {
-		if !strings.Contains(flagVal, "/") {
-			log.Fatal("Unable to parse skip_test flag, specifically for ", flagVal)
-		}
 		fileInd := strings.Index(flagVal, "/")
-		if (flagVal[:fileInd] == ""){
-			log.Fatal("Empty filename")
+		splitFile = strings.SplitN(flagVal, "/", 2)
+		fileName := splitFile[0]
+		sectionString := splitFile[1]
+		if fileInd > 0 || sectionString == "" {
+			log.Fatal("skip_test argument must contain at least <file>/<section>, received ", flagVal)
 		}
-		allSections := strings.Split(flagVal, ";")
-		filename := flagVal[:fileInd+1]
-		for _, sectionVal := range allSections {
-			if firstFlag {
-				skipTests = append(skipTests, sectionVal)
-				firstFlag = false
-			} else {
-				sections := strings.Count(sectionVal, "/")
-				if sections == 0 {
-					if sectionVal != "" {
-						skipTests = append(skipTests, filename + sectionVal)
-					} else {
-						log.Fatal("Empty string where should be section name")
-					}
-				} else if sections == 1 {
-					lastInd := strings.LastIndex(sectionVal, "/")
-					sectionName := sectionVal[:lastInd+1]
-					testString := sectionVal[lastInd+1:]
-					if testString == "" {
-						log.Fatal("Empty string where should be test name")
-					} else {
-						tests := strings.Split(testString, ",")
-						for _, test := range tests{
-							if test == "" {
-								log.Fatal("Empty string where should be test name")
-							} else {
-								skipTests = append(skipTests, filename + sectionName + test)
-							}
+		for _, sectionVal := range strings.Split(sectionString, ";") {
+			sections := strings.Count(sectionVal, "/")
+			if sections == 0 {
+				if sectionVal != "" {
+					skipTests = append(skipTests, filename+"/"+sectionVal)
+				} else {
+					log.Fatal("Empty string where should be section name")
+				}
+			} else if sections == 1 {
+				lastInd := strings.LastIndex(sectionVal, "/")
+				sectionName := sectionVal[:lastInd+1]
+				testString := sectionVal[lastInd+1:]
+				if testString == "" {
+					log.Fatal("Empty string where should be test name")
+				} else {
+					tests := strings.Split(testString, ",")
+					for _, test := range tests {
+						if test == "" {
+							log.Fatal("Empty string where should be test name")
+						} else {
+							skipTests = append(skipTests, filename+"/"+sectionName+test)
 						}
 					}
-				} else {
-					log.Fatal("Unable to parse skip_test flag, specifically for ", sectionVal)
 				}
+			} else {
+				log.Fatal("Unable to parse skip_test flag, specifically for ", sectionVal)
 			}
 		}
-		firstFlag = true
 	}
-        // Run the flag-configured tests.
-        for _, filename := range flag.Args() {
-                testFile, err := parseSimpleFile(filename)
-                if err != nil {
-                        t.Fatalf("Can't parse input file %v: %v", filename, err)
-                }
-                t.Logf("Running tests in file %v\n", testFile.Name)
-                for _, section := range testFile.Section {
+	// Run the flag-configured tests.
+	for _, filename := range flag.Args() {
+		testFile, err := parseSimpleFile(filename)
+		if err != nil {
+			t.Fatalf("Can't parse input file %v: %v", filename, err)
+		}
+		t.Logf("Running tests in file %v\n", testFile.Name)
+		for _, section := range testFile.Section {
 			sectionPath := testFile.Name + "/" + section.Name
-                        if contains(skipTests, sectionPath) {
-                                t.Logf("Skipping all tests in section %v\n", section.Name)
-                        } else {
-                                t.Logf("Running tests in section %v\n", section.Name)
-                                for _, test := range section.Test {
-					testPath := sectionPath + "/" + test.Name
-                                        if contains(skipTests, testPath){
-						t.Logf("Skipping test name %v\n", test.Name)
-					} else {
-                                                desc := fmt.Sprintf("%s/%s/%s", testFile.Name, section.Name, test.Name)
-                                                t.Run(desc, func(t *testing.T) {
-                                                        err := rc.RunTest(test)
-                                                             if err != nil {
-                                                                t.Fatal(err)
-                                                        }
-						})
-                                        }
+			if contains(skipTests, sectionPath) {
+				t.Logf("Skipping all tests in section %v\n", section.Name)
+				continue
+			}
+			t.Logf("Running tests in section %v\n", section.Name)
+			for _, test := range section.Test {
+				testPath := sectionPath + "/" + test.Name
+				if contains(skipTests, testPath) {
+					t.Logf("Skipping test name %v\n", test.Name)
+					continue
 				}
+				desc := fmt.Sprintf("%s/%s/%s", testFile.Name, section.Name, test.Name)
+				t.Run(desc, func(t *testing.T) {
+					err := rc.RunTest(test)
+					if err != nil {
+						t.Fatal(err)
+					}
+				})
 			}
 		}
 	}
 }
+
+// Strings can be stored in a sorted order to speed up checks if needed
 func contains(s []string, e string) bool {
-        for _, a := range s {
-                if a == e {
-                        return true
-                }
-        }
-        return false
+	for _, a := range s {
+		if a == e {
+			return true
+		}
+	}
+	return false
 }
