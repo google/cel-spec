@@ -151,26 +151,23 @@ func TestSimpleFile(t *testing.T) {
 				log.Fatal("Unable to parse skip_test flag for ", sectionVal)
 			}
 			if sections == 0 {
-				if sectionVal != "" {
-					skipTests = append(skipTests, fileName+"/"+sectionVal)
-				} else {
+				if sectionVal == "" {
 					log.Fatal("Empty string where should be section name")
 				}
+				 skipTests = append(skipTests, fileName+"/"+sectionVal)
 			} else if sections == 1 {
 				splitSection := strings.SplitN(sectionVal, "/", 2)
 				sectionName := splitSection[0]
 				testString := splitSection[1]
 				if testString == "" {
 					log.Fatal("Empty string where should be test name")
-				} else {
-					tests := strings.Split(testString, ",")
-					for _, test := range tests {
-						if test == "" {
-							log.Fatal("Empty string where should be test name")
-						} else {
-							skipTests = append(skipTests, fileName+"/"+sectionName+"/"+test)
-						}
+				}
+				tests := strings.Split(testString, ",")
+				for _, test := range tests {
+					if test == "" {
+						log.Fatal("Empty string where should be test name")
 					}
+					skipTests = append(skipTests, fileName+"/"+sectionName+"/"+test)
 				}
 			}
 		}
