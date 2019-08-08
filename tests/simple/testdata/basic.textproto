@@ -158,6 +158,20 @@ section {
       value: { value: { bool_value: true } }
     }
   }
+  test {
+    name: "self_eval_unbound_lookup"
+    description: "An unbound variable should be marked as an error during execution. See google/cel-go#154"
+    expr: "x"
+    disable_check: true
+    ## Expected behavior
+    eval_error: {
+      errors: { message: "undeclared reference to 'x' (in container '')" }
+    }
+    ## Current behavior as expressed by the cel-go implementation
+    #unknown: {
+    #  exprs: 1
+    #}
+  }
 }
 section {
   name: "namespace"
