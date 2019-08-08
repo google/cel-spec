@@ -198,8 +198,6 @@ section {
     ## value: { uint64_value: 18446744073709551615 }
   }
 }
-
-}
 section {
   name: "uint64_math"
   description: "Simple tests for uint64."
