@@ -247,7 +247,7 @@ section {
     }
     disable_check: true ## when check is disabled, the evaluator should evaluate it in the correct order
     value: { string_value: "yeah" }
-  }  
+  }
   test {
     name: "list_field_select_unsupported"
     expr: "a.b.pancakes"
@@ -341,5 +341,37 @@ section {
       }
     }
     value: { string_value: "yeah" }
+  }
+  test {
+    name: "map_key_float"
+    description: "map should not support float as the key."
+    expr: "{3.3:15.15, 1.0: 5}[1.0]"
+    disable_check: true # need to make it fail in the evaluation phase
+    eval_error: {
+      errors: { message: "unsupported key type" }
+    }
+    ## Current behavior
+    ## value: { int64_value: 5 }
+  }
+  test {
+    name: "map_key_null"
+    description: "map should not support null as the key."
+    expr: "expr: '{null:false}[null]'"
+    disable_check: true # need to make it fail in the evaluation phase
+    eval_error: {
+      errors: { message: "unsupported key type" }
+    }
+    ## Current behavior
+    ## value: { bool_value: false }
+  }
+  test {
+    name: "map_value_repeat_key"
+    description: "map should not support repeated key."
+    expr: "{true:1,false:2,true:3}[true]"
+    eval_error: {
+      errors: { message: "Failed with repeated key" }
+    }
+    ## Current behavior:
+    ## value: { int64_value: 1 }
   }
 }

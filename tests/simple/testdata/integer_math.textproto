@@ -79,7 +79,7 @@ section {
     value: { int64_value: -2 }
   }
   test {
-    name: "negtive"
+    name: "negative"
     expr: "-(42)"
     value: { int64_value: -42 }
   }
@@ -96,7 +96,7 @@ section {
     value: { int64_value: 0 }
   }
   test {
-    name: "double_negtive"
+    name: "double_negative"
     expr: "-(-42)"
     value: { int64_value: 42 }
   }
@@ -157,6 +157,48 @@ section {
     expr: "5 * (15 + 25)  == 5 * 15 + 5 * 25"
     value: { bool_value: true }
   }
+  test {
+    name: "int64_overflow_positive"
+    description: "LLONG_MAX plus one."
+    expr: "9223372036854775807 + 1"
+    eval_error: {
+      errors: { message: "return error for overflow" }
+    }
+    ## Current behavior:
+    ## value: { int64_value: -9223372036854775808 }
+  }
+  test {
+    name: "int64_overflow_negative"
+    description: "LLONG_MIN minus one."
+    expr: "-9223372036854775808 - 1"
+    eval_error: {
+      errors: { message: "return error for overflow" }
+    }
+    ## Current behavior:
+    ## value: { int64_value: 9223372036854775807 }
+  }
+  test {
+    name: "uint64_overflow_positive"
+    description: "ULLONG_MAX plus one."
+    expr: "18446744073709551615u + 1u"
+    eval_error: {
+      errors: { message: "return error for overflow" }
+    }
+    ## Current behavior:
+    ## value: { uint64_value: 0 }
+  }
+  test {
+    name: "uint64_overflow_negative"
+    description: "zero minus one."
+    expr: "0u - 1u"
+    eval_error: {
+      errors: { message: "return error for overflow" }
+    }
+    ## Current behavior:
+    ## value: { uint64_value: 18446744073709551615 }
+  }
+}
+
 }
 section {
   name: "uint64_math"
