@@ -585,7 +585,7 @@ to support, selecting from the predefined set of macros. The currently available
 macros are:
 
 *   `has(e.f)`: tests whether a field is available. See "Field Selection" below.
-*   `e.all(x, p),`: tests whether a predicate holds for all elements of a list
+*   `e.all(x, p)`: tests whether a predicate holds for all elements of a list
     `e` or keys of a map `e`. Here `x` is a simple identifier to be used in `p`
     which binds to the element or key. The `all()` macro combines per-element
     predicate results with the "and" (`&&`) operator, so if any predicate
