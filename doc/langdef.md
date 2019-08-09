@@ -108,10 +108,10 @@ COMMENT        ::= '//' ~NEWLINE* NEWLINE
 
 Note that negative numbers are recognized as positives with the unary `-`
 operator from the grammar. For the sake of a readable representation, the escape
-sequences (`ESCAPE`) are kept implicit in string tokens. The meaning is that in
-strings without the `r` or `R` (raw) prefix, `ESCAPE` is processed, whereas in
-strings with they stay uninterpreted. See documentation of string literals
-below.
+sequences (`ESCAPE`) are kept implicit in string tokens. This means that strings
+without the `r` or `R` (raw) prefix process `ESCAPE` sequences, while in strings
+with the raw prefix they stay uninterpreted. See documentation of string
+literals below.
 
 The following identifiers are reserved due to their use as literal values or in
 the syntax:
@@ -199,7 +199,7 @@ arithmetic conversions are added in the future.
 
 CEL provides no way to control the finer points of floating-point arithmetic,
 such as expression evaluation, rounding mode, or exception handling. However,
-any two not-a-number values will compare unequal even if their underlying
+any two not-a-number values will compare equal even if their underlying
 properties are different.
 
 ### String and Bytes Values
@@ -230,10 +230,10 @@ representation of the string literal. In addition, the octal escape sequence are
 interpreted as octet values rather than as Unicode code points. Both raw and
 multiline string literals can be used for byte literals.
 
-Escape sequences are a backslash (`\`) followed by one of the following:
+Escape sequences are a backslash (`\ `) followed by one of the following:
 
 *   A punctuation mark representing itself:
-    *   `\`: backslash
+    *   `\ `: backslash
     *   `?`: question mark
     *   `"`: double quote
     *   `'`: single quote
@@ -247,8 +247,10 @@ Escape sequences are a backslash (`\`) followed by one of the following:
     *   `t`: horizontal tab
     *   `v`: vertical tab
 *   A `u` followed by four hexadecimal characters, encoding a Unicode code point
-    in the BMP. Characters in other Unicode planes can be represented with
-    surrogate pairs. Valid only for string literals.
+    in the
+    [BMP](https://en.wikipedia.org/wiki/Plane_\(Unicode\)#Basic_Multilingual_Plane).
+    Characters in other Unicode planes can be represented with surrogate pairs.
+    Valid only for string literals.
 *   A `U` followed by eight hexadecimal characters, encoding a Unicode code
     point. Valid only for string literals.
 *   A `x` or `X` followed by two hexadecimal characters. For strings, it denotes
@@ -266,7 +268,7 @@ CEL Literal   | Meaning
 `"\""`        | String of one double-quote character
 `"\\"`        | String of one backslash character
 `r"\\"`       | String of two backslash characters
-`b"abc"`      | Byte sequence of 61, 62, 63
+`b"abc"`      | Byte sequence of 97, 98, 99
 `b"ÿ"`        | Sequence of bytes 195 and 191 (UTF-8 of &yuml;)
 `b"\303\277"` | Also sequence of bytes 195 and 191
 `"\303\277"`  | String of "&Atilde;&iquest;" (code points 195, 191)
@@ -318,7 +320,7 @@ where a value of some other type is expected.
 
 ### Type Values
 
-Every value in CEL has a runtime type which is a value by itself. The standard
+Every value in CEL has a runtime type which is itself a value. The standard
 function `type(x)` returns the type of expression `x`.
 
 As types are values, those values (`int`, `string`, etc.) also have a type: the
@@ -334,8 +336,8 @@ type `type`, which is an expression by itself which in turn also has type
 
 A CEL implementation can add new types to the language. These types will be
 given names in the same namespace as the other types, but will have no special
-upport in the language syntax. The only way to construct or use values of these
-abstract types is through functions which the implementor will also provide.
+support in the language syntax. The only way to construct or use values of these
+abstract types is through functions which the implementor must also provide.
 
 Commonly, an abstract type will have a representation as a protocol buffer, so
 that it can be stored or transmitted across a network. In this case, the
@@ -583,8 +585,8 @@ to support, selecting from the predefined set of macros. The currently available
 macros are:
 
 *   `has(e.f)`: tests whether a field is available. See "Field Selection" below.
-*   `e.all(x, p),`: tests where a predicate holds for all elements of a list `e`
-    or keys of a map `e`. Here `x` is a simple identifier to be used in `p`
+*   `e.all(x, p),`: tests whether a predicate holds for all elements of a list
+    `e` or keys of a map `e`. Here `x` is a simple identifier to be used in `p`
     which binds to the element or key. The `all()` macro combines per-element
     predicate results with the "and" (`&&`) operator, so if any predicate
     evaluates to false, the macro evaluates to false, ignoring any errors from
