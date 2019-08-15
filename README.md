@@ -62,6 +62,10 @@ For more detail, see:
 *   [Introduction](doc/intro.md)
 *   [Language Definition](doc/langdef.md)
 
+A dashboard that shows results of conformance tests on current CEL
+implementations can be found
+[here](https://k8s-testgrid.appspot.com/google-cel).
+
 Released under the [Apache License](LICENSE).
 
 Disclaimer: This is not an official Google product.
