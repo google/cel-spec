@@ -31,7 +31,7 @@ sh_test(
         "$(location @com_google_cel_spec//tests/envcheck:testdata/go-0.1.0.textproto)",
     ],
     data = [
-        "@com_google_cel_spec//tests/simple:simple_test",
+        "@com_google_cel_spec//tests/envcheck:envcheck_test",
         "//server/main:cel_server",
         "@com_google_cel_spec//tests/envcheck:testdata/go-0.1.0.textproto",
     ],
