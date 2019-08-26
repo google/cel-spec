@@ -81,6 +81,20 @@ section {
     value: { bool_value: false }
   }
   test {
+    name: "error_right"
+    expr: "true && 1/0 != 0"
+    eval_error: {
+      errors: { message: "no matching overload" }
+    }
+  }
+  test {
+    name: "error_left"
+    expr: "1/0 != 0 && true"
+    eval_error: {
+      errors: { message: "no matching overload" }
+    }
+  }
+  test {
     name: "no_overload"
     expr: "'less filling' && 'tastes great'"
     disable_check: true
@@ -133,6 +147,20 @@ section {
     name: "short_circuit_error_right"
     expr: "(2 / 0 > 3 ? false : true) || true"
     value: { bool_value: true }
+  }
+  test {
+    name: "error_right"
+    expr: "false || 1/0 != 0"
+    eval_error: {
+      errors: { message: "no matching overload" }
+    }
+  }
+  test {
+    name: "error_left"
+    expr: "1/0 != 0 || false"
+    eval_error: {
+      errors: { message: "no matching overload" }
+    }
   }
   test {
     name: "no_overload"
