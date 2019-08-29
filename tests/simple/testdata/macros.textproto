@@ -2,53 +2,123 @@ name: "macros"
 description: "Tests for CEL macros."
 section {
   name: "exists"
-  description: "Checks for the existence of a map key or list element"
+  description: "Tests for the .exists() macro, which is equivalent to joining the evaluated elements with logical-OR."
   test {
-    name: "list_elem_exists"
+    name: "list_elem_all"
+    expr: "[1, 2, 3].exists(e, e > 0)"
+    value: { bool_value: true }
+  }
+  test {
+    name: "list_elem_some"
     expr: "[1, 2, 3].exists(e, e == 2)"
     value: { bool_value: true }
   }
   test {
-    name: "not_list_elem_exists"
-    expr: "![1, 2, 3].exists(e, e > 3)"
+    name: "list_elem_none"
+    expr: "[1, 2, 3].exists(e, e > 3)"
+    value: { bool_value: false }
+  }
+  test {
+    name: "list_elem_mixed_type"
+    description: "Exists filter is true for the last element, thus short-circuits after 'err || true'"
+    expr: "[1, 'foo', 3].exists(e, e != '1')"
     value: { bool_value: true }
   }
   test {
-    name: "list_elem_mixed_type_exists"
-    description: "Exists filter is true for the second element, thus short-circuits after 'err || true'"
-    expr: "[1, '2', 3].exists(e, e != '10')"
-    value: { bool_value: true }
-  }
-  test {
-    name: "list_elem_mixed_type_exists_error"
+    name: "list_elem_mixed_type_error"
     description: "Exists filter is never true, thus reduces to 'err || false || err' which is an error"
-    expr: "[1, '2', 3].exists(e, e == '10')"
+    expr: "[1, 'foo', 3].exists(e, e == '10')"
     eval_error: {
       errors: { message: "no such overload" }
     }
   }
   test {
-    name: "map_key_exists"
+    name: "list_elem_all_error"
+    expr: "[1, 2, 3].exists(e, e / 0 == 17)"
+    eval_error: {
+      errors: { message: "divide by zero" }
+    }
+  }
+  test {
+    name: "list_empty"
+    expr: "[].exists(e, e == 2)"
+    value: { bool_value: false }
+  }
+  test {
+    name: "map_key"
     expr: "{'key1':1, 'key2':2}.exists(k, k == 'key2')"
     value: { bool_value: true }
   }
   test {
-    name: "not_map_key_exists"
+    name: "not_map_key"
     expr: "!{'key1':1, 'key2':2}.exists(k, k == 'key3')"
     value: { bool_value: true }
   }
   test {
-    name: "map_key_mixed_type_exists"
+    name: "map_key_mixed_type"
     description: "Exists filter is true for the second key, thus reduces to 'err || true' which is true"
     expr: "{'key':1, 1:21}.exists(k, k != 2)"
     value: { bool_value: true }
   }
   test {
-    name: "map_key_mixed_type_exists_error"
-    description: "Exists filter is never true, thus reduces to 'err || false' which is an error" 
+    name: "map_key_mixed_type_error"
+    description: "Exists filter is never true, thus reduces to 'err || false' which is an error"
     expr: "!{'key':1, 1:42}.exists(k, k == 2)"
     eval_error: {
       errors: { message: "no such overload" }
     }
+  }
+}
+section {
+  name: "all"
+  description: "Tests for the .all() macro, which is equivalent to joining the evaluated elements with logical-AND."
+  test {
+    name: "list_elem_all"
+    expr: "[1, 2, 3].all(e, e > 0)"
+    value: { bool_value: true }
+  }
+  test {
+    name: "list_elem_some"
+    expr: "[1, 2, 3].all(e, e == 2)"
+    value: { bool_value: false }
+  }
+  test {
+    name: "list_elem_none"
+    expr: "[1, 2, 3].all(e, e == 17)"
+    value: { bool_value: false }
+  }
+  test {
+    name: "list_elem_type_short"
+    expr: "[1, 'foo', 3].all(e, e == 1)"
+    value: { bool_value: false }
+  }
+  test {
+    name: "list_elem_type_long"
+    expr: "[1, 'foo', 3].all(e, e % 2 == 1)"
+    eval_error: {
+      errors: { message: "no_such_overload" }
+    }
+  }
+  test {
+    name: "list_elem_error_short"
+    expr: "[1, 2, 3].all(e, 6 / (2 - e) == 6)"
+    value: { bool_value: false }
+  }
+  test {
+    name: "list_elem_error_long"
+    expr: "[1, 2, 3].all(e, e / 0 != 17)"
+    eval_error: {
+      errors: { message: "divide by zero" }
+    }
+  }
+  test {
+    name: "list_empty"
+    expr: "[].all(e, e > 0)"
+    value: { bool_value: true }
+  }
+  test {
+    name: "map_key"
+    expr: "{'key1':1, 'key2':2}.all(k, k == 'key2')"
+    value: { bool_value: false }
   }
 }
