@@ -356,7 +356,7 @@ section {
   test {
     name: "map_key_null"
     description: "map should not support null as the key."
-    expr: "expr: '{null:false}[null]'"
+    expr: "{null:false}[null]"
     disable_check: true # need to make it fail in the evaluation phase
     eval_error: {
       errors: { message: "unsupported key type" }
