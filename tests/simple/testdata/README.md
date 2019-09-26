@@ -21,11 +21,6 @@ The available test files are:
   - literals of various types;
   - variables of various types.
 
-- [`broken.textproto`](broken.textproto) Tests that are currently broken in
-  the reference `cel-go` implementation.  CEL users and implementors should
-  beware of relying on the current behavior of `cel-go` when it's covered
-  by one of these tests.
-
 - [`comparisons.textproto`](comparisons.textproto) Checks the standard functions
   that return a boolean value.
 
@@ -46,6 +41,9 @@ The available test files are:
 - [`logic.textproto`](logic.textproto) Checks special logical operators.
 
 - [`macros.textproto`](macros.textproto) Checks use of CEL macros.
+
+- [`namespace.textproto`](namespace.textproto) Checks use of namespaces and
+  qualified identifiers.
 
 - [`proto2.textproto`](proto2.textproto) Checks use of protocol buffers version
   2.
