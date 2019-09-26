@@ -1,0 +1,68 @@
+name: "namespace"
+description: "Uses of qualified identifiers and namespaces."
+section {
+  name: "qualified"
+  description: "Qualified variable lookups."
+  test {
+    name: "self_eval_qualified_lookup"
+    expr: "x.y"
+    value: { bool_value: true }
+    type_env: {
+      name: "x.y",
+      ident: { type: { primitive: BOOL } }
+    }
+    bindings: {
+      key: "x.y"
+      value: { value: { bool_value: true } }
+    }
+  }
+}
+section {
+  name: "namespace"
+  description: "Namespaced identifiers."
+  test {
+    name: "self_eval_container_lookup"
+    expr: "y"
+    container: "x"
+    type_env: {
+      name: "x.y",
+      ident: { type: { primitive: BOOL } }
+    }
+    type_env: {
+      name: "y",
+      ident: { type: { primitive: STRING } }
+    }
+    bindings: {
+      key: "x.y"
+      value: { value: { bool_value: true } }
+    }
+    bindings: {
+      key: "y"
+      value: { value: { string_value: "false" } }
+    }
+    value: { bool_value: true }
+  }
+  test {
+    name: "self_eval_container_lookup_unchecked"
+    expr: "y"
+    container: "x"
+    type_env: {
+      name: "x.y",
+      ident: { type: { primitive: BOOL } }
+    }
+    type_env: {
+      name: "y",
+      ident: { type: { primitive: BOOL } }
+    }
+    bindings: {
+      key: "x.y"
+      value: { value: { bool_value: true } }
+    }
+    bindings: {
+      key: "y"
+      value: { value: { bool_value: false } }
+    }
+    disable_check: true ## ensure unchecked ASTs resolve the same as checked ASTs
+    value: { bool_value: true }
+  }
+}

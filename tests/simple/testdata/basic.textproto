@@ -146,80 +146,13 @@ section {
     value: { int64_value: 123 }
   }
   test {
-    name: "self_eval_qualified_lookup"
-    expr: "x.y"
-    value: { bool_value: true }
-    type_env: {
-      name: "x.y",
-      ident: { type: { primitive: BOOL } }
-    }
-    bindings: {
-      key: "x.y"
-      value: { value: { bool_value: true } }
-    }
-  }
-  test {
     name: "self_eval_unbound_lookup"
     description: "An unbound variable should be marked as an error during execution. See google/cel-go#154"
     expr: "x"
     disable_check: true
-    ## Expected behavior
     eval_error: {
       errors: { message: "undeclared reference to 'x' (in container '')" }
     }
-    ## Current behavior as expressed by the cel-go implementation
-    #unknown: {
-    #  exprs: 1
-    #}
-  }
-}
-section {
-  name: "namespace"
-  description: "Namespaced identifiers."
-  test {
-    name: "self_eval_container_lookup"
-    expr: "y"
-    container: "x"
-    type_env: {
-      name: "x.y",
-      ident: { type: { primitive: BOOL } }
-    }
-    type_env: {
-      name: "y",
-      ident: { type: { primitive: STRING } }
-    }
-    bindings: {
-      key: "x.y"
-      value: { value: { bool_value: true } }
-    }
-    bindings: {
-      key: "y"
-      value: { value: { string_value: "false" } }
-    }
-    value: { bool_value: true }
-  }
-  test {
-    name: "self_eval_container_lookup_unchecked"
-    expr: "y"
-    container: "x"
-    type_env: {
-      name: "x.y",
-      ident: { type: { primitive: BOOL } }
-    }
-    type_env: {
-      name: "y",
-      ident: { type: { primitive: BOOL } }
-    }
-    bindings: {
-      key: "x.y"
-      value: { value: { bool_value: true } }
-    }
-    bindings: {
-      key: "y"
-      value: { value: { bool_value: false } }
-    }
-    disable_check: true ## ensure unchecked ASTs resolve the same as checked ASTs
-    value: { bool_value: true }
   }
 }
 section {
