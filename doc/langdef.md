@@ -7,7 +7,7 @@ This page constitutes the reference for CEL. For a gentle introduction, see
 
 In the taxonomy of programming languages, CEL is:
 
-*   **memory-safe:** programs cannot express access to unrelated memory, such as
+*   **memory-safe:** programs cannot access unrelated memory, such as
     out-of-bounds array indexes or use-after-free pointer dereferences;
 *   **side-effect-free:** a CEL program only computes an output from its inputs;
 *   **terminating:** CEL programs cannot loop forever;
@@ -359,19 +359,17 @@ converted in the other direction when initializing a field. In general, protocol
 buffer data can be converted to CEL without error, but range errors are possible
 in the other direction.
 
-| Protocol Buffer Type             | CEL Type                               |
-| -------------------------------- | -------------------------------------- |
-| int32, int64, sint32, sint64,    | `int`                                  |
-: sfixed32, sfixed64               :                                        :
-| uint32, uint64, fixed32, fixed64 | `uint`                                 |
-| float, double                    | `double`                               |
-| bool, string, bytes              | same                                   |
-| enum                             | `int`                                  |
-| repeated                         | `list`                                 |
-| map<K, V>                        | `map`                                  |
-| oneof                            | options expanded individually, at most |
-:                                  : one is set                             :
-| message                          | same                                   |
+Protocol Buffer Field Type                       | CEL Type
+------------------------------------------------ | --------
+int32, int64, sint32, sint64, sfixed32, sfixed64 | `int`
+uint32, uint64, fixed32, fixed64                 | `uint`
+float, double                                    | `double`
+bool, string, bytes                              | same
+enum                                             | `int`
+repeated                                         | `list`
+map<K, V>                                        | `map`
+oneof                                            | options expanded individually, at most one is set
+message                                          | same except for conversions below
 
 Signed integers, unsigned integers, and floating point numbers are converted to
 the singular CEL type of the same sort. The CEL type is capable of expressing
@@ -414,17 +412,15 @@ is set. (See exception for wrapper types, below.)
 ### Dynamic Values
 
 CEL automatically converts certain protocol buffer messages in the
-google.protobuf package to other types.
+`google.protobuf` package to other types.
 
-| google.protobuf message | CEL Conversion                                     |
-| ----------------------- | -------------------------------------------------- |
-| `Any`                   | dynamically converted to the contained message     |
-:                         : type, or error                                     :
-| `ListValue`             | list of `Value` messages                           |
-| `Struct`                | map (with string keys, `Value` values)             |
-| `Value`                 | dynamically converted to the contained type (null, |
-:                         : double, string, bool, `Struct`, or `ListValue`)    :
-| wrapper types           | converted to eponymous type                        |
+google.protobuf message | CEL Conversion
+----------------------- | --------------
+`Any`                   | dynamically converted to the contained message type, or error
+`ListValue`             | list of `Value` messages
+`Struct`                | map (with string keys, `Value` values)
+`Value`                 | dynamically converted to the contained type (null, double, string, bool, `Struct`, or `ListValue`)
+wrapper types           | converted as eponymous field type
 
 The wrapper types are `BoolValue`, `BytesValue`, `DoubleValue`, `EnumValue`,
 `FloatValue`, `Int32Value`, `Int64Value`, `NullValue`, `StringValue`,
@@ -440,6 +436,38 @@ a `ListValue` of more values, and so on.
 Also note that all of these conversions are dynamic at runtime, so CEL's static
 type analysis cannot avoid the possibility of type-related errors in expressions
 using these dynamic values.
+
+## JSON Data Conversion
+
+CEL can also work with JSON data. Since there is a natural correspondence of
+most CEL data with protocol buffer data, and protocol buffers have a
+[defined mapping](https://developers.google.com/protocol-buffers/docs/proto3#json)
+to JSON, this creates a natural mapping of CEL to JSON. This creates an exact
+bidirectional mapping between JSON types and a subset of CEL data:
+
+JSON Type | CEL Type
+--------- | ----------------------------------------------
+`null`    | `null`
+Boolean   | `bool`
+Number    | `double` (except infinities or NaN)
+String    | `string`
+Array     | `list` of elements in this table
+Object    | `map` (with string keys, values in this table)
+
+We define JSON mappings for much of the remainder of CEL data, but note that
+this data will not map back in to CEL as the same value:
+
+CEL Data                                             | JSON Data
+---------------------------------------------------- | ---------
+`int`                                                | Number if in interoperable range, otherwise decimal String.
+`uint`                                               | Number if in interoperable range, otherwise decimal String.
+double infinity                                      | String `"Infinity"` or `"-Infinity"`
+double NaN                                           | String "NaN"
+`bytes`                                              | String of base64-encoded bytes
+message                                              | JSON conversion of protobuf message.
+`list` with non-convertible elements                 | none
+`map` with non-string keys or non-convertible values | none
+`type`                                               | none
 
 ## Gradual Type Checking
 
@@ -712,15 +740,17 @@ All predefined operators, functions and constants are listed in the table below.
 For each symbol, the available overloads are listed. Operator symbols use a
 notation like `_+_` where `_` is a placeholder for an argument.
 
-TODO https://issuetracker.google.com/67014381 : have better descriptions. The
-table is auto-generated so the descriptions need to be updated in the code.
-
 ### Timezones
 
-Timezones are expressed in the following grammar: `grammar TimeZone = "UTC" |
-LongTZ | FixedTZ ; LongTZ = ? list available at
-http://joda-time.sourceforge.net/timezones.html ? ; FixedTZ = ( "+" | "-" )
-Digit Digit ":" Digit Digit ; Digit = "0" | "1" | ... | "9" ;`
+Timezones are expressed in the following grammar:
+
+```grammar
+TimeZone = "UTC" | LongTZ | FixedTZ ;
+LongTZ = ? list available at
+           http://joda-time.sourceforge.net/timezones.html ? ;
+FixedTZ = ( "+" | "-" ) Digit Digit ":" Digit Digit ;
+Digit = "0" | "1" | ... | "9" ;
+```
 
 Fixed timezones are explicit hour and minute offsets from UTC. Long timezone
 names are like `Europe/Paris`, `CET`, or `US/Central`.
@@ -728,9 +758,14 @@ names are like `Europe/Paris`, `CET`, or `US/Central`.
 ### Regular Expressions
 
 Regular expressions follow the
-[RE2 syntax](https://github.com/google/re2/wiki/Syntax).
+[RE2 syntax](https://github.com/google/re2/wiki/Syntax). Regular expression
+matches succeed if they match a substring of the argument. Use explicit anchors
+(`^` and `$`) in the pattern to force full-string matching, if desired.
 
 ### List of Standard Definitions
+
+TODO https://issuetracker.google.com/67014381 : have better descriptions. The
+table is auto-generated so the descriptions need to be updated in the code.
 
 <!-- BEGIN GENERATED DECL TABLE; DO NOT EDIT BELOW -->
 
