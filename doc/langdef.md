@@ -446,28 +446,32 @@ to JSON, this creates a natural mapping of CEL to JSON. This creates an exact
 bidirectional mapping between JSON types and a subset of CEL data:
 
 JSON Type | CEL Type
---------- | ----------------------------------------------
+--------- | -----------------------------------------------
 `null`    | `null`
 Boolean   | `bool`
 Number    | `double` (except infinities or NaN)
 String    | `string`
-Array     | `list` of elements in this table
-Object    | `map` (with string keys, values in this table)
+Array     | `list` of bi-convertible elements
+Object    | `map` (with string keys, bi-convertible values)
 
 We define JSON mappings for much of the remainder of CEL data, but note that
 this data will not map back in to CEL as the same value:
 
-CEL Data                                             | JSON Data
----------------------------------------------------- | ---------
-`int`                                                | Number if in interoperable range, otherwise decimal String.
-`uint`                                               | Number if in interoperable range, otherwise decimal String.
-double infinity                                      | String `"Infinity"` or `"-Infinity"`
-double NaN                                           | String "NaN"
-`bytes`                                              | String of base64-encoded bytes
-message                                              | JSON conversion of protobuf message.
-`list` with non-convertible elements                 | none
-`map` with non-string keys or non-convertible values | none
-`type`                                               | none
+CEL Data                                               | JSON Data
+------------------------------------------------------ | ---------
+`int`                                                  | Number if in interoperable range, otherwise decimal String.
+`uint`                                                 | Number if in interoperable range, otherwise decimal String.
+double infinity                                        | String `"Infinity"` or `"-Infinity"`
+double NaN                                             | String "NaN"
+`bytes`                                                | String of base64-encoded bytes
+message                                                | JSON conversion of protobuf message.
+`list` of convertible elements                         | JSON Array of converted values
+`list` with a non-convertible element                  | none
+`map` with string keys and convertible values          | JSON Object with converted values
+`map` with a non-string key or a non-convertible value | none
+`type`                                                 | none
+
+The "interoperable" range of integer values is `-(2^53-1)` to `2^53 - 1`.
 
 ## Gradual Type Checking
 
@@ -764,8 +768,8 @@ matches succeed if they match a substring of the argument. Use explicit anchors
 
 ### List of Standard Definitions
 
-TODO https://issuetracker.google.com/67014381 : have better descriptions. The
-table is auto-generated so the descriptions need to be updated in the code.
+TODO: automatically generate these descriptions from the cel-go implementation.
+See [cel-go/issues/9](https://github.com/google/cel-go/issues/9).
 
 <!-- BEGIN GENERATED DECL TABLE; DO NOT EDIT BELOW -->
 
