@@ -275,6 +275,14 @@ section {
     expr: "{'a':'b','c':'d'} != {'c':'d','a':'b'}"
     value: { bool_value: false }
   }
+  test {
+    name: "ne_mixed_types_error"
+    expr: "2u != 2"
+    disable_check: true
+    eval_error : {
+      errors: { message: "no such overload" }
+    }
+  }
 }
 section {
   name: "lt_literal"
@@ -406,6 +414,14 @@ section {
       errors: { message: "no such overload" }
     }
   }
+  test {
+    name: "lt_mixed_types_error"
+    expr: "'foo' < 1024"
+    disable_check: true
+    eval_error : {
+      errors: { message: "no such overload" }
+    }
+  }
 }
 section {
   name: "gt_literal"
@@ -496,6 +512,14 @@ section {
     expr: "{1:'b'} > {0:'a'}"
     disable_check: true
     eval_error: {
+      errors: { message: "no such overload" }
+    }
+  }
+  test {
+    name: "gt_mixed_types_error"
+    expr: "'foo' > 1024"
+    disable_check: true
+    eval_error : {
       errors: { message: "no such overload" }
     }
   }
@@ -614,6 +638,14 @@ section {
     expr: "{0:'a'} <= {1:'b'}"
     disable_check: true
     eval_error: {
+      errors: { message: "no such overload" }
+    }
+  }
+  test {
+    name: "lte_mixed_types_error"
+    expr: "'foo' <= 1024"
+    disable_check: true
+    eval_error : {
       errors: { message: "no such overload" }
     }
   }
@@ -742,6 +774,14 @@ section {
     expr: "{1:'b'} >= {0:'a'}"
     disable_check: true
     eval_error: {
+      errors: { message: "no such overload" }
+    }
+  }
+  test {
+    name: "gte_mixed_types_error"
+    expr: "'foo' >= 1.0"
+    disable_check: true
+    eval_error : {
       errors: { message: "no such overload" }
     }
   }
