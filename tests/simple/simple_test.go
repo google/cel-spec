@@ -1,11 +1,13 @@
 package simple
 
 import (
+	"bytes"
 	"flag"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
+	"os/exec"
 	"strings"
 	"testing"
 
@@ -13,6 +15,8 @@ import (
 	"github.com/google/cel-spec/tools/celrpc"
 
 	spb "github.com/google/cel-spec/proto/test/v1/simple"
+	_ "github.com/google/cel-spec/proto/test/v1/proto2/test_all_types"
+	_ "github.com/google/cel-spec/proto/test/v1/proto3/test_all_types"
 )
 
 type stringArray []string
@@ -33,16 +37,18 @@ var (
 	flagParseServerCmd string
 	flagCheckServerCmd string
 	flagEvalServerCmd  string
-	skipFlags          stringArray
+	flagProtoFilterCmd string
+	flagSkipTests      stringArray
 	rc                 *runConfig
 )
 
 func init() {
 	flag.StringVar(&flagServerCmd, "server", "", "path to binary for server when no phase-specific server defined")
-	flag.StringVar(&flagParseServerCmd, "parse_server", "", "path to binary for parse server")
-	flag.StringVar(&flagCheckServerCmd, "check_server", "", "path to binary for check server")
-	flag.StringVar(&flagEvalServerCmd, "eval_server", "", "path to binary for eval server")
-	flag.Var(&skipFlags, "skip_test", "name(s) of tests to skip. can be set multiple times. to skip the following tests: f1/s1/t1, f1/s1/t2, f1/s2/*, f2/s3/t3, you give the arguments --skip_test=f1/s1/t1,t2;s2 --skip_test=f2/s3/t3")
+	flag.StringVar(&flagParseServerCmd, "parse_server", "", "path to command for parse server")
+	flag.StringVar(&flagCheckServerCmd, "check_server", "", "path to command for check server")
+	flag.StringVar(&flagEvalServerCmd, "eval_server", "", "path to command for eval server")
+	flag.StringVar(&flagProtoFilterCmd, "proto_filter", "", "path to command which converts textproto to binary")
+	flag.Var(&flagSkipTests, "skip_test", "name(s) of tests to skip. can be set multiple times. to skip the following tests: f1/s1/t1, f1/s1/t2, f1/s2/*, f2/s3/t3, you give the arguments --skip_test=f1/s1/t1,t2;s2 --skip_test=f2/s3/t3")
 	flag.Parse()
 }
 
@@ -111,6 +117,28 @@ func parseSimpleFile(filename string) (*spb.SimpleTestFile, error) {
 	return &pb, nil
 }
 
+func parseFilter(filename string, filterPath string) (*spb.SimpleTestFile, error) {
+	in, err := os.Open(filename)
+	if err != nil {
+		return nil, err
+	}
+	defer in.Close()
+	var out bytes.Buffer
+	cmd := exec.Command(filterPath)
+	cmd.Stdin = in
+	cmd.Stdout = &out
+	err = cmd.Run()
+	if err != nil {
+		return nil, err
+	}
+	var pb spb.SimpleTestFile
+	err = proto.Unmarshal(out.Bytes(), &pb)
+	if err != nil {
+		return nil, err
+	}
+	return &pb, nil
+}
+
 // Usage: --server=<path-to-binary> testfile1 ...
 func TestMain(m *testing.M) {
 	flag.Parse()
@@ -137,7 +165,7 @@ func TestSimpleFile(t *testing.T) {
 		return
 	}
 	var skipTests []string
-	for _, flagVal := range skipFlags {
+	for _, flagVal := range flagSkipTests {
 		fileInd := strings.Index(flagVal, "/")
 		splitFile := strings.SplitN(flagVal, "/", 2)
 		fileName := splitFile[0]
@@ -174,7 +202,13 @@ func TestSimpleFile(t *testing.T) {
 	}
 	// Run the flag-configured tests.
 	for _, filename := range flag.Args() {
-		testFile, err := parseSimpleFile(filename)
+		var testFile *spb.SimpleTestFile
+		var err error
+		if flagProtoFilterCmd == "" {
+			testFile, err = parseSimpleFile(filename)
+		} else {
+			testFile, err = parseFilter(filename, flagProtoFilterCmd)
+		}
 		if err != nil {
 			t.Fatalf("Can't parse input file %v: %v", filename, err)
 		}

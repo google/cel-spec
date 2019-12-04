@@ -34,6 +34,8 @@ go_test(
     deps = [
         "@com_github_golang_protobuf//proto:go_default_library",
         "//proto/test/v1:simple_go_proto",
+        "//proto/test/v1/proto2:test_all_types_go_proto",
+        "//proto/test/v1/proto3:test_all_types_go_proto",
         "//tools/celrpc:go_default_library",
     ],
     # This is the magic setting that lets external invokers see

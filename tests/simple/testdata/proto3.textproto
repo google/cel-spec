@@ -1,2 +1,22 @@
 name: "proto3"
 description: "Protocol buffer version 3 tests.  See notes for the available set of protos for tests."
+section {
+  name: "singular_read"
+  description: "Reading the singlular fields."
+  test {
+    name: "int32"
+    expr: "x.single_int32"
+    type_env: {
+      name: "x"
+      ident: { type: { message_type: "google.api.expr.test.v1.proto3.TestAllTypes" } }
+    }
+    bindings: {
+      key: "x"
+      value: { value: { object_value: {
+            [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+            { single_int32: 17 }
+          }}}
+    }
+    value: { int64_value: 17 }
+  }
+}
