@@ -20,3 +20,24 @@ section {
     value: { int64_value: 17 }
   }
 }
+section {
+  name: "singular_literal"
+  description: "Literals with singular fields set."
+  test {
+    name: "int64_nocontainer"
+    expr: "google.api.expr.test.v1.proto3.TestAllTypes{single_int64: 17}"
+    value: { object_value: {
+            [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+            { single_int64: 17 }
+          }}
+  }
+  test {
+    name: "int64"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_int64: 17}"
+    value: { object_value: {
+            [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+            { single_int64: 17 }
+          }}
+  }
+}
