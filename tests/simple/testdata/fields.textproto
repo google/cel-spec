@@ -165,6 +165,25 @@ section {
   }
 }
 section {
+  name: "map_has"
+  description: "Has macro for map entries."
+  test {
+    name: "has"
+    expr: "has({'a': 1, 'b': 2}.a)"
+    value: { bool_value: true }
+  }
+  test {
+    name: "has_not"
+    expr: "has({'a': 1, 'b': 2}.c)"
+    value: { bool_value: false }
+  }
+  test {
+    name: "has_empty"
+    expr: "has({}.a)"
+    value: { bool_value: false }
+  }
+}
+section {
   name: "qualified_identifier_resolution"
   description: "Tests for qualified identifier resolution."
   test {
