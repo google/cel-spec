@@ -59,8 +59,8 @@ message TestAllTypes {
 
   // Nested messages
   oneof nested_type {
-    NestedMessage single_nested_message = 18;
-    NestedEnum single_nested_enum = 21 [default = BAR];
+    NestedMessage single_nested_message = 21;
+    NestedEnum single_nested_enum = 22 [default = BAR];
   }
 
   // Repeated
@@ -80,18 +80,16 @@ message TestAllTypes {
   repeated string repeated_string = 44;
   repeated bytes repeated_bytes = 45;
 
-  repeated NestedMessage repeated_nested_message = 48;
-
-  repeated NestedEnum repeated_nested_enum = 51;
-
-  repeated string repeated_string_piece = 54 [ctype = STRING_PIECE];
-  repeated string repeated_cord = 55 [ctype = CORD];
-
-  repeated NestedMessage repeated_lazy_message = 57 [lazy = true];
+  // Repeated and nested
+  repeated NestedMessage repeated_nested_message = 51;
+  repeated NestedEnum repeated_nested_enum = 52;
+  repeated string repeated_string_piece = 53 [ctype = STRING_PIECE];
+  repeated string repeated_cord = 54 [ctype = CORD];
+  repeated NestedMessage repeated_lazy_message = 55 [lazy = true];
 
   // Map
-  map<string, string> map_string_string = 58;
-  map<int64, NestedTestAllTypes> map_int64_nested_type = 59;
+  map<string, string> map_string_string = 61;
+  map<int64, NestedTestAllTypes> map_int64_nested_type = 62;
 }
 
 // This proto includes a recursively nested message.
