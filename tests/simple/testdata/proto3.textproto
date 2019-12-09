@@ -41,3 +41,51 @@ section {
           }}
   }
 }
+section {
+  name: "empty_field"
+  description: "Tests on empty fields."
+  test {
+    name: "scalar"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{}.single_int32"
+    value: { int64_value: 0 }
+  }
+  test {
+    name: "nested_message"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{}.single_nested_message"
+    value: { object_value: {
+            [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes.NestedMessage]
+            { }}}
+  }
+  test {
+    name: "nested_message_subfield"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{}.single_nested_message.bb"
+    value: { int64_value: 0 }
+  }
+  test {
+    name: "wkt"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{}.single_int64_wrapper"
+    value: { null_value: NULL_VALUE }
+  }
+  test {
+    name: "repeated_scalar"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{}.repeated_int64"
+    value: { list_value: {} }
+  }
+  test {
+    name: "repeated_nested"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{}.repeated_nested_message"
+    value: { list_value: {} }
+  }
+  test {
+    name: "map"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{}.map_string_string"
+    value: { map_value: {} }
+  }
+}
