@@ -1,0 +1,26 @@
+name: "conversions"
+description: "Tests for type conversions."
+section {
+  name: "bytes"
+  description: "Conversions to bytes."
+  test {
+    name: "string_empty"
+    expr: "bytes('')"
+    value: { bytes_value: "" }
+  }
+  test {
+    name: "string"
+    expr: "bytes('abc')"
+    value: { bytes_value: "abc" }
+  }
+  test {
+    name: "string_unicode"
+    expr: "bytes('ÿ')"
+    value: { bytes_value: "\303\277" }
+  }
+  test {
+    name: "string_unicode_vs_literal"
+    expr: "bytes('\\377') == b'\\377'"
+    value: { bool_value: false }
+  }
+}

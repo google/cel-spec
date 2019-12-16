@@ -54,6 +54,16 @@ section {
     value: { bool_value: false }
   }
   test {
+    name: "eq_string_unicode"
+    expr: "'ίσος' == 'ίσος'"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_eq_string_unicode_ascii"
+    expr: "'a' == 'à'"
+    value: { bool_value: false }
+  }
+  test {
     name: "eq_null"
     expr: "null == null"
     value: { bool_value: true }
@@ -202,6 +212,16 @@ section {
   test {
     name: "not_ne_string"
     expr: "'abc' != 'abc'"
+    value: { bool_value: false }
+  }
+  test {
+    name: "ne_string_unicode"
+    expr: "'résumé' != 'resume'"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_ne_string_unicode"
+    expr: "'ίδιο' != 'ίδιο'"
     value: { bool_value: false }
   }
   test {
@@ -462,6 +482,11 @@ section {
     value: { bool_value: false }
   }
   test {
+    name: "gt_string_unicode"
+    expr: "'α' > 'omega'"
+    value: { bool_value: true }
+  }
+  test {
     name: "gt_bytes_one"
     expr: "b'\x01' > b'\x00'"
     value: { bool_value: true }
@@ -593,6 +618,21 @@ section {
     value: { bool_value: true }
   }
   test {
+    name: "lte_string_unicode_eq"
+    expr: "'α' <= 'α'"
+    value: { bool_value: true }
+  }
+  test {
+    name: "lte_string_unicode_lt"
+    expr: "'a' <= 'α'"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_lte_string_unicode"
+    expr: "'α' <= 'a'"
+    value: { bool_value: false }
+  }
+  test {
     name: "lte_bytes_empty"
     expr: "b'' <= b'\x00'"
     value: { bool_value: true }
@@ -721,6 +761,21 @@ section {
   test {
     name: "not_gte_string_lexicographical"
     expr: "'abc' >= 'abd'"
+    value: { bool_value: false }
+  }
+  test {
+    name: "gte_string_unicode_eq"
+    expr: "'τ' >= 'τ'"
+    value: { bool_value: true }
+  }
+  test {
+    name: "gte_string_unicode_gt"
+    expr: "'τ' >= 't'"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_get_string_unicode"
+    expr: "'t' >= 'τ'"
     value: { bool_value: false }
   }
   test {
