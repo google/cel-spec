@@ -1,6 +1,35 @@
 name: "string"
 description: "Tests for string operations."
 section {
+  name: "size"
+  description: "Tests for the size() function."
+  test {
+    name: "empty"
+    expr: "size('')"
+    value: { int64_value: 0 }
+  }
+  test {
+    name: "one_ascii"
+    expr: "size('A')"
+    value: { int64_value: 1 }
+  }
+  test {
+    name: "one_unicode"
+    expr: "size('ÿ')"
+    value: { int64_value: 1 }
+  }
+  test {
+    name: "ascii"
+    expr: "size('four')"
+    value: { int64_value: 4 }
+  }
+  test {
+    name: "unicode"
+    expr: "size('πέντε')"
+    value: { int64_value: 5 }
+  }
+}
+section {
   name: "starts_with"
   description: "Tests for the startsWith() function."
   test {
@@ -26,6 +55,11 @@ section {
   test {
     name: "empty_empty"
     expr: "''.startsWith('')"
+    value: { bool_value: true }
+  }
+  test {
+    name: "unicode"
+    expr: "'завтра'.startsWith('за')"
     value: { bool_value: true }
   }
 }
@@ -55,6 +89,11 @@ section {
   test {
     name: "empty_empty"
     expr: "''.endsWith('')"
+    value: { bool_value: true }
+  }
+  test {
+    name: "unicode"
+    expr: "'forté'.endsWith('té')"
     value: { bool_value: true }
   }
 }
@@ -96,6 +135,11 @@ section {
     expr: "'banana'.matches('ba(na)*')"
     value: { bool_value: true }
   }
+  test {
+    name: "unicode"
+    expr: "'mañana'.matches('a+ñ+a+')"
+    value: { bool_value: true }
+  }
 }
 section {
   name: "concatentation"
@@ -125,6 +169,21 @@ section {
     expr: "'' + ''"
     value: { string_value: "" }
   }
+  test {
+    name: "unicode_unicode"
+    expr: "'¢' + 'ÿ' + 'Ȁ'"
+    value: { string_value: "¢ÿȀ" }
+  }
+  test {
+    name: "ascii_unicode"
+    expr: "'r' + 'ô' + 'le'"
+    value: { string_value: "rôle" }
+  }
+  test {
+    name: "empty_unicode"
+    expr: "'' + 'Ω' + ''"
+    value: { string_value: "Ω" }
+  }
 }
 section {
   name: "contains"
@@ -147,6 +206,11 @@ section {
   test {
     name: "contains_multiple"
     expr: "'abababc'.contains('ababc')"
+    value: { bool_value: true }
+  }
+  test {
+    name: "contains_unicode"
+    expr: "'Straße'.contains('aß')"
     value: { bool_value: true }
   }
 }
