@@ -1,5 +1,5 @@
 name: "string"
-description: "Tests for string operations."
+description: "Tests for string and bytes operations."
 section {
   name: "size"
   description: "Tests for the size() function."
@@ -27,6 +27,16 @@ section {
     name: "unicode"
     expr: "size('πέντε')"
     value: { int64_value: 5 }
+  }
+  test {
+    name: "bytes_empty"
+    expr: "size(b'')"
+    value: { int64_value: 0 }
+  }
+  test {
+    name: "bytes"
+    expr: "size(b'abc')"
+    value: { int64_value: 3 }
   }
 }
 section {
@@ -212,5 +222,39 @@ section {
     name: "contains_unicode"
     expr: "'Straße'.contains('aß')"
     value: { bool_value: true }
+  }
+  test {
+    name: "empty_contains"
+    expr: "''.contains('something')"
+    value: { bool_value: false }
+  }
+  test {
+    name: "empty_empty"
+    expr: "''.contains('')"
+    value: { bool_value: true }
+  }
+}
+section {
+  name: "bytes_concat"
+  description: "Tests for bytes concatenation."
+  test {
+    name: "concat"
+    expr: "b'abc' + b'def'"
+    value: { bytes_value: "abcdef" }
+  }
+  test {
+    name: "left_unit"
+    expr: "b'' + b'\\xffoo'"
+    value: { bytes_value: "\377oo" }
+  }
+  test {
+    name: "right_unit"
+    expr: "b'zxy' + b''"
+    value: { bytes_value: "zxy" }
+  }
+  test {
+    name: "empty_empty"
+    expr: "b'' + b''"
+    value: { bytes_value: "" }
   }
 }

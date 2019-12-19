@@ -24,6 +24,9 @@ The available test files are:
 - [`comparisons.textproto`](comparisons.textproto) Checks the standard functions
   that return a boolean value.
 
+- [`conversions.textproto`](conversions.textproto) Checks conversions between
+  types and type tests.
+
 - [`dynamic.textproto`](dynamic.textproto) Checks the automatic conversions
   associated with the well-known protobuf messages.
 
