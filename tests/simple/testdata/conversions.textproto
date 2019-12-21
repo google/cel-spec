@@ -44,11 +44,9 @@ section {
   }
   test {
     name: "int_range"
-    description: "Largest signed 64-bit."
+    description: "Largest signed 64-bit. Rounds to nearest double."
     expr: "double(9223372036854775807)"
-    eval_error {
-      errors { message: "range" }
-    }
+    value: { double_value: 9.223372036854775807e18 }
   }
   test {
     name: "uint_zero"
@@ -63,10 +61,8 @@ section {
   test {
     name: "uint_range"
     description: "Largest unsigned 64-bit."
-    expr: "double(18446744073709551615)"
-    eval_error {
-      errors { message: "range" }
-    }
+    expr: "double(18446744073709551615u)"
+    value: { double_value: 1.8446744073709551615e19 }
   }
   test {
     name: "string_zero"
@@ -131,7 +127,7 @@ section {
 }
 section {
   name: "int"
-  description: "Conversions for ints."
+  description: "Conversions to int."
   test {
     name: "uint"
     expr: "int(42u)"
@@ -143,10 +139,43 @@ section {
     value: { int64_value: 0 }
   }
   test {
-    name: "double"
-    description: "Rounds toward zero."
+    name: "uint_range"
+    expr: "int(18446744073709551615u)"
+    eval_error {
+      errors { message: "range error" }
+    }
+  }
+  test {
+    name: "double_round_neg"
     expr: "int(-123.456)"
     value: { int64_value: -123 }
+  }
+  test {
+    name: "double_nearest"
+    expr: "int(1.9)"
+    value: { int64_value: 2 }
+  }
+  test {
+    name: "double_nearest_neg"
+    expr: "int(-7.9)"
+    value: { int64_value: -8 }
+  }
+  test {
+    name: "double_half_away_pos"
+    expr: "int(11.5)"
+    value: { int64_value: 12 }
+  }
+  test {
+    name: "double_half_away_neg"
+    expr: "int(-3.5)"
+    value: { int64_value: -4 }
+  }
+  test {
+    name: "double_range"
+    expr: "int(1e99)"
+    eval_error {
+      errors: { message: "range" }
+    }
   }
   test {
     name: "string"
@@ -155,13 +184,13 @@ section {
   }
   test {
     name: "timestamp"
-    expr: "int(timestamp('2004-09-17T00:00:31Z'))"
+    expr: "int(timestamp('2004-09-16T23:59:59Z'))"
     value: { int64_value: 1095379199 }
   }
 }
 section {
   name: "string"
-  description: "String conversion tests."
+  description: "Conversions to string."
   test {
     name: "int"
     expr: "string(123)"
@@ -359,7 +388,7 @@ section {
 }
 section {
   name: "uint"
-  description: "Conversion to uint tests."
+  description: "Conversions to uint."
   test {
     name: "int"
     expr: "uint(1729)"
@@ -376,6 +405,28 @@ section {
     name: "double"
     expr: "uint(3.14159265)"
     value: { uint64_value: 3 }
+  }
+  test {
+    name: "double_nearest_int"
+    expr: "int(1.9)"
+    value: { int64_value: 2 }
+  }
+  test {
+    name: "double_nearest"
+    expr: "uint(1.9)"
+    value: { uint64_value: 2 }
+  }
+  test {
+    name: "double_half_away"
+    expr: "uint(25.5)"
+    value: { uint64_value: 26 }
+  }
+  test {
+    name: "double_range"
+    expr: "uint(6.022e23)"
+    eval_error {
+      errors { message: "range" }
+    }
   }
   test {
     name: "string"
