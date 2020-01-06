@@ -394,3 +394,27 @@ section {
     ## value: { int64_value: 1 }
   }
 }
+section {
+  name: "in"
+  description: "Tests for 'in' operator for maps."
+  test {
+    name: "empty"
+    expr: "7 in {}"
+    value: { bool_value: false }
+  }
+  test {
+    name: "singleton"
+    expr: "true in {true: 1}"
+    value: { bool_value: true }
+  }
+  test {
+    name: "present"
+    expr: "'George' in {'John': 'smart', 'Paul': 'cute', 'George': 'quiet', 'Ringo': 'funny'}"
+    value: { bool_value: true }
+  }
+  test {
+    name: "absent"
+    expr: "'spider' in {'ant': 6, 'fly': 6, 'centipede': 100}"
+    value: { bool_value: false }
+  }
+}

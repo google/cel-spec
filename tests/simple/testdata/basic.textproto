@@ -103,6 +103,11 @@ section {
     value: { bytes_value: "\303\277" }
   }
   test {
+    name: "self_eval_bytes_invalid_utf8"
+    expr: "b'\\000\\xff'"
+    value: { bytes_value: "\000\377" }
+  }
+  test {
     name: "self_eval_list_singleitem"
     expr: "[-1]"
     value: {

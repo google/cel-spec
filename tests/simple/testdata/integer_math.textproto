@@ -79,9 +79,35 @@ section {
     value: { int64_value: -2 }
   }
   test {
-    name: "negative"
+    name: "mod_negative_positive"
+    expr: "-3 % 5"
+    value: { int64_value: -3 }
+  }
+  test {
+    name: "unary_minus_pos"
     expr: "-(42)"
     value: { int64_value: -42 }
+  }
+  test {
+    name: "unary_minus_neg"
+    expr: "-(-42)"
+    value: { int64_value: 42 }
+  }
+  test {
+    name: "unary_minus_no_overload"
+    expr: "-(42u)"
+    disable_check: true
+    eval_error: {
+      errors: { message:"no_such_overload" }
+    }
+  }
+  test {
+    name: "unary_minus_not_bool"
+    expr: "-false"
+    disable_check: true
+    eval_error: {
+      errors: { message:"no_such_overload" }
+    }
   }
   test {
     name: "mod_zero"

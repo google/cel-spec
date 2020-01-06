@@ -184,4 +184,12 @@ section {
     expr: "!false"
     value: { bool_value: true }
   }
+  test {
+    name: "no_overload"
+    expr: "!0"
+    disable_check: true
+    eval_error: {
+      errors: { message: "no matching overload" }
+    }
+  }
 }
