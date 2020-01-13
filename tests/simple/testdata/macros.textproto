@@ -207,16 +207,7 @@ section {
       errors: { message: "divide by zero" }
     }
   }
-  test {
-    name: "map_many"
-    expr: "{1: 1, 2: 4, 3: 9}.map(x, x * x)"
-    value: { list_value {
-        values: { int64_value: 1 }
-        values: { int64_value: 4 }
-        values: { int64_value: 9 }
-      }
-    }
-  }
+  // The map() macro is currently not supported for maps.
 }
 section {
   name: "filter"
@@ -270,13 +261,5 @@ section {
       errors: { message: "divide by zero" }
     }
   }
-  test {
-    name: "map_some"
-    expr: "{0: 10, 1: 11, 2: 12, 3: 13, 4: 14}.filter(x, x % 2 == 1)"
-    value: { list_value {
-        values: { int64_value: 1 }
-        values: { int64_value: 3 }
-      }
-    }
-  }
+  // The filter() macro is currently not supported for maps.
 }
