@@ -207,7 +207,7 @@ section {
       errors: { message: "divide by zero" }
     }
   }
-  // The map() macro is currently not supported for maps.
+  # The map() macro is currently not supported for maps.
 }
 section {
   name: "filter"
@@ -261,5 +261,5 @@ section {
       errors: { message: "divide by zero" }
     }
   }
-  // The filter() macro is currently not supported for maps.
+  # The filter() macro is currently not supported for maps.
 }
