@@ -72,19 +72,19 @@ section {
     }
   }
   test {
-    name: "negtive"
+    name: "negative"
     expr: "-(4.5)"
     value: { double_value: -4.5 }
   }
   test {
-    name: "double_negtive"
+    name: "double_negative"
     expr: "-(-1.25)"
     value: { double_value: 1.25 }
   }
   test {
-    name: "negtive_zero"
+    name: "negative_zero"
     expr: "-(0.0)"
-    value: { double_value: 0 }
+    value: { double_value: -0.0 }
   }
   test {
     name: "divide_zero"

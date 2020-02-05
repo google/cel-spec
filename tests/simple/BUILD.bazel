@@ -33,6 +33,9 @@ go_test(
     embed = [":go_default_library"],
     deps = [
         "@com_github_golang_protobuf//proto:go_default_library",
+        "@com_github_golang_protobuf//ptypes/any:go_default_library",
+        "@com_github_golang_protobuf//ptypes/struct:go_default_library",
+        "@org_golang_google_genproto//googleapis/api/expr/v1alpha1:go_default_library",
         "//proto/test/v1:simple_go_proto",
         "//proto/test/v1/proto2:test_all_types_go_proto",
         "//proto/test/v1/proto3:test_all_types_go_proto",
