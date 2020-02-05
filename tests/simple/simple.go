@@ -134,8 +134,18 @@ func MatchValue(tag string, expected *exprpb.Value, actual *exprpb.Value) error 
 		}
 	default:
 		// By default, just compare the protos.
-		if !proto.Equal(expected, actual) {
-			return fmt.Errorf("%s: Eval got [%v], want [%v]", tag, actual, expected)
+		// Compare the canonical string marshaling which is closer
+		// to protobuf equality semantics than proto.Equal:
+		// - properly compares Any messages, which might be
+		//   equivalent even with different byte encodings;
+		// - surfaces sign differences for floating-point zero.
+		// Text marshaling isn't documented as deterministic,
+		// but it appears to be so in practice.
+		text := &proto.TextMarshaler{ExpandAny: true}
+		sExpected := text.Text(expected)
+		sActual := text.Text(actual)
+		if sExpected != sActual {
+			return fmt.Errorf("%s: Eval got [%v], want [%v]", tag, sActual, sExpected)
 		}
 	}
 	return nil

@@ -12,7 +12,11 @@ import (
 	"github.com/golang/protobuf/proto"
 	"github.com/google/cel-spec/tools/celrpc"
 
+	anypb "github.com/golang/protobuf/ptypes/any"
+	structpb "github.com/golang/protobuf/ptypes/struct"
 	spb "github.com/google/cel-spec/proto/test/v1/simple"
+        exprpb "google.golang.org/genproto/googleapis/api/expr/v1alpha1"
+
 	// The following are needed to link in these proto libraries
 	// which are needed dynamically, despite not being explicitly
 	// used in the Go source.
@@ -213,4 +217,40 @@ func contains(s []string, e string) bool {
 		}
 	}
 	return false
+}
+
+func TestProtoCompareAny(t *testing.T) {
+	// JSON {"one": 1, "two": 2} encoded with different field orders.
+	structBytes1 := []byte("\n\020\n\003one\022\t\021\000\000\000\000\000\000\360?\n\020\n\003two\022\t\021\000\000\000\000\000\000\000@")
+	structBytes2 := []byte("\n\020\n\003two\022\t\021\000\000\000\000\000\000\000@\n\020\n\003one\022\t\021\000\000\000\000\000\000\360?")
+	// Confirm that they unmarshal to equal protos.
+	struct1 := &structpb.Struct{}
+	struct2 := &structpb.Struct{}
+	if err := proto.Unmarshal(structBytes1, struct1); err != nil {
+		t.Fatal("error unmarshaling struct 1:", err)
+	}
+	if err := proto.Unmarshal(structBytes2, struct2); err != nil {
+		t.Fatal("error unmarshaling struct 2:", err)
+	}
+	if !proto.Equal(struct1, struct2) {
+		t.Error("map comparison should ignore field order.")
+	}
+	// Confirm that any messages with these encodings are unequal
+	any1 := &anypb.Any{
+		TypeUrl: "type.googleapis.com/google.protobuf.Struct",
+		Value: structBytes1,
+	}
+	any2 := &anypb.Any{
+		TypeUrl: "type.googleapis.com/google.protobuf.Struct",
+		Value: structBytes2,
+	}
+	if proto.Equal(any1, any2) {
+		t.Error("any protos should be unequal on different map values")
+	}
+	// Check that our proto comparison works
+	v1 := &exprpb.Value{Kind: &exprpb.Value_ObjectValue{ObjectValue: any1}}
+	v2 := &exprpb.Value{Kind: &exprpb.Value_ObjectValue{ObjectValue: any2}}
+	if err := MatchValue("foo", v1, v2); err != nil {
+		t.Error("match value fails: ", err)
+	}
 }
