@@ -15,7 +15,7 @@ import (
 	anypb "github.com/golang/protobuf/ptypes/any"
 	structpb "github.com/golang/protobuf/ptypes/struct"
 	spb "github.com/google/cel-spec/proto/test/v1/simple"
-        exprpb "google.golang.org/genproto/googleapis/api/expr/v1alpha1"
+	exprpb "google.golang.org/genproto/googleapis/api/expr/v1alpha1"
 
 	// The following are needed to link in these proto libraries
 	// which are needed dynamically, despite not being explicitly
@@ -238,11 +238,11 @@ func TestProtoCompareAny(t *testing.T) {
 	// Confirm that any messages with these encodings are unequal
 	any1 := &anypb.Any{
 		TypeUrl: "type.googleapis.com/google.protobuf.Struct",
-		Value: structBytes1,
+		Value:   structBytes1,
 	}
 	any2 := &anypb.Any{
 		TypeUrl: "type.googleapis.com/google.protobuf.Struct",
-		Value: structBytes2,
+		Value:   structBytes2,
 	}
 	if proto.Equal(any1, any2) {
 		t.Error("any protos should be unequal on different map values")
