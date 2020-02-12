@@ -631,12 +631,12 @@ macros are:
     `false`, and any predicate error causes the macro to raise an error.
 *   `e.map(x, t)` transforms a list `e` by taking each element `x` to the
     element given by the expression `t`, which can use the variable `x`. For
-    instance, `[1, 2, 3].map(n, n * n)` evaluates to `[1, 4, 9]`.  Any
-    evaluation error for any element causes the macro to raise an error.  The
-    `map()` macro is not supported when `e` is a map.
+    instance, `[1, 2, 3].map(n, n * n)` evaluates to `[1, 4, 9]`.  Any evaluation
+    error for any element causes the macro to raise an error. The `map()` macro
+    is not supported when `e` is a map.
 *   `e.filter(x, p)` returns the sublist of all elements `x` of list `e` which
     evaluate to `true` in the predicate expression `p` (which can use variable
-    `x`).  For instance, `[1, 2, 3].filter(i, i % 2 > 0)` evaluates to `[1, 3]`.
+    `x`). For instance, `[1, 2, 3].filter(i, i % 2 > 0)` evaluates to `[1, 3]`.
     If no elements evaluate to `true`, the result is an empty list. Any
     evaluation error for any element causes the macro to raise an error. The
     `filter()` macro is not supported on maps.
