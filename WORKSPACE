@@ -4,7 +4,6 @@ load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository", "new_git_r
 http_archive(
     name = "io_bazel_rules_go",
     urls = ["https://github.com/bazelbuild/rules_go/releases/download/0.18.5/rules_go-0.18.5.tar.gz"],
-
 )
 
 http_archive(
@@ -26,7 +25,6 @@ http_archive(
 load("@io_bazel_rules_go//go:deps.bzl", "go_rules_dependencies", "go_register_toolchains")
 load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies")
 load("@bazel_gazelle//:deps.bzl", "go_repository")
-load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
 
 # Do *not* call *_dependencies(), etc, yet.  See comment at the end.
 
