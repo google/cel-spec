@@ -263,3 +263,20 @@ section {
   }
   # The filter() macro is currently not supported for maps.
 }
+section {
+  name: "nested"
+  description: "Tests with nested macros."
+  test {
+    name: "filter_all"
+    expr: "['signer'].filter(signer, ['artifact'].all(artifact, true))"
+    value: { list_value {
+        values: { string_value: "signer" }
+      }
+    }
+  }
+  test {
+    name: "all_all"
+    expr: "['signer'].all(signer, ['artifact'].all(artifact, true))"
+    value: { bool_value: true }
+  }
+}
