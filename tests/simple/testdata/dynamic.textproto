@@ -1,2 +1,38 @@
 name: "dynamic"
 description: "Tests for 'dynamic' proto behavior, including JSON, wrapper, and Any messages."
+section {
+  name: "null"
+  description: "Tests for null conversions."
+  test {
+    name: "literal_proto"
+    expr: "google.protobuf.Value{null_value: google.protobuf.NullValue.NULL_VALUE}"
+    value { null_value: NULL_VALUE }
+  }
+  test {
+    name: "var_proto"
+    expr: "x"
+    type_env {
+      name: "x",
+      ident { type { message_type: "google.protobuf.Value" } }
+    }
+    bindings {
+      key: "x",
+      value { value { object_value {
+            [type.googleapis.com/google.protobuf.Value]
+            { null_value: NULL_VALUE }
+          } } }
+    }
+    value { null_value: NULL_VALUE }
+  }
+  test {
+    name: "field_assign_proto2"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{single_value: null}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        { single_value { null_value: NULL_VALUE } }
+      }
+    }
+  }
+}
