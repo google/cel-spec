@@ -14,7 +14,7 @@ import (
 
 	anypb "github.com/golang/protobuf/ptypes/any"
 	structpb "github.com/golang/protobuf/ptypes/struct"
-	spb "github.com/google/cel-spec/proto/test/v1/simple"
+	spb "github.com/google/cel-spec/proto/test/v1/testpb"
 	exprpb "google.golang.org/genproto/googleapis/api/expr/v1alpha1"
 
 	// The following are needed to link in these proto libraries

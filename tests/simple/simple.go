@@ -43,7 +43,7 @@ import (
 	"github.com/golang/protobuf/proto"
 	"github.com/google/cel-spec/tools/celrpc"
 
-	spb "github.com/google/cel-spec/proto/test/v1/simple"
+	spb "github.com/google/cel-spec/proto/test/v1/testpb"
 	exprpb "google.golang.org/genproto/googleapis/api/expr/v1alpha1"
 )
 

@@ -4,6 +4,8 @@ syntax = "proto3";
 
 package google.api.expr.test.v1;
 
+option go_package = "github.com/google/cel-spec/test/v1/testpb";
+
 import "google/api/expr/v1alpha1/checked.proto";
 
 // The format of a standard environment, i.e. a collection of declarations
