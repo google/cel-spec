@@ -665,7 +665,7 @@ used.
 1.  If `e` evaluates to a map, then `has(e.f)` indicates whether the string `f`
     is a key in the map (note that `f` must syntactically be an identifier).
 2.  If `e` evaluates to a message and `f` is not a declared field for the
-    message, `has(e.f.)` is `false`.
+    message, `has(e.f)` is `false`.
 3.  If `e` evaluates to a protocol buffers version 2 message and `f` is a
     defined field:
     -   If `f` is a repeated field or map field, `has(e.f)` indicates whether
