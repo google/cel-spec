@@ -4,6 +4,7 @@ syntax = "proto3";
 
 package google.api.expr.test.v1;
 
+// Note, run regen_go_proto.sh after making modifications to this file.
 option go_package = "github.com/google/cel-spec/test/v1/testpb";
 
 import "google/api/expr/v1alpha1/checked.proto";
