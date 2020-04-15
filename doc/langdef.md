@@ -646,18 +646,18 @@ macros are:
 A field selection expression, `e.f`, can be applied both to messages and to
 maps. For maps, selection is interpreted as the field being a string key.
 
-The semantics depends on the type of `e`:
+The semantics depends on the type of the result of evaluating expression `e`:
 
-1.  If `e` is a message and `f` is not declared in this message, the runtime
+1.  If `e` evaluates to a message and `f` is not declared in this message, the runtime
     error `no_such_field` is raised.
-2.  If `e` is a message and `f` is declared, but the field is not set, the
+2.  If `e` evaluates to a message and `f` is declared, but the field is not set, the
     default value of the field's type will be produced. Note that this is `null`
     for messages or the according primitive default value as determined by
     proto2 or proto3 semantics.
-3.  If `e` is a map and `f` is not present in the map, a runtime error will be
-    produced. (Note the runtime error is not a well-known one like
-    `no_such_field` but implementation dependent.) It holds that `e.f ==
-    e['f']`.
+3.  If `e` evaluates to a map, then `e.f` is equivalent to `e['f']` (where `f`
+    is still being used as a meta-variable, e.g. the expression `x.foo` is
+    equivalent to the expression `x['foo']` when `x` evaluates to a map).
+4.  In all other cases, `e.f` evaluates to an error.
 
 To test for the presence of a field, the boolean-valued macro `has(e.f)` can be
 used.
