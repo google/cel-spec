@@ -499,11 +499,12 @@ function `dyn` has no effect at runtime, but signals to the type checker that
 its argument should be considered of type `dyn`, `list(dyn)`, or a `dyn`-valued
 map.
 
-A CEL type checker attempts to identify occurrences of `no_matching_overload`
-and `no_such_field` runtime errors (see [Runtime Errors](#runtime-errors)) ahead
-of runtime. It also serves to optimize execution speed, by narrowing down the
-number of possible matching overloads for a function call, and by allowing for a
-more efficient (unboxed) runtime representation of values.
+A CEL type checker attempts to identify possible runtime errors (see
+[Runtime Errors](#runtime-errors)), particularly `no_matching_overload` and
+`no_such_field`, ahead of runtime. It also serves to optimize execution speed
+by narrowing down the number of possible matching overloads for a function
+call, and by allowing for a more efficient (unboxed) runtime representation of
+values.
 
 By construction, a CEL expression that does not use the dynamic features coming
 from `Struct`, `Value`, or `Any`, can be fully statically type checked and all
@@ -665,7 +666,7 @@ used.
 1.  If `e` evaluates to a map, then `has(e.f)` indicates whether the string `f`
     is a key in the map (note that `f` must syntactically be an identifier).
 2.  If `e` evaluates to a message and `f` is not a declared field for the
-    message, `has(e.f)` is `false`.
+    message, `has(e.f)` raises a  `no_such_field` error.
 3.  If `e` evaluates to a protocol buffers version 2 message and `f` is a
     defined field:
     -   If `f` is a repeated field or map field, `has(e.f)` indicates whether
