@@ -25,7 +25,7 @@ import (
 	"github.com/golang/protobuf/proto"
 	"github.com/google/cel-spec/tools/celrpc"
 
-	envpb "github.com/google/cel-spec/proto/test/v1/envcheck"
+	envpb "github.com/google/cel-spec/proto/test/v1/testpb"
 )
 
 var (

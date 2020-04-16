@@ -9,24 +9,15 @@ licenses(["notice"])  # Apache 2.0
 exports_files(["LICENSE"])
 
 proto_library(
-    name = "envcheck_protos",
+    name = "envcheck_proto",
     srcs = [ "envcheck.proto" ],
     deps = [
         "@com_google_googleapis//google/api/expr/v1alpha1:checked_proto",
     ],
 )
 
-go_proto_library(
-    name = "envcheck_go_proto",
-    proto = ":envcheck_protos",
-    importpath = "github.com/google/cel-spec/proto/test/v1/envcheck",
-    deps = [
-        "@org_golang_google_genproto//googleapis/api/expr/v1alpha1:go_default_library",
-    ],
-)
-
 proto_library(
-    name = "simple_protos",
+    name = "simple_proto",
     srcs = [
         "simple.proto",
     ],
@@ -40,13 +31,16 @@ proto_library(
 
 cc_proto_library(
     name = "simple_cc_proto",
-    deps = [":simple_protos",],
+    deps = [":simple_proto",],
 )
 
 go_proto_library(
-    name = "simple_go_proto",
-    proto = ":simple_protos",
-    importpath = "github.com/google/cel-spec/proto/test/v1/simple",
+    name = "testpb_go_proto",
+    protos = [
+        ":envcheck_proto",
+        ":simple_proto",
+    ],
+    importpath = "github.com/google/cel-spec/proto/test/v1/testpb",
     deps = [
         "@org_golang_google_genproto//googleapis/api/expr/v1alpha1:go_default_library",
     ],

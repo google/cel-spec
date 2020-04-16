@@ -35,7 +35,7 @@ go_test(
     embed = [":go_default_library"],
     deps = [
         "@com_github_golang_protobuf//proto:go_default_library",
-        "//proto/test/v1:envcheck_go_proto",
+        "//proto/test/v1:testpb_go_proto",
         "//tools/celrpc:go_default_library",
     ],
     # This is the magic setting that lets external invokers see
