@@ -499,11 +499,12 @@ function `dyn` has no effect at runtime, but signals to the type checker that
 its argument should be considered of type `dyn`, `list(dyn)`, or a `dyn`-valued
 map.
 
-A CEL type checker attempts to identify occurrences of `no_matching_overload`
-and `no_such_field` runtime errors (see [Runtime Errors](#runtime-errors)) ahead
-of runtime. It also serves to optimize execution speed, by narrowing down the
-number of possible matching overloads for a function call, and by allowing for a
-more efficient (unboxed) runtime representation of values.
+A CEL type checker attempts to identify possible runtime errors (see
+[Runtime Errors](#runtime-errors)), particularly `no_matching_overload` and
+`no_such_field`, ahead of runtime. It also serves to optimize execution speed
+by narrowing down the number of possible matching overloads for a function
+call, and by allowing for a more efficient (unboxed) runtime representation of
+values.
 
 By construction, a CEL expression that does not use the dynamic features coming
 from `Struct`, `Value`, or `Any`, can be fully statically type checked and all
@@ -646,26 +647,42 @@ macros are:
 A field selection expression, `e.f`, can be applied both to messages and to
 maps. For maps, selection is interpreted as the field being a string key.
 
-The semantics depends on the type of `e`:
+The semantics depends on the type of the result of evaluating expression `e`:
 
-1.  If `e` is a message and `f` is not declared in this message, the runtime
+1.  If `e` evaluates to a message and `f` is not declared in this message, the runtime
     error `no_such_field` is raised.
-2.  If `e` is a message and `f` is declared, but the field is not set, the
+2.  If `e` evaluates to a message and `f` is declared, but the field is not set, the
     default value of the field's type will be produced. Note that this is `null`
     for messages or the according primitive default value as determined by
     proto2 or proto3 semantics.
-3.  If `e` is a map and `f` is not present in the map, a runtime error will be
-    produced. (Note the runtime error is not a well-known one like
-    `no_such_field` but implementation dependent.) It holds that `e.f ==
-    e['f']`.
+3.  If `e` evaluates to a map, then `e.f` is equivalent to `e['f']` (where `f`
+    is still being used as a meta-variable, e.g. the expression `x.foo` is
+    equivalent to the expression `x['foo']` when `x` evaluates to a map).
+4.  In all other cases, `e.f` evaluates to an error.
 
-To test for the presence of a field, the macro `has(e.f)` can be used.
-`has(e.f)` behaves similar as `e.f`, except as where the former would produce
-`null` or an error different than `no_such_field`, it will return false, and
-true otherwise. This means means that `has(e.f)` applied to a message which does
-not declare field `f` produces a `no_such_field` error, where it produces false
-if `f` is declared but not set (or, in proto3, has its default value). Moreover,
-`has(e.f)` where `e` is a map returns false if `f` is not defined in the map.
+To test for the presence of a field, the boolean-valued macro `has(e.f)` can be
+used.
+
+1.  If `e` evaluates to a map, then `has(e.f)` indicates whether the string `f`
+    is a key in the map (note that `f` must syntactically be an identifier).
+2.  If `e` evaluates to a message and `f` is not a declared field for the
+    message, `has(e.f)` raises a  `no_such_field` error.
+3.  If `e` evaluates to a protocol buffers version 2 message and `f` is a
+    defined field:
+    -   If `f` is a repeated field or map field, `has(e.f)` indicates whether
+        the field is non-empty.
+    -   If `f` is a singular or  oneof field, `has(e.f)` indicates
+        whether the field is set.
+4.  If `e` evaluates to a protocol buffers version 3 message and `f` is a
+    defined field:
+    -   If `f` is a repeated field or map field, `has(e.f)` indicates whether
+        the field is non-empty.
+    -   If `f` is a oneof or singular message field, `has(e.f)` indicates
+        whether the field is set.
+    -   If `f` is some other singular field, `has(e.f)` indicates whether the
+        field's value is its default value (zero for numeric fields, false for
+        booleans, empty for strings and bytes).
+5.  In all other cases, `has(e.f)` evaluates to an error.
 
 ## Functions
 
@@ -854,7 +871,7 @@ See [cel-go/issues/9](https://github.com/google/cel-go/issues/9).
     </td>
   </tr>
   <tr>
-    <th rowspan="1">
+    <th rowspan="2">
       _&&_
     </th>
     <td>
@@ -862,6 +879,14 @@ See [cel-go/issues/9](https://github.com/google/cel-go/issues/9).
     </td>
     <td>
       logical and
+    </td>
+  </tr>
+  <tr>
+    <td>
+      (bool, ...) -> bool
+    </td>
+    <td>
+      logical and (variadic)
     </td>
   </tr>
   <tr>
@@ -1373,7 +1398,7 @@ See [cel-go/issues/9](https://github.com/google/cel-go/issues/9).
     </td>
   </tr>
   <tr>
-    <th rowspan="1">
+    <th rowspan="2">
       _||_
     </th>
     <td>
@@ -1381,6 +1406,14 @@ See [cel-go/issues/9](https://github.com/google/cel-go/issues/9).
     </td>
     <td>
       logical or
+    </td>
+  </tr>
+  <tr>
+    <td>
+      (bool, ...) -> bool
+    </td>
+    <td>
+      logical or (variadic)
     </td>
   </tr>
   <tr>
