@@ -521,3 +521,124 @@ section {
     value: { map_value: {} }
   }
 }
+section {
+  name: "has"
+  description: "Tests for the has() macro on proto3 messages."
+  test {
+    name: "undefined"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "has(TestAllTypes{}.no_such_field)"
+    disable_check: true
+    eval_error: {
+      errors: { message: "no_such_field" }
+    }
+  }
+  test {
+    name: "repeated_none_implicit"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "has(TestAllTypes{}.repeated_int32)"
+    value { bool_value: false }
+  }
+  test {
+    name: "repeated_none_explicit"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "has(TestAllTypes{repeated_int32: []}.repeated_int32)"
+    value { bool_value: false }
+  }
+  test {
+    name: "repeated_one"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "has(TestAllTypes{repeated_int32: [1]}.repeated_int32)"
+    value { bool_value: true }
+  }
+  test {
+    name: "repeated_many"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "has(TestAllTypes{repeated_int32: [1, 2, 3]}.repeated_int32)"
+    value { bool_value: true }
+  }
+  test {
+    name: "map_none_implicit"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "has(TestAllTypes{}.map_string_string)"
+    value { bool_value: false }
+  }
+  test {
+    name: "map_none_explicit"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "has(TestAllTypes{map_string_string: {}}.map_string_string)"
+    value { bool_value: false }
+  }
+  test {
+    name: "map_one_default"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "has(TestAllTypes{map_string_string: {'MT': ''}}.map_string_string)"
+    value { bool_value: true }
+  }
+  test {
+    name: "map_one"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "has(TestAllTypes{map_string_string: {'one': 'uno'}}.map_string_string)"
+    value { bool_value: true }
+  }
+  test {
+    name: "map_many"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "has(TestAllTypes{map_string_string: {'one': 'uno', 'two': 'dos'}}.map_string_string)"
+    value { bool_value: true }
+  }
+  test {
+    name: "single_unset"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "has(TestAllTypes{}.single_int32)"
+    value { bool_value: false }
+  }
+  test {
+    name: "single_set"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "has(TestAllTypes{single_int32: 16}.single_int32)"
+    value { bool_value: true }
+  }
+  test {
+    name: "single_set_to_default"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "has(TestAllTypes{single_int32: 0}.single_int32)"
+    value { bool_value: false }
+  }
+  test {
+    name: "single_message_unset"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "has(TestAllTypes{}.single_nested_message_standalone)"
+    value { bool_value: false }
+  }
+  test {
+    name: "single_message_set"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "has(TestAllTypes{single_nested_message_standalone: TestAllTypes.NestedMessage{bb: 123}}.single_nested_message_standalone)"
+    value { bool_value: true }
+  }
+  test {
+    name: "single_message_set_to_default"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "has(TestAllTypes{single_nested_message_standalone: TestAllTypes.NestedMessage{}}.single_nested_message_standalone)"
+    value { bool_value: true }
+  }
+  test {
+    name: "oneof_unset"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "has(TestAllTypes{}.single_nested_message)"
+    value { bool_value: false }
+  }
+  test {
+    name: "oneof_other_set"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "has(TestAllTypes{single_nested_enum: TestAllTypes.NestedEnum.BAZ}.single_nested_message)"
+    value { bool_value: false }
+  }
+  test {
+    name: "oneof_set"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "has(TestAllTypes{single_nested_message: TestAllTypes.NestedMessage{}}.single_nested_message)"
+    value { bool_value: true }
+  }
+}

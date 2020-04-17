@@ -101,6 +101,11 @@ message NestedTestAllTypes {
   optional TestAllTypes payload = 2;
 }
 
+// This proto has a required field.
+message TestRequired {
+  required int32 required_int32 = 1;
+}
+
 // This proto tests that global enums are resolved correctly.
 enum GlobalEnum {
   GOO = 0;
