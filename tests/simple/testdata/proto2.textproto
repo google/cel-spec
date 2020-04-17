@@ -655,6 +655,12 @@ section {
     value { bool_value: true }
   }
   test {
+    name: "optional_enum_set_zero"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "has(TestAllTypes{standalone_enum: TestAllTypes.NestedEnum.FOO}.standalone_enum)"
+    value { bool_value: true }
+  }
+  test {
     name: "oneof_unset"
     container: "google.api.expr.test.v1.proto2"
     expr: "has(TestAllTypes{}.single_nested_message)"
@@ -670,6 +676,12 @@ section {
     name: "oneof_set"
     container: "google.api.expr.test.v1.proto2"
     expr: "has(TestAllTypes{single_nested_message: TestAllTypes.NestedMessage{}}.single_nested_message)"
+    value { bool_value: true }
+  }
+  test {
+    name: "oneof_set_default"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "has(TestAllTypes{single_nested_enum: TestAllTypes.NestedEnum.FOO}.single_nested_enum)"
     value { bool_value: true }
   }
 }
