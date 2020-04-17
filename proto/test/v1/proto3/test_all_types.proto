@@ -65,7 +65,8 @@ message TestAllTypes {
     NestedMessage single_nested_message = 21;
     NestedEnum single_nested_enum = 22;
   }
-  NestedMessage single_nested_message_standalone = 23;
+  NestedMessage standalone_message = 23;
+  NestedEnum standalone_enum = 24;
 
   // Repeated
   repeated int32 repeated_int32 = 31;

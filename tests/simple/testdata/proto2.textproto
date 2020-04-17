@@ -631,6 +631,30 @@ section {
     value { bool_value: true }
   }
   test {
+    name: "optional_message_unset"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "has(TestAllTypes{}.standalone_message)"
+    value { bool_value: false }
+  }
+  test {
+    name: "optional_message_set"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "has(TestAllTypes{standalone_message: TestAllTypes.NestedMessage{}}.standalone_message)"
+    value { bool_value: true }
+  }
+  test {
+    name: "optional_enum_unset"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "has(TestAllTypes{}.standalone_enum)"
+    value { bool_value: false }
+  }
+  test {
+    name: "optional_enum_set"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "has(TestAllTypes{standalone_enum: TestAllTypes.NestedEnum.BAR}.standalone_enum)"
+    value { bool_value: true }
+  }
+  test {
     name: "oneof_unset"
     container: "google.api.expr.test.v1.proto2"
     expr: "has(TestAllTypes{}.single_nested_message)"
