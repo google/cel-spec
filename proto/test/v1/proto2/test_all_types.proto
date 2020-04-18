@@ -65,6 +65,8 @@ message TestAllTypes {
     NestedMessage single_nested_message = 21;
     NestedEnum single_nested_enum = 22 [default = BAR];
   }
+  optional NestedMessage standalone_message = 23;
+  optional NestedEnum standalone_enum = 24;
 
   // Repeated
   repeated int32 repeated_int32 = 31;
@@ -99,6 +101,11 @@ message TestAllTypes {
 message NestedTestAllTypes {
   optional NestedTestAllTypes child = 1;
   optional TestAllTypes payload = 2;
+}
+
+// This proto has a required field.
+message TestRequired {
+  required int32 required_int32 = 1;
 }
 
 // This proto tests that global enums are resolved correctly.
