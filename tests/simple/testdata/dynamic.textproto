@@ -35,4 +35,343 @@ section {
       }
     }
   }
+  test {
+    name: "field_assign_proto3"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_value: null}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        { single_value { null_value: NULL_VALUE } }
+      }
+    }
+  }
+}
+section {
+  name: "int32"
+  description: "Tests for int32 conversion."
+  test {
+    name: "literal_proto"
+    expr: "google.protobuf.Int32Value{value: -123}"
+    value { int64_value: -123 }
+  }
+  test {
+    name: "literal_no_field_access"
+    expr: "google.protobuf.Int32Value{value: -123}.value"
+    disable_check: true
+    eval_error {
+      errors { message: "no_matching_overload" }
+    }
+  }
+  test {
+    name: "literal_zero"
+    expr: "google.protobuf.Int32Value{}"
+    value { int64_value: 0 }
+  }
+  test {
+    name: "var_proto"
+    expr: "x"
+    type_env {
+      name: "x",
+      ident { type { message_type: "google.protobuf.Int32Value" } }
+    }
+    bindings {
+      key: "x",
+      value { value { object_value {
+            [type.googleapis.com/google.protobuf.Int32Value]
+            { value: 2000000 }
+          } } }
+    }
+    value { int64_value: 2000000 }
+  }
+  test {
+    name: "field_assign_proto2"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{single_int32_wrapper: 432}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        { single_int32_wrapper { value: 432 } }
+      }
+    }
+  }
+  test {
+    name: "field_assign_proto2_zero"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{single_int32_wrapper: 0}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        { single_int32_wrapper { } }
+      }
+    }
+  }
+  test {
+    name: "field_assign_proto3"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_int32_wrapper: -975}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        { single_int32_wrapper { value: -975 } }
+      }
+    }
+  }
+  test {
+    name: "field_assign_proto3_zero"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_int32_wrapper: 0}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        { single_int32_wrapper { } }
+      }
+    }
+  }
+}
+section {
+  name: "int64"
+  description: "Tests for int64 conversion."
+  test {
+    name: "literal_proto"
+    expr: "google.protobuf.Int64Value{value: -123}"
+    value { int64_value: -123 }
+  }
+  test {
+    name: "literal_no_field_access"
+    expr: "google.protobuf.Int64Value{value: -123}.value"
+    disable_check: true
+    eval_error {
+      errors { message: "no_matching_overload" }
+    }
+  }
+  test {
+    name: "literal_zero"
+    expr: "google.protobuf.Int64Value{}"
+    value { int64_value: 0 }
+  }
+  test {
+    name: "var_proto"
+    expr: "x"
+    type_env {
+      name: "x",
+      ident { type { message_type: "google.protobuf.Int64Value" } }
+    }
+    bindings {
+      key: "x",
+      value { value { object_value {
+            [type.googleapis.com/google.protobuf.Int64Value]
+            { value: 2000000 }
+          } } }
+    }
+    value { int64_value: 2000000 }
+  }
+  test {
+    name: "field_assign_proto2"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{single_int64_wrapper: 432}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        { single_int64_wrapper { value: 432 } }
+      }
+    }
+  }
+  test {
+    name: "field_assign_proto2_zero"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{single_int64_wrapper: 0}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        { single_int64_wrapper { } }
+      }
+    }
+  }
+  test {
+    name: "field_assign_proto3"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_int64_wrapper: -975}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        { single_int64_wrapper { value: -975 } }
+      }
+    }
+  }
+  test {
+    name: "field_assign_proto3_zero"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_int64_wrapper: 0}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        { single_int64_wrapper { } }
+      }
+    }
+  }
+}
+section {
+  name: "uint32"
+  description: "Tests for uint32 conversion."
+  test {
+    name: "literal_proto"
+    expr: "google.protobuf.UInt32Value{value: 123u}"
+    value { uint64_value: 123 }
+  }
+  test {
+    name: "literal_no_field_access"
+    expr: "google.protobuf.UInt32Value{value: 123u}.value"
+    disable_check: true
+    eval_error {
+      errors { message: "no_matching_overload" }
+    }
+  }
+  test {
+    name: "literal_zero"
+    expr: "google.protobuf.UInt32Value{}"
+    value { uint64_value: 0 }
+  }
+  test {
+    name: "var_proto"
+    expr: "x"
+    type_env {
+      name: "x",
+      ident { type { message_type: "google.protobuf.UInt32Value" } }
+    }
+    bindings {
+      key: "x",
+      value { value { object_value {
+            [type.googleapis.com/google.protobuf.UInt32Value]
+            { value: 2000000 }
+          } } }
+    }
+    value { uint64_value: 2000000 }
+  }
+  test {
+    name: "field_assign_proto2"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{single_uint32_wrapper: 432u}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        { single_uint32_wrapper { value: 432 } }
+      }
+    }
+  }
+  test {
+    name: "field_assign_proto2_zero"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{single_uint32_wrapper: 0u}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        { single_uint32_wrapper { } }
+      }
+    }
+  }
+  test {
+    name: "field_assign_proto3"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_uint32_wrapper: 975u}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        { single_uint32_wrapper { value: 975 } }
+      }
+    }
+  }
+  test {
+    name: "field_assign_proto3_zero"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_uint32_wrapper: 0u}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        { single_uint32_wrapper { } }
+      }
+    }
+  }
+}
+section {
+  name: "uint64"
+  description: "Tests for uint64 conversion."
+  test {
+    name: "literal_proto"
+    expr: "google.protobuf.UInt64Value{value: 123u}"
+    value { uint64_value: 123 }
+  }
+  test {
+    name: "literal_no_field_access"
+    expr: "google.protobuf.UInt64Value{value: 123u}.value"
+    disable_check: true
+    eval_error {
+      errors { message: "no_matching_overload" }
+    }
+  }
+  test {
+    name: "literal_zero"
+    expr: "google.protobuf.UInt64Value{}"
+    value { uint64_value: 0 }
+  }
+  test {
+    name: "var_proto"
+    expr: "x"
+    type_env {
+      name: "x",
+      ident { type { message_type: "google.protobuf.UInt64Value" } }
+    }
+    bindings {
+      key: "x",
+      value { value { object_value {
+            [type.googleapis.com/google.protobuf.UInt64Value]
+            { value: 2000000 }
+          } } }
+    }
+    value { uint64_value: 2000000 }
+  }
+  test {
+    name: "field_assign_proto2"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{single_uint64_wrapper: 432u}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        { single_uint64_wrapper { value: 432 } }
+      }
+    }
+  }
+  test {
+    name: "field_assign_proto2_zero"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{single_uint64_wrapper: 0u}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        { single_uint64_wrapper { } }
+      }
+    }
+  }
+  test {
+    name: "field_assign_proto3"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_uint64_wrapper: 975u}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        { single_uint64_wrapper { value: 975 } }
+      }
+    }
+  }
+  test {
+    name: "field_assign_proto3_zero"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_uint64_wrapper: 0u}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        { single_uint64_wrapper { } }
+      }
+    }
+  }
 }
