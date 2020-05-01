@@ -1120,7 +1120,6 @@ section {
     value { list_value { } }
   }
 }
-
 section {
   name: "struct"
   description: "Tests for struct conversion."
@@ -1327,7 +1326,22 @@ section {
   description: "Tests for null conversions."
   test {
     name: "literal"
-    expr: "google.protobuf.Value{null_value: google.protobuf.NullValue.NULL_VALUE}"
+    container: "google.protobuf"
+    expr: "Value{null_value: NullValue.NULL_VALUE}"
+    value { null_value: NULL_VALUE }
+  }
+  test {
+    name: "literal_no_field_access"
+    container: "google.protobuf"
+    expr: "Value{null_value: NullValue.NULL_VALUE}.null_value"
+    disable_check: true
+    eval_error {
+      errors { message: "no_matching_overload" }
+    }
+  }
+  test {
+    name: "literal_unset"
+    expr: "google.protobuf.Value{}"
     value { null_value: NULL_VALUE }
   }
   test {
@@ -1358,6 +1372,18 @@ section {
     }
   }
   test {
+    name: "field_read_proto2"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{single_value: null}.single_value"
+    value { null_value: NULL_VALUE }
+  }
+  test {
+    name: "field_read_proto2_unset"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{}.single_value"
+    value { null_value: NULL_VALUE }
+  }
+  test {
     name: "field_assign_proto3"
     container: "google.api.expr.test.v1.proto3"
     expr: "TestAllTypes{single_value: null}"
@@ -1368,21 +1394,642 @@ section {
       }
     }
   }
+  test {
+    name: "field_read_proto3"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_value: null}.single_value"
+    value { null_value: NULL_VALUE }
+  }
+  test {
+    name: "field_read_proto3_unset"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{}.single_value"
+    value { null_value: NULL_VALUE }
+  }
 }
 section {
   name: "value_number"
+  description: "Tests for number conversions in Value."
+  test {
+    name: "literal"
+    expr: "google.protobuf.Value{number_value: 12.5}"
+    value { double_value: 12.5 }
+  }
+  test {
+    name: "literal_no_field_access"
+    expr: "google.protobuf.Value{number_value: 12.5}.number_value"
+    disable_check: true
+    eval_error {
+      errors { message: "no_matching_overload" }
+    }
+  }
+  test {
+    name: "literal_zero"
+    expr: "google.protobuf.Value{number_value: 0.0}"
+    value { double_value: 0.0 }
+  }
+  test {
+    name: "var"
+    expr: "x"
+    type_env {
+      name: "x"
+      ident { type { message_type: "google.protobuf.Value" } }
+    }
+    bindings {
+      key: "x"
+      value { value { object_value {
+            [type.googleapis.com/google.protobuf.Value]
+            { number_value: -26.375 }
+          } } }
+    }
+    value { double_value: -26.375 }
+  }
+  test {
+    name: "field_assign_proto2"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{single_value: 7e23}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        { single_value { number_value: 7e23 } }
+      }
+    }
+  }
+  test {
+    name: "field_assign_proto2_zero"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{single_value: 0.0}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        { single_value { number_value: 0.0 } }
+      }
+    }
+  }
+  test {
+    name: "field_read_proto2"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{single_value: 7e23}.single_value"
+    value { double_value: 7e23 }
+  }
+  test {
+    name: "field_read_proto2_zero"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{single_value: 0.0}.single_value"
+    value { double_value: 0.0 }
+  }
+  test {
+    name: "field_assign_proto3"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_value: 7e23}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        { single_value { number_value: 7e23 } }
+      }
+    }
+  }
+  test {
+    name: "field_assign_proto3_zero"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_value: 0.0}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        { single_value { number_value: 0.0 } }
+      }
+    }
+  }
+  test {
+    name: "field_read_proto3"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_value: 7e23}.single_value"
+    value { double_value: 7e23 }
+  }
+  test {
+    name: "field_read_proto3_zero"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_value: 0.0}.single_value"
+    value { double_value: 0.0 }
+  }
 }
 section {
   name: "value_string"
+  description: "Tests for string conversions in Value."
+  test {
+    name: "literal"
+    expr: "google.protobuf.Value{string_value: 'foo'}"
+    value { string_value: "foo" }
+  }
+  test {
+    name: "literal_no_field_access"
+    expr: "google.protobuf.Value{string_value: 'foo'}.string_value"
+    disable_check: true
+    eval_error {
+      errors { message: "no_matching_overload" }
+    }
+  }
+  test {
+    name: "literal_empty"
+    expr: "google.protobuf.Value{string_value: ''}"
+    value { string_value: "" }
+  }
+  test {
+    name: "var"
+    expr: "x"
+    type_env {
+      name: "x"
+      ident { type { message_type: "google.protobuf.Value" } }
+    }
+    bindings {
+      key: "x"
+      value { value { object_value {
+            [type.googleapis.com/google.protobuf.Value]
+            { string_value: "bar" }
+          } } }
+    }
+    value { string_value: "bar" }
+  }
+  test {
+    name: "field_assign_proto2"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{single_value: 'baz'}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        { single_value { string_value: "baz" } }
+      }
+    }
+  }
+  test {
+    name: "field_assign_proto2_empty"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{single_value: ''}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        { single_value { string_value: "" } }
+      }
+    }
+  }
+  test {
+    name: "field_read_proto2"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{single_value: 'bletch'}.single_value"
+    value { string_value: "bletch" }
+  }
+  test {
+    name: "field_read_proto2_zero"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{single_value: ''}.single_value"
+    value { string_value: "" }
+  }
+  test {
+    name: "field_assign_proto3"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_value: 'baz'}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        { single_value { string_value: "baz" } }
+      }
+    }
+  }
+  test {
+    name: "field_assign_proto3_empty"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_value: ''}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        { single_value { string_value: "" } }
+      }
+    }
+  }
+  test {
+    name: "field_read_proto3"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_value: 'bletch'}.single_value"
+    value { string_value: "bletch" }
+  }
+  test {
+    name: "field_read_proto3_zero"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_value: ''}.single_value"
+    value { string_value: "" }
+  }
 }
 section {
   name: "value_bool"
+  description: "Tests for boolean conversions in Value."
+  test {
+    name: "literal"
+    expr: "google.protobuf.Value{bool_value: true}"
+    value { bool_value: true }
+  }
+  test {
+    name: "literal_no_field_access"
+    expr: "google.protobuf.Value{bool_value: true}.bool_value"
+    disable_check: true
+    eval_error {
+      errors { message: "no_matching_overload" }
+    }
+  }
+  test {
+    name: "literal_false"
+    expr: "google.protobuf.Value{bool_value: false}"
+    value { bool_value: false }
+  }
+  test {
+    name: "var"
+    expr: "x"
+    type_env {
+      name: "x"
+      ident { type { message_type: "google.protobuf.Value" } }
+    }
+    bindings {
+      key: "x"
+      value { value { object_value {
+            [type.googleapis.com/google.protobuf.Value]
+            { bool_value: true }
+          } } }
+    }
+    value { bool_value: true }
+  }
+  test {
+    name: "field_assign_proto2"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{single_value: true}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        { single_value { bool_value: true } }
+      }
+    }
+  }
+  test {
+    name: "field_assign_proto2_false"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{single_value: false}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        { single_value { bool_value: false } }
+      }
+    }
+  }
+  test {
+    name: "field_read_proto2"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{single_value: true}.single_value"
+    value { bool_value: true }
+  }
+  test {
+    name: "field_read_proto2_false"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{single_value: false}.single_value"
+    value { bool_value: false }
+  }
+  test {
+    name: "field_assign_proto3"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_value: true}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        { single_value { bool_value: true } }
+      }
+    }
+  }
+  test {
+    name: "field_assign_proto3_false"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_value: false}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        { single_value { bool_value: false } }
+      }
+    }
+  }
+  test {
+    name: "field_read_proto3"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_value: true}.single_value"
+    value { bool_value: true }
+  }
+  test {
+    name: "field_read_proto3_false"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_value: false}.single_value"
+    value { bool_value: false }
+  }
 }
 section {
   name: "value_struct"
+  description: "Tests for struct conversions in Value."
+  test {
+    name: "literal"
+    expr: "google.protobuf.Value{struct_value: {'a': 1.0, 'b': 'two'}}"
+    value {
+      map_value {
+        entries {
+          key { string_value: "a" }
+          value { double_value: 1.0 }
+        }
+        entries {
+          key { string_value: "b" }
+          value { string_value: "two" }
+        }
+      }
+    }
+  }
+  test {
+    name: "literal_no_field_access"
+    expr: "google.protobuf.Value{struct_value: {'a': 1.0, 'b': 'two'}}.struct_value"
+    disable_check: true
+    eval_error {
+      errors { message: "no_matching_overload" }
+    }
+  }
+  test {
+    name: "literal_empty"
+    expr: "google.protobuf.Value{struct_value: {}}"
+    value { map_value: { } }
+  }
+  test {
+    name: "var"
+    expr: "x"
+    type_env {
+      name: "x"
+      ident { type { message_type: "google.protobuf.Value" } }
+    }
+    bindings {
+      key: "x"
+      value { value { object_value {
+            [type.googleapis.com/google.protobuf.Value]
+            { struct_value {
+                fields {
+                  key: "x"
+                  value { null_value: NULL_VALUE }
+                }
+                fields {
+                  key: "y"
+                  value { bool_value: false }
+                }
+              } }
+          } } }
+    }
+    value {
+      map_value {
+        entries {
+          key { string_value: "x" }
+          value { null_value: NULL_VALUE }
+        }
+        entries {
+          key { string_value: "y" }
+          value { bool_value: false }
+        }
+      }
+    }
+  }
+  test {
+    name: "field_assign_proto2"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{single_value: {'un': 1.0, 'deux': 2.0}}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        { single_value { struct_value {
+              fields {
+                key: "un"
+                value { number_value: 1.0 }
+              }
+              fields {
+                key: "deux"
+                value { number_value: 2.0 }
+              }
+            } } }
+      }
+    }
+  }
+  test {
+    name: "field_assign_proto2_empty"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{single_value: {}}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        { single_value { struct_value: { } } }
+      }
+    }
+  }
+  test {
+    name: "field_read_proto2"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{single_value: {'i': true}}.single_value"
+    value {
+      map_value {
+        entries {
+          key { string_value: "i" }
+          value { bool_value: true }
+        }
+      }
+    }
+  }
+  test {
+    name: "field_read_proto2_empty"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{single_value: {}}.single_value"
+    value { map_value: { } }
+  }
+  test {
+    name: "field_assign_proto3"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_value: {'un': 1.0, 'deux': 2.0}}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        { single_value { struct_value {
+              fields {
+                key: "un"
+                value { number_value: 1.0 }
+              }
+              fields {
+                key: "deux"
+                value { number_value: 2.0 }
+              }
+            } } }
+      }
+    }
+  }
+  test {
+    name: "field_assign_proto3_empty"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_value: {}}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        { single_value { struct_value: { } } }
+      }
+    }
+  }
+  test {
+    name: "field_read_proto3"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_value: {'i': true}}.single_value"
+    value {
+      map_value {
+        entries {
+          key { string_value: "i" }
+          value { bool_value: true }
+        }
+      }
+    }
+  }
+  test {
+    name: "field_read_proto3_empty"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_value: {}}.single_value"
+    value { map_value: { } }
+  }
 }
 section {
   name: "value_list"
+  description: "Tests for list conversions in Value."
+  test {
+    name: "literal"
+    expr: "google.protobuf.Value{list_value: ['a', 3.0]}"
+    value {
+      list_value {
+        values { string_value: "a" }
+        values { double_value: 3.0 }
+      }
+    }
+  }
+  test {
+    name: "literal_no_field_access"
+    expr: "google.protobuf.Value{list_value: []}.list_value"
+    disable_check: true
+    eval_error {
+      errors { message: "no_matching_overload" }
+    }
+  }
+  test {
+    name: "literal_empty"
+    expr: "google.protobuf.Value{list_value: []}"
+    value { list_value: { } }
+  }
+  test {
+    name: "var"
+    expr: "x"
+    type_env {
+      name: "x"
+      ident { type { message_type: "google.protobuf.Value" } }
+    }
+    bindings {
+      key: "x"
+      value { value { object_value {
+            [type.googleapis.com/google.protobuf.Value]
+            { list_value {
+                values { number_value: 1.0 }
+                values { bool_value: true }
+                values { string_value: "hi" }
+              } }
+          } } }
+    }
+    value {
+      list_value {
+        values { double_value: 1.0 }
+        values { bool_value: true }
+        values { string_value: "hi" }
+      }
+    }
+  }
+  test {
+    name: "field_assign_proto2"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{single_value: ['un', 1.0]}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        { single_value { list_value {
+              values { string_value: "un" }
+              values { number_value: 1.0 }
+            } } }
+      }
+    }
+  }
+  test {
+    name: "field_assign_proto2_empty"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{single_value: []}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        { single_value { list_value: { } } }
+      }
+    }
+  }
+  test {
+    name: "field_read_proto2"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{single_value: ['i', true]}.single_value"
+    value {
+      list_value {
+        values { string_value: "i" }
+        values { bool_value: true }
+      }
+    }
+  }
+  test {
+    name: "field_read_proto2_empty"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{single_value: []}.single_value"
+    value { list_value: { } }
+  }
+  test {
+    name: "field_assign_proto3"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_value: ['un', 1.0]}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        { single_value { list_value {
+              values { string_value: "un" }
+              values { number_value: 1.0 }
+            } } }
+      }
+    }
+  }
+  test {
+    name: "field_assign_proto3_empty"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_value: []}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        { single_value { list_value: { } } }
+      }
+    }
+  }
+  test {
+    name: "field_read_proto3"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_value: ['i', true]}.single_value"
+    value {
+      list_value {
+        values { string_value: "i" }
+        values { bool_value: true }
+      }
+    }
+  }
+  test {
+    name: "field_read_proto3_empty"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_value: []}.single_value"
+    value { list_value: { } }
+  }
 }
 section {
   name: "any"
