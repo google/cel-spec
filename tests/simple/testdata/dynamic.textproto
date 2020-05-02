@@ -2033,4 +2033,129 @@ section {
 }
 section {
   name: "any"
+  description: "Tests for Any conversion."
+  test {
+    name: "literal"
+    expr: "google.protobuf.Any{type_url: 'type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes', value: b'\\x08\\x96\\x01'}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        { single_int32: 150 }
+      }
+    }
+  }
+  test {
+    name: "literal_no_field_access"
+    expr: "google.protobuf.Any{type_url: 'type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes', value: b'\\x08\\x96\\x01'}.type_url"
+    disable_check: true
+    eval_error {
+      errors { message: "no_matching_overload" }
+    }
+  }
+  test {
+    name: "literal_empty"
+    expr: "google.protobuf.Any{}"
+    eval_error {
+      errors { message: "conversion" }
+    }
+  }
+  test {
+    name: "var"
+    expr: "x"
+    type_env {
+      name: "x"
+      ident { type { message_type: "google.protubuf.Any" } }
+    }
+    bindings {
+      key: "x"
+      value { value { object_value {
+            [type.googleapis.com/google.protobuf.Any]
+            {
+              type_url: "type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes"
+              value: "\x08\x96\x01"
+            }
+          } } }
+    }
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        { single_int32: 150 }
+      }
+    }
+  }
+  test {
+    name: "field_assign_proto2"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{single_any: TestAllTypes{single_int32: 150}}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        {
+          single_any {
+            type_url: "type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes"
+            value: "\x08\x96\x01"
+          }
+        }
+      }
+    }
+  }
+  test {
+    name: "field_read_proto2"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{single_any: TestAllTypes{single_int32: 150}}.single_any"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        { single_int32: 150 }
+      }
+    }
+  }
+  test {
+    name: "field_assign_proto3"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_any: TestAllTypes{single_int32: 150}}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        {
+          single_any {
+            type_url: "type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes"
+            value: "\x08\x96\x01"
+          }
+        }
+      }
+    }
+  }
+  test {
+    name: "field_read_proto3"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_any: TestAllTypes{single_int32: 150}}.single_any"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        { single_int32: 150 }
+      }
+    }
+  }
+}
+section {
+  name: "complex"
+  description: "Tests combining various dynamic conversions."
+  test {
+    name: "any_list_map"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_any: [{'almost': 'done'}]}.single_any"
+    value {
+      list_value {
+        values {
+          map_value {
+            entries {
+              key { string_value: "almost" }
+              value { string_value: "done" }
+            }
+          }
+        }
+      }
+    }
+  }
 }
