@@ -159,6 +159,36 @@ section {
       errors: { message: "undeclared reference to 'x' (in container '')" }
     }
   }
+  test {
+    name: "unbound_is_runtime_error"
+    description: "Make sure we can short-circuit around an unbound variable."
+    expr: "x || true"
+    disable_check: true
+    value { bool_value: true }
+  }
+}
+section {
+  name: "functions"
+  description: "Basic mechanisms for function calls."
+  test {
+    name: "binop"
+    expr: "1 + 1"
+    value { int64_value: 2 }
+  }
+  test {
+    name: "unbound"
+    expr: "f_unknown(17)"
+    disable_check: true
+    eval_error {
+      errors { message: "unbound function" }
+    }
+  }
+  test {
+    name: "unbound_is_runtime_error"
+    expr: "f_unknown(17) || true"
+    disable_check: true
+    value { bool_value: true }
+  }
 }
 section {
   name: "reserved_const"
