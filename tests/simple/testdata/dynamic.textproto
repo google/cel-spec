@@ -280,7 +280,7 @@ section {
     container: "google.api.expr.test.v1.proto2"
     expr: "TestAllTypes{single_uint32_wrapper: 6111222333u}"
     eval_error {
-      errors { message: "range" }
+      errors { message: "range error" }
     }
   }
   test {
@@ -310,7 +310,7 @@ section {
     container: "google.api.expr.test.v1.proto3"
     expr: "TestAllTypes{single_uint32_wrapper: 6111222333u}"
     eval_error {
-      errors { message: "range" }
+      errors { message: "range error" }
     }
   }
   test {
@@ -439,6 +439,12 @@ section {
     name: "literal"
     expr: "google.protobuf.FloatValue{value: -1.5e3}"
     value { double_value: -1500.0 }
+  }
+  test {
+    name: "literal_not_double"
+    description: "Use a number with no exact representation to make sure we actually narrow to a float."
+    expr: "google.protobuf.FloatValue{value: 1.333} == 1.333"
+    value { bool_value: false }
   }
   test {
     name: "literal_no_field_access"
