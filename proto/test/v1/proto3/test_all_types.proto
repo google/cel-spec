@@ -59,6 +59,7 @@ message TestAllTypes {
   google.protobuf.StringValue single_string_wrapper = 111;
   google.protobuf.BoolValue single_bool_wrapper = 112;
   google.protobuf.BytesValue single_bytes_wrapper = 113;
+  google.protobuf.ListValue list_value = 114;
 
   // Nested messages
   oneof nested_type {
