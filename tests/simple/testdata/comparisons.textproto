@@ -64,6 +64,18 @@ section {
     value: { bool_value: false }
   }
   test {
+    name: "no_string_normalization"
+    description: "Should not normalize Unicode."
+    expr: "'Am\\u00E9lie' == 'Ame\\u0301lie'"
+    value: { bool_value: false }
+  }
+  test {
+    name: "no_string_normalization_surrogate"
+    description: "Should not replace surrogate pairs."
+    expr: "'\\U0001F436' == '\\uD83D\\uDC36'"
+    value: { bool_value: false }
+  }
+  test {
     name: "eq_null"
     expr: "null == null"
     value: { bool_value: true }
@@ -378,6 +390,12 @@ section {
     name: "not_lt_string_case_length"
     expr: "'a' < 'AB'"
     value: { bool_value: false }
+  }
+  test {
+    name: "unicode_order_lexical"
+    description: "Compare the actual code points of the string, instead of decomposing ế into 'e' plus accent modifiers."
+    expr: "'f' < '\\u1EBF'"
+    value: { bool_value: true }
   }
   test {
     name: "lt_bytes"

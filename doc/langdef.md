@@ -277,6 +277,17 @@ CEL Literal   | Meaning
 `"\xFF"`      | String of "&yuml;" (code point 255)
 `b"\xFF"`     | Sequence of byte 255 (_not_ UTF-8 of &yuml;)
 
+While strings must be sequences of valid Unicode code points,
+no Unicode normalization is attempted on strings, as there are several
+normal forms, they can be expensive to convert, and we don't know which
+is desired. If Unicode normalization is desired, it should be perform
+outside of CEL, or done as a custom extension function.
+
+Likewise, no advance collation is attempted on strings, as this depnds
+on the normalization and can be local-dependent. Strings are simply treated
+as sequences of code points and are compared with lexicographic ordering
+based on the numeric value of the code points.
+
 ### Aggregate Values
 
 Lists are ordered sequences of values.
