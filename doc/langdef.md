@@ -783,6 +783,49 @@ All predefined operators, functions and constants are listed in the table below.
 For each symbol, the available overloads are listed. Operator symbols use a
 notation like `_+_` where `_` is a placeholder for an argument.
 
+### Equality and Ordering
+
+Equality (`_==_`) and inequality (`_!=_`) are defined for all types. Inequality
+is the logical negation of equality, i.e. `e1 != e2` is the same as `!(e1 ==
+e2)` for all expressions `e1` and `e2`.
+
+Equality and inequality are homogeneous; comparing values of different runtime
+types results in a runtime error. Thus `2 == 3` is false, but `2 == 2.0` is an
+error.
+
+For `double`, all not-a-number (`NaN`) values compare equal. This is different
+than the usual semantics of floating-point numbers, but it is more consistent
+with the usual expectations of reflexivity, and is more compatible with the
+usual notions of equality on protocol buffers.
+
+Lists are unequal if their lengths are different. Otherwise, for lists `a` and
+`b` with length `N`, `a == b` is equivalent to
+
+```
+a[0] == b[0] && a[1] == b[2] && ... && a[N-1] == b[N-1]
+```
+
+Maps are unequal if their key sets are different, otherwise for maps `a` and
+`b` with keyset `k1, k2, ..., kN`, `a == b` is equivalent to
+
+```
+a[k1] == b[k1] && a[k2] == b[k2] && ... && a[kN] == b[kN]
+```
+
+So for equality of both lists and maps this means:
+
+- if the list lengths / map key sets are different, the result is false;
+- if one or more element comparisons is false, the result is false;
+- if all element comparisons are true, the result is true;
+- otherwise the result is an error.
+
+Ordering operators are defined for `int`, `uint`, `double`, `string`, `bytes`,
+`bool`, as well as `timestamp` and `duration`. Strings obey lexicographic
+ordering of the code points, and bytes obey lexicographic ordering of the byte
+values. The ordering operators obey the usual algebraic properties, i.e. `e1 <=
+e2` gives the same result as `!(e1 > e2)` as well as `(e1 < e2) || (e1 == e2)`
+when the expressions involved do not have side effects.
+
 ### Timezones
 
 Timezones are expressed in the following grammar:
