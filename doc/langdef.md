@@ -802,7 +802,7 @@ Lists are unequal if their lengths are different. Otherwise, for lists `a` and
 `b` with length `N`, `a == b` is equivalent to
 
 ```
-a[0] == b[0] && a[1] == b[2] && ... && a[N-1] == b[N-1]
+a[0] == b[0] && a[1] == b[1] && ... && a[N-1] == b[N-1]
 ```
 
 Maps are unequal if their key sets are different, otherwise for maps `a` and
