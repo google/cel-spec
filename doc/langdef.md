@@ -80,9 +80,9 @@ by the grammar.
 IDENT          ::= [_a-zA-Z][_a-zA-Z0-9]* - RESERVED
 LITERAL        ::= INT_LIT | UINT_LIT | FLOAT_LIT | STRING_LIT | BYTES_LIT
                  | BOOL_LIT | NULL_LIT
-INT_LIT        ::= DIGIT+ | 0x HEXDIGIT+
+INT_LIT        ::= -? DIGIT+ | -? 0x HEXDIGIT+
 UINT_LIT       ::= INT_LIT [uU]
-FLOAT_LIT      ::= DIGIT* . DIGIT+ EXPONENT? | DIGIT+ EXPONENT
+FLOAT_LIT      ::= -? DIGIT* . DIGIT+ EXPONENT? | -? DIGIT+ EXPONENT
 DIGIT          ::= [0-9]
 HEXDIGIT       ::= [0-9abcdefABCDEF]
 EXPONENT       ::= [eE] [+-]? DIGIT+
@@ -100,14 +100,15 @@ NEWLINE        ::= \r\n | \r | \n
 BOOL_LIT       ::= "true" | "false"
 NULL_LIT       ::= "null"
 RESERVED       ::= BOOL_LIT | NULL_LIT | "in"
-                 | "for" | "if" | "function" | "return" | "void"
-                 | "import" | "package" | "as" | "let" | "const"
+                 | "as" | "break" | "const" | "continue" | "else"
+                 | "for" | "function" | "if" | "import" | "let"
+                 | "loop" | "package" | "namespace" | "return"
+                 | "var" | "void" | "while"
 WHITESPACE     ::= [\t\n\f\r ]+
 COMMENT        ::= '//' ~NEWLINE* NEWLINE
 ```
 
-Note that negative numbers are recognized as positives with the unary `-`
-operator from the grammar. For the sake of a readable representation, the escape
+For the sake of a readable representation, the escape
 sequences (`ESCAPE`) are kept implicit in string tokens. This means that strings
 without the `r` or `R` (raw) prefix process `ESCAPE` sequences, while in strings
 with the raw prefix they stay uninterpreted. See documentation of string
