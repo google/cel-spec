@@ -343,3 +343,67 @@ section {
     value: { int64_value: 3730 }
   }
 }
+section {
+  name: "timestamp_range"
+  description: "Tests for out-of-range operations on timestamps."
+  test {
+    name: "from_string_under"
+    expr: "timestamp('0000-01-01T00:00:00Z')"
+    eval_error {
+      errors { message: "range" }
+    }
+  }
+  test {
+    name: "from_string_over"
+    expr: "timestamp('10000-01-01T00:00:00Z')"
+    eval_error {
+      errors { message: "range" }
+    }
+  }
+  test {
+    name: "add_duration_under"
+    expr: "timestamp('0001-01-01T00:00:00Z') - duration('10s')"
+    eval_error {
+      errors { message: "range" }
+    }
+  }
+  test {
+    name: "add_duration_over"
+    expr: "timestamp('9999-12-31T23:59:59Z') + duration('10s')"
+    eval_error {
+      errors { message: "range" }
+    }
+  }
+}
+section {
+  name: "duration_range"
+  description: "Tests for out-of-range operations on durations."
+  test {
+    name: "from_string_under"
+    expr: "duration('-320000000000s')"
+    eval_error {
+      errors { message: "range" }
+    }
+  }
+  test {
+    name: "from_string_over"
+    expr: "duration('320000000000s')"
+    eval_error {
+      errors { message: "range" }
+    }
+  }
+  test {
+    name: "add_under"
+    expr: "duration('-200000000000s') + duration('-200000000000s')"
+    eval_error {
+      errors { message: "range" }
+    }
+  }
+  test {
+    name: "add_over"
+    expr: "duration('200000000000s') + duration('200000000000s')"
+    eval_error {
+      errors { message: "range" }
+    }
+  }
+}
