@@ -827,6 +827,12 @@ values. The ordering operators obey the usual algebraic properties, i.e. `e1 <=
 e2` gives the same result as `!(e1 > e2)` as well as `(e1 < e2) || (e1 == e2)`
 when the expressions involved do not have side effects.
 
+### Overflow
+
+Arithmetic operations raise an error when the results exceed the range of the
+integer type (int, uint) or the timestamp or duration type.  An error is also
+raised for conversions which exceed the range of the target type.
+
 ### Timezones
 
 Timezones are expressed in the following grammar:

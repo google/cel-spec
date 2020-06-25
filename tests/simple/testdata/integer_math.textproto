@@ -190,8 +190,6 @@ section {
     eval_error: {
       errors: { message: "return error for overflow" }
     }
-    ## Current behavior:
-    ## value: { int64_value: -9223372036854775808 }
   }
   test {
     name: "int64_overflow_negative"
@@ -200,8 +198,14 @@ section {
     eval_error: {
       errors: { message: "return error for overflow" }
     }
-    ## Current behavior:
-    ## value: { int64_value: 9223372036854775807 }
+  }
+  test {
+    name: "int64_min_negate"
+    description: "Negated LLONG_MIN is not representable."
+    expr: "-(-9223372036854775808)"
+    eval_error: {
+      errors: { message: "return error for overflow" }
+    }
   }
   test {
     name: "uint64_overflow_positive"
