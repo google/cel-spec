@@ -1860,7 +1860,7 @@ See [cel-go/issues/9](https://github.com/google/cel-go/issues/9).
     </td>
   </tr>
   <tr>
-    <th rowspan="2">
+    <th rowspan="1">
       list
     </th>
     <td>
@@ -1871,15 +1871,7 @@ See [cel-go/issues/9](https://github.com/google/cel-go/issues/9).
     </td>
   </tr>
   <tr>
-    <td>
-      (type(A), list(A)) -> list(A)
-    </td>
-    <td>
-      type conversion
-    </td>
-  </tr>
-  <tr>
-    <th rowspan="2">
+    <th rowspan="1">
       map
     </th>
     <td>
@@ -1887,14 +1879,6 @@ See [cel-go/issues/9](https://github.com/google/cel-go/issues/9).
     </td>
     <td>
       type denotation
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (type(A), type(B), map(A, B)) -> map(A, B)
-    </td>
-    <td>
-      type conversion
     </td>
   </tr>
   <tr>
