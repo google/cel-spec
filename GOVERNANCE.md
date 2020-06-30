@@ -32,8 +32,6 @@ The review process is as follows:
   the cel-lang-discuss@googlegroups.com.
 - The Language Council will review the design doc at the next council meeting
   (once every three weeks) and the council decision included in the document.
-- The council decision will be included in the design doc and the document shared
-  with cel-lang-discuss@googlegroups.com, and the linked in the original FR.
 
 If the proposal is approved, the spec will be updated by a maintainer (if
 applicable) and a rationale will be included in the CEL-Spec wiki to ensure
