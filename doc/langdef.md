@@ -95,6 +95,7 @@ BYTES_LIT      ::= [bB] STRING_LIT
 ESCAPE         ::= \ [bfnrt"'\]
                  | \ x HEXDIGIT HEXDIGIT
                  | \ u HEXDIGIT HEXDIGIT HEXDIGIT HEXDIGIT
+                 | \ U HEXDIGIT HEXDIGIT HEXDIGIT HEXDIGIT HEXDIGIT HEXDIGIT HEXDIGIT HEXDIGIT
                  | \ [0-3] [0-7] [0-7]
 NEWLINE        ::= \r\n | \r | \n
 BOOL_LIT       ::= "true" | "false"
