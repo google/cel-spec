@@ -63,6 +63,16 @@ section {
     expr: '{}'
     value: { map_value: {} }
   }
+  test {
+    name: "self_eval_string_raw_prefix_triple_double"
+    expr: 'r""""""'
+    value: { string_value: "" }
+  }
+  test {
+    name: "self_eval_string_raw_prefix_triple_single"
+    expr: "r''''''"
+    value: { string_value: "" }
+  }
 }
 section {
   name: "self_eval_nonzeroish"
@@ -132,6 +142,36 @@ section {
     name: "self_eval_bool_true"
     expr: "true"
     value: { bool_value: true }
+  }
+  test {
+    name: "self_eval_int_hex"
+    expr: "0x55555555"
+    value: { int64_value: 1431655765 }
+  }
+  test {
+    name: "self_eval_int_hex_negative"
+    expr: "-0x55555555"
+    value: { int64_value: -1431655765 }
+  }
+  test {
+    name: "self_eval_uint_hex"
+    expr: "0x55555555u"
+    value: { uint64_value: 1431655765 }
+  }
+  test {
+    name: "self_eval_unicode_escape_four"
+    expr: '"\\u270c"'
+    value: { string_value: "\xe2\x9c\x8c" }
+  }
+  test {
+    name: "self_eval_unicode_escape_eight"
+    expr: '"\\U0001f431"'
+    value: { string_value: "\xf0\x9f\x90\xb1" }
+  }
+  test {
+    name: "self_eval_ascii_escape_seq"
+    expr: '"\\a\\b\\f\\n\\r\\t\\v\\"\\\'\\\\"'
+    value: { string_value: "\a\b\f\n\r\t\v\"'\\" }
   }
 }
 section {
