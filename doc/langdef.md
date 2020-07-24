@@ -1562,7 +1562,7 @@ See [cel-go/issues/9](https://github.com/google/cel-go/issues/9).
       (string) -> google.protobuf.Duration
     </td>
     <td>
-      type conversion, duration should be end with "s", which stands for seconds
+      type conversion, duration should end with "s", which stands for seconds
     </td>
   </tr>
   <tr>
