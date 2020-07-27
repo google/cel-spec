@@ -1,0 +1,9 @@
+steps:
+- name: 'gcr.io/cel-analysis/bazel:3.0.0'
+  entrypoint: bazel
+  args: ['test', '--test_output=errors', '...']
+  id: bazel-test
+  waitFor: ['-']
+timeout: 10m
+options:
+  machineType: 'N1_HIGHCPU_8'
