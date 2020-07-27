@@ -54,23 +54,6 @@ cc_proto_library(
     deps = [":test_value_proto"],
 )
 
-go_proto_library(
-    name = "test_data_go_proto",
-    importpath = "github.com/google/cel-spec/testdata/test_data",
-    proto = ":test_data_proto",
-    deps = [
-        "@com_google_googleapis//:expr_v1beta1_go_proto",
-        ":test_value_go_proto",
-    ],
-)
-
-go_proto_library(
-    name = "test_value_go_proto",
-    importpath = "github.com/google/cel-spec/testdata/test_value",
-    proto = ":test_value_proto",
-    deps = ["@com_google_googleapis//:expr_v1beta1_go_proto"],
-)
-
 java_proto_library(
     name = "test_data_java_proto",
     deps = [":test_data_proto"],
