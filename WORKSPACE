@@ -1,5 +1,4 @@
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
-load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository", "new_git_repository")
 
 http_archive(
     name = "io_bazel_rules_go",
@@ -21,20 +20,12 @@ http_archive(
 
 http_archive(
     name = "rules_cc",
-    sha256 = "36fa66d4d49debd71d05fba55c1353b522e8caef4a20f8080a3d17cdda001d89",
+    sha256 = "24c8ae1a4b802309ed9fa3580fe815bdca7d4d9b5b21494d92e4b616d83b5e51",
     strip_prefix = "rules_cc-0d5f3f2768c6ca2faca0079a997a97ce22997a0c",
     urls = [
-        "https://mirror.bazel.build/github.com/bazelbuild/rules_cc/archive/0d5f3f2768c6ca2faca0079a997a97ce22997a0c.zip",
-        "https://github.com/bazelbuild/rules_cc/archive/0d5f3f2768c6ca2faca0079a997a97ce22997a0c.zip",
+        "https://mirror.bazel.build/github.com/bazelbuild/rules_cc/archive/0d5f3f2768c6ca2faca0079a997a97ce22997a0c.tar.gz",
+        "https://github.com/bazelbuild/rules_cc/archive/0d5f3f2768c6ca2faca0079a997a97ce22997a0c.tar.gz",
     ],
-)
-
-http_archive(
-    name = "rules_python",
-    strip_prefix = "rules_python-cd552725122fdfe06a72864e21a92b5093a1857d",
-    type = "zip",
-    url = "https://github.com/bazelbuild/rules_python/archive/cd552725122fdfe06a72864e21a92b5093a1857d.zip",
-    sha256 = "e4ddb2bf3c2e0ddfec5a1ab41e480661e65605c6e3c336fe85c5bd6a267dbc2e"
 )
 
 http_archive(
@@ -48,6 +39,14 @@ http_archive(
 )
 
 http_archive(
+    name = "rules_python",
+    sha256 = "943071099515973b27e8139df8d2a2628404070a7e8782765b4fe1f12ab92033",
+    strip_prefix = "rules_python-cd552725122fdfe06a72864e21a92b5093a1857d",
+    url = "https://github.com/bazelbuild/rules_python/archive/cd552725122fdfe06a72864e21a92b5093a1857d.tar.gz",
+)
+
+# googleapis
+http_archive(
     name = "com_google_googleapis",
     sha256 = "1f742f6cafe616fe73302db010e0b7ee6579cb1ce06010427b7d0995cbd80ce4",
     strip_prefix = "googleapis-6a813acf535e4746fa4a135ce23547bb6425c26d",
@@ -56,10 +55,55 @@ http_archive(
     ]
 )
 
+# protobuf
+http_archive(
+    name = "com_google_protobuf",
+    sha256 = "9748c0d90e54ea09e5e75fb7fac16edce15d2028d4356f32211cfa3c0e956564",
+    strip_prefix = "protobuf-3.11.4",
+    urls = ["https://github.com/protocolbuffers/protobuf/archive/v3.11.4.zip"],
+)
+
+# googletest
+http_archive(
+     name = "com_google_googletest",
+     urls = ["https://github.com/google/googletest/archive/master.zip"],
+     strip_prefix = "googletest-master",
+)
+
+# gflags
+http_archive(
+    name = "com_github_gflags_gflags",
+    sha256 = "6e16c8bc91b1310a44f3965e616383dbda48f83e8c1eaa2370a215057b00cabe",
+    strip_prefix = "gflags-77592648e3f3be87d6c7123eb81cbad75f9aef5a",
+    urls = [
+        "https://mirror.bazel.build/github.com/gflags/gflags/archive/77592648e3f3be87d6c7123eb81cbad75f9aef5a.tar.gz",
+        "https://github.com/gflags/gflags/archive/77592648e3f3be87d6c7123eb81cbad75f9aef5a.tar.gz",
+    ],
+)
+
+# glog
+http_archive(
+    name = "com_google_glog",
+    sha256 = "1ee310e5d0a19b9d584a855000434bb724aa744745d5b8ab1855c85bff8a8e21",
+    strip_prefix = "glog-028d37889a1e80e8a07da1b8945ac706259e5fd8",
+    urls = [
+        "https://mirror.bazel.build/github.com/google/glog/archive/028d37889a1e80e8a07da1b8945ac706259e5fd8.tar.gz",
+        "https://github.com/google/glog/archive/028d37889a1e80e8a07da1b8945ac706259e5fd8.tar.gz",
+    ],
+)
+
+# absl
+http_archive(
+    name = "com_google_absl",
+    strip_prefix = "abseil-cpp-master",
+    urls = ["https://github.com/abseil/abseil-cpp/archive/master.zip"],
+)
+
 load("@io_bazel_rules_go//go:deps.bzl", "go_rules_dependencies", "go_register_toolchains")
 load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies", "go_repository")
 load("@com_google_googleapis//:repository_rules.bzl", "switched_rules_by_language")
 load("@rules_proto//proto:repositories.bzl", "rules_proto_dependencies", "rules_proto_toolchains")
+load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
 
 switched_rules_by_language(
     name = "com_google_googleapis_imports",
@@ -95,49 +139,6 @@ go_repository(
     sum = "h1:g61tztE5qeGQ89tm6NTjjM9VPIm088od1l6aSorWRWg=",
     version = "v0.3.0",
 )
-
-http_archive(
-    name = "com_google_protobuf",
-    sha256 = "9748c0d90e54ea09e5e75fb7fac16edce15d2028d4356f32211cfa3c0e956564",
-    strip_prefix = "protobuf-3.11.4",
-    urls = ["https://github.com/protocolbuffers/protobuf/archive/v3.11.4.zip"],
-)
-
-http_archive(
-     name = "com_google_googletest",
-     urls = ["https://github.com/google/googletest/archive/master.zip"],
-     strip_prefix = "googletest-master",
-)
-
-# gflags
-http_archive(
-    name = "com_github_gflags_gflags",
-    sha256 = "6e16c8bc91b1310a44f3965e616383dbda48f83e8c1eaa2370a215057b00cabe",
-    strip_prefix = "gflags-77592648e3f3be87d6c7123eb81cbad75f9aef5a",
-    urls = [
-        "https://mirror.bazel.build/github.com/gflags/gflags/archive/77592648e3f3be87d6c7123eb81cbad75f9aef5a.tar.gz",
-        "https://github.com/gflags/gflags/archive/77592648e3f3be87d6c7123eb81cbad75f9aef5a.tar.gz",
-    ],
-)
-
-# glog
-http_archive(
-    name = "com_google_glog",
-    sha256 = "1ee310e5d0a19b9d584a855000434bb724aa744745d5b8ab1855c85bff8a8e21",
-    strip_prefix = "glog-028d37889a1e80e8a07da1b8945ac706259e5fd8",
-    urls = [
-        "https://mirror.bazel.build/github.com/google/glog/archive/028d37889a1e80e8a07da1b8945ac706259e5fd8.tar.gz",
-        "https://github.com/google/glog/archive/028d37889a1e80e8a07da1b8945ac706259e5fd8.tar.gz",
-    ],
-)
-
-http_archive(
-    name = "com_google_absl",
-    strip_prefix = "abseil-cpp-master",
-    urls = ["https://github.com/abseil/abseil-cpp/archive/master.zip"],
-)
-
-load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
 
 # Run the dependencies at the end.  These will silently try to import some
 # of the above repositories but at different versions, so ours must come first.
