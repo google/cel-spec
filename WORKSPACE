@@ -1,4 +1,4 @@
-load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive") 
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository", "new_git_repository")
 
 http_archive(
@@ -49,10 +49,10 @@ http_archive(
 
 http_archive(
     name = "com_google_googleapis",
-    strip_prefix = "googleapis-master",
-    sha256 = "df5ed4cc76411f15aca9f1c4f40e877e97a47ea7683ce3755907f6ea9329dba8",
+    sha256 = "1f742f6cafe616fe73302db010e0b7ee6579cb1ce06010427b7d0995cbd80ce4",
+    strip_prefix = "googleapis-6a813acf535e4746fa4a135ce23547bb6425c26d",
     urls = [
-        "https://github.com/googleapis/googleapis/archive/master.zip",
+        "https://github.com/googleapis/googleapis/archive/6a813acf535e4746fa4a135ce23547bb6425c26d.tar.gz",
     ]
 )
 
