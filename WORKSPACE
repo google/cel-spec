@@ -112,6 +112,7 @@ switched_rules_by_language(
 
 # Do *not* call *_dependencies(), etc, yet.  See comment at the end.
 
+# Generated Google APIs protos for Golang
 go_repository(
   name = "org_golang_google_genproto",
   build_file_proto_mode = "disable",
@@ -119,6 +120,7 @@ go_repository(
   importpath = "google.golang.org/genproto",
 )
 
+# gRPC deps
 go_repository(
     name = "org_golang_google_grpc",
     build_file_proto_mode = "disable",
