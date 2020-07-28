@@ -1,4 +1,4 @@
-load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive") 
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository", "new_git_repository")
 
 http_archive(
@@ -71,7 +71,7 @@ switched_rules_by_language(
 go_repository(
   name = "org_golang_google_genproto",
   build_file_proto_mode = "disable",
-  commit = "bd91e49a0898e27abb88c339b432fa53d7497ac0",
+  commit = "3dc8dca74b7b7d2637db5f256f0310f95386653f",
   importpath = "google.golang.org/genproto",
 )
 
