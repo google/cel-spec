@@ -48,6 +48,9 @@ The available test files are:
 - [`namespace.textproto`](namespace.textproto) Checks use of namespaces and
   qualified identifiers.
 
+- [`parse.textproto`](parse.textproto) End-to-end tests of parsing. More
+  detailed parsing tests will the subject of a later conformance suite.
+
 - [`proto2.textproto`](proto2.textproto) Checks use of protocol buffers version
   2.
 
