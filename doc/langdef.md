@@ -51,6 +51,9 @@ FieldInits     = IDENT ":" Expr {"," IDENT ":" Expr} ;
 MapInits       = Expr ":" Expr {"," Expr ":" Expr} ;
 ```
 
+Implementations are required to support at least 250 levels of recursion in
+parsing, but may reject programs that exceed that limit.
+
 This grammar corresponds to the following operator precedence and associativity:
 
 Precedence | Operator        | Description                    | Associativity
