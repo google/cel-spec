@@ -1,11 +1,110 @@
 name: "parse"
 description: "End-to-end parsing tests."
 section {
-  name: "depth"
+  name: "nest"
   description: "Deep parse trees which all implementations must support."
   test {
+    name: "list_index"
+    description: "Member = Member '[' Expr ']'"
+    expr: "a[a[a[a[a[a[a[a[a[a[a[a[a[a[a[a[a[a[a[a[a[a[a[a[a[a[a[a[a[a[a[a[0]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]"
+    type_env {
+      name: "a"
+      ident { type { list_type { elem_type { primitive: INT64 } } } }
+    }
+    bindings {
+      key: "a"
+      value { value { list_value { values { int64_value: 0 } } } }
+    }
+    value { int64_value: 0 }
+  }
+  test {
+    name: "message_literal"
+    description: "Member = Member '{' [FieldInits] '}'"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "NestedTestAllTypes{child: NestedTestAllTypes{child: NestedTestAllTypes{child: NestedTestAllTypes{child: NestedTestAllTypes{child: NestedTestAllTypes{child: NestedTestAllTypes{child: NestedTestAllTypes{child: NestedTestAllTypes{child: NestedTestAllTypes{child: NestedTestAllTypes{child: NestedTestAllTypes{child: NestedTestAllTypes{child: NestedTestAllTypes{child: NestedTestAllTypes{child: NestedTestAllTypes{child: NestedTestAllTypes{child: NestedTestAllTypes{child: NestedTestAllTypes{child: NestedTestAllTypes{child: NestedTestAllTypes{child: NestedTestAllTypes{child: NestedTestAllTypes{child: NestedTestAllTypes{child: NestedTestAllTypes{child: NestedTestAllTypes{child: NestedTestAllTypes{child: NestedTestAllTypes{child: NestedTestAllTypes{child: NestedTestAllTypes{child: NestedTestAllTypes{payload: TestAllTypes{single_int64: 137}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}.payload.single_int64"
+    value { int64_value: 0 }
+  }
+  test {
+    name: "funcall"
+    description: "Primary = ['.'] IDENT ['(' [ExprList] ')']"
+    expr: "int(uint(int(uint(int(uint(int(uint(int(uint(int(uint(int(uint(int(uint(int(uint(int(uint(int(uint(int(uint(int(uint(int(uint(int(uint(int(uint(7))))))))))))))))))))))))))))))))"
+    value { int64_value: 7 }
+  }
+  test {
+    name: "parens"
+    description: "Primary = '(' Expr ')'"
+    expr: "((((((((((((((((((((((((((((((((7))))))))))))))))))))))))))))))))"
+    value { int64_value: 7 }
+  }
+  test {
     name: "list_literal"
-    expr: "size([[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[['just fine'],[1],[2],[3],[4],[5]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]])"
+    description: "Primary = '[' [ExprList] ']'"
+    expr: "size([[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[0]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]])"
     value { int64_value: 1 }
+  }
+  test {
+    name: "map_literal"
+    description: "Primary = '{' [MapInits] '}'"
+    expr: "size({0: {0: {0: {0: {0: {0: {0: {0: {0: {0: {0: {0: {0: {0: {0: {0: {0: {0: {0: {0: {0: {0: {0: {0: {0: {0: {0: {0: {0: {0: {0: 'foo'}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}})"
+    value { int64_value: 1 }
+  }
+}
+section {
+  name: "repeat"
+  description: "Repetitive parse trees which all implementations must support."
+  test {
+    name: "conditional"
+    description: "Expr = ConditionalOr ['?' ConditionalOr ':' Expr]"
+    expr: "true ? true : true ? true : true ? true : true ? true : true ? true : true ? true : true ? true : true ? true : true ? true : true ? true : true ? true : true ? true : true ? true : true ? true : true ? true : true ? true : true ? true : true ? true : true ? true : true ? true : true ? true : true ? true : true ? true : true ? true : true ? true : true ? true : true ? true : true ? true : true ? true : true ? true : true ? true : true ? true : false"
+    value { bool_value: true }
+  }
+  test {
+    name: "or"
+    description: "ConditionalOr = [ConditionalOr '||'] ConditionalAnd"
+    expr: "false || false || false || false || false || false || false || false || false || false || false || false || false || false || false || false || false || false || false || false || false || false || false || false || false || false || false || false || false || false || false || false || true"
+    value { bool_value: true }
+  }
+  test {
+    name: "and"
+    description: "ConditionalAnd = [ConditionalAnd '&&'] Relation"
+    expr: "true && true && true && true && true && true && true && true && true && true && true && true && true && true && true && true && true && true && true && true && true && true && true && true && true && true && true && true && true && true && true && true && false"
+    value { bool_value: false }
+  }
+  test {
+    name: "add_sub"
+    description: "Addition = [Addition ('+' | '-')] Multiplication"
+    expr: "3 - 3 + 3 - 3 + 3 - 3 + 3 - 3 + 3 - 3 + 3 - 3 + 3 - 3 + 3 - 3 + 3 - 3 + 3 - 3 + 3 - 3 + 3 - 3 + 3 - 3 + 3 - 3 + 3 - 3 + 3 - 3 + 3"
+    value { int64_value: 3 }
+  }
+  test {
+    name: "mul_div"
+    description: "Multiplication = [Multiplication ('*' | '/' | '%')] Unary"
+    expr: "4 * 4 / 4 * 4 / 4 * 4 / 4 * 4 / 4 * 4 / 4 * 4 / 4 * 4 / 4 * 4 / 4 * 4 / 4 * 4 / 4 * 4 / 4 * 4 / 4 * 4 / 4 * 4 / 4 * 4 / 4 * 4 / 4"
+    value { int64_value: 4 }
+  }
+  test {
+    name: "not"
+    description: "Unary = '!' {'!'} Member"
+    expr: "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!true"
+    value { bool_value: true }
+  }
+  test {
+    name: "unary_neg"
+    description: "Unary = '-' {'-'} Member"
+    expr: "--------------------------------19"
+    value { int64_value: 19 }
+  }
+  test {
+    name: "select"
+    description: "Member = Member '.' IDENT ['(' [ExprList] ')']"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "NestedTestAllTypes{}.child.child.child.child.child.child.child.child.child.child.child.child.child.child.child.child.child.child.child.child.child.child.child.child.child.child.child.child.child.child.payload.single_int32"
+    value { int64_value: 0 }
+  }
+  test {
+    name: "index"
+    description: "Member = Member '[' Expr ']'"
+    expr: "[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[['foo']]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0][0]"
+    value { string_value: "foo" }
   }
 }
