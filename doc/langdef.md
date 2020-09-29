@@ -51,8 +51,19 @@ FieldInits     = IDENT ":" Expr {"," IDENT ":" Expr} ;
 MapInits       = Expr ":" Expr {"," Expr ":" Expr} ;
 ```
 
-Implementations are required to support at least 250 levels of recursion in
-parsing, but may reject programs that exceed that limit.
+Implementations are required to support at least:
+
+*   32 levels of nested expressions;
+*   32 repetitions of self-recursive or repetitive rules, i.e.:
+    *   32 terms separated by `||` in a row;
+    *   32 terms separated by `&&` in a row;
+    *   32 relations in a row;
+    *   32 binary arithmetic operators of the same precedence in a row;
+    *   32 selection (`.`) operators in a row;
+    *   32 indexing (`[_]`) operators in a row;
+    *   32 function call arguments;
+    *   list literals with 32 elements;
+    *   map or message literals with 32 fields.
 
 This grammar corresponds to the following operator precedence and associativity:
 
