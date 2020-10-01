@@ -422,7 +422,13 @@ section {
     value: { uint64_value: 26 }
   }
   test {
-    name: "double_range"
+    name: "double_range_beyond_int"
+    description: "Checks conversion of integer outside int range."
+    expr: "uint(1e19)"
+    value: { uint64_value: 10000000000000000000 }
+  }
+  test {
+    name: "double_range_err"
     expr: "uint(6.022e23)"
     eval_error {
       errors { message: "range" }
