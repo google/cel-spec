@@ -42,6 +42,7 @@ var (
 	flagParseServerCmd string
 	flagCheckServerCmd string
 	flagEvalServerCmd  string
+	flagCheckedOnly    bool
 	flagSkipTests      stringArray
 	rc                 *runConfig
 )
@@ -51,6 +52,7 @@ func init() {
 	flag.StringVar(&flagParseServerCmd, "parse_server", "", "path to command for parse server")
 	flag.StringVar(&flagCheckServerCmd, "check_server", "", "path to command for check server")
 	flag.StringVar(&flagEvalServerCmd, "eval_server", "", "path to command for eval server")
+	flag.BoolVar(&flagCheckedOnly, "checked_only", false, "skip tests which skip type checking")
 	flag.Var(&flagSkipTests, "skip_test", "name(s) of tests to skip. can be set multiple times. to skip the following tests: f1/s1/t1, f1/s1/t2, f1/s2/*, f2/s3/t3, you give the arguments --skip_test=f1/s1/t1,t2;s2 --skip_test=f2/s3/t3")
 	flag.Parse()
 }
@@ -99,6 +101,7 @@ func initRunConfig() (*runConfig, error) {
 	rc.parseClient = servers[pCmd]
 	rc.checkClient = servers[cCmd]
 	rc.evalClient = servers[eCmd]
+	rc.checkedOnly = flagCheckedOnly
 	return &rc, nil
 }
 
@@ -193,7 +196,7 @@ func TestSimpleFile(t *testing.T) {
 			t.Logf("Running tests in section %v\n", section.Name)
 			for _, test := range section.Test {
 				testPath := sectionPath + "/" + test.Name
-				if contains(skipTests, testPath) {
+				if contains(skipTests, testPath) || (flagCheckedOnly && test.DisableCheck) {
 					t.Logf("Skipping test name %v\n", test.Name)
 					continue
 				}
