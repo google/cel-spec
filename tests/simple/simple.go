@@ -231,7 +231,7 @@ func (r *runConfig) RunTest(t *spb.SimpleTest) error {
 	}
 	if checkedExpr != nil {
 		err = r.RunEval(t, &exprpb.EvalRequest{
-			ExprKind:  &exprpb.EvalRequest_ParsedExpr{ParsedExpr: parsedExpr},
+			ExprKind:  &exprpb.EvalRequest_CheckedExpr{CheckedExpr: checkedExpr},
 			Bindings:  t.Bindings,
 			Container: t.Container,
 		})
