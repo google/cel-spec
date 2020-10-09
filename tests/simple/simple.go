@@ -158,6 +158,7 @@ type runConfig struct {
 	parseClient *celrpc.ConfClient
 	checkClient *celrpc.ConfClient
 	evalClient  *celrpc.ConfClient
+	checkedOnly bool
 }
 
 // RunTest runs the test described by t, returning an error for any
@@ -216,24 +217,33 @@ func (r *runConfig) RunTest(t *spb.SimpleTest) error {
 		// TODO: validate that the inferred type is compatible
 		// with the expected value, if any, in the eval matcher.
 	}
-	// TODO: if check phase disabled, check anyhow and ensure it fails.
 
 	// Eval
-	var ereq exprpb.EvalRequest
-	if checkedExpr == nil {
-		ereq = exprpb.EvalRequest{
+	if !r.checkedOnly {
+		err = r.RunEval(t, &exprpb.EvalRequest{
 			ExprKind:  &exprpb.EvalRequest_ParsedExpr{ParsedExpr: parsedExpr},
 			Bindings:  t.Bindings,
 			Container: t.Container,
+		})
+		if err != nil {
+			return err
 		}
-	} else {
-		ereq = exprpb.EvalRequest{
+	}
+	if checkedExpr != nil {
+		err = r.RunEval(t, &exprpb.EvalRequest{
 			ExprKind:  &exprpb.EvalRequest_CheckedExpr{CheckedExpr: checkedExpr},
 			Bindings:  t.Bindings,
 			Container: t.Container,
+		})
+		if err != nil {
+			return err
 		}
 	}
-	eres, err := r.evalClient.Eval(context.Background(), &ereq)
+	return nil
+}
+
+func (r *runConfig) RunEval(t *spb.SimpleTest, ereq *exprpb.EvalRequest) error {
+	eres, err := r.evalClient.Eval(context.Background(), ereq)
 	if err != nil {
 		return fmt.Errorf("%s: Fatal eval RPC error: %v", t.Name, err)
 	}
