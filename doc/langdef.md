@@ -449,12 +449,12 @@ google.protobuf message | CEL Conversion
 `Value`                 | dynamically converted to the contained type (null, double, string, bool, `Struct`, or `ListValue`)
 wrapper types           | converted as eponymous field type
 
-The wrapper types are `BoolValue`, `BytesValue`, `DoubleValue`, `EnumValue`,
-`FloatValue`, `Int32Value`, `Int64Value`, `NullValue`, `StringValue`,
-`Uint32Value`, and `Uint64Value`. Values of these wrapper types are converted to
-the obvious type. Additionally, field selection of an unset message field of
-wrapper type will evaluate to `null`, instead of the default message. This is an
-exception to the usual evaluation of unset message fields.
+The wrapper types are `BoolValue`, `BytesValue`, `DoubleValue`, `FloatValue`,
+`Int32Value`, `Int64Value`, `NullValue`, `StringValue`, `Uint32Value`, and
+`Uint64Value`. Values of these wrapper types are converted to the obvious type.
+Additionally, field selection of an unset message field of wrapper type will
+evaluate to `null`, instead of the default message. This is an exception to the
+usual evaluation of unset message fields.
 
 Note that this implies some cascading conversions. An `Any` message might be
 converted to a `Struct`, one of whose `Value`-typed values might be converted to
