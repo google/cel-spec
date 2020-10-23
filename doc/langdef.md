@@ -159,10 +159,11 @@ combination of one or more of:
     indicate that we're accessing a field within a protocol buffer or map.
 *   Protocol buffer package names: a simple or qualified name could represent an
     absolute or relative name in the protocol buffer package namespace. Package
-    names must be followed by a message type or enum constant.
-*   Protocol buffer message types and enum constants: following an optional
-    protocol buffer package name, a simple or qualified name could refer to a
-    message type or enum constant in the package's namespace.
+    names must be followed by a message type, enum type, or enum constant.
+*   Protocol buffer message types, enum types, and enum constants: following an
+    optional protocol buffer package name, a simple or qualified name could
+    refer to a message type, and enum type, or an enum constant in the
+    package's namespace.
 
 Resolution works as follows. If `a.b` is a name to be resolved in the context of
 a protobuf declaration with scope `A.B`, then resolution is attempted, in order,
@@ -217,6 +218,16 @@ CEL provides no way to control the finer points of floating-point arithmetic,
 such as expression evaluation, rounding mode, or exception handling. However,
 any two not-a-number values will compare equal even if their underlying
 properties are different.
+
+### Enumerations
+
+Each protocol buffer enumeration is its own CEL type.  Enumerations have no
+operations other than equality (and inequality), obtaining the type from a
+value, and conversion to an `int`. (No conversion to string is supported, as
+an enum value might have 0, 1, or many names.)  Values of type `int` can be
+converted to enum values as long as they are in the range `-2^31` to `2^31 - 1`.
+A value of type `string` can be converted to enum values as long as it is a
+defined for that enum.
 
 ### String and Bytes Values
 
@@ -392,11 +403,11 @@ int32, int64, sint32, sint64, sfixed32, sfixed64 | `int`
 uint32, uint64, fixed32, fixed64                 | `uint`
 float, double                                    | `double`
 bool, string, bytes                              | same
-enum                                             | `int`
+enum E                                           | E
 repeated                                         | `list`
 map<K, V>                                        | `map`
 oneof                                            | options expanded individually, at most one is set
-message                                          | same except for conversions below
+message M                                        | M, except for conversions below
 
 Signed integers, unsigned integers, and floating point numbers are converted to
 the singular CEL type of the same sort. The CEL type is capable of expressing
@@ -405,10 +416,6 @@ buffers, an out-of-range CEL value results in an error.
 
 Boolean, string, and bytes types have identical ranges and are converted without
 error.
-
-Protocol buffer enum values are converted to the corresponding `int` value.
-Protocol buffer enum fields can accept any signed 32-bit number, values outside
-that range will raise an error.
 
 Repeated fields are converted to CEL lists of converted values, preserving the
 order. In the other direction, the CEL list elements must be of the right type
@@ -1832,7 +1839,7 @@ See [cel-go/issues/9](https://github.com/google/cel-go/issues/9).
     </td>
   </tr>
   <tr>
-    <th rowspan="5">
+    <th rowspan="6">
       int
     </th>
     <td>
@@ -1861,6 +1868,14 @@ See [cel-go/issues/9](https://github.com/google/cel-go/issues/9).
   <tr>
     <td>
       (string) -> int
+    </td>
+    <td>
+      type conversion
+    </td>
+  </tr>
+  <tr>
+    <td>
+      (enum E) -> int
     </td>
     <td>
       type conversion
@@ -2080,6 +2095,39 @@ See [cel-go/issues/9](https://github.com/google/cel-go/issues/9).
       type conversion
     </td>
   </tr>
+  <tr>
+    <th rowspan="2">
+      E (for fully-qualified enumeration E)
+    </th>
+    <td>
+      (int) -> enum E
+    </td>
+    <td>
+      type conversion when in int32 range, otherwise error
+    </td>
+  </tr>
+  <tr>
+    <td>
+      (string) -> enum E
+    </td>
+    <td>
+      type conversion for unqualified symbolic name, otherwise error
+    </td>
+  </tr>
 </table>
 
 <!-- END GENERATED DECL TABLE; DO NOT EDIT ABOVE -->
+
+## Appendix 1: Legacy Behavior
+
+### Enums
+
+In many pre-1.0 implementations, protocol buffer enums are all treated as CEL
+type `int`, and are legal arguments whenever an `int` is expected. Int values
+in the range `-2**31` to `2**31 - 1` can be used whenever an enum is expected.
+Values outside that range will raise an error. There are no standard functions
+for conversion from strings, and no conversion to `int` is needed.
+
+```
+type(google.protobuf.Field{}.kind) # was int, now google.protobuf.Field.Kind
+```

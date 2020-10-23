@@ -1,40 +1,29 @@
 name: "enums"
 description: "Tests for enum types."
 section {
-  name: "literal"
+  name: "legacy_proto2"
+  description: "Legacy semantics where all enums are ints, proto2."
   test {
-    name: "global2"
+    name: "literal_global"
     container: "google.api.expr.test.v1.proto2"
     expr: "GlobalEnum.GAZ"
     value { int64_value: 2 }
   }
   test {
-    name: "global3"
-    container: "google.api.expr.test.v1.proto3"
-    expr: "GlobalEnum.GAZ"
-    value { int64_value: 2 }
-  }
-  test {
-    name: "nested2"
+    name: "literal_nested"
     container: "google.api.expr.test.v1.proto2"
     expr: "TestAllTypes.NestedEnum.BAR"
     value { int64_value: 1 }
   }
   test {
-    name: "nested3"
-    container: "google.api.expr.test.v1.proto3"
-    expr: "TestAllTypes.NestedEnum.BAR"
-    value { int64_value: 1 }
-  }
-  test {
-    name: "zero"
+    name: "literal_zero"
     container: "google.api.expr.test.v1.proto2"
     expr: "GlobalEnum.GOO"
     value { int64_value: 0 }
   }
   test {
     name: "comparision"
-    container: "google.api.expr.test.v1.proto3"
+    container: "google.api.expr.test.v1.proto2"
     expr: "GlobalEnum.GAR == 1"
     value { bool_value: true }
   }
@@ -44,52 +33,26 @@ section {
     expr: "TestAllTypes.NestedEnum.BAR + 3"
     value { int64_value: 4 }
   }
-}
-section {
-  name: "type"
-  description: "Enums are all of type int, not a separate type."
   test {
-    name: "global2"
+    name: "type_global"
     container: "google.api.expr.test.v1.proto2"
     expr: "type(GlobalEnum.GOO)"
     value { type_value: "int" }
   }
   test {
-    name: "global3"
-    container: "google.api.expr.test.v1.proto3"
-    expr: "type(GlobalEnum.GOO)"
-    value { type_value: "int" }
-  }
-  test {
-    name: "nested2"
+    name: "type_nested"
     container: "google.api.expr.test.v1.proto2"
     expr: "type(TestAllTypes.NestedEnum.BAZ)"
     value { type_value: "int" }
   }
   test {
-    name: "nested3"
-    container: "google.api.expr.test.v1.proto3"
-    expr: "type(TestAllTypes.NestedEnum.BAZ)"
-    value { type_value: "int" }
-  }
-}
-section {
-  name: "select"
-  description: "Selecting enum-valued fields from messages."
-  test {
-    name: "default2"
+    name: "select_default"
     container: "google.api.expr.test.v1.proto2"
     expr: "TestAllTypes{}.standalone_enum"
     value { int64_value: 0 }
   }
   test {
-    name: "default3"
-    container: "google.api.expr.test.v1.proto3"
-    expr: "TestAllTypes{}.standalone_enum"
-    value { int64_value: 0 }
-  }
-  test {
-    name: "global2"
+    name: "select"
     container: "google.api.expr.test.v1.proto2"
     expr: "x.standalone_enum"
     type_env {
@@ -113,7 +76,181 @@ section {
     value { int64_value: 2 }
   }
   test {
-    name: "global3"
+    name: "select_big"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "x.standalone_enum"
+    type_env {
+      name: "x"
+      ident {
+        type { message_type: "google.api.expr.test.v1.proto2.TestAllTypes" }
+      }
+    }
+    bindings {
+      key: "x"
+      value {
+        value {
+          object_value {
+            [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes] {
+              standalone_enum: 108
+            }
+          }
+        }
+      }
+    }
+    value { int64_value: 108 }
+  }
+  test {
+    name: "select_neg"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "x.standalone_enum"
+    type_env {
+      name: "x"
+      ident {
+        type { message_type: "google.api.expr.test.v1.proto2.TestAllTypes" }
+      }
+    }
+    bindings {
+      key: "x"
+      value {
+        value {
+          object_value {
+            [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes] {
+              standalone_enum: -3
+            }
+          }
+        }
+      }
+    }
+    value { int64_value: -3 }
+  }
+  test {
+    name: "field_type"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "type(TestAllTypes{}.standalone_enum)"
+    value { type_value: "int" }
+  }
+  test {
+    name: "assign_standalone_name"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{standalone_enum: TestAllTypes.NestedEnum.BAZ}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes] {
+          standalone_enum: BAZ
+        }
+      }
+    }
+  }
+  test {
+    name: "assign_standalone_int"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{standalone_enum: 1}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes] {
+          standalone_enum: BAR
+        }
+      }
+    }
+  }
+  test {
+    name: "assign_standalone_int_big"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{standalone_enum: 99}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes] {
+          standalone_enum: 99
+        }
+      }
+    }
+  }
+  test {
+    name: "assign_standalone_int_neg"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{standalone_enum: -1}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes] {
+          standalone_enum: -1
+        }
+      }
+    }
+  }
+  test {
+    name: "assign_standalone_int_too_big"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{standalone_enum: 5000000000}"
+    eval_error {
+      errors {
+        message: "range"
+      }
+    }
+  }
+  test {
+    name: "assign_standalone_int_too_neg"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{standalone_enum: -7000000000}"
+    eval_error {
+      errors {
+        message: "range"
+      }
+    }
+  }
+}
+section {
+  name: "legacy_proto3"
+  description: "Legacy semantics where all enums are ints, proto3"
+  test {
+    name: "literal_global"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "GlobalEnum.GAZ"
+    value { int64_value: 2 }
+  }
+  test {
+    name: "literal_nested"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes.NestedEnum.BAR"
+    value { int64_value: 1 }
+  }
+  test {
+    name: "literal_zero"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "GlobalEnum.GOO"
+    value { int64_value: 0 }
+  }
+  test {
+    name: "comparision"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "GlobalEnum.GAR == 1"
+    value { bool_value: true }
+  }
+  test {
+    name: "arithmetic"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes.NestedEnum.BAR + 3"
+    value { int64_value: 4 }
+  }
+  test {
+    name: "type_global"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "type(GlobalEnum.GOO)"
+    value { type_value: "int" }
+  }
+  test {
+    name: "type_nested"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "type(TestAllTypes.NestedEnum.BAZ)"
+    value { type_value: "int" }
+  }
+  test {
+    name: "select_default"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{}.standalone_enum"
+    value { int64_value: 0 }
+  }
+  test {
+    name: "select"
     container: "google.api.expr.test.v1.proto3"
     expr: "x.standalone_enum"
     type_env {
@@ -137,23 +274,298 @@ section {
     value { int64_value: 2 }
   }
   test {
-    name: "type2"
-    container: "google.api.expr.test.v1.proto2"
+    name: "select_big"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "x.standalone_enum"
+    type_env {
+      name: "x"
+      ident {
+        type { message_type: "google.api.expr.test.v1.proto3.TestAllTypes" }
+      }
+    }
+    bindings {
+      key: "x"
+      value {
+        value {
+          object_value {
+            [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes] {
+              standalone_enum: 108
+            }
+          }
+        }
+      }
+    }
+    value { int64_value: 108 }
+  }
+  test {
+    name: "select_neg"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "x.standalone_enum"
+    type_env {
+      name: "x"
+      ident {
+        type { message_type: "google.api.expr.test.v1.proto3.TestAllTypes" }
+      }
+    }
+    bindings {
+      key: "x"
+      value {
+        value {
+          object_value {
+            [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes] {
+              standalone_enum: -3
+            }
+          }
+        }
+      }
+    }
+    value { int64_value: -3 }
+  }
+  test {
+    name: "field_type"
+    container: "google.api.expr.test.v1.proto3"
     expr: "type(TestAllTypes{}.standalone_enum)"
     value { type_value: "int" }
   }
   test {
-    name: "type3"
+    name: "assign_standalone_name"
     container: "google.api.expr.test.v1.proto3"
-    expr: "type(TestAllTypes{}.standalone_enum)"
-    value { type_value: "int" }
+    expr: "TestAllTypes{standalone_enum: TestAllTypes.NestedEnum.BAZ}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes] {
+          standalone_enum: BAZ
+        }
+      }
+    }
+  }
+  test {
+    name: "assign_standalone_int"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{standalone_enum: 1}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes] {
+          standalone_enum: BAR
+        }
+      }
+    }
+  }
+  test {
+    name: "assign_standalone_int_big"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{standalone_enum: 99}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes] {
+          standalone_enum: 99
+        }
+      }
+    }
+  }
+  test {
+    name: "assign_standalone_int_neg"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{standalone_enum: -1}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes] {
+          standalone_enum: -1
+        }
+      }
+    }
+  }
+  test {
+    name: "assign_standalone_int_too_big"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{standalone_enum: 5000000000}"
+    eval_error {
+      errors {
+        message: "range"
+      }
+    }
+  }
+  test {
+    name: "assign_standalone_int_too_neg"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{standalone_enum: -7000000000}"
+    eval_error {
+      errors {
+        message: "range"
+      }
+    }
   }
 }
 section {
-  name: "assign"
-  description: "Initialization of enum messge fields."
+  name: "strong_proto2"
+  description: "String semantics where enums are distinct types, proto2."
   test {
-    name: "standalone_name2"
+    name: "literal_global"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "GlobalEnum.GAZ"
+    value {
+      enum_value {
+        type: "google.api.expr.test.v1.proto2.GlobalEnum"
+        value: 2
+      }
+    }
+  }
+  test {
+    name: "literal_nested"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes.NestedEnum.BAR"
+    value {
+      enum_value {
+        type: "google.api.expr.test.v1.proto2.TestAllTypes.NestedEnum"
+        value: 1
+      }
+    }
+  }
+  test {
+    name: "literal_zero"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "GlobalEnum.GOO"
+    value {
+      enum_value {
+        type: "google.api.expr.test.v1.proto2.GlobalEnum"
+        value: 0
+      }
+    }
+  }
+  test {
+    name: "comparision_true"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "GlobalEnum.GAR == GlobalEnum.GAR"
+    value { bool_value: true }
+  }
+  test {
+    name: "comparision_false"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "GlobalEnum.GAR == GlobalEnum.GAZ"
+    value { bool_value: false }
+  }
+  test {
+    name: "type_global"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "type(GlobalEnum.GOO)"
+    value { type_value: "google.api.expr.test.v1.proto2.GlobalEnum" }
+  }
+  test {
+    name: "type_nested"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "type(TestAllTypes.NestedEnum.BAZ)"
+    value {
+      type_value: "google.api.expr.test.v1.proto2.TestAllTypes.NestedEnum"
+    }
+  }
+  test {
+    name: "select_default"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{}.standalone_enum"
+    value {
+      enum_value {
+        type: "google.api.expr.test.v1.proto2.TestAllTypes.NestedEnum"
+        value: 0
+      }
+    }
+  }
+  test {
+    name: "select"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "x.standalone_enum"
+    type_env {
+      name: "x"
+      ident {
+        type { message_type: "google.api.expr.test.v1.proto2.TestAllTypes" }
+      }
+    }
+    bindings {
+      key: "x"
+      value {
+        value {
+          object_value {
+            [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes] {
+              standalone_enum: 2
+            }
+          }
+        }
+      }
+    }
+    value {
+      enum_value {
+        type: "google.api.expr.test.v1.proto2.TestAllTypes.NestedEnum"
+        value: 2
+      }
+    }
+  }
+  test {
+    name: "select_big"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "x.standalone_enum"
+    type_env {
+      name: "x"
+      ident {
+        type { message_type: "google.api.expr.test.v1.proto2.TestAllTypes" }
+      }
+    }
+    bindings {
+      key: "x"
+      value {
+        value {
+          object_value {
+            [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes] {
+              standalone_enum: 108
+            }
+          }
+        }
+      }
+    }
+    value {
+      enum_value {
+        type: "google.api.expr.test.v1.proto2.TestAllTypes.NestedEnum"
+        value: 108
+      }
+    }
+  }
+  test {
+    name: "select_neg"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "x.standalone_enum"
+    type_env {
+      name: "x"
+      ident {
+        type { message_type: "google.api.expr.test.v1.proto2.TestAllTypes" }
+      }
+    }
+    bindings {
+      key: "x"
+      value {
+        value {
+          object_value {
+            [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes] {
+              standalone_enum: -3
+            }
+          }
+        }
+      }
+    }
+    value {
+      enum_value {
+        type: "google.api.expr.test.v1.proto2.TestAllTypes.NestedEnum"
+        value: -3
+      }
+    }
+  }
+  test {
+    name: "field_type"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "type(TestAllTypes{}.standalone_enum)"
+    value {
+      type_value: "google.api.expr.test.v1.proto2.TestAllTypes.NestedEnum"
+    }
+  }
+  test {
+    name: "assign_standalone_name"
     container: "google.api.expr.test.v1.proto2"
     expr: "TestAllTypes{standalone_enum: TestAllTypes.NestedEnum.BAZ}"
     value {
@@ -165,7 +577,333 @@ section {
     }
   }
   test {
-    name: "standalone_name3"
+    name: "assign_standalone_int"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{standalone_enum: TestAllTypes.NestedEnum(1)}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes] {
+          standalone_enum: BAR
+        }
+      }
+    }
+  }
+  test {
+    name: "assign_standalone_int_big"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{standalone_enum: TestAllTypes.NestedEnum(99)}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes] {
+          standalone_enum: 99
+        }
+      }
+    }
+  }
+  test {
+    name: "assign_standalone_int_neg"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{standalone_enum: TestAllTypes.NestedEnum(-1)}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes] {
+          standalone_enum: -1
+        }
+      }
+    }
+  }
+  test {
+    name: "convert_symbol_to_int"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "int(GlobalEnum.GAZ)"
+    value { int64_value: 2 }
+  }
+  test {
+    name: "convert_unnamed_to_int"
+    description: "Disable check - missing way to declare enums."
+    expr: "int(x)"
+    disable_check: true
+    bindings {
+      key: "x"
+      value {
+        value {
+          enum_value {
+            type: "google.api.expr.test.v1.proto2.GlobalEnum"
+            value: 444
+          }
+        }
+      }
+    }
+    value { int64_value: 444 }
+  }
+  test {
+    name: "convert_unnamed_to_int_select"
+    expr: "int(x.standalone_enum)"
+    type_env {
+      name: "x"
+      ident {
+        type { message_type: "google.api.expr.test.v1.proto2.TestAllTypes" }
+      }
+    }
+    bindings {
+      key: "x"
+      value {
+        value {
+          object_value {
+            [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes] {
+              standalone_enum: -987
+            }
+          }
+        }
+      }
+    }
+    value { int64_value: -987 }
+  }
+  test {
+    name: "convert_int_inrange"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes.NestedEnum(2)"
+    value {
+      enum_value {
+        type: "google.api.expr.test.v1.proto2.TestAllTypes.NestedEnum"
+        value: 2
+      }
+    }
+  }
+  test {
+    name: "convert_int_big"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes.NestedEnum(20000)"
+    value {
+      enum_value {
+        type: "google.api.expr.test.v1.proto2.TestAllTypes.NestedEnum"
+        value: 20000
+      }
+    }
+  }
+  test {
+    name: "convert_int_neg"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "GlobalEnum(-33)"
+    value {
+      enum_value {
+        type: "google.api.expr.test.v1.proto2.GlobalEnum"
+        value: -33
+      }
+    }
+  }
+  test {
+    name: "convert_int_too_big"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes.NestedEnum(5000000000)}"
+    eval_error {
+      errors {
+        message: "range"
+      }
+    }
+  }
+  test {
+    name: "convert_int_too_neg"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes.NestedEnum(-7000000000)}"
+    eval_error {
+      errors {
+        message: "range"
+      }
+    }
+  }
+  test {
+    name: "convert_string"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes.NestedEnum('BAZ')}"
+    value {
+      enum_value {
+        type: "google.api.expr.test.v1.proto2.TestAllTypes.NestedEnum"
+        value: 2
+      }
+    }
+  }
+  test {
+    name: "convert_string_bad"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes.NestedEnum('BLETCH')}"
+    eval_error {
+      errors {
+        message: "invalid"
+      }
+    }
+  }
+}
+section {
+  name: "strong_proto3"
+  description: "String semantics where enums are distinct types, proto3."
+  test {
+    name: "literal_global"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "GlobalEnum.GAZ"
+    value {
+      enum_value {
+        type: "google.api.expr.test.v1.proto3.GlobalEnum"
+        value: 2
+      }
+    }
+  }
+  test {
+    name: "literal_nested"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes.NestedEnum.BAR"
+    value {
+      enum_value {
+        type: "google.api.expr.test.v1.proto3.TestAllTypes.NestedEnum"
+        value: 1
+      }
+    }
+  }
+  test {
+    name: "literal_zero"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "GlobalEnum.GOO"
+    value {
+      enum_value {
+        type: "google.api.expr.test.v1.proto3.GlobalEnum"
+        value: 0
+      }
+    }
+  }
+  test {
+    name: "comparision_true"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "GlobalEnum.GAR == GlobalEnum.GAR"
+    value { bool_value: true }
+  }
+  test {
+    name: "comparision_false"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "GlobalEnum.GAR == GlobalEnum.GAZ"
+    value { bool_value: false }
+  }
+  test {
+    name: "type_global"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "type(GlobalEnum.GOO)"
+    value { type_value: "google.api.expr.test.v1.proto3.GlobalEnum" }
+  }
+  test {
+    name: "type_nested"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "type(TestAllTypes.NestedEnum.BAZ)"
+    value {
+      type_value: "google.api.expr.test.v1.proto3.TestAllTypes.NestedEnum"
+    }
+  }
+  test {
+    name: "select_default"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{}.standalone_enum"
+    value {
+      enum_value {
+        type: "google.api.expr.test.v1.proto3.TestAllTypes.NestedEnum"
+        value: 0
+      }
+    }
+  }
+  test {
+    name: "select"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "x.standalone_enum"
+    type_env {
+      name: "x"
+      ident {
+        type { message_type: "google.api.expr.test.v1.proto3.TestAllTypes" }
+      }
+    }
+    bindings {
+      key: "x"
+      value {
+        value {
+          object_value {
+            [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes] {
+              standalone_enum: 2
+            }
+          }
+        }
+      }
+    }
+    value {
+      enum_value {
+        type: "google.api.expr.test.v1.proto3.TestAllTypes.NestedEnum"
+        value: 2
+      }
+    }
+  }
+  test {
+    name: "select_big"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "x.standalone_enum"
+    type_env {
+      name: "x"
+      ident {
+        type { message_type: "google.api.expr.test.v1.proto3.TestAllTypes" }
+      }
+    }
+    bindings {
+      key: "x"
+      value {
+        value {
+          object_value {
+            [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes] {
+              standalone_enum: 108
+            }
+          }
+        }
+      }
+    }
+    value {
+      enum_value {
+        type: "google.api.expr.test.v1.proto3.TestAllTypes.NestedEnum"
+        value: 108
+      }
+    }
+  }
+  test {
+    name: "select_neg"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "x.standalone_enum"
+    type_env {
+      name: "x"
+      ident {
+        type { message_type: "google.api.expr.test.v1.proto3.TestAllTypes" }
+      }
+    }
+    bindings {
+      key: "x"
+      value {
+        value {
+          object_value {
+            [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes] {
+              standalone_enum: -3
+            }
+          }
+        }
+      }
+    }
+    value {
+      enum_value {
+        type: "google.api.expr.test.v1.proto3.TestAllTypes.NestedEnum"
+        value: -3
+      }
+    }
+  }
+  test {
+    name: "field_type"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "type(TestAllTypes{}.standalone_enum)"
+    value {
+      type_value: "google.api.expr.test.v1.proto3.TestAllTypes.NestedEnum"
+    }
+  }
+  test {
+    name: "assign_standalone_name"
     container: "google.api.expr.test.v1.proto3"
     expr: "TestAllTypes{standalone_enum: TestAllTypes.NestedEnum.BAZ}"
     value {
@@ -177,21 +915,9 @@ section {
     }
   }
   test {
-    name: "standalone_int2"
-    container: "google.api.expr.test.v1.proto2"
-    expr: "TestAllTypes{standalone_enum: 1}"
-    value {
-      object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes] {
-          standalone_enum: BAR
-        }
-      }
-    }
-  }
-  test {
-    name: "standalone_int3"
+    name: "assign_standalone_int"
     container: "google.api.expr.test.v1.proto3"
-    expr: "TestAllTypes{standalone_enum: 1}"
+    expr: "TestAllTypes{standalone_enum: TestAllTypes.NestedEnum(1)}"
     value {
       object_value {
         [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes] {
@@ -201,21 +927,9 @@ section {
     }
   }
   test {
-    name: "standalone_int_big2"
-    container: "google.api.expr.test.v1.proto2"
-    expr: "TestAllTypes{standalone_enum: 99}"
-    value {
-      object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes] {
-          standalone_enum: 99
-        }
-      }
-    }
-  }
-  test {
-    name: "standalone_int_big3"
+    name: "assign_standalone_int_big"
     container: "google.api.expr.test.v1.proto3"
-    expr: "TestAllTypes{standalone_enum: 99}"
+    expr: "TestAllTypes{standalone_enum: TestAllTypes.NestedEnum(99)}"
     value {
       object_value {
         [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes] {
@@ -225,21 +939,9 @@ section {
     }
   }
   test {
-    name: "standalone_int_neg2"
-    container: "google.api.expr.test.v1.proto2"
-    expr: "TestAllTypes{standalone_enum: -1}"
-    value {
-      object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes] {
-          standalone_enum: -1
-        }
-      }
-    }
-  }
-  test {
-    name: "standalone_int_neg3"
+    name: "assign_standalone_int_neg"
     container: "google.api.expr.test.v1.proto3"
-    expr: "TestAllTypes{standalone_enum: -1}"
+    expr: "TestAllTypes{standalone_enum: TestAllTypes.NestedEnum(-1)}"
     value {
       object_value {
         [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes] {
@@ -249,42 +951,123 @@ section {
     }
   }
   test {
-    name: "standalone_int_too_big2"
-    container: "google.api.expr.test.v1.proto2"
-    expr: "TestAllTypes{standalone_enum: 5000000000}"
-    eval_error {
-      errors {
-        message: "range"
-      }
-    }
-  }
-  test {
-    name: "standalone_int_too_big3"
+    name: "convert_symbol_to_int"
     container: "google.api.expr.test.v1.proto3"
-    expr: "TestAllTypes{standalone_enum: 5000000000}"
-    eval_error {
-      errors {
-        message: "range"
-      }
-    }
+    expr: "int(GlobalEnum.GAZ)"
+    value { int64_value: 2 }
   }
   test {
-    name: "standalone_int_too_neg2"
-    container: "google.api.expr.test.v1.proto2"
-    expr: "TestAllTypes{standalone_enum: -7000000000}"
-    eval_error {
-      errors {
-        message: "range"
+    name: "convert_unnamed_to_int"
+    description: "Disable check - missing way to declare enums."
+    expr: "int(x)"
+    disable_check: true
+    bindings {
+      key: "x"
+      value {
+        value {
+          enum_value {
+            type: "google.api.expr.test.v1.proto3.GlobalEnum"
+            value: 444
+          }
+        }
       }
     }
+    value { int64_value: 444 }
   }
   test {
-    name: "standalone_int_too_neg3"
+    name: "convert_unnamed_to_int_select"
+    expr: "int(x.standalone_enum)"
+    type_env {
+      name: "x"
+      ident {
+        type { message_type: "google.api.expr.test.v1.proto3.TestAllTypes" }
+      }
+    }
+    bindings {
+      key: "x"
+      value {
+        value {
+          object_value {
+            [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes] {
+              standalone_enum: -987
+            }
+          }
+        }
+      }
+    }
+    value { int64_value: -987 }
+  }
+  test {
+    name: "convert_int_inrange"
     container: "google.api.expr.test.v1.proto3"
-    expr: "TestAllTypes{standalone_enum: -7000000000}"
+    expr: "TestAllTypes.NestedEnum(2)"
+    value {
+      enum_value {
+        type: "google.api.expr.test.v1.proto3.TestAllTypes.NestedEnum"
+        value: 2
+      }
+    }
+  }
+  test {
+    name: "convert_int_big"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes.NestedEnum(20000)"
+    value {
+      enum_value {
+        type: "google.api.expr.test.v1.proto3.TestAllTypes.NestedEnum"
+        value: 20000
+      }
+    }
+  }
+  test {
+    name: "convert_int_neg"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "GlobalEnum(-33)"
+    value {
+      enum_value {
+        type: "google.api.expr.test.v1.proto3.GlobalEnum"
+        value: -33
+      }
+    }
+  }
+  test {
+    name: "convert_int_too_big"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes.NestedEnum(5000000000)}"
     eval_error {
       errors {
         message: "range"
+      }
+    }
+  }
+  test {
+    name: "convert_int_too_neg"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes.NestedEnum(-7000000000)}"
+    eval_error {
+      errors {
+        message: "range"
+      }
+    }
+  }
+  test {
+    name: "convert_string"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes.NestedEnum('BAZ')}"
+    value {
+      enum_value {
+        type: "google.api.expr.test.v1.proto3.TestAllTypes.NestedEnum"
+        value: 2
+      }
+    }
+  }
+  test {
+    name: "convert_string_bad"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes.NestedEnum('BLETCH')}"
+    eval_error {
+      errors {
+        message: "invalid"
       }
     }
   }
