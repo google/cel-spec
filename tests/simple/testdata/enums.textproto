@@ -695,7 +695,7 @@ section {
   test {
     name: "convert_int_too_big"
     container: "google.api.expr.test.v1.proto2"
-    expr: "TestAllTypes.NestedEnum(5000000000)}"
+    expr: "TestAllTypes.NestedEnum(5000000000)"
     eval_error {
       errors {
         message: "range"
@@ -705,7 +705,7 @@ section {
   test {
     name: "convert_int_too_neg"
     container: "google.api.expr.test.v1.proto2"
-    expr: "TestAllTypes.NestedEnum(-7000000000)}"
+    expr: "TestAllTypes.NestedEnum(-7000000000)"
     eval_error {
       errors {
         message: "range"
@@ -715,7 +715,7 @@ section {
   test {
     name: "convert_string"
     container: "google.api.expr.test.v1.proto2"
-    expr: "TestAllTypes.NestedEnum('BAZ')}"
+    expr: "TestAllTypes.NestedEnum('BAZ')"
     value {
       enum_value {
         type: "google.api.expr.test.v1.proto2.TestAllTypes.NestedEnum"
@@ -726,7 +726,7 @@ section {
   test {
     name: "convert_string_bad"
     container: "google.api.expr.test.v1.proto2"
-    expr: "TestAllTypes.NestedEnum('BLETCH')}"
+    expr: "TestAllTypes.NestedEnum('BLETCH')"
     eval_error {
       errors {
         message: "invalid"
@@ -1033,7 +1033,7 @@ section {
   test {
     name: "convert_int_too_big"
     container: "google.api.expr.test.v1.proto3"
-    expr: "TestAllTypes.NestedEnum(5000000000)}"
+    expr: "TestAllTypes.NestedEnum(5000000000)"
     eval_error {
       errors {
         message: "range"
@@ -1043,7 +1043,7 @@ section {
   test {
     name: "convert_int_too_neg"
     container: "google.api.expr.test.v1.proto3"
-    expr: "TestAllTypes.NestedEnum(-7000000000)}"
+    expr: "TestAllTypes.NestedEnum(-7000000000)"
     eval_error {
       errors {
         message: "range"
@@ -1053,7 +1053,7 @@ section {
   test {
     name: "convert_string"
     container: "google.api.expr.test.v1.proto3"
-    expr: "TestAllTypes.NestedEnum('BAZ')}"
+    expr: "TestAllTypes.NestedEnum('BAZ')"
     value {
       enum_value {
         type: "google.api.expr.test.v1.proto3.TestAllTypes.NestedEnum"
@@ -1064,7 +1064,7 @@ section {
   test {
     name: "convert_string_bad"
     container: "google.api.expr.test.v1.proto3"
-    expr: "TestAllTypes.NestedEnum('BLETCH')}"
+    expr: "TestAllTypes.NestedEnum('BLETCH')"
     eval_error {
       errors {
         message: "invalid"
