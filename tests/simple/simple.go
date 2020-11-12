@@ -159,6 +159,7 @@ type runConfig struct {
 	checkClient *celrpc.ConfClient
 	evalClient  *celrpc.ConfClient
 	checkedOnly bool
+	skipCheck   bool
 }
 
 // RunTest runs the test described by t, returning an error for any
@@ -193,7 +194,7 @@ func (r *runConfig) RunTest(t *spb.SimpleTest) error {
 
 	// Check (optional)
 	var checkedExpr *exprpb.CheckedExpr
-	if !t.DisableCheck {
+	if !t.DisableCheck && !r.skipCheck {
 		creq := exprpb.CheckRequest{
 			ParsedExpr: parsedExpr,
 			TypeEnv:    t.TypeEnv,

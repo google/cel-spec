@@ -43,6 +43,7 @@ var (
 	flagCheckServerCmd string
 	flagEvalServerCmd  string
 	flagCheckedOnly    bool
+	flagSkipCheck      bool
 	flagSkipTests      stringArray
 	rc                 *runConfig
 )
@@ -53,6 +54,7 @@ func init() {
 	flag.StringVar(&flagCheckServerCmd, "check_server", "", "path to command for check server")
 	flag.StringVar(&flagEvalServerCmd, "eval_server", "", "path to command for eval server")
 	flag.BoolVar(&flagCheckedOnly, "checked_only", false, "skip tests which skip type checking")
+	flag.BoolVar(&flagSkipCheck, "skip_check", false, "force skipping the check phase")
 	flag.Var(&flagSkipTests, "skip_test", "name(s) of tests to skip. can be set multiple times. to skip the following tests: f1/s1/t1, f1/s1/t2, f1/s2/*, f2/s3/t3, you give the arguments --skip_test=f1/s1/t1,t2;s2 --skip_test=f2/s3/t3")
 	flag.Parse()
 }
@@ -102,6 +104,7 @@ func initRunConfig() (*runConfig, error) {
 	rc.checkClient = servers[cCmd]
 	rc.evalClient = servers[eCmd]
 	rc.checkedOnly = flagCheckedOnly
+	rc.skipCheck = flagSkipCheck
 	return &rc, nil
 }
 
