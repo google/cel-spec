@@ -18,9 +18,11 @@ go_library(
         "//tools/celrpc:go_default_library",
         "@com_github_golang_protobuf//proto:go_default_library",
         "@org_golang_google_genproto//googleapis/api/expr/v1alpha1:go_default_library",
+        "@org_golang_google_genproto//googleapis/api/expr/conformance/v1alpha1:go_default_library",
         "@org_golang_google_genproto//googleapis/rpc/status:go_default_library",
         "@org_golang_google_grpc//codes:go_default_library",
         "@org_golang_google_grpc//status:go_default_library",
+        "@org_golang_google_protobuf//proto:go_default_library",
     ],
 )
 
@@ -34,9 +36,9 @@ go_test(
     srcs = ["envcheck_test.go"],
     embed = [":go_default_library"],
     deps = [
-        "@com_github_golang_protobuf//proto:go_default_library",
         "//proto/test/v1:testpb_go_proto",
         "//tools/celrpc:go_default_library",
+        "@org_golang_google_protobuf//encoding/prototext:go_default_library",
     ],
     # This is the magic setting that lets external invokers see
     # files in their expected locations.

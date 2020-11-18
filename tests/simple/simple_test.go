@@ -9,14 +9,16 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/golang/protobuf/proto"
+	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/encoding/prototext"
+
 	"github.com/google/cel-spec/tools/celrpc"
 
-	anypb "github.com/golang/protobuf/ptypes/any"
-	structpb "github.com/golang/protobuf/ptypes/struct"
+	anypb "google.golang.org/protobuf/types/known/anypb"
+	structpb "google.golang.org/protobuf/types/known/structpb"
+
 	spb "github.com/google/cel-spec/proto/test/v1/testpb"
 	exprpb "google.golang.org/genproto/googleapis/api/expr/v1alpha1"
-
 	// The following are needed to link in these proto libraries
 	// which are needed dynamically, despite not being explicitly
 	// used in the Go source.
@@ -113,9 +115,8 @@ func parseSimpleFile(filename string) (*spb.SimpleTestFile, error) {
 	if err != nil {
 		return nil, err
 	}
-	s := string(bytes)
 	var pb spb.SimpleTestFile
-	err = proto.UnmarshalText(s, &pb)
+	err = prototext.Unmarshal(bytes, &pb)
 	if err != nil {
 		return nil, err
 	}

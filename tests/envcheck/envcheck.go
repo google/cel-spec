@@ -68,11 +68,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/golang/protobuf/proto"
 	"github.com/google/cel-spec/tools/celrpc"
+
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/proto"
 
+	confpb "google.golang.org/genproto/googleapis/api/expr/conformance/v1alpha1"
 	exprpb "google.golang.org/genproto/googleapis/api/expr/v1alpha1"
 	spb "google.golang.org/genproto/googleapis/rpc/status"
 )
@@ -327,8 +329,8 @@ func (r *runConfig) runProg(name string, prog *exprpb.Expr) (*exprpb.ExprValue, 
 		Expr:       prog,
 		SourceInfo: &exprpb.SourceInfo{},
 	}
-	ereq := exprpb.EvalRequest{
-		ExprKind: &exprpb.EvalRequest_ParsedExpr{ParsedExpr: parsedExpr},
+	ereq := confpb.EvalRequest{
+		ExprKind: &confpb.EvalRequest_ParsedExpr{ParsedExpr: parsedExpr},
 	}
 	eres, err := r.client.Eval(context.Background(), &ereq)
 	if err != nil {
