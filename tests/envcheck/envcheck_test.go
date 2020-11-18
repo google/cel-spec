@@ -22,8 +22,9 @@ import (
 	"os"
 	"testing"
 
-	"github.com/golang/protobuf/proto"
 	"github.com/google/cel-spec/tools/celrpc"
+
+	"google.golang.org/protobuf/encoding/prototext"
 
 	envpb "github.com/google/cel-spec/proto/test/v1/testpb"
 )
@@ -59,9 +60,8 @@ func parseEnvFile(filename string) (*envpb.Env, error) {
 	if err != nil {
 		return nil, err
 	}
-	s := string(bytes)
 	var pb envpb.Env
-	err = proto.UnmarshalText(s, &pb)
+	err = prototext.Unmarshal(bytes, &pb)
 	if err != nil {
 		return nil, err
 	}

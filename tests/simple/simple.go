@@ -37,13 +37,17 @@ Example test data:
 package simple
 
 import (
+	"bytes"
 	"context"
 	"fmt"
 
-	"github.com/golang/protobuf/proto"
 	"github.com/google/cel-spec/tools/celrpc"
 
+	"google.golang.org/protobuf/encoding/prototext"
+
 	spb "github.com/google/cel-spec/proto/test/v1/testpb"
+
+	confpb "google.golang.org/genproto/googleapis/api/expr/conformance/v1alpha1"
 	exprpb "google.golang.org/genproto/googleapis/api/expr/v1alpha1"
 )
 
@@ -141,11 +145,18 @@ func MatchValue(tag string, expected *exprpb.Value, actual *exprpb.Value) error 
 		// - surfaces sign differences for floating-point zero.
 		// Text marshaling isn't documented as deterministic,
 		// but it appears to be so in practice.
-		text := &proto.TextMarshaler{ExpandAny: true}
-		sExpected := text.Text(expected)
-		sActual := text.Text(actual)
-		if sExpected != sActual {
-			return fmt.Errorf("%s: Eval got [%v], want [%v]", tag, sActual, sExpected)
+
+		// TODO: consider replacing this logic with protocmp and go-cmp
+		sExpected, err := prototext.Marshal(expected)
+		if err != nil {
+			return fmt.Errorf("prototext.Marshal(%v) failed: %v", expected, err)
+		}
+		sActual, err := prototext.Marshal(actual)
+		if err != nil {
+			return fmt.Errorf("prototext.Marshal(%v) failed: %v", actual, err)
+		}
+		if !bytes.Equal(sExpected, sActual) {
+			return fmt.Errorf("%s: Eval got [%v], want [%v]", tag, string(sActual), string(sExpected))
 		}
 	}
 	return nil
@@ -171,7 +182,7 @@ func (r *runConfig) RunTest(t *spb.SimpleTest) error {
 	}
 
 	// Parse
-	preq := exprpb.ParseRequest{
+	preq := confpb.ParseRequest{
 		CelSource:      t.Expr,
 		SourceLocation: t.Name,
 		DisableMacros:  t.DisableMacros,
@@ -195,7 +206,7 @@ func (r *runConfig) RunTest(t *spb.SimpleTest) error {
 	// Check (optional)
 	var checkedExpr *exprpb.CheckedExpr
 	if !t.DisableCheck && !r.skipCheck {
-		creq := exprpb.CheckRequest{
+		creq := confpb.CheckRequest{
 			ParsedExpr: parsedExpr,
 			TypeEnv:    t.TypeEnv,
 			Container:  t.Container,
@@ -221,8 +232,8 @@ func (r *runConfig) RunTest(t *spb.SimpleTest) error {
 
 	// Eval
 	if !r.checkedOnly {
-		err = r.RunEval(t, &exprpb.EvalRequest{
-			ExprKind:  &exprpb.EvalRequest_ParsedExpr{ParsedExpr: parsedExpr},
+		err = r.RunEval(t, &confpb.EvalRequest{
+			ExprKind:  &confpb.EvalRequest_ParsedExpr{ParsedExpr: parsedExpr},
 			Bindings:  t.Bindings,
 			Container: t.Container,
 		})
@@ -231,8 +242,8 @@ func (r *runConfig) RunTest(t *spb.SimpleTest) error {
 		}
 	}
 	if checkedExpr != nil {
-		err = r.RunEval(t, &exprpb.EvalRequest{
-			ExprKind:  &exprpb.EvalRequest_CheckedExpr{CheckedExpr: checkedExpr},
+		err = r.RunEval(t, &confpb.EvalRequest{
+			ExprKind:  &confpb.EvalRequest_CheckedExpr{CheckedExpr: checkedExpr},
 			Bindings:  t.Bindings,
 			Container: t.Container,
 		})
@@ -243,7 +254,7 @@ func (r *runConfig) RunTest(t *spb.SimpleTest) error {
 	return nil
 }
 
-func (r *runConfig) RunEval(t *spb.SimpleTest, ereq *exprpb.EvalRequest) error {
+func (r *runConfig) RunEval(t *spb.SimpleTest, ereq *confpb.EvalRequest) error {
 	eres, err := r.evalClient.Eval(context.Background(), ereq)
 	if err != nil {
 		return fmt.Errorf("%s: Fatal eval RPC error: %v", t.Name, err)

@@ -12,12 +12,12 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 
-	exprpb "google.golang.org/genproto/googleapis/api/expr/v1alpha1"
+	confpb "google.golang.org/genproto/googleapis/api/expr/conformance/v1alpha1"
 )
 
 // ConfClient manages calls to conformance test services.
 type ConfClient struct {
-	exprpb.ConformanceServiceClient
+	confpb.ConformanceServiceClient
 	cmd  *exec.Cmd
 	conn *grpc.ClientConn
 }
@@ -58,7 +58,7 @@ func NewClientFromPath(serverPath string) (*ConfClient, error) {
 	}
 	c.conn = conn
 
-	c.ConformanceServiceClient = exprpb.NewConformanceServiceClient(conn)
+	c.ConformanceServiceClient = confpb.NewConformanceServiceClient(conn)
 	return &c, nil
 }
 
@@ -70,7 +70,7 @@ func ExampleNewClientFromPath() {
 	if err != nil {
 		log.Fatal("Couldn't create client")
 	}
-	parseRequest := exprpb.ParseRequest{
+	parseRequest := confpb.ParseRequest{
 		CelSource: "1 + 1",
 	}
 	parseResponse, err := c.Parse(context.Background(), &parseRequest)
@@ -78,8 +78,8 @@ func ExampleNewClientFromPath() {
 		log.Fatal("Couldn't parse")
 	}
 	parsedExpr := parseResponse.ParsedExpr
-	evalRequest := exprpb.EvalRequest{
-		ExprKind: &exprpb.EvalRequest_ParsedExpr{ParsedExpr: parsedExpr},
+	evalRequest := confpb.EvalRequest{
+		ExprKind: &confpb.EvalRequest_ParsedExpr{ParsedExpr: parsedExpr},
 	}
 	evalResponse, err := c.Eval(context.Background(), &evalRequest)
 	if err != nil {
@@ -107,7 +107,7 @@ func (c *ConfClient) Shutdown() {
 // network device, prints its address and port to stdout, then starts
 // a gRPC server on the socket with the given service callbacks.
 // Note that this call doesn't return until ther server exits.
-func RunServer(service exprpb.ConformanceServiceServer) {
+func RunServer(service confpb.ConformanceServiceServer) {
 	lis, err := net.Listen("tcp4", "127.0.0.1:")
 	if err != nil {
 		lis, err = net.Listen("tcp6", "[::1]:0")
@@ -122,7 +122,7 @@ func RunServer(service exprpb.ConformanceServiceServer) {
 	os.Stdout.Sync()
 
 	s := grpc.NewServer()
-	exprpb.RegisterConformanceServiceServer(s, service)
+	confpb.RegisterConformanceServiceServer(s, service)
 	reflection.Register(s)
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
