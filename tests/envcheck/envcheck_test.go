@@ -46,7 +46,7 @@ func initRunConfig() (*runConfig, error) {
 		return nil, fmt.Errorf("no server defined")
 	}
 
-	cli, err := celrpc.NewClientFromPath(cmd)
+	cli, err := celrpc.NewGrpcClient(cmd)
 	if err != nil {
 		return nil, err
 	}

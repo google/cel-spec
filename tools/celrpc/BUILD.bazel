@@ -14,5 +14,7 @@ go_library(
         "@org_golang_google_genproto//googleapis/api/expr/conformance/v1alpha1:go_default_library",
         "@org_golang_google_grpc//:go_default_library",
         "@org_golang_google_grpc//reflection:go_default_library",
+        "@org_golang_google_protobuf//encoding/protojson:go_default_library",
+        "@org_golang_google_protobuf//proto:go_default_library",
     ],
 )

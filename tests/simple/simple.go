@@ -166,9 +166,9 @@ func MatchValue(tag string, expected *exprpb.Value, actual *exprpb.Value) error 
 // for the various phases.  Some phases might use the
 // same server.
 type runConfig struct {
-	parseClient *celrpc.ConfClient
-	checkClient *celrpc.ConfClient
-	evalClient  *celrpc.ConfClient
+	parseClient celrpc.ConfClient
+	checkClient celrpc.ConfClient
+	evalClient  celrpc.ConfClient
 	checkedOnly bool
 	skipCheck   bool
 }
