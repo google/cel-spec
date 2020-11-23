@@ -736,19 +736,21 @@ Space and time complexity will be measured in terms of an abstract size
 measurment of CEL expressions and values. The size of a CEL value depends on
 its type:
 
-*   *string*: The size is its length, i.e. the number of code points.
-*   *bytes*: The size is its length, i.e. the number of bytes.
-*   *list*: The size is the sum of sizes of its entries.
+*   *string*: The size is its length, i.e. the number of code points, plus a
+    constant.
+*   *bytes*: The size is its length, i.e. the number of bytes, plus a constant.
+*   *list*: The size is the sum of sizes of its entries, plus a constant.
 *   *map*: The size is the sum of the key size plus the value size for all of
-    its entries.
-*   *message*: The size is the sum of the size of all fields.
+    its entries, plus a constant.
+*   *message*: The size is the sum of the size of all fields, plus a constant.
 *   All other values have constant size.
 
 The size of a CEL program is:
 
 *   *string literal*: The size of the resulting value.
 *   *bytes literal*: The size of the resulting value.
-*   All other gramatical constructs have constant size.
+*   Grammatical aggregates are the sum of the size of their components.
+*   Gramatical primitives other than above have constant size.
 
 Thus, the size of a CEL program is bounded by either the length of the source
 text string or the bytes of the proto-encoded AST.
@@ -764,7 +766,7 @@ sub-expression values, plus a constant.
 
 For instance, an expression `x` has constant time complexity since it has no
 sub-expressions.  An expression `x != y` takes time proportional to the sum of
-sizes of the bindings of `x` and `y`.
+sizes of the bindings of `x` and `y`, plus a constant.
 
 Some functions cost less than this:
 
@@ -774,7 +776,7 @@ Some functions cost less than this:
     the length of its input, not its total size (plus the time of the
     sub-expression).
 *   The index operator on lists takes constant time (plus the time of the
-    sub-expression).
+    sub-expressions).
 *   The select operator on messages takes constant time (plus the time of the
     sub-expression).
 
@@ -824,7 +826,7 @@ can lead to exponential behavior when nested or chained.  For instance,
 takes exponential (in the size of the expression) time to evaluate, while
 
 ```
-[0,1].map(x, [x,x]).map(x, [x,x])...map(x, [x,x])
+["foo","bar"].map(x, [x+x,x+x]).map(x, [x+x,x+x])...map(x, [x+x,x+x])
 ```
 
 is exponential in both time and space.
@@ -832,19 +834,19 @@ is exponential in both time and space.
 The time and space cost of macros is the cost of the range sub-expression `e`,
 plus the follwing:
 
-*   `has(e.f)`: space is constant
-    *   if `e` is a map, time is linear in size of `e`.
-    *   if `e` is a message, time is constant.
+*   `has(e.f)`: Space is constant.
+    *   If `e` is a map, time is linear in size of `e`.
+    *   If `e` is a message, time is constant.
 *   `e.all(x,p)`, `e.exists(x,p)`, and `e.exists_one(x,p)`
-    *   time is the sum of the time of `p` for each element of `e`
-    *   space is constant
+    *   Time is the sum of the time of `p` for each element of `e`.
+    *   Space is constant.
 *   `e.map(x,t)`
-    *   time is the sum of time of`t` for each element of `e`
-    *   space is the sum of space of `t` for each element of `e`, plus a
-        constant
+    *   Time is the sum of time of`t` for each element of `e`.
+    *   Space is the sum of space of `t` for each element of `e`, plus a
+        constant.
 *   `e.filter(x,t)`
-    *   time is the sum of time of `t` for each element of `e`
-    *   space is the space of `e`
+    *   Time is the sum of time of `t` for each element of `e`.
+    *   Space is the space of `e`.
 
 ### Time and Space Limits on Evaluation
 
