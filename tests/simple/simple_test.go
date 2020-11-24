@@ -9,8 +9,8 @@ import (
 	"strings"
 	"testing"
 
-	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/encoding/prototext"
+	"google.golang.org/protobuf/proto"
 
 	"github.com/google/cel-spec/tools/celrpc"
 
@@ -47,6 +47,7 @@ var (
 	flagCheckedOnly    bool
 	flagSkipCheck      bool
 	flagSkipTests      stringArray
+	flagPipe           bool
 	rc                 *runConfig
 )
 
@@ -58,6 +59,7 @@ func init() {
 	flag.BoolVar(&flagCheckedOnly, "checked_only", false, "skip tests which skip type checking")
 	flag.BoolVar(&flagSkipCheck, "skip_check", false, "force skipping the check phase")
 	flag.Var(&flagSkipTests, "skip_test", "name(s) of tests to skip. can be set multiple times. to skip the following tests: f1/s1/t1, f1/s1/t2, f1/s2/*, f2/s3/t3, you give the arguments --skip_test=f1/s1/t1,t2;s2 --skip_test=f2/s3/t3")
+	flag.BoolVar(&flagPipe, "pipe", false, "Use pipes instead of gRPC")
 	flag.Parse()
 }
 
@@ -89,12 +91,18 @@ func initRunConfig() (*runConfig, error) {
 	}
 
 	// Only launch each required binary once
-	servers := make(map[string]*celrpc.ConfClient)
+	servers := make(map[string]celrpc.ConfClient)
 	servers[pCmd] = nil
 	servers[cCmd] = nil
 	servers[eCmd] = nil
 	for cmd := range servers {
-		cli, err := celrpc.NewClientFromPath(cmd)
+		var cli celrpc.ConfClient
+		var err error
+		if flagPipe {
+			cli, err = celrpc.NewPipeClient(cmd)
+		} else {
+			cli, err = celrpc.NewGrpcClient(cmd)
+		}
 		if err != nil {
 			return nil, err
 		}

@@ -81,7 +81,7 @@ import (
 
 // runConfig holds the client stub for the server for the runtime.
 type runConfig struct {
-	client *celrpc.ConfClient
+	client celrpc.ConfClient
 }
 
 var (
