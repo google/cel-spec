@@ -718,6 +718,167 @@ used.
         booleans, empty for strings and bytes).
 5.  In all other cases, `has(e.f)` evaluates to an error.
 
+## Performance
+
+Since one of the main applications for CEL is for execution of untrusted
+expressions with reliable containment, the time and space cost of evaluation
+is an essential part of the specification of the language. But we also want to
+give considerable freedom in how to implement the language. To balance these
+concerns, we specify only the time and space computational complexity of
+language constructs and standard functions (see [Functions](#functions)).
+
+CEL applications are responsible for noting the computational complexity of
+any extension functions they provide.
+
+### Abstract Size of Values
+
+Space and time complexity will be measured in terms of an abstract size
+measurment of CEL expressions and values. The size of a CEL value depends on
+its type:
+
+*   *string*: The size is its length, i.e. the number of code points, plus a
+    constant.
+*   *bytes*: The size is its length, i.e. the number of bytes, plus a constant.
+*   *list*: The size is the sum of sizes of its entries, plus a constant.
+*   *map*: The size is the sum of the key size plus the value size for all of
+    its entries, plus a constant.
+*   *message*: The size is the sum of the size of all fields, plus a constant.
+*   All other values have constant size.
+
+The size of a CEL program is:
+
+*   *string literal*: The size of the resulting value.
+*   *bytes literal*: The size of the resulting value.
+*   Grammatical aggregates are the sum of the size of their components.
+*   Gramatical primitives other than above have constant size.
+
+Thus, the size of a CEL program is bounded by either the length of the source
+text string or the bytes of the proto-encoded AST.
+
+The inputs to a CEL expression are the _bindings_ given to the evaluator and
+the _literals_ within the expression itself.
+
+### Time Complexity
+
+Unless otherwise noted, the time complexity of an expression is the sum of the
+time complexity of its sub-expressions, plus the sum of the sizes of the
+sub-expression values, plus a constant.
+
+For instance, an expression `x` has constant time complexity since it has no
+sub-expressions.  An expression `x != y` takes time proportional to the sum of
+sizes of the bindings of `x` and `y`, plus a constant.
+
+Some functions cost less than this:
+
+*   The conditional expression `_?_:_`, only evaluates one of the alternative
+    sub-expressions.
+*   For the `size()` function on lists and maps, the time is proportional to
+    the length of its input, not its total size (plus the time of the
+    sub-expression).
+*   The index operator on lists takes constant time (plus the time of the
+    sub-expressions).
+*   The select operator on messages takes constant time (plus the time of the
+    sub-expression).
+
+Some functions take more time than this.  The following functions take time
+proportional to the _product_ of their input sizes (plus the time of the
+sub-expressions):
+
+*    The index operator on maps.
+*    The select operator on maps.
+*    The in operator.
+*    The `contains`, `startsWith`, `endsWith`, and `matches` functions on
+     strings.
+
+See below for the time cost of macros.
+
+Implementations are free to provide a more performant implementation. For
+instance, a hashing implementation of maps would make indexing/selection
+faster, but we do not require such sophistication from all implementations.
+
+### Space Complexity
+
+Unless otherwise noted, the space complexity of an expression is the sum of the
+space complexity of its sub-expressions, plus a constant. The exceptions are:
+
+*   *Literals*: Message, map, and list literals allocate new space for their
+    output.
+*   *Concatenation*: The `_+_` operator on lists and stings allocate new space
+    for their output.
+
+See below for the space cost of macros.
+
+We'll assume that bytes-to-string and string-to-bytes conversions do not need
+to allocate new space.
+
+### Macros
+
+Macros can take considerably more time and space than other constructs, and
+can lead to exponential behavior when nested or chained.  For instance,
+
+```
+[0,1].all(x,
+  [0,1].all(x,
+    ...
+      [0,1].all(x, 1/0)...))
+```
+
+takes exponential (in the size of the expression) time to evaluate, while
+
+```
+["foo","bar"].map(x, [x+x,x+x]).map(x, [x+x,x+x])...map(x, [x+x,x+x])
+```
+
+is exponential in both time and space.
+
+The time and space cost of macros is the cost of the range sub-expression `e`,
+plus the follwing:
+
+*   `has(e.f)`: Space is constant.
+    *   If `e` is a map, time is linear in size of `e`.
+    *   If `e` is a message, time is constant.
+*   `e.all(x,p)`, `e.exists(x,p)`, and `e.exists_one(x,p)`
+    *   Time is the sum of the time of `p` for each element of `e`.
+    *   Space is constant.
+*   `e.map(x,t)`
+    *   Time is the sum of time of`t` for each element of `e`.
+    *   Space is the sum of space of `t` for each element of `e`, plus a
+        constant.
+*   `e.filter(x,t)`
+    *   Time is the sum of time of `t` for each element of `e`.
+    *   Space is the space of `e`.
+
+### Time and Space Limits on Evaluation
+
+Putting this all together, we can make the following statements about the cost
+of evaluation. Let `P` be the non-literal size of the expression, `L` be the
+size of the literals, `B` be the size of the bindings, and `I=B+L` be the total
+size of the inputs.
+
+*   The macros other than `has()` are the only avenue for exponential
+    behavior. This can be curtailed by the implementation allowing applications
+    to set limits on the recursion or chaining of macros, or disable them
+    entirely.
+*   The concatenation operator `_+_` is the only operator that dramatically
+    increases the space complexity, with the program `x + x + ... + x` taking
+    time and space `O(B * P^2)`.
+*   The string-detection functions (`contains()` and friends) yield a boolean
+    result, thus cannot be nested to drive exponential or even higher
+    polynomial cost.  We can bound the time cost by `O(B^2 * P)`, with a
+    limiting case being `x.contains(y) || x.contains(y) || ...`.
+*   The map indexing operators yield a smaller result than their input, and
+    thus are also limited in their ability to increase the cost. A particularly
+    bad case would be an expensive selection that returns a subcomponent that
+    contains the majority of the size of the aggregate, resulting in a time
+    cost of `O(P * I)`, and see below.
+*   Eliminating all of the above and using only default-cost functions, plus
+    aggregate literals, time and space are limited `O(P * I)`.
+    A limiting time example is `size(x) + size(x) + ...`.
+    A limiting time and space example is `[x, x, ..., x]`.
+
+Note that custom function will alter this analysis if they are more expensive
+than the default costs.
+
 ## Functions
 
 CEL functions have no observable side-effects (there maybe side-effects like
@@ -882,8 +1043,6 @@ matches succeed if they match a substring of the argument. Use explicit anchors
 TODO: automatically generate these descriptions from the cel-go implementation.
 See [cel-go/issues/9](https://github.com/google/cel-go/issues/9).
 
-<!-- BEGIN GENERATED DECL TABLE; DO NOT EDIT BELOW -->
-
 <table style="width=100%" border="1">
   <col width="15%">
   <col width="40%">
@@ -1031,7 +1190,8 @@ See [cel-go/issues/9](https://github.com/google/cel-go/issues/9).
       (string, string) -> string
     </td>
     <td>
-      string concatenation
+      String concatenation. Space and time cost proportional to the sum of the
+      input sizes.
     </td>
   </tr>
   <tr>
@@ -1047,7 +1207,8 @@ See [cel-go/issues/9](https://github.com/google/cel-go/issues/9).
       (list(A), list(A)) -> list(A)
     </td>
     <td>
-      list concatenation
+      List concatenation. Space and time cost proportional to the sum of the
+      input sizes.
     </td>
   </tr>
   <tr>
@@ -1439,7 +1600,8 @@ See [cel-go/issues/9](https://github.com/google/cel-go/issues/9).
       (bool, A, A) -> A
     </td>
     <td>
-      conditional
+      The conditional operator. See above for evaluation semantics. Will
+      evaluate the test and only one of the remaining sub-expressions.
     </td>
   </tr>
   <tr>
@@ -1450,7 +1612,7 @@ See [cel-go/issues/9](https://github.com/google/cel-go/issues/9).
       (list(A), int) -> A
     </td>
     <td>
-      list indexing
+      list indexing. Constant time cost.
     </td>
   </tr>
   <tr>
@@ -1458,7 +1620,8 @@ See [cel-go/issues/9](https://github.com/google/cel-go/issues/9).
       (map(A, B), A) -> B
     </td>
     <td>
-      map indexing
+      map indexing.  For string keys, cost is proportional to the size of the
+      map keys times the size of the index string.
     </td>
   </tr>
   <tr>
@@ -1469,7 +1632,8 @@ See [cel-go/issues/9](https://github.com/google/cel-go/issues/9).
       (A, list(A)) -> bool
     </td>
     <td>
-      list membership
+      list membership. Time cost proportional to the product of the size of
+      both arguments.
     </td>
   </tr>
   <tr>
@@ -1477,7 +1641,8 @@ See [cel-go/issues/9](https://github.com/google/cel-go/issues/9).
       (A, map(A, B)) -> bool
     </td>
     <td>
-      map key membership
+      map key membership. Time cost proportional to the product of the size of
+      both arguments.
     </td>
   </tr>
   <tr>
@@ -1537,7 +1702,8 @@ See [cel-go/issues/9](https://github.com/google/cel-go/issues/9).
       string.(string) -> bool
     </td>
     <td>
-      tests whether the string operand contains the substring
+      Tests whether the string operand contains the substring. Time cost
+      proportional to the product of sizes of the arguments.
     </td>
   </tr>
   <tr>
@@ -1613,7 +1779,8 @@ See [cel-go/issues/9](https://github.com/google/cel-go/issues/9).
       string.(string) -> bool
     </td>
     <td>
-      tests whether the string operand ends with the suffix argument
+      Tests whether the string operand ends with the suffix argument. Time cost
+      proportional to the product of the sizes of the arguments.
     </td>
   </tr>
   <tr>
@@ -1919,7 +2086,8 @@ See [cel-go/issues/9](https://github.com/google/cel-go/issues/9).
       (string, string) -> bool
     </td>
     <td>
-      matches first argument against regular expression in second argument
+      Matches first argument against regular expression in second argument.
+      Time cost proportional to the product of the sizes of the arguments.
     </td>
   </tr>
   <tr>
@@ -1927,7 +2095,8 @@ See [cel-go/issues/9](https://github.com/google/cel-go/issues/9).
       string.(string) -> bool
     </td>
     <td>
-      matches the self argument against regular expression in first argument
+      Matches the self argument against regular expression in first argument.
+      Time cost proportional to the product of the sizes of the arguments.
     </td>
   </tr>
   <tr>
@@ -1965,7 +2134,7 @@ See [cel-go/issues/9](https://github.com/google/cel-go/issues/9).
       (list(A)) -> int
     </td>
     <td>
-      list size
+      list size. Time cost proportional to the length of the list.
     </td>
   </tr>
   <tr>
@@ -1973,7 +2142,7 @@ See [cel-go/issues/9](https://github.com/google/cel-go/issues/9).
       (map(A, B)) -> int
     </td>
     <td>
-      map size
+      map size. Time cost proportional to the number of entries.
     </td>
   </tr>
   <tr>
@@ -1984,7 +2153,8 @@ See [cel-go/issues/9](https://github.com/google/cel-go/issues/9).
       string.(string) -> bool
     </td>
     <td>
-      tests whether the string operand starts with the prefix argument
+      Tests whether the string operand starts with the prefix argument. Time
+      cost proportional to the product of the sizes of the arguments.
     </td>
   </tr>
   <tr>
@@ -2115,8 +2285,6 @@ See [cel-go/issues/9](https://github.com/google/cel-go/issues/9).
     </td>
   </tr>
 </table>
-
-<!-- END GENERATED DECL TABLE; DO NOT EDIT ABOVE -->
 
 ## Appendix 1: Legacy Behavior
 
