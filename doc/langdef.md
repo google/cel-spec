@@ -3,6 +3,47 @@
 This page constitutes the reference for CEL. For a gentle introduction, see
 [Intro](intro.md).
 
+## Contents
+
+- [Overview](#overview)
+- [Syntax](#syntax)
+    - [Name Resolution](#name-resolution)
+- [Values](#values)
+    - [Numeric Values](#numeric-values)
+    - [Enumerations](#enumerations)
+    - [String and Byte Values](#string-and-byte-values)
+    - [Aggregate Values](#aggregate-values)
+    - [Booleans and Null](#booleans-and-null)
+    - [Type Values](#type-values)
+    - [Abstract Values](#abstract-values)
+    - [Protocol Buffer Data Conversion](#protocol-buffer-data-conversion)
+    - [Dynamic Values](#dynamic-values)
+- [JSON Data Conversion](#json-data-conversion)
+- [Gradual Type Checking](#gradual-type-checking)
+- [Evaluation](#evaluation)
+    - [Evaluation Environment](#evaluation-environment)
+    - [Runtime Errors](#runtime-errors)
+    - [Logical Operators](#logical-operators)
+    - [Macros](#macros)
+    - [Field Selection](#field-selection)
+- [Performance](#performance)
+    - [Abstract Sizes](#abstract-sizes)
+    - [Time Complexity](#time-complexity)
+    - [Space Complexity](#space-complexity)
+    - [Macro Performance](#macro-performance)
+    - [Performance Limits](#performance-limits)
+- [Functions](#functions)
+    - [Extension Functions](#extension-functions)
+    - [Receiver Call Style](#receiver-call-style)
+- [Standard Definitions](#standard-definitions)
+    - [Equality and Ordering](#equality-and-ordering)
+    - [Overflow](#overflow)
+    - [Timezones](#timezones)
+    - [Regular Expressions](#regular-expressions)
+    - [List of Standard Definitions](#list-of-standard-definitions)
+- [Appendix 1: Legacy Behavior](#appendix-1-legacy-behavior)
+    - [Enums as Ints](#enums-as-ints)
+
 ## Overview
 
 In the taxonomy of programming languages, CEL is:
@@ -730,7 +771,7 @@ language constructs and standard functions (see [Functions](#functions)).
 CEL applications are responsible for noting the computational complexity of
 any extension functions they provide.
 
-### Abstract Size of Values
+### Abstract Sizes
 
 Space and time complexity will be measured in terms of an abstract size
 measurment of CEL expressions and values. The size of a CEL value depends on
@@ -811,7 +852,7 @@ See below for the space cost of macros.
 We'll assume that bytes-to-string and string-to-bytes conversions do not need
 to allocate new space.
 
-### Macros
+### Macro Performance
 
 Macros can take considerably more time and space than other constructs, and
 can lead to exponential behavior when nested or chained.  For instance,
@@ -848,7 +889,7 @@ plus the follwing:
     *   Time is the sum of time of `t` for each element of `e`.
     *   Space is the space of `e`.
 
-### Time and Space Limits on Evaluation
+### Performance Limits
 
 Putting this all together, we can make the following statements about the cost
 of evaluation. Let `P` be the non-literal size of the expression, `L` be the
@@ -2288,7 +2329,7 @@ See [cel-go/issues/9](https://github.com/google/cel-go/issues/9).
 
 ## Appendix 1: Legacy Behavior
 
-### Enums
+### Enums as Ints
 
 In many pre-1.0 implementations, protocol buffer enums are all treated as CEL
 type `int`, and are legal arguments whenever an `int` is expected. Int values
