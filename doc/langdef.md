@@ -1943,7 +1943,7 @@ See [cel-go/issues/9](https://github.com/google/cel-go/issues/9).
       google.protobuf.Duration.() -> int
     </td>
     <td>
-      get hours from duration
+      get duration in hours, rounded towards 0
     </td>
   </tr>
   <tr>
@@ -1970,7 +1970,7 @@ See [cel-go/issues/9](https://github.com/google/cel-go/issues/9).
       google.protobuf.Duration.() -> int
     </td>
     <td>
-      milliseconds from duration, 0-999
+      get milliseconds part from duration (0-999), rounded towards 0
     </td>
   </tr>
   <tr>
@@ -1997,7 +1997,7 @@ See [cel-go/issues/9](https://github.com/google/cel-go/issues/9).
       google.protobuf.Duration.() -> int
     </td>
     <td>
-      get minutes from duration
+      get duration in minutes, rounded towards 0
     </td>
   </tr>
   <tr>
@@ -2043,7 +2043,7 @@ See [cel-go/issues/9](https://github.com/google/cel-go/issues/9).
       google.protobuf.Duration.() -> int
     </td>
     <td>
-      get seconds from duration
+      get duration in seconds, rounded towards 0
     </td>
   </tr>
   <tr>
