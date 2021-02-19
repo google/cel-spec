@@ -1,7 +1,0 @@
-syntax = "proto3";
-
-package third_party.cel.spec.tools.tests;
-
-message TestMessage1 {
-  string name = 1;
-}
