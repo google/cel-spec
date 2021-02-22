@@ -200,9 +200,57 @@ section {
     }
   }
   test {
+    name: "int64_overflow_add_negative"
+    description: "negative overflow via addition"
+    expr: "-9223372036854775808 + (-1)"
+    eval_error: {
+      errors: { message: "return error for overflow" }
+    }
+  }
+  test {
+    name: "int64_overflow_sub_positive"
+    description: "positive overflow via subtraction"
+    expr: "1 - (-9223372036854775807)"
+    eval_error: {
+      errors: { message: "return error for overflow" }
+    }
+  }
+  test {
     name: "int64_min_negate"
     description: "Negated LLONG_MIN is not representable."
     expr: "-(-9223372036854775808)"
+    eval_error: {
+      errors: { message: "return error for overflow" }
+    }
+  }
+  test {
+    name: "int64_min_negate_mul"
+    description: "Negate LLONG_MIN via multiplication"
+    expr: "(-9223372036854775808) * -1"
+    eval_error: {
+      errors: { message: "return error for overflow" }
+    }
+  }
+  test {
+    name: "int64_min_negate_div"
+    description: "Negate LLONG_MIN via division."
+    expr: "(-9223372036854775808)/-1"
+    eval_error: {
+      errors: { message: "return error for overflow" }
+    }
+  }
+  test {
+    name: "int64_overflow_mul_positive"
+    description: "Overflow via multiplication."
+    expr: "5000000000 * 5000000000"
+    eval_error: {
+      errors: { message: "return error for overflow" }
+    }
+  }
+  test {
+    name: "int64_overflow_mul_negative"
+    description: "Overflow via multiplication."
+    expr: "(-5000000000) * 5000000000"
     eval_error: {
       errors: { message: "return error for overflow" }
     }
@@ -214,8 +262,6 @@ section {
     eval_error: {
       errors: { message: "return error for overflow" }
     }
-    ## Current behavior:
-    ## value: { uint64_value: 0 }
   }
   test {
     name: "uint64_overflow_negative"
@@ -224,8 +270,14 @@ section {
     eval_error: {
       errors: { message: "return error for overflow" }
     }
-    ## Current behavior:
-    ## value: { uint64_value: 18446744073709551615 }
+  }
+  test {
+    name: "uint64_overflow_mul_positive"
+    description: "Overflow via multiplication."
+    expr: "5000000000u * 5000000000u"
+    eval_error: {
+      errors: { message: "return error for overflow" }
+    }
   }
 }
 section {
