@@ -945,7 +945,7 @@ specified by the following overloads:
       string.() -> int
     </td>
     <td>
-      string length
+      number of unicode codepoints in the string
     </td>
   </tr>
   <tr>
@@ -2152,19 +2152,35 @@ See [cel-go/issues/9](https://github.com/google/cel-go/issues/9).
     </td>
   </tr>
   <tr>
-    <th rowspan="4">
+    <th rowspan="8">
       size
     </th>
     <td>
       string.() -> int
     </td>
     <td>
-      string length
+      number of unicode codepoints in the string
+    </td>
+  </tr>
+  <tr>
+    <td>
+      (string) -> int
+    </td>
+    <td>
+      number of unicode codepoints in the string
     </td>
   </tr>
   <tr>
     <td>
       bytes.() -> int
+    </td>
+    <td>
+      bytes length
+    </td>
+  </tr>
+  <tr>
+    <td>
+      (bytes) -> int
     </td>
     <td>
       bytes length
@@ -2180,7 +2196,23 @@ See [cel-go/issues/9](https://github.com/google/cel-go/issues/9).
   </tr>
   <tr>
     <td>
+      (list(A)) -> int
+    </td>
+    <td>
+      list size. Time cost proportional to the length of the list.
+    </td>
+  </tr>
+  <tr>
+    <td>
       map(A, B).() -> int
+    </td>
+    <td>
+      map size. Time cost proportional to the number of entries.
+    </td>
+  </tr>
+  <tr>
+    <td>
+      (map(A, B)) -> int
     </td>
     <td>
       map size. Time cost proportional to the number of entries.
