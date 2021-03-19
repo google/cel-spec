@@ -60,6 +60,28 @@ section {
     }
   }
   test {
+    name: "field_assign_proto2_max"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{single_int32_wrapper: 2147483647}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        { single_int32_wrapper { value: 2147483647 } }
+      }
+    }
+  }
+  test {
+    name: "field_assign_proto2_min"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{single_int32_wrapper: -2147483648}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        { single_int32_wrapper { value: -2147483648 } }
+      }
+    }
+  }
+  test {
     name: "field_assign_proto2_range"
     container: "google.api.expr.test.v1.proto2"
     expr: "TestAllTypes{single_int32_wrapper: 12345678900}"
@@ -104,6 +126,28 @@ section {
       object_value {
         [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
         { single_int32_wrapper { } }
+      }
+    }
+  }
+  test {
+    name: "field_assign_proto3_max"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_int32_wrapper: 2147483647}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        { single_int32_wrapper { value: 2147483647 } }
+      }
+    }
+  }
+  test {
+    name: "field_assign_proto3_min"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_int32_wrapper: -2147483648}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        { single_int32_wrapper { value: -2147483648 } }
       }
     }
   }
@@ -276,6 +320,17 @@ section {
     }
   }
   test {
+    name: "field_assign_proto2_max"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{single_uint32_wrapper: 4294967295u}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        { single_uint32_wrapper { value: 4294967295} }
+      }
+    }
+  }
+  test {
     name: "field_assign_proto2_range"
     container: "google.api.expr.test.v1.proto2"
     expr: "TestAllTypes{single_uint32_wrapper: 6111222333u}"
@@ -302,6 +357,17 @@ section {
       object_value {
         [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
         { single_uint32_wrapper { } }
+      }
+    }
+  }
+  test {
+    name: "field_assign_proto3_max"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_uint32_wrapper: 4294967295u}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        { single_uint32_wrapper { value: 4294967295 } }
       }
     }
   }
@@ -498,6 +564,30 @@ section {
     }
   }
   test {
+    name: "field_assign_proto2_subnorm"
+    description: "Subnormal single floats range from ~1e-38 to ~1e-45."
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{single_float_wrapper: 1e-40}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        { single_float_wrapper { value: 1e-40 } }
+      }
+    }
+  }
+  test {
+    name: "field_assign_proto2_round_to_zero"
+    description: "Subnormal single floats range from ~1e-38 to ~1e-45."
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{single_float_wrapper: 1e-50}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        { single_float_wrapper { } }
+      }
+    }
+  }
+  test {
     name: "field_assign_proto2_range"
     container: "google.api.expr.test.v1.proto2"
     expr: "TestAllTypes{single_float_wrapper: 1.4e55}"
@@ -514,8 +604,8 @@ section {
   test {
     name: "field_read_proto2_zero"
     container: "google.api.expr.test.v1.proto2"
-    expr: "TestAllTypes{single_int32_wrapper: 0}.single_int32_wrapper"
-    value { int64_value: 0 }
+    expr: "TestAllTypes{single_float_wrapper: 0.0}.single_float_wrapper"
+    value { double_value: 0.0 }
   }
   test {
     name: "field_read_proto2_unset"
@@ -546,9 +636,32 @@ section {
     }
   }
   test {
-    name: "field_assign_proto3_range"
+    name: "field_assign_proto2_subnorm"
+    description: "Subnormal single floats range from ~1e-38 to ~1e-45."
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{single_float_wrapper: 1e-40}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        { single_float_wrapper { value: 1e-40 } }
+      }
+    }
+  }
+  test {
+    name: "field_assign_proto3_round_to_zero"
     container: "google.api.expr.test.v1.proto3"
     expr: "TestAllTypes{single_float_wrapper: -9.9e-100}"
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        { single_float_wrapper { value: -0 } }
+      }
+    }
+  }
+  test {
+    name: "field_assign_proto3_range"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_float_wrapper: -9.9e100}"
     eval_error {
       errors { message: "range error" }
     }
@@ -685,11 +798,11 @@ section {
   test {
     name: "field_assign_proto3_range"
     container: "google.api.expr.test.v1.proto3"
-    expr: "TestAllTypes{single_double_wrapper: -9.9e-100}"
+    expr: "TestAllTypes{single_double_wrapper: -9.9e100}"
     value {
       object_value {
         [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
-        { single_double_wrapper { value: -9.9e-100 } }
+        { single_double_wrapper { value: -9.9e100 } }
       }
     }
   }
