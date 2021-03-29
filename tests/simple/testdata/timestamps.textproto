@@ -14,6 +14,11 @@ section {
     value: { string_value: "2009-02-13T23:31:30Z" }
   }
   test {
+    name: "toString_timestamp_nanos"
+    expr: "string(timestamp('9999-12-31T23:59:59.999999999Z'))"
+    value: { string_value: "9999-12-31T23:59:59.999999999Z" }
+  }
+  test {
     name: "toType_timestamp"
     expr: "type(timestamp('2009-02-13T23:31:30Z'))"
     value: { type_value: "google.protobuf.Timestamp" }
