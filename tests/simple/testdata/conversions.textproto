@@ -44,11 +44,13 @@ section {
   }
   test {
     name: "int_min_exact"
+    description: "Smallest contiguous representable int (-2^53)."
     expr: "double(-9007199254740992)"
     value { double_value: -9.007199254740992e15 }
   }
   test {
     name: "int_max_exact"
+    description: "Largest contiguous representable int (2^53)."
     expr: "double(9007199254740992)"
     value { double_value: 9.007199254740992e15 }
   }
@@ -70,6 +72,7 @@ section {
   }
   test {
     name: "uint_max_exact"
+    description: "Largest contiguous representable int (2^53)."
     expr: "double(9007199254740992u)"
     value { double_value: 9.007199254740992e15 }
   }
