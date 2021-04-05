@@ -85,7 +85,7 @@ citizens of CEL:
 ```proto
 has(account.properties.id)
   && (type(account.properties.id) == string
-     || type(account.properties.id) == list(string))
+     || type(account.properties.id) == list)
 ```
 
 CEL's default type checker deals with a mixture of dynamic and static typing;
