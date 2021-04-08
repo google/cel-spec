@@ -589,10 +589,14 @@ section {
   }
   test {
     name: "field_assign_proto2_range"
+    description: "Single float max is about 3.4e38"
     container: "google.api.expr.test.v1.proto2"
     expr: "TestAllTypes{single_float_wrapper: 1.4e55}"
-    eval_error {
-      errors { message: "range error" }
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        { single_float_wrapper { value: inf } }
+      }
     }
   }
   test {
@@ -660,10 +664,14 @@ section {
   }
   test {
     name: "field_assign_proto3_range"
+    description: "Single float min is about -3.4e38"
     container: "google.api.expr.test.v1.proto3"
     expr: "TestAllTypes{single_float_wrapper: -9.9e100}"
-    eval_error {
-      errors { message: "range error" }
+    value {
+      object_value {
+        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        { single_float_wrapper { value: -inf } }
+      }
     }
   }
   test {
