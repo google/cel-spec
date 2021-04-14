@@ -162,3 +162,64 @@ section {
     value: {double_value: 0}
   }
 }
+section {
+  name: "round"
+  description: "Tests for round()."
+  test {
+    name: "zero"
+    expr: "round(0.0)"
+    value { int64_value: 0 }
+  }
+  test {
+    name: "zero_neg"
+    expr: "round(-0.0)"
+    value { int64_value: 0 }
+  }
+  test {
+    name: "exact"
+    expr: "round(1.0)"
+    value { int64_value: 1 }
+  }
+  test {
+    name: "exact_neg"
+    expr: "round(-3.0)"
+    value { int64_value: -3 }
+  }
+  test {
+    name: "small_frac_pos"
+    expr: "round(3.1416)"
+    value { int64_value: 3 }
+  }
+  test {
+    name: "small_frac_neg"
+    expr: "round(-27.4)"
+    value { int64_value: -27 }
+  }
+  test {
+    name: "half_pos"
+    expr: "round(32.5)"
+    value { int64_value: 33 }
+  }
+  test {
+    name: "half_neg"
+    expr: "round(-17.5)"
+    value { int64_value: -18 }
+  }
+  test {
+    name: "big_frac_pos"
+    expr: "round(2.71828)"
+    value { int64_value: 3 }
+  }
+  test {
+    name: "big_frac_neg"
+    expr: "round(-7.8)"
+    value { int64_value: -8 }
+  }
+  test {
+    name: "range"
+    expr: "round(1e99)"
+    eval_error {
+      errors { message: "range" }
+    }
+  }
+}

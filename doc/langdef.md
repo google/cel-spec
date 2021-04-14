@@ -2070,7 +2070,8 @@ See [cel-go/issues/9](https://github.com/google/cel-go/issues/9).
       (double) -> int
     </td>
     <td>
-      type conversion
+      Type conversion. Rounds toward zero, then errors if result is out of
+      range. See also round().
     </td>
   </tr>
   <tr>
@@ -2149,6 +2150,18 @@ See [cel-go/issues/9](https://github.com/google/cel-go/issues/9).
     </td>
     <td>
       type denotation
+    </td>
+  </tr>
+  <tr>
+    <th>
+      round
+    </th>
+    <td>
+      (double) -> int
+    </td>
+    <td>
+      Rounds half away (i.e. round(1.5) is 2, round(-1.5) is -2). Error if
+      result is out of range.
     </td>
   </tr>
   <tr>
@@ -2295,7 +2308,8 @@ See [cel-go/issues/9](https://github.com/google/cel-go/issues/9).
       (double) -> uint
     </td>
     <td>
-      type conversion
+      Type conversion. Rounds toward zero, then errors if result is out of
+      range.
     </td>
   </tr>
   <tr>
