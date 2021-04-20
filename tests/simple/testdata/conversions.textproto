@@ -43,6 +43,18 @@ section {
     value: { double_value: -1e15 }
   }
   test {
+    name: "int_min_exact"
+    description: "Smallest contiguous representable int (-2^53)."
+    expr: "double(-9007199254740992)"
+    value { double_value: -9.007199254740992e15 }
+  }
+  test {
+    name: "int_max_exact"
+    description: "Largest contiguous representable int (2^53)."
+    expr: "double(9007199254740992)"
+    value { double_value: 9.007199254740992e15 }
+  }
+  test {
     name: "int_range"
     description: "Largest signed 64-bit. Rounds to nearest double."
     expr: "double(9223372036854775807)"
@@ -57,6 +69,12 @@ section {
     name: "uint_pos"
     expr: "double(123u)"
     value: { double_value: 123.0 }
+  }
+  test {
+    name: "uint_max_exact"
+    description: "Largest contiguous representable int (2^53)."
+    expr: "double(9007199254740992u)"
+    value { double_value: 9.007199254740992e15 }
   }
   test {
     name: "uint_range"
@@ -139,6 +157,11 @@ section {
     value: { int64_value: 0 }
   }
   test {
+    name: "uint_max_exact"
+    expr: "int(9223372036854775807u)"
+    value { int64_value: 9223372036854775807 }
+  }
+  test {
     name: "uint_range"
     expr: "int(18446744073709551615u)"
     eval_error {
@@ -169,6 +192,18 @@ section {
     name: "double_half_neg"
     expr: "int(-3.5)"
     value: { int64_value: -3 }
+  }
+  test {
+    name: "double_big_exact"
+    description: "Beyond exact range (2^53), but no loss of precision (2^55)."
+    expr: "int(double(36028797018963968))"
+    value { int64_value: 36028797018963968 }
+  }
+  test {
+    name: "double_big_precision"
+    description: "Beyond exact range (2^53), but loses precisons (2^55 + 1)."
+    expr: "int(double(36028797018963969))"
+    value { int64_value: 36028797018963968 }
   }
   test {
     name: "double_range"
@@ -395,6 +430,11 @@ section {
     value: { uint64_value: 1729 }
   }
   test {
+    name: "int_max"
+    expr: "uint(9223372036854775807)"
+    value { uint64_value: 9223372036854775807 }
+  }
+  test {
     name: "int_neg"
     expr: "uint(-1)"
     eval_error {
@@ -415,6 +455,18 @@ section {
     name: "double_half"
     expr: "uint(25.5)"
     value: { uint64_value: 25 }
+  }
+  test {
+    name: "double_big_exact"
+    description: "Beyond exact range (2^53), but no loss of precision (2^55)."
+    expr: "uint(double(36028797018963968u))"
+    value { uint64_value: 36028797018963968 }
+  }
+  test {
+    name: "double_big_precision"
+    description: "Beyond exact range (2^53), but loses precisons (2^55 + 1)."
+    expr: "uint(double(36028797018963969u))"
+    value { uint64_value: 36028797018963968 }
   }
   test {
     name: "double_range_beyond_uint"
