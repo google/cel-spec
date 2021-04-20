@@ -2070,7 +2070,8 @@ See [cel-go/issues/9](https://github.com/google/cel-go/issues/9).
       (double) -> int
     </td>
     <td>
-      type conversion
+      Type conversion. Rounds toward zero, then errors if result is out of
+      range.
     </td>
   </tr>
   <tr>
@@ -2295,7 +2296,8 @@ See [cel-go/issues/9](https://github.com/google/cel-go/issues/9).
       (double) -> uint
     </td>
     <td>
-      type conversion
+      Type conversion. Rounds toward zero, then errors if result is out of
+      range.
     </td>
   </tr>
   <tr>
