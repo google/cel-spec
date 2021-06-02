@@ -174,24 +174,24 @@ section {
     value: { int64_value: -123 }
   }
   test {
-    name: "double_nearest"
+    name: "double_truncate"
     expr: "int(1.9)"
-    value: { int64_value: 2 }
+    value: { int64_value: 1 }
   }
   test {
-    name: "double_nearest_neg"
+    name: "double_truncate_neg"
     expr: "int(-7.9)"
-    value: { int64_value: -8 }
+    value: { int64_value: -7 }
   }
   test {
-    name: "double_half_away_pos"
+    name: "double_half_pos"
     expr: "int(11.5)"
-    value: { int64_value: 12 }
+    value: { int64_value: 11 }
   }
   test {
-    name: "double_half_away_neg"
+    name: "double_half_neg"
     expr: "int(-3.5)"
-    value: { int64_value: -4 }
+    value: { int64_value: -3 }
   }
   test {
     name: "double_big_exact"
@@ -447,19 +447,14 @@ section {
     value: { uint64_value: 3 }
   }
   test {
-    name: "double_nearest_int"
-    expr: "int(1.9)"
-    value: { int64_value: 2 }
-  }
-  test {
-    name: "double_nearest"
+    name: "double_truncate"
     expr: "uint(1.9)"
-    value: { uint64_value: 2 }
+    value: { uint64_value: 1 }
   }
   test {
-    name: "double_half_away"
+    name: "double_half"
     expr: "uint(25.5)"
-    value: { uint64_value: 26 }
+    value: { uint64_value: 25 }
   }
   test {
     name: "double_big_exact"
@@ -474,8 +469,8 @@ section {
     value { uint64_value: 36028797018963968 }
   }
   test {
-    name: "double_range_beyond_int"
-    description: "Checks conversion of integer outside int range."
+    name: "double_range_beyond_uint"
+    description: "Checks conversion of integer outside uint range."
     expr: "uint(1e19)"
     value: { uint64_value: 10000000000000000000 }
   }
