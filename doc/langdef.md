@@ -2200,7 +2200,7 @@ See [cel-go/issues/9](https://github.com/google/cel-go/issues/9).
     </td>
   </tr>
   <tr>
-    <th rowspan="5">
+    <th rowspan="7">
       string
     </th>
     <td>
@@ -2240,6 +2240,22 @@ See [cel-go/issues/9](https://github.com/google/cel-go/issues/9).
     </td>
     <td>
       type conversion
+    </td>
+  </tr>
+  <tr>
+    <td>
+      (timestamp) -> string
+    </td>
+    <td>
+      type conversion, using the same format as timestamp string parsing
+    </td>
+  </tr>
+  <tr>
+    <td>
+      (duration) -> string
+    </td>
+    <td>
+      type conversion, using the same format as duration string parsing
     </td>
   </tr>
   <tr>
