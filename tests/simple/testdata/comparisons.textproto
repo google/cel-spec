@@ -1127,10 +1127,7 @@ section {
     eval_error: {
       errors: { message: "no such overload" }
     }
-    type_env: {
-      name: "x",
-      ident: { type: { null: NULL_VALUE } }
-    }
+    disable_check: true
     bindings: {
       key: "x",
       value: { value: { null_value: NULL_VALUE } }
