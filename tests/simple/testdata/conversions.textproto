@@ -206,6 +206,22 @@ section {
     value { int64_value: 36028797018963968 }
   }
   test {
+    name: "double_int_max_range"
+    description: "The double(2^63-1) cast produces a floating point value outside the int range"
+    expr: "int(9223372036854775807.0)"
+    eval_error {
+      errors: { message: "range" }
+    }
+  }
+  test {
+    name: "double_int_min_range"
+    description: "The double(-2^63) cast produces a floating point value outside the int range"
+    expr: "int(-9223372036854775808)"
+    eval_error {
+      errors: { message: "range" }
+    }
+  }
+  test {
     name: "double_range"
     expr: "int(1e99)"
     eval_error {
@@ -469,13 +485,15 @@ section {
     value { uint64_value: 36028797018963968 }
   }
   test {
-    name: "double_range_beyond_uint"
-    description: "Checks conversion of integer outside uint range."
-    expr: "uint(1e19)"
-    value: { uint64_value: 10000000000000000000 }
+    name: "double_uint_max_range"
+    description: "The exact conversion of uint max as a double does not round trip."
+    expr: "int(18446744073709551615.0)"
+    eval_error {
+      errors: { message: "range" }
+    }
   }
   test {
-    name: "double_range_err"
+    name: "double_range_beyond_uint"
     expr: "uint(6.022e23)"
     eval_error {
       errors { message: "range" }

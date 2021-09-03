@@ -1057,6 +1057,18 @@ Arithmetic operations raise an error when the results exceed the range of the
 integer type (int, uint) or the timestamp or duration type.  An error is also
 raised for conversions which exceed the range of the target type.
 
+There are a few additional considerations to keep in mind with respect to
+how and when certain types will overflow:
+
+*  Duration values are limited to a single int64 value, or roughly +-290 years.
+*  Timestamp values are limited to the range of values which can be serialized
+   as a string: ["0001-01-01T00:00:00Z", "9999-12-31T23:59:59.999999999Z"].
+*  Double to int conversions are limited to (minInt, maxInt) non-inclusive.
+
+Note, that whether the minimum or maximum integer value will roundtrip successfully
+int -> double -> int can be compiler dependent which is the motivation for the
+conservative round-tripping behavior.
+
 ### Timezones
 
 Timezones are expressed in the following grammar:
