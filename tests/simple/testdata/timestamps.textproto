@@ -115,7 +115,7 @@ section {
   }
   test {
     name: "getDayOfMonth_numerical_neg"
-    expr: "timestamp('2009-02-13T02:00:00Z').getDayOfMonth('-2:30')"
+    expr: "timestamp('2009-02-13T02:00:00Z').getDayOfMonth('-02:30')"
     value: { int64_value: 11 }
   }
   test {
@@ -135,12 +135,12 @@ section {
   }
   test {
     name: "getFullYear"
-    expr: "timestamp('2009-02-13T23:31:30Z').getFullYear('-9:30')"
+    expr: "timestamp('2009-02-13T23:31:30Z').getFullYear('-09:30')"
     value: { int64_value: 2009 }
   }
   test {
     name: "getHours"
-    expr: "timestamp('2009-02-13T23:31:30Z').getHours('2:00')"
+    expr: "timestamp('2009-02-13T23:31:30Z').getHours('02:00')"
     value: { int64_value: 1 }
   }
   test {
