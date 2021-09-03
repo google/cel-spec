@@ -1790,7 +1790,10 @@ See [cel-go/issues/9](https://github.com/google/cel-go/issues/9).
       (string) -> google.protobuf.Duration
     </td>
     <td>
-      type conversion, duration should end with "s", which stands for seconds
+      Type conversion. Duration strings should support the following suffixes:
+      "h" (hour), "m" (minute), "s" (second), "ms" (millisecond),
+      "us" (microsecond), and "ns" (nanosecond).
+      Duration strings may also represent compound durations, e.g. "1m6s"
     </td>
   </tr>
   <tr>
