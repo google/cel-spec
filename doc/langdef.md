@@ -1790,7 +1790,11 @@ See [cel-go/issues/9](https://github.com/google/cel-go/issues/9).
       (string) -> google.protobuf.Duration
     </td>
     <td>
-      type conversion, duration should end with "s", which stands for seconds
+      Type conversion. Duration strings should support the following suffixes:
+      "h" (hour), "m" (minute), "s" (second), "ms" (millisecond),
+      "us" (microsecond), and "ns" (nanosecond).
+      Duration strings may be zero, negative, fractional, and/or compound.
+      Examples: "0", "-1.5h", "1m6s"
     </td>
   </tr>
   <tr>
@@ -2266,7 +2270,8 @@ See [cel-go/issues/9](https://github.com/google/cel-go/issues/9).
       (string) -> google.protobuf.Timestamp
     </td>
     <td>
-      Type conversion of strings to timestamps according to RFC3339. Example: "1972-01-01T10:00:20.021-05:00"
+      Type conversion of strings to timestamps according to RFC3339.
+      Example: "1972-01-01T10:00:20.021-05:00"
     </td>
   </tr>
   <tr>
