@@ -79,12 +79,12 @@ Unary          = Member
 Member         = Primary
                | Member "." IDENT ["(" [ExprList] ")"]
                | Member "[" Expr "]"
-               | Member "{" [FieldInits] "}"
+               | Member "{" [FieldInits] [","] "}"
                ;
 Primary        = ["."] IDENT ["(" [ExprList] ")"]
                | "(" Expr ")"
-               | "[" [ExprList] "]"
-               | "{" [MapInits] "}"
+               | "[" [ExprList] [","] "]"
+               | "{" [MapInits] [","] "}"
                | LITERAL
                ;
 ExprList       = Expr {"," Expr} ;
@@ -129,7 +129,9 @@ Precedence | Operator        | Description                    | Associativity
 
 The lexis is defined below. As is typical, the `WHITESPACE` and `COMMENT`
 productions are only used to recognize separate lexical elements and are ignored
-by the grammar.
+by the grammar. Please note, that in the lexer `[]` denotes a character range,
+`*` represents zero or more, `+` represents one or more, and `?` denotes zero
+or one occurrence.
 
 ```
 IDENT          ::= [_a-zA-Z][_a-zA-Z0-9]* - RESERVED
