@@ -24,7 +24,7 @@ proto_library(
         "test_value.proto",
     ],
     deps = [
-        "@com_google_googleapis//google/api/expr/v1beta1:eval_proto",
+        "@com_google_googleapis//google/api/expr/v1alpha1:eval_proto",
         '@com_google_protobuf//:any_proto',
         '@com_google_protobuf//:duration_proto',
         '@com_google_protobuf//:struct_proto',
@@ -39,7 +39,6 @@ proto_library(
         "test_data.proto",
     ],
     deps = [
-#        "@com_google_googleapis//:expr_v1beta1",
         ":test_value_proto",
     ],
 )

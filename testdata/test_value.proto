@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package google.api.expr.testdata;
 
-import "google/api/expr/v1beta1/eval.proto";
+import "google/api/expr/v1alpha1/eval.proto";
 import "google/protobuf/any.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/struct.proto";
@@ -37,7 +37,7 @@ message TestValue {
   repeated TestProtoValue proto = 3;
 
   // The set of v1beta1 representations.
-  repeated google.api.expr.v1beta1.ExprValue v1beta1 = 4;
+  repeated google.api.expr.v1alpha1.ExprValue v1beta1 = 4;
 }
 
 // This proto includes every type of field in both singular and repeated
