@@ -216,7 +216,7 @@ section {
   test {
     name: "double_int_min_range"
     description: "The double(-2^63) cast produces a floating point value outside the int range"
-    expr: "int(-9223372036854775808)"
+    expr: "int(-9223372036854775808.0)"
     eval_error {
       errors: { message: "range" }
     }
