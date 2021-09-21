@@ -640,13 +640,13 @@ section {
     }
   }
   test {
-    name: "field_assign_proto2_subnorm"
+    name: "field_assign_proto3_subnorm"
     description: "Subnormal single floats range from ~1e-38 to ~1e-45."
-    container: "google.api.expr.test.v1.proto2"
+    container: "google.api.expr.test.v1.proto3"
     expr: "TestAllTypes{single_float_wrapper: 1e-40}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
         { single_float_wrapper { value: 1e-40 } }
       }
     }
@@ -654,11 +654,11 @@ section {
   test {
     name: "field_assign_proto3_round_to_zero"
     container: "google.api.expr.test.v1.proto3"
-    expr: "TestAllTypes{single_float_wrapper: -9.9e-100}"
+    expr: "TestAllTypes{single_float_wrapper: 9.9e-100}"
     value {
       object_value {
         [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
-        { single_float_wrapper { value: -0 } }
+        { single_float_wrapper { } }
       }
     }
   }
