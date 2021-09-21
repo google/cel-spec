@@ -325,7 +325,7 @@ section {
   }
   test {
     name: "get_milliseconds"
-    description: "Need to import a variable to get milliseconds."
+    description: "Obtain the milliseconds component of the duration. Note, this is not the same as converting the duration to milliseconds. This behavior will be deprecated."
     expr: "x.getMilliseconds()"
     type_env {
       name: "x"
@@ -345,7 +345,7 @@ section {
         }
       }
     }
-    value: { int64_value: 123123 }
+    value: { int64_value: 123 }
   }
   test {
     name: "get_minutes"
