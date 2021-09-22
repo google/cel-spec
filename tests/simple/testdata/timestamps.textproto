@@ -339,13 +339,13 @@ section {
             [type.googleapis.com/google.protobuf.Duration]
             {
               seconds: 123
-              nanos: 123456789
+              nanos:321456789
             }
           }
         }
       }
     }
-    value: { int64_value: 123 }
+    value: { int64_value: 321 }
   }
   test {
     name: "get_minutes"
