@@ -1,13 +1,13 @@
 # Language Definition
 
 This page constitutes the reference for CEL. For a gentle introduction, see
-[Intro](intro.md).
+[Intro](intro.md). 
 
 ## Contents
 
 - [Overview](#overview)
 - [Syntax](#syntax)
-    - [Name Resolution](#name-resolution)
+    - [Name Resolution](#name-resolution) 
 - [Values](#values)
     - [Numeric Values](#numeric-values)
     - [Enumerations](#enumerations)
