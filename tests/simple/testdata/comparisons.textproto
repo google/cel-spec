@@ -204,6 +204,323 @@ section {
       errors: { message: "no such overload" }
     }
   }
+  test {
+    name: "eq_dyn_json_null"
+    expr: "dyn(google.protobuf.Value{}) == null"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_eq_dyn_bool_null"
+    expr: "dyn(false) == null"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_eq_dyn_bytes_null"
+    expr: "dyn(b'') == null"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_eq_dyn_double_null"
+    expr: "dyn(2.1) == null"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_eq_dyn_duration_null"
+    expr: "dyn(duration('0s')) == null"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_eq_dyn_int_null"
+    expr: "dyn(1) == null"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_eq_dyn_list_null"
+    expr: "dyn([]) == null"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_eq_dyn_map_null"
+    expr: "dyn({}) == null"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_eq_dyn_proto2_msg_null"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "dyn(TestAllTypes{}) == null"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_eq_dyn_proto3_msg_null"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "dyn(TestAllTypes{}) == null"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_eq_dyn_string_null"
+    expr: "dyn('') == null"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_eq_dyn_timestamp_null"
+    expr: "dyn(timestamp(0)) == null"
+    value: { bool_value: false }
+  }
+}
+section {
+  name: "eq_wrapper"
+  description: "Wrapper type comparison on _==_"
+  test {
+    name: "eq_bool"
+    expr: "google.protobuf.BoolValue{value: true} == true"
+    value: { bool_value: true }
+  }
+  test {
+    name: "eq_bool_empty"
+    expr: "google.protobuf.BoolValue{} == false"
+    value: { bool_value: true }
+  }
+  test {
+    name: "eq_bool_not_null"
+    expr: "google.protobuf.BoolValue{} != null"
+    value: { bool_value: true }
+  }
+  test {
+    name: "eq_bool_proto2_null"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{}.single_bool_wrapper == null"
+    value: { bool_value: true }
+  }
+  test {
+    name: "eq_bool_proto3_null"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{}.single_bool_wrapper == null"
+    value: { bool_value: true }
+  }
+
+  test {
+    name: "eq_bytes"
+    expr: "google.protobuf.BytesValue{value: b'set'} == b'set'"
+    value: { bool_value: true }
+  }
+  test {
+    name: "eq_bytes_empty"
+    expr: "google.protobuf.BytesValue{} == b''"
+    value: { bool_value: true }
+  }
+  test {
+    name: "eq_bytes_not_null"
+    expr: "google.protobuf.BytesValue{} != null"
+    value: { bool_value: true }
+  }
+  test {
+    name: "eq_bytes_proto2_null"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{}.single_bytes_wrapper == null"
+    value: { bool_value: true }
+  }
+  test {
+    name: "eq_bytes_proto3_null"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{}.single_bytes_wrapper == null"
+    value: { bool_value: true }
+  }
+
+  test {
+    name: "eq_double"
+    expr: "google.protobuf.DoubleValue{value: -1.175494e-40} == -1.175494e-40"
+    value: { bool_value: true }
+  }
+  test {
+    name: "eq_double_empty"
+    expr: "google.protobuf.DoubleValue{} == 0.0"
+    value: { bool_value: true }
+  }
+  test {
+    name: "eq_double_not_null"
+    expr: "google.protobuf.DoubleValue{} != null"
+    value: { bool_value: true }
+  }
+  test {
+    name: "eq_double_proto2_null"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{}.single_double_wrapper == null"
+    value: { bool_value: true }
+  }
+  test {
+    name: "eq_double_proto3_null"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{}.single_double_wrapper == null"
+    value: { bool_value: true }
+  }
+
+  test {
+    name: "eq_float"
+    expr: "google.protobuf.FloatValue{value: -1.5} == -1.5"
+    value: { bool_value: true }
+  }
+  test {
+    name: "eq_float_empty"
+    expr: "google.protobuf.FloatValue{} == 0.0"
+    value: { bool_value: true }
+  }
+  test {
+    name: "eq_float_not_null"
+    expr: "google.protobuf.FloatValue{} != null"
+    value: { bool_value: true }
+  }
+  test {
+    name: "eq_float_proto2_null"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{}.single_float_wrapper == null"
+    value: { bool_value: true }
+  }
+  test {
+    name: "eq_float_proto3_null"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{}.single_float_wrapper == null"
+    value: { bool_value: true }
+  }
+
+  test {
+    name: "eq_int32"
+    expr: "google.protobuf.Int32Value{value: 123} == 123"
+    value: { bool_value: true }
+  }
+  test {
+    name: "eq_int32_empty"
+    expr: "google.protobuf.Int32Value{} == 0"
+    value: { bool_value: true }
+  }
+  test {
+    name: "eq_int32_not_null"
+    expr: "google.protobuf.Int32Value{} != null"
+    value: { bool_value: true }
+  }
+  test {
+    name: "eq_int32_proto2_null"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{}.single_int32_wrapper == null"
+    value: { bool_value: true }
+  }
+  test {
+    name: "eq_int32_proto3_null"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{}.single_int32_wrapper == null"
+    value: { bool_value: true }
+  }
+
+  test {
+    name: "eq_int64"
+    expr: "google.protobuf.Int64Value{value: 2147483650} == 2147483650"
+    value: { bool_value: true }
+  }
+  test {
+    name: "eq_int64_empty"
+    expr: "google.protobuf.Int64Value{} == 0"
+    value: { bool_value: true }
+  }
+  test {
+    name: "eq_int64_not_null"
+    expr: "google.protobuf.Int64Value{} != null"
+    value: { bool_value: true }
+  }
+  test {
+    name: "eq_int64_proto2_null"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{}.single_int64_wrapper == null"
+    value: { bool_value: true }
+  }
+  test {
+    name: "eq_int64_proto3_null"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{}.single_int64_wrapper == null"
+    value: { bool_value: true }
+  }
+
+  test {
+    name: "eq_string"
+    expr: "google.protobuf.StringValue{value: 'set'} == 'set'"
+    value: { bool_value: true }
+  }
+  test {
+    name: "eq_string_empty"
+    expr: "google.protobuf.StringValue{} == ''"
+    value: { bool_value: true }
+  }
+  test {
+    name: "eq_string_not_null"
+    expr: "google.protobuf.StringValue{} != null"
+    value: { bool_value: true }
+  }
+  test {
+    name: "eq_string_proto2_null"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{}.single_string_wrapper == null"
+    value: { bool_value: true }
+  }
+  test {
+    name: "eq_string_proto3_null"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{}.single_string_wrapper == null"
+    value: { bool_value: true }
+  }
+
+  test {
+    name: "eq_uint32"
+    expr: "google.protobuf.UInt32Value{value: 42u} == 42u"
+    value: { bool_value: true }
+  }
+  test {
+    name: "eq_uint32_empty"
+    expr: "google.protobuf.UInt32Value{} == 0u"
+    value: { bool_value: true }
+  }
+  test {
+    name: "eq_uint32_not_null"
+    expr: "google.protobuf.UInt32Value{} != null"
+    value: { bool_value: true }
+  }
+  test {
+    name: "eq_uint32_proto2_null"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{}.single_uint32_wrapper == null"
+    value: { bool_value: true }
+  }
+  test {
+    name: "eq_uint32_proto3_null"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{}.single_uint32_wrapper == null"
+    value: { bool_value: true }
+  }
+
+  test {
+    name: "eq_uint64"
+    expr: "google.protobuf.UInt64Value{value: 4294967296u} == 4294967296u"
+    value: { bool_value: true }
+  }
+  test {
+    name: "eq_uint64_empty"
+    expr: "google.protobuf.UInt64Value{} == 0u"
+    value: { bool_value: true }
+  }
+  test {
+    name: "eq_uint64_not_null"
+    expr: "google.protobuf.UInt64Value{} != null"
+    value: { bool_value: true }
+  }
+  test {
+    name: "eq_uint64_proto2_null"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{}.single_uint64_wrapper == null"
+    value: { bool_value: true }
+  }
+  test {
+    name: "eq_uint64_proto3_null"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{}.single_uint64_wrapper == null"
+    value: { bool_value: true }
+  }
 }
 section {
   name: "ne_literal"
