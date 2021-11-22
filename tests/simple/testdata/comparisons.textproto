@@ -269,7 +269,7 @@ section {
 }
 section {
   name: "eq_wrapper"
-  description: "Wrapper type comparison on _==_"
+  description: "Wrapper type comparison on _==_. Wrapper types treated as boxed primitives when they appear on message fields. An unset wrapper field should be treated as null. The tests show the distinction between unset, empty, and set equality behavior."
   test {
     name: "eq_bool"
     expr: "google.protobuf.BoolValue{value: true} == true"
