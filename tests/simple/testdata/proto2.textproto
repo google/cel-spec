@@ -345,7 +345,6 @@ section {
     }
   }
 
-
   test {
     name: "uint64_wrapper"
     container: "google.api.expr.test.v1.proto2"
@@ -360,7 +359,6 @@ section {
       }
     }
   }
-
 
   test {
     name: "uint32_wrapper"
@@ -377,7 +375,6 @@ section {
     }
   }
 
-
   test {
     name: "string_wrapper"
     container: "google.api.expr.test.v1.proto2"
@@ -393,7 +390,6 @@ section {
     }
   }
 
-
   test {
     name: "bool_wrapper"
     container: "google.api.expr.test.v1.proto2"
@@ -408,7 +404,6 @@ section {
       }
     }
   }
-
 
   test {
     name: "bytes_wrapper"
