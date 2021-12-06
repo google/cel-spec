@@ -113,6 +113,16 @@ section {
     value: { bool_value: true }
   }
   test {
+    name: "eq_list_null"
+    expr: "[null] == [null]"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_eq_list_null"
+    expr: "['1', '2', null] == ['1', '2', '3']"
+    value: { bool_value: false }
+  }
+  test {
     name: "eq_list_numbers"
     expr: "[1, 2, 3] == [1, 2, 3]"
     value: { bool_value: true }
@@ -142,6 +152,16 @@ section {
     name: "eq_map_empty"
     expr: "{} == {}"
     value: { bool_value: true }
+  }
+  test {
+    name: "eq_map_null"
+    expr: "{'k': null} == {'k': null}"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_eq_map_null"
+    expr: "{'k': 1, 'j': 2} == {'k': 1, 'j': null}"
+    value: { bool_value: false }
   }
   test {
     name: "eq_map_onekey"
