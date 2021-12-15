@@ -286,6 +286,66 @@ section {
     expr: "dyn(timestamp(0)) == null"
     value: { bool_value: false }
   }
+  test {
+    name: "eq_dyn_int_uint"
+    expr: "dyn(1) == 1u"
+    value: { bool_value: true }
+  }
+  test {
+    name: "eq_dyn_int_double"
+    expr: "dyn(1) == 1.0"
+    value: { bool_value: true }
+  }
+  test {
+    name: "eq_dyn_uint_int"
+    expr: "dyn(1u) == 1"
+    value: { bool_value: true }
+  }
+  test {
+    name: "eq_dyn_uint_double"
+    expr: "dyn(1u) == 1.0"
+    value: { bool_value: true }
+  }
+  test {
+    name: "eq_dyn_double_int"
+    expr: "dyn(1.0) == 1"
+    value: { bool_value: true }
+  }
+  test {
+    name: "eq_dyn_double_uint"
+    expr: "dyn(1.0) == 1u"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_eq_dyn_int_uint"
+    expr: "dyn(1) == 2u"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_eq_dyn_int_double"
+    expr: "dyn(1) == 2.0"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_eq_dyn_uint_int"
+    expr: "dyn(1u) == 2"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_eq_dyn_uint_double"
+    expr: "dyn(1u) == 120"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_eq_dyn_double_int"
+    expr: "dyn(1.0) == 2"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_eq_dyn_double_uint"
+    expr: "dyn(1.0) == 2u"
+    value: { bool_value: false }
+  }
 }
 section {
   name: "eq_wrapper"
@@ -819,6 +879,66 @@ section {
       errors: { message: "no such overload" }
     }
   }
+  test {
+    name: "lt_dyn_int_uint"
+    expr: "dyn(1) < 2u"
+    value: { bool_value: true }
+  }
+  test {
+    name: "lt_dyn_int_double"
+    expr: "dyn(1) < 2.0"
+    value: { bool_value: true }
+  }
+  test {
+    name: "lt_dyn_uint_int"
+    expr: "dyn(1u) < 2"
+    value: { bool_value: true }
+  }
+  test {
+    name: "lt_dyn_uint_double"
+    expr: "dyn(1u) < 2.0"
+    value: { bool_value: true }
+  }
+  test {
+    name: "lt_dyn_double_int"
+    expr: "dyn(1.0) < 2"
+    value: { bool_value: true }
+  }
+  test {
+    name: "lt_dyn_double_uint"
+    expr: "dyn(1.0) < 2u"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_lt_dyn_int_uint"
+    expr: "dyn(1) < 1u"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_lt_dyn_int_double"
+    expr: "dyn(1) < 1.0"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_lt_dyn_uint_int"
+    expr: "dyn(1u) < 1"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_lt_dyn_uint_double"
+    expr: "dyn(1u) < 1.0"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_lt_dyn_double_int"
+    expr: "dyn(1.0) < 1"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_lt_dyn_double_uint"
+    expr: "dyn(1.0) < 1u"
+    value: { bool_value: false }
+  }
 }
 section {
   name: "gt_literal"
@@ -934,6 +1054,66 @@ section {
     eval_error : {
       errors: { message: "no such overload" }
     }
+  }
+  test {
+    name: "gt_dyn_int_uint"
+    expr: "dyn(2) > 1u"
+    value: { bool_value: true }
+  }
+  test {
+    name: "gt_dyn_int_double"
+    expr: "dyn(2) > 1.0"
+    value: { bool_value: true }
+  }
+  test {
+    name: "gt_dyn_uint_int"
+    expr: "dyn(2u) > 1"
+    value: { bool_value: true }
+  }
+  test {
+    name: "gt_dyn_uint_double"
+    expr: "dyn(2u) > 1.0"
+    value: { bool_value: true }
+  }
+  test {
+    name: "gt_dyn_double_int"
+    expr: "dyn(2.0) > 1"
+    value: { bool_value: true }
+  }
+  test {
+    name: "gt_dyn_double_uint"
+    expr: "dyn(2.0) > 1u"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_gt_dyn_int_uint"
+    expr: "dyn(1) > 1u"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_gt_dyn_int_double"
+    expr: "dyn(1) > 1.0"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_gt_dyn_uint_int"
+    expr: "dyn(1u) > 1"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_gt_dyn_uint_double"
+    expr: "dyn(1u) > 1.0"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_gt_dyn_double_int"
+    expr: "dyn(1.0) > 1"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_gt_dyn_double_uint"
+    expr: "dyn(1.0) > 1u"
+    value: { bool_value: false }
   }
 }
 section {
@@ -1075,6 +1255,66 @@ section {
     eval_error : {
       errors: { message: "no such overload" }
     }
+  }
+  test {
+    name: "lte_dyn_int_uint"
+    expr: "dyn(1) <= 2u"
+    value: { bool_value: true }
+  }
+  test {
+    name: "lte_dyn_int_double"
+    expr: "dyn(1) <= 2.0"
+    value: { bool_value: true }
+  }
+  test {
+    name: "lte_dyn_uint_int"
+    expr: "dyn(1u) <= 2"
+    value: { bool_value: true }
+  }
+  test {
+    name: "lte_dyn_uint_double"
+    expr: "dyn(1u) <= 2.0"
+    value: { bool_value: true }
+  }
+  test {
+    name: "lte_dyn_double_int"
+    expr: "dyn(1.0) <= 2"
+    value: { bool_value: true }
+  }
+  test {
+    name: "lte_dyn_double_uint"
+    expr: "dyn(1.0) <= 2u"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_lte_dyn_int_uint"
+    expr: "dyn(2) <= 1u"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_lte_dyn_int_double"
+    expr: "dyn(2) <= 1.0"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_lte_dyn_uint_int"
+    expr: "dyn(2u) <= 1"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_lte_dyn_uint_double"
+    expr: "dyn(2u) <= 1.0"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_lte_dyn_double_int"
+    expr: "dyn(2.0) <= 1"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_lte_dyn_double_uint"
+    expr: "dyn(2.0) <= 1u"
+    value: { bool_value: false }
   }
 }
 section {
@@ -1226,6 +1466,66 @@ section {
     eval_error : {
       errors: { message: "no such overload" }
     }
+  }
+  test {
+    name: "gte_dyn_int_uint"
+    expr: "dyn(2) >= 1u"
+    value: { bool_value: true }
+  }
+  test {
+    name: "gte_dyn_int_double"
+    expr: "dyn(2) >= 1.0"
+    value: { bool_value: true }
+  }
+  test {
+    name: "gte_dyn_uint_int"
+    expr: "dyn(2u) >= 1"
+    value: { bool_value: true }
+  }
+  test {
+    name: "gte_dyn_uint_double"
+    expr: "dyn(2u) >= 1.0"
+    value: { bool_value: true }
+  }
+  test {
+    name: "gte_dyn_double_int"
+    expr: "dyn(2.0) >= 1"
+    value: { bool_value: true }
+  }
+  test {
+    name: "gte_dyn_double_uint"
+    expr: "dyn(2.0) >= 1u"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_gte_dyn_int_uint"
+    expr: "dyn(0) >= 1u"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_gte_dyn_int_double"
+    expr: "dyn(0) >= 1.0"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_gte_dyn_uint_int"
+    expr: "dyn(0u) >= 1"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_gte_dyn_uint_double"
+    expr: "dyn(0u) >= 1.0"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_gte_dyn_double_int"
+    expr: "dyn(0.0) >= 1"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_gte_dyn_double_uint"
+    expr: "dyn(0.0) >= 1u"
+    value: { bool_value: false }
   }
 }
 section {
