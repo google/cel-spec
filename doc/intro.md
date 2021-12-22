@@ -96,4 +96,4 @@ make use of any of the dynamic features based on `Struct` et.al can be always
 fully type checked at compile time.
 
 [1]: https://en.wikipedia.org/wiki/Protocol_Buffers
-[2]: https://developers.google.com/protocol-buffers/docs/proto3
+[2]: 
