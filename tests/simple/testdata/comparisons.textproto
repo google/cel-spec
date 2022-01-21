@@ -202,7 +202,7 @@ section {
     name: "eq_mixed_types_error"
     description: "A mix of types fails during type checks but can't be captured in the conformance tests yet (See google/cel-go#155). Also, if you disable checks it yields {bool_value: false} where it should also yield an error"
     expr: "1.0 == 1"
-    disable_check: true # need to make it fail in the evaluation phase
+    disable_check: true  # need to make it fail in the evaluation phase
     eval_error {
       errors: { message: "no such overload" }
     }
@@ -211,7 +211,7 @@ section {
     name: "eq_list_elem_mixed_types_error"
     description: "A mix of types in a list fails during type checks. See #self_test_equals_mixed_types"
     expr: "[1] == [1.0]"
-    disable_check: true # need to make it fail in the evaluation phase
+    disable_check: true  # need to make it fail in the evaluation phase
     eval_error: {
       errors: { message: "no such overload" }
     }
@@ -601,6 +601,129 @@ section {
     expr: "TestAllTypes{}.single_uint64_wrapper == null"
     value: { bool_value: true }
   }
+  test {
+    name: "eq_proto2"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{single_int64: 1234, single_string: '1234'} == TestAllTypes{single_int64: 1234, single_string: '1234'}"
+    value { bool_value: true }
+  }
+  test {
+    name: "eq_proto3"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_int64: 1234, single_string: '1234'} == TestAllTypes{single_int64: 1234, single_string: '1234'}"
+    value { bool_value: true }
+  }
+  test {
+    name: "eq_proto2_missing_fields_neq"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{single_int64: 1234} == TestAllTypes{single_string: '1234'}"
+    value { bool_value: false }
+  }
+  test {
+    name: "eq_proto3_missing_fields_neq"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_int64: 1234} == TestAllTypes{single_string: '1234'}"
+    value { bool_value: false }
+  }
+  test {
+    name: "eq_proto_nan_equal"
+    container: "google.api.expr.test.v1.proto2"
+    description: "For proto equality, fields with NaN value are treated as not equal."
+    expr: "TestAllTypes{single_double: double('NaN')} == TestAllTypes{single_double: double('NaN')}"
+    value { bool_value: false }
+  }
+  test {
+    name: "eq_proto_different_types"
+    container: "google.api.expr.test.v1.proto2"
+    description: "At runtime, differently typed messages are treated as not equal."
+    expr: "dyn(TestAllTypes{}) == dyn(NestedTestAllTypes{})"
+    value { bool_value: false }
+  }
+  test {
+    name: "eq_proto2_any_unpack_equal"
+    description: "Any values should be unpacked and compared."
+    container: "google.api.expr.test.v1.proto2"
+    # Two equal messages with any fields serialized differently (but both are valid).
+    # TestAllTypes{single_any: [TestAllTypes]{single_int64: 1234, single_string: '1234'}}
+    expr:
+      "TestAllTypes{single_any: protobuf.Any{type_url: 'type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes', value: b'\\020\\256\\366\\377\\377\\377\\377\\377\\377\\377\\001r\\0041234'}} =="
+      " TestAllTypes{single_any: protobuf.Any{type_url: 'type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes', value: b'r\\0041234\\020\\256\\366\\377\\377\\377\\377\\377\\377\\377\\001'}}"
+    value { bool_value: true }
+  }
+  test {
+    name: "eq_proto2_any_unpack_not_equal"
+    description: "Any values should be unpacked and compared."
+    container: "google.api.expr.test.v1.proto2"
+    # Two messages with any fields that are not equal
+    # TestAllTypes{single_any: [TestAllTypes]{single_int64: 1234, single_string: '1234'}}
+    # TestAllTypes{single_any: [TestAllTypes]{single_double: -1234.0, single_string: '1234'}}
+    expr:
+      "TestAllTypes{single_any: protobuf.Any{type_url: 'type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes', value: b'a\\000\\000\\000\\000\\000H\\223\\300r\\0041234'}} =="
+      " TestAllTypes{single_any: protobuf.Any{type_url: 'type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes', value: b'r\\0041234\\020\\256\\366\\377\\377\\377\\377\\377\\377\\377\\001'}}"
+    value { bool_value: false }
+  }
+  test {
+    name: "eq_proto2_any_unpack_bytewise_fallback_not_equal"
+    description: "If an any field is missing its type_url, the comparison should fallback to a bytewise comparison of the serialized proto."
+    container: "google.api.expr.test.v1.proto2"
+    # The missing type info any is doubly nested to skip create message validations.
+    expr:
+      "TestAllTypes{single_any: protobuf.Any{type_url: 'type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes', value: b'\\242\\006\\023\\022\\021\\020\\256\\366\\377\\377\\377\\377\\377\\377\\377\\001r\\0041234'}} =="
+      " TestAllTypes{single_any: protobuf.Any{type_url: 'type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes', value: b'\\242\\006\\023\\022\\021r\\0041234\\020\\256\\366\\377\\377\\377\\377\\377\\377\\377\\001'}}"
+    value { bool_value: false }
+  }
+  test {
+    name: "eq_proto2_any_unpack_bytewise_fallback_equal"
+    description: "If an any field is missing its type_url, the comparison should fallback to a bytewise comparison of the serialized proto."
+    container: "google.api.expr.test.v1.proto2"
+    # The missing type info any is doubly nested to skip create message validations.
+    expr:
+      "TestAllTypes{single_any: protobuf.Any{type_url: 'type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes', value: b'\\242\\006\\023\\022\\021\\020\\256\\366\\377\\377\\377\\377\\377\\377\\377\\001r\\0041234'}} =="
+      " TestAllTypes{single_any: protobuf.Any{type_url: 'type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes', value: b'\\242\\006\\023\\022\\021\\020\\256\\366\\377\\377\\377\\377\\377\\377\\377\\001r\\0041234'}}"
+    value { bool_value: true }
+  }
+  test {
+    name: "eq_proto3_any_unpack_equal"
+    description: "Any values should be unpacked and compared."
+    container: "google.api.expr.test.v1.proto3"
+    # Two equal messages with any fields serialized differently (but both are valid).
+    expr:
+      "TestAllTypes{single_any: protobuf.Any{type_url: 'type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes', value: b'\\020\\256\\366\\377\\377\\377\\377\\377\\377\\377\\001r\\0041234'}} =="
+      " TestAllTypes{single_any: protobuf.Any{type_url: 'type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes', value: b'r\\0041234\\020\\256\\366\\377\\377\\377\\377\\377\\377\\377\\001'}}"
+    value { bool_value: true }
+  }
+  test {
+    name: "eq_proto3_any_unpack_not_equal"
+    description: "Any values should be unpacked and compared."
+    container: "google.api.expr.test.v1.proto3"
+    # Two messages with any fields that are not equal
+    # TestAllTypes{single_any: [TestAllTypes]{single_int64: 1234, single_string: '1234'}}
+    # TestAllTypes{single_any: [TestAllTypes]{single_double: -1234.0, single_string: '1234'}}
+    expr:
+      "TestAllTypes{single_any: protobuf.Any{type_url: 'type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes', value: b'a\\000\\000\\000\\000\\000H\\223\\300r\\0041234'}} =="
+      " TestAllTypes{single_any: protobuf.Any{type_url: 'type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes', value: b'r\\0041234\\020\\256\\366\\377\\377\\377\\377\\377\\377\\377\\001'}}"
+    value { bool_value: false }
+  }
+  test {
+    name: "eq_proto3_any_unpack_bytewise_fallback_not_equal"
+    description: "If an any field is missing its type_url, the comparison should fallback to a bytewise comparison of the serialized proto."
+    container: "google.api.expr.test.v1.proto3"
+    # The missing type info any is doubly nested to skip create message validations.
+    expr:
+      "TestAllTypes{single_any: protobuf.Any{type_url: 'type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes', value: b'\\242\\006\\023\\022\\021\\020\\256\\366\\377\\377\\377\\377\\377\\377\\377\\001r\\0041234'}} =="
+      " TestAllTypes{single_any: protobuf.Any{type_url: 'type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes', value: b'\\242\\006\\023\\022\\021r\\0041234\\020\\256\\366\\377\\377\\377\\377\\377\\377\\377\\001'}}"
+    value { bool_value: false }
+  }
+  test {
+    name: "eq_proto3_any_unpack_bytewise_fallback_equal"
+    description: "If an any field is missing its type_url, the comparison should fallback to a bytewise comparison of the serialized proto."
+    container: "google.api.expr.test.v1.proto3"
+    # The missing type info any is doubly nested to skip create message validations.
+    expr:
+      "TestAllTypes{single_any: protobuf.Any{type_url: 'type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes', value: b'\\242\\006\\023\\022\\021\\020\\256\\366\\377\\377\\377\\377\\377\\377\\377\\001r\\0041234'}} =="
+      " TestAllTypes{single_any: protobuf.Any{type_url: 'type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes', value: b'\\242\\006\\023\\022\\021\\020\\256\\366\\377\\377\\377\\377\\377\\377\\377\\001r\\0041234'}}"
+    value { bool_value: true }
+  }
 }
 section {
   name: "ne_literal"
@@ -730,9 +853,89 @@ section {
     name: "ne_mixed_types_error"
     expr: "2u != 2"
     disable_check: true
-    eval_error : {
+    eval_error: {
       errors: { message: "no such overload" }
     }
+  }
+  test {
+    name: "ne_proto2"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{single_int64: 1234, single_string: '1234'} != TestAllTypes{single_int64: 1234, single_string: '1234'}"
+    value { bool_value: false }
+  }
+  test {
+    name: "ne_proto3"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_int64: 1234, single_string: '1234'} != TestAllTypes{single_int64: 1234, single_string: '1234'}"
+    value { bool_value: false }
+  }
+  test {
+    name: "ne_proto2_missing_fields_neq"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{single_int64: 1234} != TestAllTypes{single_string: '1234'}"
+    value { bool_value: true }
+  }
+  test {
+    name: "ne_proto3_missing_fields_neq"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_int64: 1234} != TestAllTypes{single_string: '1234'}"
+    value { bool_value: true }
+  }
+  test {
+    name: "ne_proto_nan_not_equal"
+    container: "google.api.expr.test.v1.proto2"
+    description: "For proto equality, NaN field values are not considered equal."
+    expr: "TestAllTypes{single_double: double('NaN')} != TestAllTypes{single_double: double('NaN')}"
+    value { bool_value: true }
+  }
+  test {
+    name: "ne_proto_different_types"
+    container: "google.api.expr.test.v1.proto2"
+    description: "At runtime, comparing differently typed messages is false."
+    expr: "dyn(TestAllTypes{}) != dyn(NestedTestAllTypes{})"
+    value: { bool_value: true }
+  }
+  test {
+    name: "ne_proto2_any_unpack"
+    description: "Any values should be unpacked and compared."
+    container: "google.api.expr.test.v1.proto2"
+    # Two equal messages with any fields serialized differently (but both are valid).
+    # TestAllTypes{single_any: [TestAllTypes]{single_int64: 1234, single_string: '1234'}}
+    expr:
+      "TestAllTypes{single_any: protobuf.Any{type_url: 'type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes', value: b'\\020\\256\\366\\377\\377\\377\\377\\377\\377\\377\\001r\\0041234'}} !="
+      " TestAllTypes{single_any: protobuf.Any{type_url: 'type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes', value: b'r\\0041234\\020\\256\\366\\377\\377\\377\\377\\377\\377\\377\\001'}}"
+    value { bool_value: false }
+  }
+  test {
+    name: "ne_proto2_any_unpack_bytewise_fallback"
+    description: "If an any field is missing its type_url, the comparison should fallback to a bytewise comparison of the serialized proto."
+    container: "google.api.expr.test.v1.proto3"
+    # The missing type info any is doubly nested to skip create
+    # message validations.
+    expr:
+      "TestAllTypes{single_any: protobuf.Any{type_url: 'type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes', value: b'\\242\\006\\023\\022\\021\\020\\256\\366\\377\\377\\377\\377\\377\\377\\377\\001r\\0041234'}} !="
+      " TestAllTypes{single_any: protobuf.Any{type_url: 'type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes', value: b'\\242\\006\\023\\022\\021r\\0041234\\020\\256\\366\\377\\377\\377\\377\\377\\377\\377\\001'}}"
+    value { bool_value: true }
+  }
+  test {
+    name: "ne_proto3_any_unpack"
+    description: "Any values should be unpacked and compared."
+    container: "google.api.expr.test.v1.proto2"
+    # Two equal messages with any fields serialized differently (but both are valid).
+    expr:
+      "TestAllTypes{single_any: protobuf.Any{type_url: 'type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes', value: b'\\020\\256\\366\\377\\377\\377\\377\\377\\377\\377\\001r\\0041234'}} !="
+      " TestAllTypes{single_any: protobuf.Any{type_url: 'type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes', value: b'r\\0041234\\020\\256\\366\\377\\377\\377\\377\\377\\377\\377\\001'}}"
+    value { bool_value: false }
+  }
+  test {
+    name: "ne_proto3_any_unpack_bytewise_fallback"
+    description: "If an any field is missing its type_url, the comparison should fallback to a bytewise comparison of the serialized proto."
+    container: "google.api.expr.test.v1.proto3"
+    # The missing type info any is doubly nested to skip create message validations.
+    expr:
+      "TestAllTypes{single_any: protobuf.Any{type_url: 'type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes', value: b'\\242\\006\\023\\022\\021\\020\\256\\366\\377\\377\\377\\377\\377\\377\\377\\001r\\0041234'}} !="
+      " TestAllTypes{single_any: protobuf.Any{type_url: 'type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes', value: b'\\242\\006\\023\\022\\021r\\0041234\\020\\256\\366\\377\\377\\377\\377\\377\\377\\377\\001'}}"
+    value { bool_value: true }
   }
 }
 section {
@@ -875,7 +1078,7 @@ section {
     name: "lt_mixed_types_error"
     expr: "'foo' < 1024"
     disable_check: true
-    eval_error : {
+    eval_error: {
       errors: { message: "no such overload" }
     }
   }
@@ -1051,7 +1254,7 @@ section {
     name: "gt_mixed_types_error"
     expr: "'foo' > 1024"
     disable_check: true
-    eval_error : {
+    eval_error: {
       errors: { message: "no such overload" }
     }
   }
@@ -1252,7 +1455,7 @@ section {
     name: "lte_mixed_types_error"
     expr: "'foo' <= 1024"
     disable_check: true
-    eval_error : {
+    eval_error: {
       errors: { message: "no such overload" }
     }
   }
@@ -1463,7 +1666,7 @@ section {
     name: "gte_mixed_types_error"
     expr: "'foo' >= 1.0"
     disable_check: true
-    eval_error : {
+    eval_error: {
       errors: { message: "no such overload" }
     }
   }
@@ -1607,11 +1810,11 @@ section {
     expr: "x > b'\x00'"
     value: { bool_value: false }
     type_env: {
-      name: "x",
+      name: "x"
       ident: { type: { primitive: BYTES } }
     }
     bindings: {
-      key: "x",
+      key: "x"
       value: { value: { bytes_value: "\x00" } }
     }
   }
@@ -1620,11 +1823,11 @@ section {
     expr: "123 <= x"
     value: { bool_value: true }
     type_env: {
-      name: "x",
+      name: "x"
       ident: { type: { primitive: INT64 } }
     }
     bindings: {
-      key: "x",
+      key: "x"
       value: { value: { int64_value: 124 } }
     }
   }
@@ -1633,11 +1836,11 @@ section {
     expr: "false < x"
     value: { bool_value: true }
     type_env: {
-      name: "x",
+      name: "x"
       ident: { type: { primitive: BOOL } }
     }
     bindings: {
-      key: "x",
+      key: "x"
       value: { value: { bool_value: true } }
     }
   }
@@ -1646,11 +1849,11 @@ section {
     expr: "x != 9.8"
     value: { bool_value: false }
     type_env: {
-      name: "x",
+      name: "x"
       ident: { type: { primitive: DOUBLE } }
     }
     bindings: {
-      key: "x",
+      key: "x"
       value: { value: { double_value: 9.8 } }
     }
   }
@@ -1659,7 +1862,7 @@ section {
     expr: "{'a':'b','c':'d'} != x"
     value: { bool_value: false }
     type_env: {
-      name: "x",
+      name: "x"
       ident: {
         type: {
           map_type: {
@@ -1670,7 +1873,7 @@ section {
       }
     }
     bindings: {
-      key: "x",
+      key: "x"
       value: {
         value: {
           map_value {
@@ -1693,11 +1896,11 @@ section {
     expr: "x == null"
     value: { bool_value: true }
     type_env: {
-      name: "x",
+      name: "x"
       ident: { type: { null: NULL_VALUE } }
     }
     bindings: {
-      key: "x",
+      key: "x"
       value: { value: { null_value: NULL_VALUE } }
     }
   }
@@ -1766,7 +1969,7 @@ section {
     }
     disable_check: true
     bindings: {
-      key: "x",
+      key: "x"
       value: { value: { null_value: NULL_VALUE } }
     }
   }
