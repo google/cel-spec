@@ -510,7 +510,7 @@ Note that this implies some cascading conversions. An `Any` message might be
 converted to a `Struct`, one of whose `Value`-typed values might be converted to
 a `ListValue` of more values, and so on.
 
-Also note that all of these conversions are dynamic at runtime, so CEL's static
+Also, note that all of these conversions are dynamic at runtime, so CEL's static
 type analysis cannot avoid the possibility of type-related errors in expressions
 using these dynamic values.
 
@@ -584,7 +584,7 @@ call, and by allowing for a more efficient (unboxed) runtime representation of
 values.
 
 By construction, a CEL expression that does not use the dynamic features coming
-from `Struct`, `Value`, or `Any`, can be fully statically type checked and all
+from `Struct`, `Value`, or `Any`, can be fully statically type-checked and all
 overloads can be resolved ahead of runtime.
 
 If a CEL expression uses a mixture of dynamic and static features, a type
@@ -776,7 +776,7 @@ any extension functions they provide.
 ### Abstract Sizes
 
 Space and time complexity will be measured in terms of an abstract size
-measurment of CEL expressions and values. The size of a CEL value depends on
+measurement of CEL expressions and values. The size of a CEL value depends on
 its type:
 
 *   *string*: The size is its length, i.e. the number of code points, plus a
@@ -793,7 +793,7 @@ The size of a CEL program is:
 *   *string literal*: The size of the resulting value.
 *   *bytes literal*: The size of the resulting value.
 *   Grammatical aggregates are the sum of the size of their components.
-*   Gramatical primitives other than above have constant size.
+*   Grammatical primitives other than above have constant size.
 
 Thus, the size of a CEL program is bounded by either the length of the source
 text string or the bytes of the proto-encoded AST.
