@@ -58,6 +58,23 @@ section {
     value: { int64_value: 7 }
   }
   test {
+    name: "zero_based_double"
+    expr: "[7, 8, 9][dyn(0.0)]"
+    value: { int64_value: 7 }
+  }
+  test {
+    name: "zero_based_double_error"
+    expr: "[7, 8, 9][dyn(0.1)]"
+    eval_error {
+      errors { message: "invalid_argument" }
+    }
+  }
+  test {
+    name: "zero_based_uint"
+    expr: "[7, 8, 9][dyn(0u)]"
+    value: { int64_value: 7 }
+  }
+  test {
     name: "singleton"
     expr: "['foo'][0]"
     value: { string_value: "foo" }
@@ -106,6 +123,36 @@ section {
   test {
     name: "last"
     expr: "20u in [4u, 6u, 8u, 12u, 20u]"
+    value: { bool_value: true }
+  }
+  test {
+    name: "double_in_ints"
+    expr: "dyn(3.0) in [5, 4, 3, 2, 1]"
+    value: { bool_value: true }
+  }
+  test {
+    name: "uint_in_ints"
+    expr: "dyn(3u) in [5, 4, 3, 2, 1]"
+    value: { bool_value: true }
+  }
+  test {
+    name: "int_in_doubles"
+    expr: "dyn(3) in [5.0, 4.0, 3.0, 2.0, 1.0]"
+    value: { bool_value: true }
+  }
+  test {
+    name: "uint_in_doubles"
+    expr: "dyn(3u) in [5.0, 4.0, 3.0, 2.0, 1.0]"
+    value: { bool_value: true }
+  }
+  test {
+    name: "int_in_uints"
+    expr: "dyn(3) in [5u, 4u, 3u, 2u, 1u]"
+    value: { bool_value: true }
+  }
+  test {
+    name: "double_in_uints"
+    expr: "dyn(3.0) in [5u, 4u, 3u, 2u, 1u]"
     value: { bool_value: true }
   }
   test {

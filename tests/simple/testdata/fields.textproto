@@ -24,9 +24,31 @@ section {
     value: { int64_value: 5 }
   }
   test {
-    name: "map_key_mix_type"
+    name: "map_key_mixed_type"
     expr: "{true:1,2:2,5u:3}[true]"
     value: { int64_value: 1 }
+  }
+  test {
+    name: "map_key_mixed_numbers_double_key"
+    expr: "{1u: 1.0, 2: 2.0, 3u: 3.0}[3.0]"
+    value: { double_value: 3.0 }
+  }
+  test {
+    name: "map_key_mixed_numbers_lossy_double_key"
+    expr: "{1u: 1.0, 2: 2.0, 3u: 3.0}[3.1]"
+    eval_error: {
+      errors: { message: "no such key" }
+    }
+  }
+  test {
+    name: "map_key_mixed_numbers_uint_key"
+    expr: "{1u: 1.0, 2: 2.0, 3u: 3.0}[2u]"
+    value: { double_value: 2.0 }
+  }
+  test {
+    name: "map_key_mixed_numbers_int_key"
+    expr: "{1u: 1.0, 2: 2.0, 3u: 3.0}[1]"
+    value: { double_value: 1.0 }
   }
   test {
     name: "map_field_access"
