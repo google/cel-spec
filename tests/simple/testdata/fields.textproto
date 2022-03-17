@@ -439,4 +439,14 @@ section {
     expr: "'spider' in {'ant': 6, 'fly': 6, 'centipede': 100}"
     value: { bool_value: false }
   }
+  test {
+    name: "mixed_numbers_and_keys_present"
+    expr: "3.0 in {1: 1, 2: 2, 3u: 3} && 2u in {1u: 1, 2: 2} && 1 in {1u: 1, 2: 2}"
+    value: { bool_value: true }
+  }
+  test {
+    name: "mixed_numbers_and_keys_absent"
+    expr: "3.1 in {1: 1, 2: 2, 3u: 3}"
+    value: { bool_value: false }
+  }
 }
