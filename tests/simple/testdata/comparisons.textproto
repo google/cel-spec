@@ -14,6 +14,26 @@ section {
     value: { bool_value: false }
   }
   test {
+    name: "eq_int_uint"
+    expr: "dyn(1) == 1u"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_eq_int_uint"
+    expr: "dyn(2) == 1u"
+    value: { bool_value: false }
+  }
+  test {
+    name: "eq_int_double"
+    expr: "dyn(1) == 1.0"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_eq_int_double"
+    expr: "dyn(2) == 1.0"
+    value: { bool_value: false }
+  }
+  test {
     name: "eq_uint"
     expr: "2u == 2u"
     value: { bool_value: true }
@@ -21,6 +41,26 @@ section {
   test {
     name: "not_eq_uint"
     expr: "1u == 2u"
+    value: { bool_value: false }
+  }
+  test {
+    name: "eq_uint_int"
+    expr: "dyn(1u) == 1"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_eq_uint_int"
+    expr: "dyn(2u) == 1"
+    value: { bool_value: false }
+  }
+  test {
+    name: "eq_uint_double"
+    expr: "dyn(1u) == 1.0"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_eq_uint_double"
+    expr: "dyn(2u) == 1.0"
     value: { bool_value: false }
   }
   test {
@@ -34,10 +74,39 @@ section {
     value: { bool_value: false }
   }
   test {
-    name: "eq_double_NaN"
-    description: "CEL defines all NaN values to be equal."
-    expr: "1.0 / 0.0 == 1.0 / 0.0"
+    name: "not_eq_double_nan"
+    expr: "0.0/0.0 == 0.0/0.0"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_eq_int_double_nan"
+    expr: "dyn(1) == 0.0/0.0"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_eq_uint_double_nan"
+    expr: "dyn(1u) == 0.0/0.0"
+    value: { bool_value: false }
+  }
+  test {
+    name: "eq_double_int"
+    expr: "dyn(1.0) == 1"
     value: { bool_value: true }
+  }
+  test {
+    name: "not_eq_double_int"
+    expr: "dyn(2.0) == 1"
+    value: { bool_value: false }
+  }
+  test {
+    name: "eq_double_uint"
+    expr: "dyn(1.0) == 1u"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_eq_double_uint"
+    expr: "dyn(2.0) == 1u"
+    value: { bool_value: false }
   }
   test {
     name: "eq_string"
@@ -128,6 +197,16 @@ section {
     value: { bool_value: true }
   }
   test {
+    name: "eq_list_mixed_type_numbers"
+    expr: "[1.0, 2.0, 3] == [1u, 2, 3u]"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_eq_list_mixed_type_numbers"
+    expr: "[1.0, 2.1] == [1u, 2]"
+    value: { bool_value: false }
+  }
+  test {
     name: "not_eq_list_order"
     expr: "[1, 2, 3] == [1, 3, 2]"
     value: { bool_value: false }
@@ -169,8 +248,13 @@ section {
     value: { bool_value: true }
   }
   test {
-    name: "eq_map_doublevalue"
+    name: "eq_map_double_value"
     expr: "{'k':1.0} == {'k':1e+0}"
+    value: { bool_value: true }
+  }
+  test {
+    name: "eq_map_mixed_type_numbers"
+    expr: "{1: 1.0, 2u: 3u} == {1u: 1, 2: 3.0}"
     value: { bool_value: true }
   }
   test {
@@ -179,12 +263,12 @@ section {
     value: { bool_value: false }
   }
   test {
-    name: "not_eq_map_extrakey"
+    name: "not_eq_map_extra_key"
     expr: "{'k':'v','k1':'v1'} == {'k':'v'}"
     value: { bool_value: false }
   }
   test {
-    name: "eq_map_keyorder"
+    name: "eq_map_key_order"
     expr: "{'k1':'v1','k2':'v2'} == {'k2':'v2','k1':'v1'}"
     value: { bool_value: true }
   }
@@ -199,30 +283,21 @@ section {
     value: { bool_value: false }
   }
   test {
-    name: "eq_mixed_types_error"
-    description: "A mix of types fails during type checks but can't be captured in the conformance tests yet (See google/cel-go#155). Also, if you disable checks it yields {bool_value: false} where it should also yield an error"
+    name: "eq_mixed_types"
     expr: "1.0 == 1"
     disable_check: true  # need to make it fail in the evaluation phase
-    eval_error {
-      errors: { message: "no such overload" }
-    }
+    value: { bool_value: true }
   }
   test {
-    name: "eq_list_elem_mixed_types_error"
-    description: "A mix of types in a list fails during type checks. See #self_test_equals_mixed_types"
+    name: "eq_list_elem_mixed_types"
     expr: "[1] == [1.0]"
     disable_check: true  # need to make it fail in the evaluation phase
-    eval_error: {
-      errors: { message: "no such overload" }
-    }
+    value: { bool_value: true }
   }
   test {
-    name: "eq_map_value_mixed_types_error"
-    description: "Mixed map value types yields error as key '1' values differed by type."
+    name: "eq_map_value_mixed_types"
     expr: "{'k':'v', 1:1} == {'k':'v', 1:'v1'}"
-    eval_error: {
-      errors: { message: "no such overload" }
-    }
+    value: { bool_value: false }
   }
   test {
     name: "eq_dyn_json_null"
@@ -284,6 +359,16 @@ section {
   test {
     name: "not_eq_dyn_timestamp_null"
     expr: "dyn(timestamp(0)) == null"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_eq_list_elem_null"
+    expr: "[1, 2, null] == [1, null, 3]"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_eq_map_value_null"
+    expr: "{1:'hello', 2:'world'} == {1:'goodbye', 2:null}"
     value: { bool_value: false }
   }
   test {
@@ -739,6 +824,26 @@ section {
     value: { bool_value: false }
   }
   test {
+    name: "ne_int_double"
+    expr: "dyn(24) != 24.1"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_ne_int_double"
+    expr: "dyn(1) != 1.0"
+    value: { bool_value: false }
+  }
+  test {
+    name: "ne_int_uint"
+    expr: "dyn(24) != 42u"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_ne_int_uint"
+    expr: "dyn(1) != 1u"
+    value: { bool_value: false }
+  }
+  test {
     name: "ne_uint"
     expr: "1u != 2u"
     value: { bool_value: true }
@@ -749,14 +854,64 @@ section {
     value: { bool_value: false }
   }
   test {
+    name: "ne_uint_double"
+    expr: "dyn(1u) != 2.0"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_ne_uint_double"
+    expr: "dyn(99u) != 99.0"
+    value: { bool_value: false }
+  }
+  test {
     name: "ne_double"
     expr: "9.0e+3 != 9001.0"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_ne_double_nan"
+    expr: "0.0/0.0 != 0.0/0.0"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_ne_int_double_nan"
+    expr: "dyn(1) != 0.0/0.0"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_ne_uint_double_nan"
+    expr: "dyn(1u) != 0.0/0.0"
     value: { bool_value: true }
   }
   test {
     name: "not_ne_double"
     expr: "1.0 != 1e+0"
     value: { bool_value: false }
+  }
+  test {
+    name: "ne_double_int"
+    expr: "dyn(9000) != 9001.0"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_ne_double_int"
+    expr: "dyn(1) != 1e+0"
+    value: { bool_value: false }
+  }
+  test {
+    name: "ne_double_uint"
+    expr: "dyn(9000u) != 9001.0"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_ne_double_uint"
+    expr: "dyn(1u) != 1e+0"
+    value: { bool_value: false }
+  }
+  test {
+    name: "ne_double_nan"
+    expr: "0.0/0.0 != 0.0/0.0"
+    value: { bool_value: true }
   }
   test {
     name: "ne_string"
@@ -850,12 +1005,10 @@ section {
     value: { bool_value: false }
   }
   test {
-    name: "ne_mixed_types_error"
+    name: "ne_mixed_types"
     expr: "2u != 2"
     disable_check: true
-    eval_error: {
-      errors: { message: "no such overload" }
-    }
+    value: { bool_value: false }
   }
   test {
     name: "ne_proto2"
@@ -1756,12 +1909,10 @@ section {
     value { bool_value: true }
   }
   test {
-    name: "elem_in_mixed_type_list_error"
-    description: "Set membership tests should error if the 'elem' does not exist in a mixed element type list as containment is equivalent to the macro exists() behavior."
+    name: "elem_in_mixed_type_list_cross_type"
+    description: "Set membership tests should return false due to the introduction of heterogeneous-equality. Set membership via 'in' is equivalent to the macro exists() behavior."
     expr: "'elem' in [1u, 'str', 2, b'bytes']"
-    eval_error: {
-      errors: { message: "no such overload" }
-    }
+    value: { bool_value: false }
   }
 }
 section {
@@ -1789,17 +1940,9 @@ section {
     value { bool_value: true }
   }
   test {
-    name: "key_in_mixed_key_type_map_error"
+    name: "key_in_mixed_key_type_map_cross_type"
     expr: "'key' in {1u:'str', 2:b'bytes'}"
-    # Current behavior
-    # value: { bool_value: false }
-    # This behavior is expected for homogeneous equality, but should break
-    # with heterogeneous equality supported in CEL 0.1.0. This case should
-    # be revisited when support for heterogeneous equality is added to CEL.
-    #
-    eval_error: {
-      errors: { message: "no such overload" }
-    }
+    value: { bool_value: false }
   }
 }
 section {

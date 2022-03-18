@@ -20,20 +20,18 @@ section {
   }
   test {
     name: "list_elem_type_shortcircuit"
-    description: "Exists filter is true for the last element, thus short-circuits after 'err || true'"
+    description: "Exists filter is true for the last element."
     expr: "[1, 'foo', 3].exists(e, e != '1')"
     value: { bool_value: true }
   }
   test {
     name: "list_elem_type_exhaustive"
-    description: "Exists filter is never true, thus reduces to 'err || false || err' which is an error"
+    description: "Exists filter is never true, but heterogenous equality ensure the result is false."
     expr: "[1, 'foo', 3].exists(e, e == '10')"
-    eval_error: {
-      errors: { message: "no such overload" }
-    }
+    value: { bool_value: false }
   }
   test {
-    name: "list_elem_all_error"
+    name: "list_elem_exists_error"
     expr: "[1, 2, 3].exists(e, e / 0 == 17)"
     eval_error: {
       errors: { message: "divide by zero" }
@@ -56,17 +54,15 @@ section {
   }
   test {
     name: "map_key_type_shortcircuit"
-    description: "Exists filter is true for the second key, thus reduces to 'err || true' which is true"
+    description: "Exists filter is true for the second key"
     expr: "{'key':1, 1:21}.exists(k, k != 2)"
     value: { bool_value: true }
   }
   test {
     name: "map_key_type_exhaustive"
-    description: "Exists filter is never true, thus reduces to 'err || false' which is an error"
+    description: "Exists filter is never true, but heterogeneous equality ensures the result is false."
     expr: "!{'key':1, 1:42}.exists(k, k == 2)"
-    eval_error: {
-      errors: { message: "no such overload" }
-    }
+    value: { bool_value: true }
   }
 }
 section {

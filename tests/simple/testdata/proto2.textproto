@@ -29,6 +29,34 @@ section {
   }
 
   test {
+    name: "int32_eq_uint"
+    container: "google.protobuf"
+    expr: "Int32Value{value: 34} == dyn(UInt64Value{value: 34u})"
+    value { bool_value: true }
+  }
+
+  test {
+    name: "not_int32_eq_uint"
+    container: "google.protobuf"
+    expr: "Int32Value{value: 34} == dyn(UInt64Value{value: 18446744073709551615u})"
+    value { bool_value: false }
+  }
+
+  test {
+    name: "int32_eq_double"
+    container: "google.protobuf"
+    expr: "Int32Value{value: 34} == dyn(DoubleValue{value: 34.0})"
+    value { bool_value: true }
+  }
+
+  test {
+    name: "not_int32_eq_double"
+    container: "google.protobuf"
+    expr: "Int32Value{value: 34} == dyn(DoubleValue{value: -9223372036854775809.0})"
+    value { bool_value: false }
+  }
+
+  test {
     name: "int64"
     container: "google.api.expr.test.v1.proto2"
     expr: "TestAllTypes{single_int64: 17}"
@@ -50,6 +78,34 @@ section {
         { single_uint32: 1 }
       }
     }
+  }
+
+  test {
+    name: "uint32_eq_int"
+    container: "google.protobuf"
+    expr: "UInt32Value{value: 34u} == dyn(Int64Value{value: 34})"
+    value { bool_value: true }
+  }
+
+  test {
+    name: "not_uint32_eq_int"
+    container: "google.protobuf"
+    expr: "UInt32Value{value: 34u} == dyn(Int64Value{value: -1})"
+    value { bool_value: false }
+  }
+
+  test {
+    name: "uint32_eq_double"
+    container: "google.protobuf"
+    expr: "UInt32Value{value: 34u} == dyn(DoubleValue{value: 34.0})"
+    value { bool_value: true }
+  }
+
+  test {
+    name: "not_uint32_eq_double"
+    container: "google.protobuf"
+    expr: "UInt32Value{value: 34u} == dyn(DoubleValue{value: 18446744073709551616.0})"
+    value { bool_value: false }
   }
 
   test {
@@ -146,6 +202,34 @@ section {
         { single_float: 3.1416 }
       }
     }
+  }
+
+  test {
+    name: "float_eq_int"
+    container: "google.protobuf"
+    expr: "FloatValue{value: 3.0} == dyn(Int64Value{value: 3})"
+    value { bool_value: true }
+  }
+
+  test {
+    name: "not_float_eq_int"
+    container: "google.protobuf"
+    expr: "FloatValue{value: -1.14} == dyn(Int64Value{value: -1})"
+    value { bool_value: false }
+  }
+
+  test {
+    name: "float_eq_uint"
+    container: "google.protobuf"
+    expr: "FloatValue{value: 34.0} == dyn(UInt64Value{value: 34u})"
+    value { bool_value: true }
+  }
+
+  test {
+    name: "not_float_eq_uint"
+    container: "google.protobuf"
+    expr: "FloatValue{value: -1.0} == dyn(UInt64Value{value: 18446744073709551615u})"
+    value { bool_value: false }
   }
 
   test {
