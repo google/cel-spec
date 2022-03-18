@@ -1142,6 +1142,72 @@ section {
     expr: "dyn(1.0) < 1u"
     value: { bool_value: false }
   }
+  test {
+    name: "lt_dyn_int_big_uint"
+    expr: "dyn(1) < 9223372036854775808u"
+    value: { bool_value: true }
+  }
+  test {
+    name: "lt_dyn_small_int_uint"
+    expr: "dyn(-1) < 0u"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_lt_dyn_int_big_lossy_double"
+    expr: "dyn(9223372036854775807) < 9223372036854775808.0"
+    value: { bool_value: false }
+  }
+  test {
+    name: "lt_dyn_int_big_lossy_double"
+    expr: "dyn(9223372036854775807) < 9223372036854777857.0"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_lt_dyn_int_small_double"
+    expr: "dyn(9223372036854775807) < -9223372036854777857.0"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_lt_dyn_int_small_lossy_double"
+    expr: "dyn(-9223372036854775808) < -9223372036854775809.0"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_lt_dyn_uint_small_int"
+    expr: "dyn(1u) < -9223372036854775808"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_lt_dyn_big_uint_int"
+    expr: "dyn(9223372036854775808u) < 1"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_lt_dyn_uint_small_double"
+    expr: "dyn(18446744073709551615u) < -1.0"
+    value: { bool_value: false }
+  }
+  test {
+    name: "lt_dyn_uint_big_double"
+    expr: "dyn(18446744073709551615u) < 18446744073709590000.0"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_lt_dyn_big_double_uint"
+    expr: "dyn(18446744073709553665.0) < 18446744073709551615u"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_lt_dyn_big_double_int"
+    expr: "dyn(9223372036854775808.0) < 9223372036854775807"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_lt_dyn_small_double_int"
+    expr: "dyn(-9223372036854775809.0) < -9223372036854775808"
+    value: { bool_value: false }
+  }
+
 }
 section {
   name: "gt_literal"
@@ -1316,6 +1382,67 @@ section {
   test {
     name: "not_gt_dyn_double_uint"
     expr: "dyn(1.0) > 1u"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_gt_dyn_int_big_uint"
+    expr: "dyn(1) > 9223372036854775808u"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_gt_dyn_small_int_uint"
+    expr: "dyn(-1) > 0u"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_gt_dyn_int_big_double"
+    expr: "dyn(9223372036854775807) > 9223372036854775808.0"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_gt_dyn_int_small_lossy_double"
+    description: "The conversion of the int to double is lossy and the numbers end up being equal"
+    expr: "dyn(-9223372036854775808) > -9223372036854775809.0"
+    value: { bool_value: false }
+  }
+  test {
+    name: "gt_dyn_int_small_lossy_double_greater"
+    expr: "dyn(-9223372036854775808) > -9223372036854777857.0"
+    value: { bool_value: true }
+  }
+  test {
+    name: "gt_dyn_uint_small_int"
+    expr: "dyn(1u) > -1"
+    value: { bool_value: true }
+  }
+  test {
+    name: "gt_dyn_big_uint_int"
+    expr: "dyn(9223372036854775808u) > 1"
+    value: { bool_value: true }
+  }
+  test {
+    name: "gt_dyn_uint_small_double"
+    expr: "dyn(9223372036854775807u) > -1.0"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_gt_dyn_uint_big_double"
+    expr: "dyn(18446744073709551615u) > 18446744073709590000.0"
+    value: { bool_value: false }
+  }
+  test {
+    name: "gt_dyn_big_double_uint"
+    expr: "dyn(18446744073709553665.0) > 18446744073709551615u"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_gt_dyn_big_double_int"
+    expr: "dyn(9223372036854775808.0) > 9223372036854775807"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_gt_dyn_small_double_int"
+    expr: "dyn(-9223372036854775809.0) > -9223372036854775808"
     value: { bool_value: false }
   }
 }
@@ -1518,6 +1645,67 @@ section {
     name: "not_lte_dyn_double_uint"
     expr: "dyn(2.0) <= 1u"
     value: { bool_value: false }
+  }
+  test {
+    name: "lte_dyn_int_big_uint"
+    expr: "dyn(1) <= 9223372036854775808u"
+    value: { bool_value: true }
+  }
+  test {
+    name: "lte_dyn_small_int_uint"
+    expr: "dyn(-1) <= 0u"
+    value: { bool_value: true }
+  }
+  test {
+    name: "lte_dyn_int_big_double"
+    expr: "dyn(9223372036854775807) <= 9223372036854775808.0"
+    value: { bool_value: true }
+  }
+  test {
+    name: "lte_dyn_int_small_lossy_double"
+    description: "The conversion of the int to double is lossy and the numbers end up being equal"
+    expr: "dyn(-9223372036854775808) <= -9223372036854775809.0"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_lte_dyn_int_small_lossy_double_less"
+    expr: "dyn(-9223372036854775808) <= -9223372036854777857.0"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_lte_dyn_uint_small_int"
+    expr: "dyn(1u) <= -9223372036854775808"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_lte_dyn_big_uint_int"
+    expr: "dyn(9223372036854775808u) <= 1"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_lte_dyn_uint_small_double"
+    expr: "dyn(18446744073709551615u) <= -1.0"
+    value: { bool_value: false }
+  }
+  test {
+    name: "lte_dyn_uint_big_double"
+    expr: "dyn(18446744073709551615u) <= 18446744073709590000.0"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_lte_dyn_big_double_uint"
+    expr: "dyn(18446744073709553665.0) <= 18446744073709551615u"
+    value: { bool_value: false }
+  }
+  test {
+    name: "lte_dyn_big_double_int"
+    expr: "dyn(9223372036854775808.0) <= 9223372036854775807"
+    value: { bool_value: true }
+  }
+  test {
+    name: "lte_dyn_small_double_int"
+    expr: "dyn(-9223372036854775809.0) <= -9223372036854775808"
+    value: { bool_value: true }
   }
 }
 section {
@@ -1729,6 +1917,72 @@ section {
     name: "not_gte_dyn_double_uint"
     expr: "dyn(0.0) >= 1u"
     value: { bool_value: false }
+  }
+  test {
+    name: "not_gte_dyn_int_big_uint"
+    expr: "dyn(1) >= 9223372036854775808u"
+    value: { bool_value: false }
+  }
+  test {
+    name: "not_gte_dyn_small_int_uint"
+    expr: "dyn(-1) >= 0u"
+    value: { bool_value: false }
+  }
+  test {
+    name: "gte_dyn_int_big_lossy_double"
+    expr: "dyn(9223372036854775807) >= 9223372036854775808.0"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_gte_dyn_int_big_double"
+    expr: "dyn(9223372036854775807) >= 9223372036854777857.0"
+    value: { bool_value: false }
+  }
+  test {
+    name: "gte_dyn_int_small_lossy_double_equal"
+    description: "The conversion of the int to double is lossy and the numbers end up being equal"
+    expr: "dyn(-9223372036854775808) >= -9223372036854775809.0"
+    value: { bool_value: true }
+  }
+  test {
+    name: "gte_dyn_int_small_lossy_double_greater"
+    expr: "dyn(-9223372036854775808) >= -9223372036854777857.0"
+    value: { bool_value: true }
+  }
+  test {
+    name: "gte_dyn_uint_small_int"
+    expr: "dyn(1u) >= -1"
+    value: { bool_value: true }
+  }
+  test {
+    name: "gte_dyn_big_uint_int"
+    expr: "dyn(9223372036854775808u) >= 1"
+    value: { bool_value: true }
+  }
+  test {
+    name: "gte_dyn_uint_small_double"
+    expr: "dyn(9223372036854775807u) >= -1.0"
+    value: { bool_value: true }
+  }
+  test {
+    name: "not_gte_dyn_uint_big_double"
+    expr: "dyn(18446744073709551615u) >= 18446744073709553665.0"
+    value: { bool_value: false }
+  }
+  test {
+    name: "gte_dyn_big_double_uint"
+    expr: "dyn(18446744073709553665.0) >= 18446744073709551615u"
+    value: { bool_value: true }
+  }
+  test {
+    name: "gte_dyn_big_double_int"
+    expr: "dyn(9223372036854775808.0) >= 9223372036854775807"
+    value: { bool_value: true }
+  }
+  test {
+    name: "gte_dyn_small_double_int"
+    expr: "dyn(-9223372036854775809.0) >= -9223372036854775808"
+    value: { bool_value: true }
   }
 }
 section {
