@@ -1010,48 +1010,152 @@ All predefined operators, functions and constants are listed in the table below.
 For each symbol, the available overloads are listed. Operator symbols use a
 notation like `_+_` where `_` is a placeholder for an argument.
 
-### Equality and Ordering
+### Equality
 
 Equality (`_==_`) and inequality (`_!=_`) are defined for all types. Inequality
-is the logical negation of equality, i.e. `e1 != e2` is the same as `!(e1 ==
-e2)` for all expressions `e1` and `e2`.
+is the logical negation of equality, i.e. `e1 != e2` is the same as
+`!(e1 == e2)` for all expressions `e1` and `e2`.
 
-Equality and inequality are homogeneous; comparing values of different runtime
-types results in a runtime error. Thus `2 == 3` is false, but `2 == 2.0` is an
-error.
+Type-checking asserts that arguments to equality operators must be the same
+type. If the argument types differ, the type-checker will raise an error.
+However, if at least one argument is dynamically typed, the type-checker
+considers all arguments dynamic and defers type-agreement checks to the
+interpreter.
 
-For `double`, all not-a-number (`NaN`) values compare equal. This is different
-than the usual semantics of floating-point numbers, but it is more consistent
-with the usual expectations of reflexivity, and is more compatible with the
-usual notions of equality on protocol buffers.
+The type-checker uses homogeneous equality to surface potential logical errors
+during static analysis, but the runtime uses heterogeneous equality with
+a definition of [numeric equality](#Numbers) which treats all numeric types as
+though they exist on a continuous number line. Semantically, equality would be
+expressed within in CEL as follows:
 
-Lists are unequal if their lengths are different. Otherwise, for lists `a` and
-`b` with length `N`, `a == b` is equivalent to
+```cel
+type(x) in [double, int, uint]
+   && type(y) in [double, int, uint] ? numericEquals(x, y)
+   : type(x) == type(y) ? x == y
+   : false
+```
+
+CEL's support for boxed primitives relies on heterogeneous equality to ensure
+that comparisons to `null` evaluate to `true` or `false` rather than error.
+This behavior is also useful for evaluating JSON data where all numbers may
+be provided as `double` or, depending on the underlying JSON implementation,
+possibly `int`. This potential discrepancy between how runtimes handle dynamic
+data is further motivation for supporting separate behaviors at type-check and
+interpretation.
+
+#### Numbers
+
+The numeric types of `int`, `uint`, and `double` are compared as though they
+exist on a continuous number line where two numbers `x` and `y` are equal if
+`!(x < y || x > y)`. Since it is possible to compare numeric types without
+type conversion, CEL uses this definition for `numericEquals` to support
+comparison across numeric types.
+
+This property of cross-type numeric equality is essential for supporting
+JSON in a way which mostly closely matches user expectations. The following
+expressions are equivalent as the type-checker cannot infer the type of the
+`json.number` in the expression since it is considered `dyn` typed:
+
+Index into a map:
+
+```
+{1: 'hello', 2: 'world'}[json.number]
+{1: 'hello', 2: 'world'}[int(json.number)]
+```
+
+Set membership test of a json number in a list of integers:
+
+```
+json.number in [1, 2, 3]
+int(json.number) in [1, 2, 3]
+```
+
+The `double` type follows the IEEE 754 standard. Not-a-number (`NaN`) values
+compare as inequal, e.g. `NaN == NaN // false` and `NaN != NaN // true`.
+
+#### Lists and Maps
+
+Two `list` values equal if their entries at each ordinal are equal. For lists
+`a` and `b` with length `N`, `a == b` is equivalent to:
 
 ```
 a[0] == b[0] && a[1] == b[1] && ... && a[N-1] == b[N-1]
 ```
 
-Maps are unequal if their key sets are different, otherwise for maps `a` and
-`b` with keyset `k1, k2, ..., kN`, `a == b` is equivalent to
+Two `map` values are equal if their entries are the same. For maps `a` and `b`
+with keyset `k1, k2, ..., kN`, `a == b` equality is equivalent to:
 
 ```
 a[k1] == b[k1] && a[k2] == b[k2] && ... && a[kN] == b[kN]
 ```
 
-So for equality of both lists and maps this means:
+In short, when `list` lengths / `map` key sets are the same, and all element
+comparisons are `true`, the result is true.
 
-- if the list lengths / map key sets are different, the result is false;
-- if one or more element comparisons is false, the result is false;
-- if all element comparisons are true, the result is true;
-- otherwise the result is an error.
+#### Protocol Buffers
+
+CEL uses the C++ [`MessageDifferencer::Equals`](https://developers.google.com/protocol-buffers/docs/reference/cpp/google.protobuf.util.message_differencer#MessageDifferencer.Equals.details)
+semantics for comparing Protocol Buffer messages across all runtimes:
+
+- Two messages must have the same type name and same `Descriptor` instance
+- Primitive typed fields such as `string` and `int64` are compared by value.
+- The `double` type follows the IEEE 754 standard. Not-a-number (`NaN`) values
+  compare as inequal, e.g. `NaN == NaN // false` and `NaN != NaN // true`.
+- When `repeated` lengths / `map` key sets are the same, and all element
+  comparisons are `true`, the result is true.
+- For `message` and `group` typed fields have their fields compared as if by
+  recursion.
+
+In addition to the publicly documented behaviors for C++ protobuf equality,
+there are two implementation behaviors which are important to mention:
+
+- All `google.protobuf.Any` typed fields are unpacked before comparison,
+  unless the `type_url` cannot be resolved, in which case the comparison
+  falls back to byte equality.
+- Unknown fields are compared using byte equality.
+
+Protocol buffer equality semantics in C++ are generally consistent with CEL's
+definition of heterogeneous equality. Note, Java and Go definitions of
+proto equality do not follow IEEE 754 for `NaN` values and do not unpack
+`google.protobuf.Any` values before comparison. These comparison differences
+can result in false negatives or false positives; consequently, CEL provides
+a uniform definition across runtimes to ensure consistent evaluation across
+runtimes.
+
+There is one edge case where CEL and protobuf equality will produce
+different results; however, this edge case is sufficiently unlikely that
+the difference is acceptable:
+
+```
+// Protocol buffer definition
+message Msg {
+  repeated google.protobuf.Any values;
+}
+
+// CEL - Produces false according to protobuf equality since the types of
+         Int32Value and FloatValue are not equal.
+Msg{values: [google.protobuf.Int32Value{value: 1}]}
+  == Msg{values: [google.protbuf.FloatValue{value: 1.0}]}
+
+// CEL - Produces true according to CEL equality with well-known
+//       protobuf type unwrapping of the list elements within `values`
+//       where the list values are unwrapped to CEL numbers and compared
+//       using `numericEquals`.
+Msg{values: [google.protobuf.Int32Value{value: 1}]}.values
+  == Msg{values: [google.protbuf.FloatValue{value: 1.0}]}.values
+```
+### Ordering
 
 Ordering operators are defined for `int`, `uint`, `double`, `string`, `bytes`,
-`bool`, as well as `timestamp` and `duration`. Strings obey lexicographic
-ordering of the code points, and bytes obey lexicographic ordering of the byte
-values. The ordering operators obey the usual algebraic properties, i.e. `e1 <=
-e2` gives the same result as `!(e1 > e2)` as well as `(e1 < e2) || (e1 == e2)`
-when the expressions involved do not have side effects.
+`bool`, as well as `timestamp` and `duration`. Runtime ordering is also
+supported across `int`, `uint`, and `double` for consistency with the runtime
+equality definition for numeric types.
+
+Strings obey lexicographic ordering of the code points, and bytes obey
+lexicographic ordering of the byte values. The ordering operators obey the
+usual algebraic properties, i.e. `e1 <= e2` gives the same result as
+`!(e1 > e2)` as well as `(e1 < e2) || (e1 == e2)` when the expressions
+involved do not have side effects.
 
 ### Overflow
 
@@ -2376,4 +2480,21 @@ for conversion from strings, and no conversion to `int` is needed.
 
 ```
 type(google.protobuf.Field{}.kind) # was int, now google.protobuf.Field.Kind
+```
+
+### Homogeneous Equality
+
+Prior to cel-spec v0.7.0, CEL runtimes only supported homogeneous equality
+to be consistent with the homogeneous equality defined by the type-checker.
+The original runtime definition for equality is as follows:
+
+```
+Equality and inequality are homogeneous; comparing values of different runtime
+types results in a runtime error. Thus `2 == 3` is false, but `2 == 2.0` is an
+error.
+
+For `double`, all not-a-number (`NaN`) values compare equal. This is different
+than the usual semantics of floating-point numbers, but it is more consistent
+with the usual expectations of reflexivity, and is more compatible with the
+usual notions of equality on protocol buffers.
 ```
