@@ -94,17 +94,21 @@ MapInits       = Expr ":" Expr {"," Expr ":" Expr} ;
 
 Implementations are required to support at least:
 
-*   32 levels of nested expressions;
-*   32 repetitions of self-recursive or repetitive rules, i.e.:
+*   24-32 repetitions of repeating rules, i.e.:
     *   32 terms separated by `||` in a row;
     *   32 terms separated by `&&` in a row;
-    *   32 relations in a row;
-    *   32 binary arithmetic operators of the same precedence in a row;
-    *   32 selection (`.`) operators in a row;
-    *   32 indexing (`[_]`) operators in a row;
     *   32 function call arguments;
     *   list literals with 32 elements;
-    *   map or message literals with 32 fields.
+    *   map or message literals with 32 fields;
+    *   24 consecutive ternary conditionals `?:`;
+    *   24 binary arithmetic operators of the same precedence in a row;
+    *   24 relations in a row.
+*   12 repetitions of recursive rules, i.e:
+    *   12 nested function calls;
+    *   12 selection (`.`) operators in a row;
+    *   12 indexing (`[_]`) operators in a row;
+    *   12 nested list, map, or message literals.
+
 
 This grammar corresponds to the following operator precedence and associativity:
 
