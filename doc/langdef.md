@@ -36,7 +36,8 @@ This page constitutes the reference for CEL. For a gentle introduction, see
     - [Extension Functions](#extension-functions)
     - [Receiver Call Style](#receiver-call-style)
 - [Standard Definitions](#standard-definitions)
-    - [Equality and Ordering](#equality-and-ordering)
+    - [Equality](#equality)
+    - [Ordering](#ordering)
     - [Overflow](#overflow)
     - [Timezones](#timezones)
     - [Regular Expressions](#regular-expressions)
@@ -1099,28 +1100,31 @@ comparisons are `true`, the result is true.
 #### Protocol Buffers
 
 CEL uses the C++ [`MessageDifferencer::Equals`](https://developers.google.com/protocol-buffers/docs/reference/cpp/google.protobuf.util.message_differencer#MessageDifferencer.Equals.details)
-semantics for comparing Protocol Buffer messages across all runtimes:
+semantics for comparing Protocol Buffer messages across all runtimes. For two
+messages to be equal:
 
-- Two messages must have the same type name and same `Descriptor` instance
-- Primitive typed fields such as `string` and `int64` are compared by value.
-- The `double` type follows the IEEE 754 standard. Not-a-number (`NaN`) values
-  compare as inequal, e.g. `NaN == NaN // false` and `NaN != NaN // true`.
-- When `repeated` lengths / `map` key sets are the same, and all element
-  comparisons are `true`, the result is true.
-- For `message` and `group` typed fields have their fields compared as if by
-  recursion.
+- Both messages must share the same type name and `Descriptor` instance;
+- Both messages must have the same set fields;
+- All primitive typed fields compare equal by value, e.g. `string`, `int64`;
+- All elements of `repeated` fields compare in-order as `true`;
+- All entries of `map` fields compare order-independently as `true`;
+- All fields of `message` and `group` typed fields compare true, with the
+  comparison being performed as if by recursion.
+- All unknown fields compare true using byte equality.
 
 In addition to the publicly documented behaviors for C++ protobuf equality,
-there are two implementation behaviors which are important to mention:
+there are some implementation behaviors which are important to mention:
 
+- The `double` type follows the IEEE 754 standard where not-a-number (`NaN`)
+  values compare as inequal, e.g. `NaN == NaN // false` and
+  `NaN != NaN // true`.
 - All `google.protobuf.Any` typed fields are unpacked before comparison,
   unless the `type_url` cannot be resolved, in which case the comparison
   falls back to byte equality.
-- Unknown fields are compared using byte equality.
 
 Protocol buffer equality semantics in C++ are generally consistent with CEL's
-definition of heterogeneous equality. Note, Java and Go definitions of
-proto equality do not follow IEEE 754 for `NaN` values and do not unpack
+definition of heterogeneous equality. Note, Java and Go proto equality
+implementations do not follow IEEE 754 for `NaN` values and do not unpack
 `google.protobuf.Any` values before comparison. These comparison differences
 can result in false negatives or false positives; consequently, CEL provides
 a uniform definition across runtimes to ensure consistent evaluation across
