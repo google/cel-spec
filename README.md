@@ -7,7 +7,7 @@ evaluation, enabling different applications to more easily interoperate.
 
 Key Applications
 
-*   Security policy: organization have complex infrastructure and need common
+*   Security policy: organizations have complex infrastructure and need common
     tooling to reason about the system as a whole
 *   Protocols: expressions are a useful data type and require interoperability
     across programming languages and platforms.
