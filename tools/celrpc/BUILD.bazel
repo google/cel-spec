@@ -1,4 +1,4 @@
-load("@io_bazel_rules_go//go:def.bzl", "go_library")
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
 
 package(
     default_visibility = ["//visibility:public"],
@@ -17,4 +17,21 @@ go_library(
         "@org_golang_google_protobuf//encoding/protojson:go_default_library",
         "@org_golang_google_protobuf//proto:go_default_library",
     ],
+)
+
+go_test(
+    name = "celrpc_test",
+    args = [
+        "--server_cmd=$(rootpath //tools/celrpc/testpipeimpl/main)"
+    ],
+    data = [
+        "//tools/celrpc/testpipeimpl/main",
+    ],
+    deps = [
+        "@io_bazel_rules_go//go/tools/bazel",
+    ],
+    srcs = [
+        "celrpc_test.go"
+    ],
+    embed = [":go_default_library"],
 )
