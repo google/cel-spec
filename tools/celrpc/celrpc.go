@@ -4,6 +4,7 @@ package celrpc
 import (
 	"bufio"
 	"context"
+	"encoding/base64"
 	"fmt"
 	"io"
 	"log"
@@ -42,9 +43,10 @@ type grpcConfClient struct {
 //   * second input line is JSON of the corresponding request
 //   * one output line is expected, repeat again.
 type pipeConfClient struct {
-	cmd    *exec.Cmd
-	stdOut *bufio.Reader
-	stdIn  io.Writer
+	cmd       *exec.Cmd
+	stdOut    *bufio.Reader
+	stdIn     io.Writer
+	useBase64 bool
 }
 
 // NewGrpcClient creates a new gRPC ConformanceService client. A server binary
@@ -118,10 +120,17 @@ func ExampleNewGrpcClient() {
 // log messages will be visible. stdin and stdout are used for communication.
 // The caller must call Shutdown() on the retured ConfClient, even if the
 // method returns a non-nil error.
-func NewPipeClient(serverCmd string) (ConfClient, error) {
-	c := pipeConfClient{}
+//
+// base64Encode enables base64Encoded messages (b64encode(Any.serializeToString))
+func NewPipeClient(serverCmd string, base64Encode bool) (ConfClient, error) {
+	c := pipeConfClient{
+		useBase64: base64Encode,
+	}
 
 	fields := strings.Fields(serverCmd)
+	if len(fields) < 1 {
+		return &c, fmt.Errorf("server cmd '%s' invalid", serverCmd)
+	}
 	cmd := exec.Command(fields[0], fields[1:]...)
 	out, err := cmd.StdoutPipe()
 	if err != nil {
@@ -146,7 +155,7 @@ func NewPipeClient(serverCmd string) (ConfClient, error) {
 // ExampleNewPipeClient creates a new CEL pipe client using a path to a server binary.
 // TODO Run from celrpc_test.go.
 func ExampleNewPipeClient() {
-	c, err := NewPipeClient("/path/to/server/binary")
+	c, err := NewPipeClient("/path/to/server/binary", false)
 	defer c.Shutdown()
 	if err != nil {
 		log.Fatal("Couldn't create client")
@@ -169,19 +178,47 @@ func ExampleNewPipeClient() {
 	fmt.Printf("1 + 1 is %v\n", evalResponse.Result.GetValue().GetInt64Value())
 }
 
+func (c *pipeConfClient) marshal(in proto.Message) (string, error) {
+	if c.useBase64 {
+		bytes, err := proto.Marshal(in)
+		if err != nil {
+			return "", err
+		}
+		return base64.StdEncoding.EncodeToString(bytes), nil
+	} else {
+		return protojson.MarshalOptions{}.Format(in), nil
+	}
+}
+
+func (c *pipeConfClient) unmarshal(encoded string, out proto.Message) error {
+	if c.useBase64 {
+		protoBytes, err := base64.StdEncoding.DecodeString(encoded)
+		if err != nil {
+			return err
+		}
+		return proto.Unmarshal(protoBytes, out)
+	} else {
+		return protojson.Unmarshal([]byte(encoded), out)
+	}
+}
+
 func (c *pipeConfClient) pipeCommand(cmd string, in proto.Message, out proto.Message) error {
 	if _, err := c.stdIn.Write([]byte(cmd + "\n")); err != nil {
 		return err
 	}
-	jsonInput := protojson.MarshalOptions{}.Format(in)
-	if _, err := c.stdIn.Write([]byte(jsonInput + "\n")); err != nil {
-		return err
-	}
-	jsonOutput, err := c.stdOut.ReadBytes('\n')
+
+	pipeInput, err := c.marshal(in)
 	if err != nil {
 		return err
 	}
-	return protojson.Unmarshal(jsonOutput, out)
+	if _, err := c.stdIn.Write([]byte(pipeInput + "\n")); err != nil {
+		return err
+	}
+	pipeOutput, err := c.stdOut.ReadString('\n')
+	if err != nil {
+		return err
+	}
+	return c.unmarshal(pipeOutput, out)
 }
 
 // Parse implements a gRPC client stub with both pipe and gRPC
