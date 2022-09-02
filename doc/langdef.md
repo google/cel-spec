@@ -851,7 +851,7 @@ space complexity of its sub-expressions, plus a constant. The exceptions are:
 
 *   *Literals*: Message, map, and list literals allocate new space for their
     output.
-*   *Concatenation*: The `_+_` operator on lists and stings allocate new space
+*   *Concatenation*: The `_+_` operator on lists and strings allocate new space
     for their output.
 
 See below for the space cost of macros.
