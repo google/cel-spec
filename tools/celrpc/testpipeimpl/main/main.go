@@ -32,9 +32,9 @@ func (c *codec) marshal(in proto.Message) (string, error) {
 			return "", err
 		}
 		return base64.StdEncoding.EncodeToString(bytes), nil
-	} else {
-		return protojson.MarshalOptions{}.Format(in), nil
 	}
+
+	return protojson.MarshalOptions{}.Format(in), nil
 }
 
 func (c *codec) unmarshal(encoded string, out proto.Message) error {
@@ -44,9 +44,9 @@ func (c *codec) unmarshal(encoded string, out proto.Message) error {
 			return err
 		}
 		return proto.Unmarshal(protoBytes, out)
-	} else {
-		return protojson.Unmarshal([]byte(encoded), out)
 	}
+
+	return protojson.Unmarshal([]byte(encoded), out)
 }
 
 func (c *codec) serialize(w *bufio.Writer, out proto.Message) error {
