@@ -1,5 +1,5 @@
 steps:
-- name: 'gcr.io/cel-analysis/bazel:3.0.0'
+- name: 'gcr.io/cloud-builders/bazel'
   entrypoint: bazel
   args: ['test', '--test_output=errors', '...']
   id: bazel-test

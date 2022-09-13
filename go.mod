@@ -1,13 +1,16 @@
 module github.com/google/cel-spec
 
-go 1.12
+go 1.18
 
 require (
-	github.com/golang/protobuf v1.4.3
-	golang.org/x/net v0.0.0-20200301022130-244492dfa37a // indirect
-	golang.org/x/sys v0.0.0-20200302150141-5c8b2ff67527 // indirect
-	golang.org/x/text v0.3.2 // indirect
-	google.golang.org/genproto v0.0.0-20201102152239-715cce707fb0
-	google.golang.org/grpc v1.33.2
-	google.golang.org/protobuf v1.25.0
+	google.golang.org/genproto v0.0.0-20220909194730-69f6226f97e5
+	google.golang.org/grpc v1.49.0
+	google.golang.org/protobuf v1.28.1
+)
+
+require (
+	github.com/golang/protobuf v1.5.2 // indirect
+	golang.org/x/net v0.0.0-20220909164309-bea034e7d591 // indirect
+	golang.org/x/sys v0.0.0-20220909162455-aba9fc2a8ff2 // indirect
+	golang.org/x/text v0.3.7 // indirect
 )
