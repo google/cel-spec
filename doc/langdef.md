@@ -80,12 +80,12 @@ Unary          = Member
 Member         = Primary
                | Member "." IDENT ["(" [ExprList] ")"]
                | Member "[" Expr "]"
-               | Member "{" [FieldInits] [","] "}"
                ;
 Primary        = ["."] IDENT ["(" [ExprList] ")"]
                | "(" Expr ")"
                | "[" [ExprList] [","] "]"
                | "{" [MapInits] [","] "}"
+               | ["."] IDENT { "." IDENT } "{" [FieldInits] [","] "}"
                | LITERAL
                ;
 ExprList       = Expr {"," Expr} ;
