@@ -1,0 +1,61 @@
+package(default_visibility = ["//visibility:public"])
+
+##############################################################################
+# Common
+##############################################################################
+
+proto_library(
+    name = "expr_proto",
+    srcs = [
+        "checked.proto",
+        "eval.proto",
+        "explain.proto",
+        "syntax.proto",
+        "value.proto",
+    ],
+    deps = [
+        "@com_google_googleapis//google/rpc:status_proto",
+        "@com_google_protobuf//:any_proto",
+        "@com_google_protobuf//:duration_proto",
+        "@com_google_protobuf//:empty_proto",
+        "@com_google_protobuf//:struct_proto",
+        "@com_google_protobuf//:timestamp_proto",
+    ],
+)
+
+
+##############################################################################
+# Java
+##############################################################################
+java_proto_library(
+    name = "expr_java_proto",
+    deps = [":expr_proto"],
+)
+
+###############################################################################
+## Go
+###############################################################################
+
+load("@io_bazel_rules_go//proto:def.bzl", "go_proto_library")
+
+go_proto_library(
+    name = "google_rpc_status_go_proto",
+    importpath = "google.golang.org/genproto/googleapis/rpc/status",
+    protos = ["@com_google_googleapis//google/rpc:status_proto"],
+)
+go_proto_library(
+    name = "expr_go_proto",
+    importpath = "dev.cel/expr",
+    protos = [":expr_proto"],
+    deps = [
+        ":google_rpc_status_go_proto",
+    ],
+)
+
+###############################################################################
+## C++
+###############################################################################
+cc_proto_library(
+    name = "expr_cc_proto",
+    deps = [":expr_proto"],
+)
