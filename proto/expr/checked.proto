@@ -117,17 +117,17 @@ message Type {
 
     // Int64 type.
     //
-    // Proto-based integer values are widened to int64.
+    // 32-bit integer values are widened to int64.
     INT64 = 2;
 
     // Uint64 type.
     //
-    // Proto-based unsigned integer values are widened to uint64.
+    // 32-bit unsigned integer values are widened to uint64.
     UINT64 = 3;
 
     // Double type.
     //
-    // Proto-based float values are widened to double values.
+    // 32-bit float values are widened to double values.
     DOUBLE = 4;
 
     // String type.
@@ -185,7 +185,7 @@ message Type {
     // Protocol buffer message type.
     //
     // The `message_type` string specifies the qualified message type name. For
-    // example, `google.plus.Profile`.
+    // example, `google.type.PhoneNumber`.
     string message_type = 9;
 
     // Type param type.
@@ -209,6 +209,9 @@ message Type {
     google.protobuf.Empty error = 12;
 
     // Abstract, application defined type.
+    //
+    // An abstract type has no accessible field names, and it can only be
+    // inspected via helper / member functions.
     AbstractType abstract_type = 14;
   }
 }
