@@ -45,14 +45,14 @@ message ParsedExpr {
 // calls. This makes it easy to represent new operators into the existing AST.
 //
 // All references within expressions must resolve to a
-// [Decl][google.api.expr.Decl] provided at type-check for an expression to be
+// [Decl][dev.cel.expr.Decl] provided at type-check for an expression to be
 // valid. A reference may either be a bare identifier `name` or a qualified
 // identifier `google.api.name`. References may either refer to a value or a
 // function declaration.
 //
 // For example, the expression `google.api.name.startsWith('expr')` references
 // the declaration `google.api.name` within a
-// [Expr.Select][google.api.expr.Expr.Select] expression, and the function
+// [Expr.Select][dev.cel.expr.Expr.Select] expression, and the function
 // declaration `startsWith`.
 message Expr {
   // An identifier expression. e.g. `request`.
@@ -61,7 +61,7 @@ message Expr {
     // '.'.
     //
     // Qualified names are represented by the
-    // [Expr.Select][google.api.expr.Expr.Select] expression.
+    // [Expr.Select][dev.cel.expr.Expr.Select] expression.
     string name = 1;
   }
 
@@ -267,7 +267,7 @@ message Expr {
 // primitives.
 //
 // Lists and structs are not included as constants as these aggregate types may
-// contain [Expr][google.api.expr.Expr] elements which require evaluation and
+// contain [Expr][dev.cel.expr.Expr] elements which require evaluation and
 // are thus not constant.
 //
 // Examples of constants include: `"hello"`, `b'bytes'`, `1u`, `4.2`, `-2`,
