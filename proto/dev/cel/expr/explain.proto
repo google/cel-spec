@@ -16,7 +16,7 @@ syntax = "proto3";
 
 package dev.cel.expr;
 
-import "proto/expr/value.proto";
+import "proto/dev/cel/expr/value.proto";
 
 option cc_enable_arenas = true;
 option go_package = "dev.cel/expr";
