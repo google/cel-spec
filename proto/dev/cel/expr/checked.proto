@@ -16,7 +16,7 @@ syntax = "proto3";
 
 package dev.cel.expr;
 
-import "proto/expr/syntax.proto";
+import "proto/dev/cel/expr/syntax.proto";
 import "google/protobuf/empty.proto";
 import "google/protobuf/struct.proto";
 
