@@ -72,6 +72,11 @@ section {
     expr: "'завтра'.startsWith('за')"
     value: { bool_value: true }
   }
+  test {
+    name: "unicode_smp"
+    expr: "'\U0001F431\U0001F600\U0001F61B'.startsWith('\U0001F431')"
+    value: { bool_value: true }
+  }
 }
 section {
   name: "ends_with"
@@ -104,6 +109,11 @@ section {
   test {
     name: "unicode"
     expr: "'forté'.endsWith('té')"
+    value: { bool_value: true }
+  }
+  test {
+    name: "unicode_smp"
+    expr: "'\U0001F431\U0001F600\U0001F61B'.endsWith('\U0001F61B')"
     value: { bool_value: true }
   }
 }
@@ -150,6 +160,11 @@ section {
     expr: "'mañana'.matches('a+ñ+a+')"
     value: { bool_value: true }
   }
+  test {
+    name: "unicode_smp"
+    expr: "'\U0001F431\U0001F600\U0001F600'.matches('(a|\U0001F600){2}')"
+    value: { bool_value: true }
+  }
 }
 section {
   name: "concatentation"
@@ -157,12 +172,12 @@ section {
   test {
     name: "concat_true"
     expr: "'he' + 'llo'"
-    value: { string_value: "hello"}
+    value: { string_value: "hello" }
   }
   test {
     name: "concat_with_spaces"
     expr: "'hello' + ' ' == 'hello'"
-    value: { bool_value: false}
+    value: { bool_value: false }
   }
   test {
     name: "concat_empty_string_beginning"
@@ -188,6 +203,11 @@ section {
     name: "ascii_unicode"
     expr: "'r' + 'ô' + 'le'"
     value: { string_value: "rôle" }
+  }
+  test {
+    name: "ascii_unicode_unicode_smp"
+    expr: "'a' + 'ÿ' + '\U0001F431'"
+    value: { string_value: "aÿ\xf0\x9f\x90\xb1" }
   }
   test {
     name: "empty_unicode"
@@ -221,6 +241,11 @@ section {
   test {
     name: "contains_unicode"
     expr: "'Straße'.contains('aß')"
+    value: { bool_value: true }
+  }
+  test {
+    name: "contains_unicode_smp"
+    expr: "'\U0001F431\U0001F600\U0001F601'.contains('\U0001F600')"
     value: { bool_value: true }
   }
   test {
