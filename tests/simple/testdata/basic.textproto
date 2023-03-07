@@ -14,6 +14,11 @@ section {
     value: { uint64_value: 0 }
   }
   test {
+    name: "self_eval_uint_alias_zero"
+    expr: "0U"
+    value: { uint64_value: 0 }
+  }
+  test {
     name: "self_eval_float_zero"
     expr: "0.0"
     value: { double_value: 0 }
@@ -88,6 +93,11 @@ section {
     value: { uint64_value: 123456789 }
   }
   test {
+    name: "self_eval_uint_alias_nonzero"
+    expr: "123456789U"
+    value: { uint64_value: 123456789 }
+  }
+  test {
     name: "self_eval_int_negative_min"
     expr: "-9223372036854775808"
     value: { int64_value: -9223372036854775808 }
@@ -156,6 +166,11 @@ section {
   test {
     name: "self_eval_uint_hex"
     expr: "0x55555555u"
+    value: { uint64_value: 1431655765 }
+  }
+  test {
+    name: "self_eval_uint_alias_hex"
+    expr: "0x55555555U"
     value: { uint64_value: 1431655765 }
   }
   test {
