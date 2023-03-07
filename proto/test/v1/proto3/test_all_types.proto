@@ -96,6 +96,23 @@ message TestAllTypes {
   repeated string repeated_cord = 54 [ctype = CORD];
   repeated NestedMessage repeated_lazy_message = 55 [lazy = true];
 
+  // Repeated wellknown.
+  repeated google.protobuf.Any repeated_any = 120;
+  repeated google.protobuf.Duration repeated_duration = 121;
+  repeated google.protobuf.Timestamp repeated_timestamp = 122;
+  repeated google.protobuf.Struct repeated_struct = 123;
+  repeated google.protobuf.Value repeated_value = 124;
+  repeated google.protobuf.Int64Value repeated_int64_wrapper = 125;
+  repeated google.protobuf.Int32Value repeated_int32_wrapper = 126;
+  repeated google.protobuf.DoubleValue repeated_double_wrapper = 127;
+  repeated google.protobuf.FloatValue repeated_float_wrapper = 128;
+  repeated google.protobuf.UInt64Value repeated_uint64_wrapper = 129;
+  repeated google.protobuf.UInt32Value repeated_uint32_wrapper = 130;
+  repeated google.protobuf.StringValue repeated_string_wrapper = 131;
+  repeated google.protobuf.BoolValue repeated_bool_wrapper = 132;
+  repeated google.protobuf.BytesValue repeated_bytes_wrapper = 133;
+  repeated google.protobuf.ListValue repeated_list_value = 134;
+
   // Map
   map<string, string> map_string_string = 61;
   map<int64, NestedTestAllTypes> map_int64_nested_type = 62;
