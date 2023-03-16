@@ -31,21 +31,21 @@ message TestAllTypes {
   }
 
   // Singular
-  optional int32 single_int32 = 1;
-  optional int64 single_int64 = 2;
-  optional uint32 single_uint32 = 3;
-  optional uint64 single_uint64 = 4;
+  optional int32 single_int32 = 1 [default = -32];
+  optional int64 single_int64 = 2 [default = -64];
+  optional uint32 single_uint32 = 3 [default = 32];
+  optional uint64 single_uint64 = 4 [default = 64];
   optional sint32 single_sint32 = 5;
   optional sint64 single_sint64 = 6;
   optional fixed32 single_fixed32 = 7;
   optional fixed64 single_fixed64 = 8;
   optional sfixed32 single_sfixed32 = 9;
   optional sfixed64 single_sfixed64 = 10;
-  optional float single_float = 11;
-  optional double single_double = 12;
-  optional bool single_bool = 13;
-  optional string single_string = 14;
-  optional bytes single_bytes = 15;
+  optional float single_float = 11 [default = 3.0];
+  optional double single_double = 12 [default = 6.4];
+  optional bool single_bool = 13 [default = true];
+  optional string single_string = 14 [default = "empty"];
+  optional bytes single_bytes = 15 [default = "none"];
 
   // Wellknown.
   optional google.protobuf.Any single_any = 100;
