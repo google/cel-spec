@@ -63,6 +63,7 @@ message TestAllTypes {
   optional google.protobuf.BoolValue single_bool_wrapper = 112;
   optional google.protobuf.BytesValue single_bytes_wrapper = 113;
   optional google.protobuf.ListValue list_value = 114;
+  optional google.protobuf.NullValue null_value = 115;
 
   // Nested messages
   oneof nested_type {
@@ -112,6 +113,7 @@ message TestAllTypes {
   repeated google.protobuf.BoolValue repeated_bool_wrapper = 132;
   repeated google.protobuf.BytesValue repeated_bytes_wrapper = 133;
   repeated google.protobuf.ListValue repeated_list_value = 134;
+  repeated google.protobuf.NullValue repeated_null_value = 135;
 
   // Map
   map<int64, NestedTestAllTypes> map_int64_nested_type = 62;
@@ -127,6 +129,9 @@ message TestAllTypes {
   map<bool, double> map_bool_double = 71;
   map<bool, NestedEnum> map_bool_enum = 72;
   map<bool, NestedMessage> map_bool_message = 73;
+  map<bool, google.protobuf.Duration> map_bool_duration = 228;
+  map<bool, google.protobuf.Timestamp> map_bool_timestamp = 229;
+  map<bool, google.protobuf.NullValue> map_bool_null_value = 230;
 
   map<int32, bool> map_int32_bool = 74;
   map<int32, string> map_int32_string = 75;
@@ -139,6 +144,9 @@ message TestAllTypes {
   map<int32, double> map_int32_double = 82;
   map<int32, NestedEnum> map_int32_enum = 83;
   map<int32, NestedMessage> map_int32_message = 84;
+  map<int32, google.protobuf.Duration> map_int32_duration = 231;
+  map<int32, google.protobuf.Timestamp> map_int32_timestamp = 232;
+  map<int32, google.protobuf.NullValue> map_int32_null_value = 233;
 
   map<int64, bool> map_int64_bool = 85;
   map<int64, string> map_int64_string = 86;
@@ -151,6 +159,9 @@ message TestAllTypes {
   map<int64, double> map_int64_double = 93;
   map<int64, NestedEnum> map_int64_enum = 94;
   map<int64, NestedMessage> map_int64_message = 95;
+  map<int64, google.protobuf.Duration> map_int64_duration = 234;
+  map<int64, google.protobuf.Timestamp> map_int64_timestamp = 235;
+  map<int64, google.protobuf.NullValue> map_int64_null_value = 236;
 
   map<uint32, bool> map_uint32_bool = 96;
   map<uint32, string> map_uint32_string = 97;
@@ -163,6 +174,9 @@ message TestAllTypes {
   map<uint32, double> map_uint32_double = 204;
   map<uint32, NestedEnum> map_uint32_enum = 205;
   map<uint32, NestedMessage> map_uint32_message = 206;
+  map<uint32, google.protobuf.Duration> map_uint32_duration = 237;
+  map<uint32, google.protobuf.Timestamp> map_uint32_timestamp = 238;
+  map<uint32, google.protobuf.NullValue> map_uint32_null_value = 239;
 
   map<uint64, bool> map_uint64_bool = 207;
   map<uint64, string> map_uint64_string = 208;
@@ -175,6 +189,9 @@ message TestAllTypes {
   map<uint64, double> map_uint64_double = 215;
   map<uint64, NestedEnum> map_uint64_enum = 216;
   map<uint64, NestedMessage> map_uint64_message = 217;
+  map<uint64, google.protobuf.Duration> map_uint64_duration = 240;
+  map<uint64, google.protobuf.Timestamp> map_uint64_timestamp = 241;
+  map<uint64, google.protobuf.NullValue> map_uint64_null_value = 242;
 
   map<string, bool> map_string_bool = 218;
   map<string, string> map_string_string = 61;
@@ -187,6 +204,9 @@ message TestAllTypes {
   map<string, double> map_string_double = 225;
   map<string, NestedEnum> map_string_enum = 226;
   map<string, NestedMessage> map_string_message = 227;
+  map<string, google.protobuf.Duration> map_string_duration = 243;
+  map<string, google.protobuf.Timestamp> map_string_timestamp = 244;
+  map<string, google.protobuf.NullValue> map_string_null_value = 245;
 }
 
 // This proto includes a recursively nested message.
