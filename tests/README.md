@@ -28,7 +28,7 @@ We currently have the following test suites:
 
 Implementations should write a gRPC server for the
 [`ConformanceService`
-API](https://github.com/googleapis/googleapis/blob/master/google/api/expr/v1alpha1/conformance_service.proto)
+API](https://github.com/googleapis/googleapis/blob/master/google/api/expr/conformance/v1alpha1/conformance_service.proto)
 See [the cel-go server](https://github.com/google/cel-go/tree/master/server)
 as an example.
 
