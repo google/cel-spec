@@ -133,6 +133,19 @@ message TestAllTypes {
   map<bool, google.protobuf.Duration> map_bool_duration = 228;
   map<bool, google.protobuf.Timestamp> map_bool_timestamp = 229;
   map<bool, google.protobuf.NullValue> map_bool_null_value = 230;
+  map<bool, google.protobuf.Any> map_bool_any = 246;
+  map<bool, google.protobuf.Struct> map_bool_struct = 247;
+  map<bool, google.protobuf.Value> map_bool_value = 248;
+  map<bool, google.protobuf.ListValue> map_bool_list_value = 249;
+  map<bool, google.protobuf.Int64Value> map_bool_int64_wrapper = 250;
+  map<bool, google.protobuf.Int32Value> map_bool_int32_wrapper = 251;
+  map<bool, google.protobuf.DoubleValue> map_bool_double_wrapper = 252;
+  map<bool, google.protobuf.FloatValue> map_bool_float_wrapper = 253;
+  map<bool, google.protobuf.UInt64Value> map_bool_uint64_wrapper = 254;
+  map<bool, google.protobuf.UInt32Value> map_bool_uint32_wrapper = 255;
+  map<bool, google.protobuf.StringValue> map_bool_string_wrapper = 256;
+  map<bool, google.protobuf.BoolValue> map_bool_bool_wrapper = 257;
+  map<bool, google.protobuf.BytesValue> map_bool_bytes_wrapper = 258;
 
   map<int32, bool> map_int32_bool = 74;
   map<int32, string> map_int32_string = 75;
@@ -148,6 +161,19 @@ message TestAllTypes {
   map<int32, google.protobuf.Duration> map_int32_duration = 231;
   map<int32, google.protobuf.Timestamp> map_int32_timestamp = 232;
   map<int32, google.protobuf.NullValue> map_int32_null_value = 233;
+  map<int32, google.protobuf.Any> map_int32_any = 259;
+  map<int32, google.protobuf.Struct> map_int32_struct = 260;
+  map<int32, google.protobuf.Value> map_int32_value = 261;
+  map<int32, google.protobuf.ListValue> map_int32_list_value = 262;
+  map<int32, google.protobuf.Int64Value> map_int32_int64_wrapper = 263;
+  map<int32, google.protobuf.Int32Value> map_int32_int32_wrapper = 264;
+  map<int32, google.protobuf.DoubleValue> map_int32_double_wrapper = 265;
+  map<int32, google.protobuf.FloatValue> map_int32_float_wrapper = 266;
+  map<int32, google.protobuf.UInt64Value> map_int32_uint64_wrapper = 267;
+  map<int32, google.protobuf.UInt32Value> map_int32_uint32_wrapper = 268;
+  map<int32, google.protobuf.StringValue> map_int32_string_wrapper = 269;
+  map<int32, google.protobuf.BoolValue> map_int32_bool_wrapper = 270;
+  map<int32, google.protobuf.BytesValue> map_int32_bytes_wrapper = 271;
 
   map<int64, bool> map_int64_bool = 85;
   map<int64, string> map_int64_string = 86;
@@ -163,6 +189,19 @@ message TestAllTypes {
   map<int64, google.protobuf.Duration> map_int64_duration = 234;
   map<int64, google.protobuf.Timestamp> map_int64_timestamp = 235;
   map<int64, google.protobuf.NullValue> map_int64_null_value = 236;
+  map<int64, google.protobuf.Any> map_int64_any = 272;
+  map<int64, google.protobuf.Struct> map_int64_struct = 273;
+  map<int64, google.protobuf.Value> map_int64_value = 274;
+  map<int64, google.protobuf.ListValue> map_int64_list_value = 275;
+  map<int64, google.protobuf.Int64Value> map_int64_int64_wrapper = 276;
+  map<int64, google.protobuf.Int32Value> map_int64_int32_wrapper = 277;
+  map<int64, google.protobuf.DoubleValue> map_int64_double_wrapper = 278;
+  map<int64, google.protobuf.FloatValue> map_int64_float_wrapper = 279;
+  map<int64, google.protobuf.UInt64Value> map_int64_uint64_wrapper = 280;
+  map<int64, google.protobuf.UInt32Value> map_int64_uint32_wrapper = 281;
+  map<int64, google.protobuf.StringValue> map_int64_string_wrapper = 282;
+  map<int64, google.protobuf.BoolValue> map_int64_bool_wrapper = 283;
+  map<int64, google.protobuf.BytesValue> map_int64_bytes_wrapper = 284;
 
   map<uint32, bool> map_uint32_bool = 96;
   map<uint32, string> map_uint32_string = 97;
@@ -178,6 +217,19 @@ message TestAllTypes {
   map<uint32, google.protobuf.Duration> map_uint32_duration = 237;
   map<uint32, google.protobuf.Timestamp> map_uint32_timestamp = 238;
   map<uint32, google.protobuf.NullValue> map_uint32_null_value = 239;
+  map<uint32, google.protobuf.Any> map_uint32_any = 285;
+  map<uint32, google.protobuf.Struct> map_uint32_struct = 286;
+  map<uint32, google.protobuf.Value> map_uint32_value = 287;
+  map<uint32, google.protobuf.ListValue> map_uint32_list_value = 288;
+  map<uint32, google.protobuf.Int64Value> map_uint32_int64_wrapper = 289;
+  map<uint32, google.protobuf.Int32Value> map_uint32_int32_wrapper = 290;
+  map<uint32, google.protobuf.DoubleValue> map_uint32_double_wrapper = 291;
+  map<uint32, google.protobuf.FloatValue> map_uint32_float_wrapper = 292;
+  map<uint32, google.protobuf.UInt64Value> map_uint32_uint64_wrapper = 293;
+  map<uint32, google.protobuf.UInt32Value> map_uint32_uint32_wrapper = 294;
+  map<uint32, google.protobuf.StringValue> map_uint32_string_wrapper = 295;
+  map<uint32, google.protobuf.BoolValue> map_uint32_bool_wrapper = 296;
+  map<uint32, google.protobuf.BytesValue> map_uint32_bytes_wrapper = 297;
 
   map<uint64, bool> map_uint64_bool = 207;
   map<uint64, string> map_uint64_string = 208;
@@ -193,6 +245,19 @@ message TestAllTypes {
   map<uint64, google.protobuf.Duration> map_uint64_duration = 240;
   map<uint64, google.protobuf.Timestamp> map_uint64_timestamp = 241;
   map<uint64, google.protobuf.NullValue> map_uint64_null_value = 242;
+  map<uint64, google.protobuf.Any> map_uint64_any = 298;
+  map<uint64, google.protobuf.Struct> map_uint64_struct = 299;
+  map<uint64, google.protobuf.Value> map_uint64_value = 300;
+  map<uint64, google.protobuf.ListValue> map_uint64_list_value = 301;
+  map<uint64, google.protobuf.Int64Value> map_uint64_int64_wrapper = 302;
+  map<uint64, google.protobuf.Int32Value> map_uint64_int32_wrapper = 303;
+  map<uint64, google.protobuf.DoubleValue> map_uint64_double_wrapper = 304;
+  map<uint64, google.protobuf.FloatValue> map_uint64_float_wrapper = 305;
+  map<uint64, google.protobuf.UInt64Value> map_uint64_uint64_wrapper = 306;
+  map<uint64, google.protobuf.UInt32Value> map_uint64_uint32_wrapper = 307;
+  map<uint64, google.protobuf.StringValue> map_uint64_string_wrapper = 308;
+  map<uint64, google.protobuf.BoolValue> map_uint64_bool_wrapper = 309;
+  map<uint64, google.protobuf.BytesValue> map_uint64_bytes_wrapper = 310;
 
   map<string, bool> map_string_bool = 218;
   map<string, string> map_string_string = 61;
@@ -208,6 +273,19 @@ message TestAllTypes {
   map<string, google.protobuf.Duration> map_string_duration = 243;
   map<string, google.protobuf.Timestamp> map_string_timestamp = 244;
   map<string, google.protobuf.NullValue> map_string_null_value = 245;
+  map<string, google.protobuf.Any> map_string_any = 311;
+  map<string, google.protobuf.Struct> map_string_struct = 312;
+  map<string, google.protobuf.Value> map_string_value = 313;
+  map<string, google.protobuf.ListValue> map_string_list_value = 314;
+  map<string, google.protobuf.Int64Value> map_string_int64_wrapper = 315;
+  map<string, google.protobuf.Int32Value> map_string_int32_wrapper = 316;
+  map<string, google.protobuf.DoubleValue> map_string_double_wrapper = 317;
+  map<string, google.protobuf.FloatValue> map_string_float_wrapper = 318;
+  map<string, google.protobuf.UInt64Value> map_string_uint64_wrapper = 319;
+  map<string, google.protobuf.UInt32Value> map_string_uint32_wrapper = 320;
+  map<string, google.protobuf.StringValue> map_string_string_wrapper = 321;
+  map<string, google.protobuf.BoolValue> map_string_bool_wrapper = 322;
+  map<string, google.protobuf.BytesValue> map_string_bytes_wrapper = 323;
 }
 
 // This proto includes a recursively nested message.
