@@ -42,6 +42,6 @@ go_proto_library(
     ],
     importpath = "github.com/google/cel-spec/proto/test/v1/testpb",
     deps = [
-        "@org_golang_google_genproto//googleapis/api/expr/v1alpha1:go_default_library",
+        "@org_golang_google_genproto_googleapis_api//expr/v1alpha1:go_default_library",
     ],
 )
