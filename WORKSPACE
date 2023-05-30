@@ -37,12 +37,13 @@ http_archive(
     ],
 )
 
+# googleapis as of 05/26/2023
 http_archive(
     name = "com_google_googleapis",
-    sha256 = "1f742f6cafe616fe73302db010e0b7ee6579cb1ce06010427b7d0995cbd80ce4",
-    strip_prefix = "googleapis-6a813acf535e4746fa4a135ce23547bb6425c26d",
+    strip_prefix = "googleapis-07c27163ac591955d736f3057b1619ece66f5b99",
+    sha256 = "bd8e735d881fb829751ecb1a77038dda4a8d274c45490cb9fcf004583ee10571",
     urls = [
-        "https://github.com/googleapis/googleapis/archive/6a813acf535e4746fa4a135ce23547bb6425c26d.tar.gz",
+        "https://github.com/googleapis/googleapis/archive/07c27163ac591955d736f3057b1619ece66f5b99.tar.gz",
     ],
 )
 
@@ -104,11 +105,22 @@ switched_rules_by_language(
 # Do *not* call *_dependencies(), etc, yet.  See comment at the end.
 
 # Generated Google APIs protos for Golang
+# Generated Google APIs protos for Golang 05/25/2023
 go_repository(
-  name = "org_golang_google_genproto",
-  build_file_proto_mode = "disable_global",
-  commit = "69f6226f97e558dbaa68715071622af0d86b3a17",
-  importpath = "google.golang.org/genproto",
+    name = "org_golang_google_genproto_googleapis_api",
+    build_file_proto_mode = "disable_global",
+    importpath = "google.golang.org/genproto/googleapis/api",
+    sum = "h1:m8v1xLLLzMe1m5P+gCTF8nJB9epwZQUBERm20Oy1poQ=",
+    version = "v0.0.0-20230525234035-dd9d682886f9",
+)
+
+# Generated Google APIs protos for Golang 05/25/2023
+go_repository(
+    name = "org_golang_google_genproto_googleapis_rpc",
+    build_file_proto_mode = "disable_global",
+    importpath = "google.golang.org/genproto/googleapis/rpc",
+    sum = "h1:0nDDozoAU19Qb2HwhXadU8OcsiO/09cnTqhUtq2MEOM=",
+    version = "v0.0.0-20230525234030-28d5490b6b19",
 )
 
 # gRPC deps
