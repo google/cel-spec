@@ -13,6 +13,7 @@ proto_library(
         "syntax.proto",
         "value.proto",
     ],
+    strip_import_prefix = "/proto",
     deps = [
         "@com_google_googleapis//google/rpc:status_proto",
         "@com_google_protobuf//:any_proto",
@@ -28,6 +29,7 @@ proto_library(
     srcs = [
         "syntax.proto",
     ],
+    strip_import_prefix = "/proto",
     deps = [
         "@com_google_protobuf//:duration_proto",
         "@com_google_protobuf//:struct_proto",
@@ -40,6 +42,7 @@ proto_library(
     srcs = [
         "checked.proto",
     ],
+    strip_import_prefix = "/proto",
     deps = [
         ":syntax_proto",
         "@com_google_protobuf//:empty_proto",
@@ -52,6 +55,7 @@ proto_library(
     srcs = [
         "value.proto",
     ],
+    strip_import_prefix = "/proto",
     deps = [
         "@com_google_protobuf//:any_proto",
         "@com_google_protobuf//:struct_proto",
@@ -63,6 +67,7 @@ proto_library(
     srcs = [
         "eval.proto",
     ],
+    strip_import_prefix = "/proto",
     deps = [
         ":value_proto",
         "@com_google_googleapis//google/rpc:status_proto",
@@ -74,6 +79,7 @@ proto_library(
     srcs = [
         "explain.proto",
     ],
+    strip_import_prefix = "/proto",
     deps = [
         ":value_proto",
     ],
