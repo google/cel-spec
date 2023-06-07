@@ -1,0 +1,54 @@
+package(default_visibility = ["//visibility:public"])
+
+##############################################################################
+# Common
+##############################################################################
+
+proto_library(
+    name = "conformance_proto",
+    srcs = [
+        "conformance_service.proto",
+    ],
+    strip_import_prefix = "/proto",
+    deps = [
+        "//proto/dev/cel/expr:expr_proto",
+        "@com_google_googleapis//google/api:client_proto",
+        "@com_google_googleapis//google/rpc:status_proto",
+    ],
+)
+
+##############################################################################
+# Java
+##############################################################################
+java_proto_library(
+    name = "conformance_java_proto",
+    deps = [":conformance_proto"],
+)
+
+###############################################################################
+## Go
+###############################################################################
+
+load("@io_bazel_rules_go//proto:def.bzl", "go_proto_library")
+
+go_proto_library(
+    name = "conformance_go_proto",
+    importpath = "dev.cel/expr/conformance",
+    protos = [":conformance_proto"],
+    deps = [
+        "//proto/dev/cel/expr:expr_go_proto",
+        "//proto/dev/cel/expr:google_rpc_status_go_proto",
+    ],
+)
+
+###############################################################################
+## C++
+###############################################################################
+
+# Note: cc_proto_library cannot generate a target for expr_proto due to the subtargets
+# defined below
+
+cc_proto_library(
+    name = "conformance_cc_proto",
+    deps = [":conformance_proto"],
+)
