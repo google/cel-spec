@@ -45,9 +45,6 @@ go_proto_library(
 ## C++
 ###############################################################################
 
-# Note: cc_proto_library cannot generate a target for expr_proto due to the subtargets
-# defined below
-
 cc_proto_library(
     name = "conformance_cc_proto",
     deps = [":conformance_proto"],
