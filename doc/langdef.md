@@ -372,7 +372,7 @@ Key values must be an allowed key type: `int`, `uint`, `bool`, or `string`. Thus
 maps are the union of what's allowed in protocol buffer maps and JSON objects.
 
 Note that the type checker uses a finer-grained notion of list and map types.
-Lists are `list(A)` for the homogenous type `A` of list elements. Maps are
+Lists are `list(A)` for the homogeneous type `A` of list elements. Maps are
 `map(K, V)` for maps with keys of type `K` and values of type `V`. The type
 `dyn` is used for heterogeneous values See
 [Gradual Type Checking](#gradual-type-checking). But these constraints are only
@@ -480,7 +480,7 @@ are used without conversion.
 
 Every protocol buffer field has a default value, and there is no semantic
 difference between a field set to this default value, and an unset field. For
-message fields, there default value is just the unset state, and an unset
+message fields, their default value is just the unset state, and an unset
 message field is distinct from one set to an empty (i.e. all-unset) message.
 
 The `has()` macro (see [Macros](#macros)) tells whether a message field is set
@@ -630,8 +630,8 @@ evaluated:
 Because CEL is free of side-effects, the order of evaluation among
 sub-expressions is not guaranteed. If multiple subexpressions would evaluate to
 errors causing the enclosing expression to evaluate to an error, it will
-propagate one or more of the sub-expression erors, but it is not specified which
-ones.
+propagate one or more of the sub-expression errors, but it is not specified
+which ones.
 
 ### Evaluation Environment
 
@@ -713,8 +713,8 @@ macros are:
     rest to `false`. Any other combination of boolean results evaluates to
     `false`, and any predicate error causes the macro to raise an error.
 *   `e.map(x, t)` transforms a list `e` by taking each element `x` to the
-    element given by the expression `t`, which can use the variable `x`. For
-    instance, `[1, 2, 3].map(n, n * n)` evaluates to `[1, 4, 9]`.  Any evaluation
+    function given by the expression `t`, which can use the variable `x`. For
+    instance, `[1, 2, 3].map(n, n * n)` evaluates to `[1, 4, 9]`. Any evaluation
     error for any element causes the macro to raise an error. The `map()` macro
     is not supported when `e` is a map.
 *   `e.filter(x, p)` returns the sublist of all elements `x` of list `e` which
@@ -1141,7 +1141,7 @@ message Msg {
 }
 
 // CEL - Produces false according to protobuf equality since the types of
-         Int32Value and FloatValue are not equal.
+//       Int32Value and FloatValue are not equal.
 Msg{values: [google.protobuf.Int32Value{value: 1}]}
   == Msg{values: [google.protbuf.FloatValue{value: 1.0}]}
 
@@ -1152,6 +1152,7 @@ Msg{values: [google.protobuf.Int32Value{value: 1}]}
 Msg{values: [google.protobuf.Int32Value{value: 1}]}.values
   == Msg{values: [google.protbuf.FloatValue{value: 1.0}]}.values
 ```
+
 ### Ordering
 
 Ordering operators are defined for `int`, `uint`, `double`, `string`, `bytes`,
