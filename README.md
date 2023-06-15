@@ -1,7 +1,5 @@
 # Common Expression Language
 
-[![Build Status](https://travis-ci.org/google/cel-spec.svg?branch=master)](https://travis-ci.org/google/cel-spec)
-
 The Common Expression Language (CEL) implements common semantics for expression
 evaluation, enabling different applications to more easily interoperate.
 
