@@ -1,0 +1,23 @@
+// Tests for runtime support of standard functions.
+
+syntax = "proto3";
+
+package dev.cel.expr.conformance;
+
+import "dev/cel/expr/checked.proto";
+
+option cc_enable_arenas = true;
+option go_package = "dev.cel/expr/conformance";
+option java_multiple_files = true;
+option java_outer_classname = "EnvcheckProto";
+option java_package = "dev.cel.expr.conformance";
+
+// The format of a standard environment, i.e. a collection of declarations
+// for the checker.
+message Env {
+  // Required.  The name of the environment.
+  string name = 1;
+
+  // The declarations in this environment.
+  repeated dev.cel.expr.Decl decl = 2;
+}
