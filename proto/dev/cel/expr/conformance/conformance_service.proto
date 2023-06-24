@@ -25,7 +25,7 @@ option cc_enable_arenas = true;
 option go_package = "dev.cel/expr/conformance";
 option java_multiple_files = true;
 option java_outer_classname = "ConformanceServiceProto";
-option java_package = "dev.cel.expr";
+option java_package = "dev.cel.expr.conformance";
 
 // Access a CEL implementation from another process or machine.
 // A CEL implementation is decomposed as a parser, a static checker,
