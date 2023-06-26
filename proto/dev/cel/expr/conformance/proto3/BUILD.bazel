@@ -1,0 +1,47 @@
+package(default_visibility = ["//visibility:public"])
+
+##############################################################################
+# Common
+##############################################################################
+
+proto_library(
+    name = "test_all_types_proto",
+    srcs = ["test_all_types.proto"],
+    strip_import_prefix = "/proto",
+    deps = [
+        "@com_google_protobuf//:any_proto",
+        "@com_google_protobuf//:duration_proto",
+        "@com_google_protobuf//:struct_proto",
+        "@com_google_protobuf//:timestamp_proto",
+        "@com_google_protobuf//:wrappers_proto",
+    ],
+)
+
+##############################################################################
+# Java
+##############################################################################
+java_proto_library(
+    name = "test_all_types_java_proto",
+    deps = [":test_all_types_proto"],
+)
+
+###############################################################################
+## Go
+###############################################################################
+
+load("@io_bazel_rules_go//proto:def.bzl", "go_proto_library")
+
+go_proto_library(
+    name = "test_all_types_go_proto",
+    importpath = "dev.cel/expr/conformance/proto3",
+    protos = [":test_all_types_proto"],
+)
+
+###############################################################################
+## C++
+###############################################################################
+
+cc_proto_library(
+    name = "test_all_types_cc_proto",
+    deps = [":test_all_types_proto"],
+)
