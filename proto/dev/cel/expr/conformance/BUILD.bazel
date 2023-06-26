@@ -5,7 +5,7 @@ package(default_visibility = ["//visibility:public"])
 ##############################################################################
 
 proto_library(
-    name = "conformance_service_proto",
+    name = "conformance_proto",
     srcs = [
         "conformance_service.proto",
         "envcheck.proto",
@@ -54,23 +54,8 @@ proto_library(
 # Java
 ##############################################################################
 java_proto_library(
-    name = "conformance_service_java_proto",
-    deps = [":conformance_service_proto"],
-)
-
-java_proto_library(
-    name = "conformance_service_java_proto",
-    deps = [":conformance_service_proto"],
-)
-
-java_proto_library(
-    name = "envcheck_java_proto",
-    deps = [":envcheck_proto"],
-)
-
-java_proto_library(
-    name = "simple_java_proto",
-    deps = [":simple_proto"],
+    name = "conformance_java_proto",
+    deps = [":conformance_proto"],
 )
 
 java_proto_library(
@@ -95,9 +80,9 @@ java_proto_library(
 load("@io_bazel_rules_go//proto:def.bzl", "go_proto_library")
 
 go_proto_library(
-    name = "conformance_service_go_proto",
+    name = "conformance_go_proto",
     importpath = "dev.cel/expr/conformance",
-    protos = [":conformance_service_proto"],
+    protos = [":conformance_proto"],
     deps = [
         "//proto/dev/cel/expr:expr_go_proto",
         "//proto/dev/cel/expr:google_rpc_status_go_proto",
@@ -137,6 +122,16 @@ go_proto_library(
 ###############################################################################
 
 cc_proto_library(
-    name = "conformance_cc_proto",
-    deps = [":conformance_proto"],
+    name = "conformance_service_cc_proto",
+    deps = [":conformance_service_proto"],
+)
+
+cc_proto_library(
+    name = "envcheck_cc_proto",
+    deps = [":envcheck_proto"],
+)
+
+cc_proto_library(
+    name = "simple_cc_proto",
+    deps = [":simple_proto"],
 )
