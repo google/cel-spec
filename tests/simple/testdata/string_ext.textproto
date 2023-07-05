@@ -1,0 +1,614 @@
+name: "strings ext tests"
+description: "Tests for the strings extension library."
+section: {
+  name: "charAt"
+  test: {
+    expr: "'tacocat'.charAt(3)"
+    value: {
+      string_value: "o"
+    }
+  }
+  test: {
+    expr: "'tacocat'.charAt(7)"
+    value: {
+      string_value: ""
+    }
+  }
+  test: {
+    expr: "'©αT'.charAt(0) == '©' && '©αT'.charAt(1) == 'α' && '©αT'.charAt(2) == 'T'"
+  }
+}
+section: {
+  name: "indexOf"
+  test: {
+    expr: "'tacocat'.indexOf('')"
+    value: {
+      int64_value: 0
+    }
+  }
+  test: {
+    expr: "'tacocat'.indexOf('ac')"
+    value: {
+      int64_value: 1
+    }
+  }
+  test: {
+    expr: "'tacocat'.indexOf('none') == -1"
+  }
+  test: {
+    expr: "'tacocat'.indexOf('', 3) == 3"
+  }
+  test: {
+    expr: "'tacocat'.indexOf('a', 3) == 5"
+  }
+  test: {
+    expr: "'tacocat'.indexOf('at', 3) == 5"
+  }
+  test: {
+    expr: "'ta©o©αT'.indexOf('©') == 2"
+  }
+  test: {
+    expr: "'ta©o©αT'.indexOf('©', 3) == 4"
+  }
+  test: {
+    expr: "'ta©o©αT'.indexOf('©αT', 3) == 4"
+  }
+  test: {
+    expr: "'ta©o©αT'.indexOf('©α', 5) == -1"
+  }
+  test: {
+    expr: "'ijk'.indexOf('k') == 2"
+  }
+  test: {
+    expr: "'hello wello'.indexOf('hello wello') == 0"
+  }
+  test: {
+    expr: "'hello wello'.indexOf('ello', 6) == 7"
+  }
+  test: {
+    expr: "'hello wello'.indexOf('elbo room!!') == -1"
+  }
+  test: {
+    expr: "'hello wello'.indexOf('elbo room!!!') == -1"
+  }
+}
+section: {
+  name: "lastIndexOf"
+  test: {
+    expr: "'tacocat'.lastIndexOf('') == 7"
+  }
+  test: {
+    expr: "'tacocat'.lastIndexOf('at') == 5"
+  }
+  test: {
+    expr: "'tacocat'.lastIndexOf('none') == -1"
+  }
+  test: {
+    expr: "'tacocat'.lastIndexOf('', 3) == 3"
+  }
+  test: {
+    expr: "'tacocat'.lastIndexOf('a', 3) == 1"
+  }
+  test: {
+    expr: "'ta©o©αT'.lastIndexOf('©') == 4"
+  }
+  test: {
+    expr: "'ta©o©αT'.lastIndexOf('©', 3) == 2"
+  }
+  test: {
+    expr: "'ta©o©αT'.lastIndexOf('©α', 4) == 4"
+  }
+  test: {
+    expr: "'hello wello'.lastIndexOf('ello', 6) == 1"
+  }
+  test: {
+    expr: "'hello wello'.lastIndexOf('low') == -1"
+  }
+  test: {
+    expr: "'hello wello'.lastIndexOf('elbo room!!') == -1"
+  }
+  test: {
+    expr: "'hello wello'.lastIndexOf('elbo room!!!') == -1"
+  }
+  test: {
+    expr: "'hello wello'.lastIndexOf('hello wello') == 0"
+  }
+  test: {
+    expr: "'bananananana'.lastIndexOf('nana', 7) == 6"
+  }
+}
+section: {
+  name: "Ascii casing"
+  test: {
+    expr: "'TacoCat'.lowerAscii() == 'tacocat'"
+  }
+  test: {
+    expr: "'TacoCÆt'.lowerAscii() == 'tacocÆt'"
+  }
+  test: {
+    expr: "'TacoCÆt Xii'.lowerAscii() == 'tacocÆt xii'"
+  }
+  test: {
+    expr: "'tacoCat'.upperAscii() == 'TACOCAT'"
+  }
+  test: {
+    expr: "'tacoCαt'.upperAscii() == 'TACOCαT'"
+  }
+}
+section: {
+  name: "replace"
+  test: {
+    expr: "'12 days 12 hours'.replace('{0}', '2') == '12 days 12 hours'"
+  }
+  test: {
+    expr: "'{0} days {0} hours'.replace('{0}', '2') == '2 days 2 hours'"
+  }
+  test: {
+    expr: "'{0} days {0} hours'.replace('{0}', '2', 1).replace('{0}', '23') == '2 days 23 hours'"
+  }
+  test: {
+    expr: "'1 ©αT taco'.replace('αT', 'o©α') == '1 ©o©α taco'"
+  }
+}
+section: {
+  name: "split"
+  test: {
+    expr: "'hello world'.split(' ') == ['hello', 'world']"
+  }
+  test: {
+    expr: "'hello world events!'.split(' ', 0) == []"
+  }
+  test: {
+    expr: "'hello world events!'.split(' ', 1) == ['hello world events!']"
+  }
+  test: {
+    expr: "'o©o©o©o'.split('©', -1) == ['o', 'o', 'o', 'o']"
+  }
+}
+section: {
+  name: "substring"
+  test: {
+    expr: "'tacocat'.substring(4) == 'cat'"
+  }
+  test: {
+    expr: "'tacocat'.substring(7) == ''"
+  }
+  test: {
+    expr: "'tacocat'.substring(0, 4) == 'taco'"
+  }
+  test: {
+    expr: "'tacocat'.substring(4, 4) == ''"
+  }
+  test: {
+    expr: "'ta©o©αT'.substring(2, 6) == '©o©α'"
+  }
+  test: {
+    expr: "'ta©o©αT'.substring(7, 7) == ''"
+  }
+}
+section: {
+  name: "trim"
+  test: {
+    expr: "' \\f\\n\\r\\t\\vtext  '.trim() == 'text'"
+  }
+  test: {
+    expr: "'\\u0085\\u00a0\\u1680text'.trim() == 'text'"
+  }
+  test: {
+    expr: "'text\\u2000\\u2001\\u2002\\u2003\\u2004\\u2004\\u2006\\u2007\\u2008\\u2009'.trim() == 'text'"
+  }
+  test: {
+    expr: "'\\u200atext\\u2028\\u2029\\u202F\\u205F\\u3000'.trim() == 'text'"
+  }
+  test: {
+    expr: "'\\u180etext\\u200b\\u200c\\u200d\\u2060\\ufeff'.trim() == '\\u180etext\\u200b\\u200c\\u200d\\u2060\\ufeff'"
+  }
+}
+section: {
+  name: "join"
+  test: {
+    expr: "['x', 'y'].join() == 'xy'"
+  }
+  test: {
+    expr: "['x', 'y'].join('-') == 'x-y'"
+  }
+  test: {
+    expr: "[].join() == ''"
+  }
+  test: {
+    expr: "[].join('-') == ''"
+  }
+}
+section: {
+  name: "quote"
+  test: {
+    expr: "strings.quote(\"first\\nsecond\") == \"\\\"first\\\\nsecond\\\"\""
+  }
+  test: {
+    expr: "strings.quote(\"bell\\a\") == \"\\\"bell\\\\a\\\"\""
+  }
+  test: {
+    expr: "strings.quote(\"\\bbackspace\") == \"\\\"\\\\bbackspace\\\"\""
+  }
+  test: {
+    expr: "strings.quote(\"\\fform feed\") == \"\\\"\\\\fform feed\\\"\""
+  }
+  test: {
+    expr: "strings.quote(\"carriage \\r return\") == \"\\\"carriage \\\\r return\\\"\""
+  }
+  test: {
+    expr: "strings.quote(\"horizontal tab\\t\") == \"\\\"horizontal tab\\\\t\\\"\""
+  }
+  test: {
+    expr: "strings.quote(\"vertical \\v tab\") == \"\\\"vertical \\\\v tab\\\"\""
+  }
+  test: {
+    expr: "strings.quote(\"double \\\\\\\\ slash\") == \"\\\"double \\\\\\\\\\\\\\\\ slash\\\"\""
+  }
+  test: {
+    expr: "strings.quote(\"two escape sequences \\\\a\\\\n\") == \"\\\"two escape sequences \\\\\\\\a\\\\\\\\n\\\"\""
+  }
+  test: {
+    expr: "strings.quote(\"verbatim\") == \"\\\"verbatim\\\"\""
+  }
+  test: {
+    expr: "strings.quote(\"ends with \\\\\") == \"\\\"ends with \\\\\\\\\\\"\""
+  }
+  test: {
+    expr: "strings.quote(\"\\\\ starts with\") == \"\\\"\\\\\\\\ starts with\\\"\""
+  }
+  test: {
+    expr: "strings.quote(\"printable unicode😀\") == \"\\\"printable unicode😀\\\"\""
+  }
+  test: {
+    expr: "strings.quote(\"mid string \\\" quote\") == \"\\\"mid string \\\\\\\" quote\\\"\""
+  }
+  test: {
+    expr: "strings.quote('single-quote with \"double quote\"') == \"\\\"single-quote with \\\\\\\"double quote\\\\\\\"\\\"\""
+  }
+  test: {
+    expr: "strings.quote(\"size('ÿ')\") == \"\\\"size('ÿ')\\\"\""
+  }
+  test: {
+    expr: "strings.quote(\"size('πέντε')\") == \"\\\"size('πέντε')\\\"\""
+  }
+  test: {
+    expr: "strings.quote(\"завтра\") == \"\\\"завтра\\\"\""
+  }
+  test: {
+    expr: "strings.quote(\"\\U0001F431\\U0001F600\\U0001F61B\")"
+    value: {
+      string_value: "\"🐱😀😛\""
+    }
+  }
+  test: {
+    expr: "strings.quote(\"ta©o©αT\") == \"\\\"ta©o©αT\\\"\""
+  }
+  test: {
+    expr: "strings.quote(\"\")"
+    value: {
+      string_value: "\"\""
+    }
+  }
+}
+section: {
+  name: "value errors"
+  test: {
+    expr: "'tacocat'.charAt(30) == ''"
+    eval_error: {
+      errors: {
+        message: "index out of range: 30"
+      }
+    }
+  }
+  test: {
+    expr: "'tacocat'.indexOf('a', 30) == -1"
+    eval_error: {
+      errors: {
+        message: "index out of range: 30"
+      }
+    }
+  }
+  test: {
+    expr: "'tacocat'.lastIndexOf('a', -1) == -1"
+    eval_error: {
+      errors: {
+        message: "index out of range: -1"
+      }
+    }
+  }
+  test: {
+    expr: "'tacocat'.lastIndexOf('a', 30) == -1"
+    eval_error: {
+      errors: {
+        message: "index out of range: 30"
+      }
+    }
+  }
+  test: {
+    expr: "'tacocat'.substring(40) == 'cat'"
+    eval_error: {
+      errors: {
+        message: "index out of range: 40"
+      }
+    }
+  }
+  test: {
+    expr: "'tacocat'.substring(-1) == 'cat'"
+    eval_error: {
+      errors: {
+        message: "index out of range: -1"
+      }
+    }
+  }
+  test: {
+    expr: "'tacocat'.substring(1, 50) == 'cat'"
+    eval_error: {
+      errors: {
+        message: "index out of range: 50"
+      }
+    }
+  }
+  test: {
+    expr: "'tacocat'.substring(49, 50) == 'cat'"
+    eval_error: {
+      errors: {
+        message: "index out of range: 49"
+      }
+    }
+  }
+  test: {
+    expr: "'tacocat'.substring(4, 3) == ''"
+    eval_error: {
+      errors: {
+        message: "invalid substring range. start: 4, end: 3"
+      }
+    }
+  }
+}
+section: {
+  name: "type errors"
+  test: {
+    expr: "42.charAt(2) == ''"
+    disable_check: true
+    eval_error: {
+      errors: {
+        message: "no such overload"
+      }
+    }
+  }
+  test: {
+    expr: "'hello'.charAt(true) == ''"
+    disable_check: true
+    eval_error: {
+      errors: {
+        message: "no such overload"
+      }
+    }
+  }
+  test: {
+    expr: "24.indexOf('2') == 0"
+    disable_check: true
+    eval_error: {
+      errors: {
+        message: "no such overload"
+      }
+    }
+  }
+  test: {
+    expr: "'hello'.indexOf(true) == 1"
+    disable_check: true
+    eval_error: {
+      errors: {
+        message: "no such overload"
+      }
+    }
+  }
+  test: {
+    expr: "42.indexOf('4', 0) == 0"
+    disable_check: true
+    eval_error: {
+      errors: {
+        message: "no such overload"
+      }
+    }
+  }
+  test: {
+    expr: "'42'.indexOf(4, 0) == 0"
+    disable_check: true
+    eval_error: {
+      errors: {
+        message: "no such overload"
+      }
+    }
+  }
+  test: {
+    expr: "'42'.indexOf('4', '0') == 0"
+    disable_check: true
+    eval_error: {
+      errors: {
+        message: "no such overload"
+      }
+    }
+  }
+  test: {
+    expr: "'42'.indexOf('4', 0, 1) == 0"
+    disable_check: true
+    eval_error: {
+      errors: {
+        message: "no such overload"
+      }
+    }
+  }
+  test: {
+    expr: "42.split('2') == ['4']"
+    disable_check: true
+    eval_error: {
+      errors: {
+        message: "no such overload"
+      }
+    }
+  }
+  test: {
+    expr: "42.replace(2, 1) == '41'"
+    disable_check: true
+    eval_error: {
+      errors: {
+        message: "no such overload"
+      }
+    }
+  }
+  test: {
+    expr: "'42'.replace(2, 1) == '41'"
+    disable_check: true
+    eval_error: {
+      errors: {
+        message: "no such overload"
+      }
+    }
+  }
+  test: {
+    expr: "'42'.replace('2', 1) == '41'"
+    disable_check: true
+    eval_error: {
+      errors: {
+        message: "no such overload"
+      }
+    }
+  }
+  test: {
+    expr: "42.replace('2', '1', 1) == '41'"
+    disable_check: true
+    eval_error: {
+      errors: {
+        message: "no such overload"
+      }
+    }
+  }
+  test: {
+    expr: "'42'.replace(2, '1', 1) == '41'"
+    disable_check: true
+    eval_error: {
+      errors: {
+        message: "no such overload"
+      }
+    }
+  }
+  test: {
+    expr: "'42'.replace('2', 1, 1) == '41'"
+    disable_check: true
+    eval_error: {
+      errors: {
+        message: "no such overload"
+      }
+    }
+  }
+  test: {
+    expr: "'42'.replace('2', '1', '1') == '41'"
+    disable_check: true
+    eval_error: {
+      errors: {
+        message: "no such overload"
+      }
+    }
+  }
+  test: {
+    expr: "'42'.replace('2', '1', 1, false) == '41'"
+    disable_check: true
+    eval_error: {
+      errors: {
+        message: "no such overload"
+      }
+    }
+  }
+  test: {
+    expr: "42.split('') == ['4', '2']"
+    disable_check: true
+    eval_error: {
+      errors: {
+        message: "no such overload"
+      }
+    }
+  }
+  test: {
+    expr: "'42'.split(2) == ['4']"
+    disable_check: true
+    eval_error: {
+      errors: {
+        message: "no such overload"
+      }
+    }
+  }
+  test: {
+    expr: "42.split('2', '1') == ['4']"
+    disable_check: true
+    eval_error: {
+      errors: {
+        message: "no such overload"
+      }
+    }
+  }
+  test: {
+    expr: "'42'.split(2, 1) == ['4']"
+    disable_check: true
+    eval_error: {
+      errors: {
+        message: "no such overload"
+      }
+    }
+  }
+  test: {
+    expr: "'42'.split('2', '1') == ['4']"
+    disable_check: true
+    eval_error: {
+      errors: {
+        message: "no such overload"
+      }
+    }
+  }
+  test: {
+    expr: "'42'.split('2', 1, 1) == ['4']"
+    disable_check: true
+    eval_error: {
+      errors: {
+        message: "no such overload"
+      }
+    }
+  }
+  test: {
+    expr: "'hello'.substring(1, 2, 3) == ''"
+    disable_check: true
+    eval_error: {
+      errors: {
+        message: "no such overload"
+      }
+    }
+  }
+  test: {
+    expr: "30.substring(true, 3) == ''"
+    disable_check: true
+    eval_error: {
+      errors: {
+        message: "no such overload"
+      }
+    }
+  }
+  test: {
+    expr: "'tacocat'.substring(true, 3) == ''"
+    disable_check: true
+    eval_error: {
+      errors: {
+        message: "no such overload"
+      }
+    }
+  }
+  test: {
+    expr: "'tacocat'.substring(0, false) == ''"
+    disable_check: true
+    eval_error: {
+      errors: {
+        message: "no such overload"
+      }
+    }
+  }
+}
