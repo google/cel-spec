@@ -82,6 +82,9 @@ message SimpleTest {
   // The container for name resolution.
   string container = 13;
 
+  // The locale to use for the evaluation phase.
+  string locale = 14;
+
   // Variable bindings to use for the eval phase.
   map<string, dev.cel.expr.ExprValue> bindings = 7;
 
@@ -108,7 +111,7 @@ message SimpleTest {
     // (Using explicit message since oneof can't handle repeated.)
     UnknownSetMatcher any_unknowns = 12;
   }
-  // Next is 14.
+  // Next is 15.
 }
 
 // Matches error results from Eval.
