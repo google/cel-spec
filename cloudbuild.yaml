@@ -4,6 +4,6 @@ steps:
   args: ['test', '--test_output=errors', '...']
   id: bazel-test
   waitFor: ['-']
-timeout: 10m
+timeout: 15m
 options:
   machineType: 'N1_HIGHCPU_8'
