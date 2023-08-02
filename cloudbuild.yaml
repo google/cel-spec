@@ -6,4 +6,4 @@ steps:
   waitFor: ['-']
 timeout: 15m
 options:
-  machineType: 'N1_HIGHCPU_8'
+  machineType: 'N1_HIGHCPU_32'
