@@ -38,7 +38,7 @@ CEL expressions support most operators and functions one would expect when
 working with protocol buffers: boolean operators, relations, arithmetics on
 numbers, string and byte string operations, and operations to deal with lists
 and maps. The full reference of standard operations is described in the
-[language definiton](langdef.md#standard). Note that applications of CEL may add
+[language definition](langdef.md#standard). Note that applications of CEL may add
 more functions and also allow users to define their own.
 
 CEL also supports construction of list, map, and protocol buffer objects. The
