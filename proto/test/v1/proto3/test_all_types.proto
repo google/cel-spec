@@ -4,6 +4,7 @@ package google.api.expr.test.v1.proto3;
 
 import "google/protobuf/any.proto";
 import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
 import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/wrappers.proto";
@@ -65,6 +66,7 @@ message TestAllTypes {
   google.protobuf.ListValue list_value = 114;
   google.protobuf.NullValue null_value = 115;
   optional google.protobuf.NullValue optional_null_value = 116;
+  google.protobuf.FieldMask field_mask = 117;
 
   // Nested messages
   oneof nested_type {
