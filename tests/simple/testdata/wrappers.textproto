@@ -1,0 +1,260 @@
+name: "wrappers"
+description: "Conformance tests related to wrapper types."
+
+# google.protobuf.BoolValue
+section {
+  name: "bool"
+  test {
+    name: "to_any"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_any: google.protobuf.BoolValue{value: true}}.single_any"
+    value {
+      bool_value: true
+    }
+  }
+  test {
+    name: "to_json"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_value: google.protobuf.BoolValue{value: true}}.single_value"
+    value {
+      bool_value: true
+    }
+  }
+}
+
+# google.protobuf.Int32Value
+section {
+  name: "int32"
+  test {
+    name: "to_any"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_any: google.protobuf.Int32Value{value: 1}}.single_any"
+    value {
+      int64_value: 1
+    }
+  }
+  test {
+    name: "to_json"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_value: google.protobuf.Int32Value{value: 1}}.single_value"
+    value {
+      double_value: 1
+    }
+  }
+}
+
+# google.protobuf.Int64Value
+section {
+  name: "int64"
+  test {
+    name: "to_any"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_any: google.protobuf.Int64Value{value: 1}}.single_any"
+    value {
+      int64_value: 1
+    }
+  }
+  test {
+    name: "to_json_number"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_value: google.protobuf.Int64Value{value: 1}}.single_value"
+    value {
+      double_value: 1
+    }
+  }
+  test {
+    name: "to_json_string"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_value: google.protobuf.Int64Value{value: 9223372036854775807}}.single_value"
+    value {
+      string_value: "9223372036854775807"
+    }
+  }
+}
+
+# google.protobuf.UInt32Value
+section {
+  name: "uint32"
+  test {
+    name: "to_any"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_any: google.protobuf.UInt32Value{value: 1u}}.single_any"
+    value {
+      uint64_value: 1
+    }
+  }
+  test {
+    name: "to_json"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_value: google.protobuf.UInt32Value{value: 1u}}.single_value"
+    value {
+      double_value: 1
+    }
+  }
+}
+
+# google.protobuf.UInt64Value
+section {
+  name: "uint64"
+  test {
+    name: "to_any"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_any: google.protobuf.UInt64Value{value: 1u}}.single_any"
+    value {
+      uint64_value: 1
+    }
+  }
+  test {
+    name: "to_json_number"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_value: google.protobuf.UInt64Value{value: 1u}}.single_value"
+    value {
+      double_value: 1
+    }
+  }
+  test {
+    name: "to_json_string"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_value: google.protobuf.UInt64Value{value: 18446744073709551615u}}.single_value"
+    value {
+      string_value: "18446744073709551615"
+    }
+  }
+}
+
+# google.protobuf.FloatValue
+section {
+  name: "float"
+  test {
+    name: "to_any"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_any: google.protobuf.FloatValue{value: 1.0}}.single_any"
+    value {
+      double_value: 1
+    }
+  }
+  test {
+    name: "to_json"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_value: google.protobuf.FloatValue{value: 1.0}}.single_value"
+    value {
+      double_value: 1
+    }
+  }
+}
+
+# google.protobuf.DoubleValue
+section {
+  name: "double"
+  test {
+    name: "to_any"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_any: google.protobuf.DoubleValue{value: 1.0}}.single_any"
+    value {
+      double_value: 1
+    }
+  }
+  test {
+    name: "to_json"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_value: google.protobuf.DoubleValue{value: 1.0}}.single_value"
+    value {
+      double_value: 1
+    }
+  }
+}
+
+# google.protobuf.BytesValue
+section {
+  name: "bytes"
+  test {
+    name: "to_any"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_any: google.protobuf.BytesValue{value: b'foo'}}.single_any"
+    value {
+      bytes_value: "foo"
+    }
+  }
+  test {
+    name: "to_json"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_value: google.protobuf.BytesValue{value: b'foo'}}.single_value"
+    value {
+      string_value: "Zm9v"
+    }
+  }
+}
+
+# google.protobuf.StringValue
+section {
+  name: "string"
+  test {
+    name: "to_any"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_any: google.protobuf.StringValue{value: 'foo'}}.single_any"
+    value {
+      string_value: "foo"
+    }
+  }
+  test {
+    name: "to_json"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_value: google.protobuf.StringValue{value: 'foo'}}.single_value"
+    value {
+      string_value: "foo"
+    }
+  }
+}
+
+# google.protobuf.Value
+section {
+  name: "value"
+  test {
+    name: "default_to_json"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_any: TestAllTypes{}.single_value}.single_any"
+    value {
+      null_value: NULL_VALUE
+    }
+  }
+}
+
+# google.protobuf.ListValue
+section {
+  name: "list_value"
+  description: ""
+  test {
+    name: "literal_to_any"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_any: []}.single_any"
+    value {
+      list_value {}
+    }
+  }
+}
+
+# google.protobuf.Struct
+section {
+  name: "struct"
+  test {
+    name: "literal_to_any"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_any: {}}.single_any"
+    value {
+      map_value {}
+    }
+  }
+}
+
+# google.protobuf.FieldMask
+section {
+  name: "field_mask"
+  test {
+    name: "to_json"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_value: google.protobuf.FieldMask{paths: ['foo', 'bar']}}.single_value"
+    value {
+      string_value: "foo,bar"
+    }
+  }
+}
