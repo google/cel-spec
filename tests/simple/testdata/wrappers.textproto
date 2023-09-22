@@ -258,3 +258,42 @@ section {
     }
   }
 }
+
+# google.protobuf.Duration
+section {
+  name: "duration"
+  test {
+    name: "to_json"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_value: duration('1000000s')}.single_value"
+    value {
+      string_value: "1000000s"
+    }
+  }
+}
+
+# google.protobuf.Timestamp
+section {
+  name: "timestamp"
+  test {
+    name: "to_json"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_value: timestamp('9999-12-31T23:59:59.999999999Z')}.single_value"
+    value {
+      string_value: "9999-12-31T23:59:59.999999999Z"
+    }
+  }
+}
+
+# google.protobuf.Empty
+section {
+  name: "empty"
+  test {
+    name: "to_json"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_value: google.protobuf.Empty{}}.single_value"
+    value {
+      map_value {}
+    }
+  }
+}
