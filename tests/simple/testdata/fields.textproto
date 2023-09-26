@@ -415,6 +415,16 @@ section {
     ## Current behavior:
     ## value: { int64_value: 1 }
   }
+  test {
+    name: "map_value_repeat_key_heterogeneous"
+    description: "map should not support repeated key."
+    expr: "{0: 1, 0u: 2}[0.0]"
+    eval_error: {
+      errors: { message: "Failed with repeated key" }
+    }
+    ## Current behavior:
+    ## value: { int64_value: 1 }
+  }
 }
 section {
   name: "in"
