@@ -5,6 +5,7 @@ import (
 	"bufio"
 	"context"
 	"encoding/base64"
+	"errors"
 	"fmt"
 	"io"
 	"log"
@@ -17,6 +18,7 @@ import (
 	"google.golang.org/grpc/reflection"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/emptypb"
 
 	confpb "google.golang.org/genproto/googleapis/api/expr/conformance/v1alpha1"
 )
@@ -38,15 +40,18 @@ type grpcConfClient struct {
 }
 
 // pipe conformance client uses the following protocol:
-//   * two lines are sent over input
-//   * first input line is "parse", "check", or "eval"
-//   * second input line is JSON of the corresponding request
-//   * one output line is expected, repeat again.
+//   - two lines are sent over input
+//   - first input line is "parse", "check", "ping", or "eval"
+//   - second input line is encoded request message
+//   - one output line is expected, repeat again.
 type pipeConfClient struct {
-	cmd       *exec.Cmd
-	stdOut    *bufio.Reader
-	stdIn     io.Writer
-	useBase64 bool
+	binary       string
+	cmd_args     []string
+	cmd          *exec.Cmd
+	stdOut       *bufio.Reader
+	stdIn        io.Writer
+	useBase64    bool
+	pingsEnabled bool
 }
 
 // NewGrpcClient creates a new gRPC ConformanceService client. A server binary
@@ -122,60 +127,62 @@ func ExampleNewGrpcClient() {
 // method returns a non-nil error.
 //
 // base64Encode enables base64Encoded messages (b64encode(Any.serializeToString))
-func NewPipeClient(serverCmd string, base64Encode bool) (ConfClient, error) {
+// pingsEnabled enables pinging between reqests to test subprocess health
+func NewPipeClient(serverCmd string, base64Encode bool, pingsEnabled bool) (ConfClient, error) {
 	c := pipeConfClient{
-		useBase64: base64Encode,
+		useBase64:    base64Encode,
+		pingsEnabled: pingsEnabled,
 	}
 
 	fields := strings.Fields(serverCmd)
 	if len(fields) < 1 {
 		return &c, fmt.Errorf("server cmd '%s' invalid", serverCmd)
 	}
-	cmd := exec.Command(fields[0], fields[1:]...)
+	c.binary = fields[0]
+	c.cmd_args = fields[1:]
+
+	return &c, c.reset()
+}
+
+// reset restarts the conformance server piped implementation.
+func (c *pipeConfClient) reset() error {
+	if c.binary == "" {
+		return errors.New("reset on invalid pipe service configuration")
+	}
+	cmd := exec.Command(c.binary, c.cmd_args...)
 	out, err := cmd.StdoutPipe()
 	if err != nil {
-		return &c, err
+		return err
 	}
 	c.stdIn, err = cmd.StdinPipe()
 	if err != nil {
-		return &c, err
+		return err
 	}
 	cmd.Stderr = os.Stderr // share our error stream
 
 	err = cmd.Start()
 	if err != nil {
-		return &c, err
+		return err
 	}
 	// Only assign cmd for stopping if it has successfully started.
 	c.cmd = cmd
 	c.stdOut = bufio.NewReader(out)
-	return &c, nil
+	return nil
 }
 
-// ExampleNewPipeClient creates a new CEL pipe client using a path to a server binary.
-// TODO Run from celrpc_test.go.
-func ExampleNewPipeClient() {
-	c, err := NewPipeClient("/path/to/server/binary", false)
-	defer c.Shutdown()
-	if err != nil {
-		log.Fatal("Couldn't create client")
+func (c *pipeConfClient) isAlive() bool {
+	m := emptypb.Empty{}
+	err := c.pipeCommand("ping", &m, &m)
+	return err == nil
+}
+
+// checkAlive tests the client process health and restarts it on failure.
+func (c *pipeConfClient) checkAlive() error {
+	if c.isAlive() {
+		return nil
 	}
-	parseRequest := confpb.ParseRequest{
-		CelSource: "1 + 1",
-	}
-	parseResponse, err := c.Parse(context.Background(), &parseRequest)
-	if err != nil {
-		log.Fatal("Couldn't parse")
-	}
-	parsedExpr := parseResponse.ParsedExpr
-	evalRequest := confpb.EvalRequest{
-		ExprKind: &confpb.EvalRequest_ParsedExpr{ParsedExpr: parsedExpr},
-	}
-	evalResponse, err := c.Eval(context.Background(), &evalRequest)
-	if err != nil {
-		log.Fatal("Couldn't eval")
-	}
-	fmt.Printf("1 + 1 is %v\n", evalResponse.Result.GetValue().GetInt64Value())
+	c.Shutdown()
+	return c.reset()
 }
 
 func (c *pipeConfClient) marshal(in proto.Message) (string, error) {
@@ -203,6 +210,11 @@ func (c *pipeConfClient) unmarshal(encoded string, out proto.Message) error {
 }
 
 func (c *pipeConfClient) pipeCommand(cmd string, in proto.Message, out proto.Message) error {
+	if c.pingsEnabled && cmd != "ping" {
+		if err := c.checkAlive(); err != nil {
+			return err
+		}
+	}
 	if _, err := c.stdIn.Write([]byte(cmd + "\n")); err != nil {
 		return err
 	}

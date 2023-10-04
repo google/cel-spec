@@ -12,6 +12,7 @@ go_binary(
     deps = [
         "@org_golang_google_protobuf//encoding/protojson:go_default_library",
         "@org_golang_google_protobuf//proto:go_default_library",
+        "@org_golang_google_protobuf//types/known/emptypb:go_default_library",
         "@org_golang_google_genproto_googleapis_api//expr/v1alpha1:go_default_library",
         "@org_golang_google_genproto_googleapis_api//expr/conformance/v1alpha1:go_default_library",
         "@org_golang_google_genproto_googleapis_rpc//status:go_default_library", 
