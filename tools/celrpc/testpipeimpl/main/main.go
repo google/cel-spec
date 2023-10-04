@@ -15,6 +15,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/emptypb"
 
 	confpb "google.golang.org/genproto/googleapis/api/expr/conformance/v1alpha1"
 	exprpb "google.golang.org/genproto/googleapis/api/expr/v1alpha1"
@@ -138,6 +139,10 @@ func processLoop() int {
 				}
 			}
 
+			if req.CelSource == "test_crash" {
+				os.Exit(2)
+			}
+
 			if err = c.serialize(writer, &resp); err != nil {
 				fmt.Fprintf(os.Stderr, "error serializing parse resp %v\n", err)
 				return 1
@@ -180,6 +185,17 @@ func processLoop() int {
 			}
 			if err = c.serialize(writer, &resp); err != nil {
 				fmt.Fprintf(os.Stderr, "error serializing check resp %v\n", err)
+				return 1
+			}
+		case "ping":
+			req := emptypb.Empty{}
+			if err := c.unmarshal(msg, &req); err != nil {
+				fmt.Fprintf(os.Stderr, "bad ping req: %v\n", err)
+				return 1
+			}
+			resp := emptypb.Empty{}
+			if err = c.serialize(writer, &resp); err != nil {
+				fmt.Fprintf(os.Stderr, "error serializing ping resp %v\n", err)
 				return 1
 			}
 		default:

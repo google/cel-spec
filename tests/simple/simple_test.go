@@ -49,6 +49,7 @@ var (
 	flagSkipCheck      bool
 	flagSkipTests      stringArray
 	flagPipe           bool
+	flagPipePings      bool
 	flagPipeBase64     bool
 	rc                 *runConfig
 )
@@ -62,7 +63,8 @@ func init() {
 	flag.BoolVar(&flagSkipCheck, "skip_check", false, "force skipping the check phase")
 	flag.Var(&flagSkipTests, "skip_test", "name(s) of tests to skip. can be set multiple times. to skip the following tests: f1/s1/t1, f1/s1/t2, f1/s2/*, f2/s3/t3, you give the arguments --skip_test=f1/s1/t1,t2;s2 --skip_test=f2/s3/t3")
 	flag.BoolVar(&flagPipe, "pipe", false, "Use pipes instead of gRPC")
-	flag.BoolVar(&flagPipeBase64, "pipe_base64", false, "Use base64 encoded wire format proto in pipes (default JSON).")
+	flag.BoolVar(&flagPipeBase64, "pipe_base64", true, "Use base64 encoded wire format proto in pipes (if disabled, use JSON).")
+	flag.BoolVar(&flagPipePings, "pipe_pings", false, "Enable pinging pipe client to subprocess status.")
 
 	flag.Parse()
 }
@@ -103,7 +105,7 @@ func initRunConfig() (*runConfig, error) {
 		var cli celrpc.ConfClient
 		var err error
 		if flagPipe {
-			cli, err = celrpc.NewPipeClient(cmd, flagPipeBase64)
+			cli, err = celrpc.NewPipeClient(cmd, flagPipeBase64, flagPipePings)
 		} else {
 			cli, err = celrpc.NewGrpcClient(cmd)
 		}

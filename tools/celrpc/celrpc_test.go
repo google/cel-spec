@@ -37,7 +37,7 @@ func TestPipeParse(t *testing.T) {
 			if err != nil {
 				t.Fatalf("error loading bazel runfile path, %v", err)
 			}
-			conf, err := NewPipeClient(serverCmd, useBase64)
+			conf, err := NewPipeClient(serverCmd, useBase64, false /*usePings*/)
 			defer conf.Shutdown()
 			if err != nil {
 				t.Fatalf("error initializing client got %v wanted nil", err)
@@ -74,6 +74,76 @@ func TestPipeParse(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestPipeCrashRecover(t *testing.T) {
+	for _, useBase64 := range []bool{false, true} {
+		t := t
+		t.Run(fmt.Sprintf("useBase64=%v", useBase64), func(t *testing.T) {
+			serverCmd, err := bazel.Runfile(serverCmd)
+
+			if useBase64 {
+				serverCmd = fmt.Sprintf("%s %s", serverCmd, serverBase64Flag)
+			}
+
+			if err != nil {
+				t.Fatalf("error loading bazel runfile path, %v", err)
+			}
+			conf, err := NewPipeClient(serverCmd, useBase64, true /*usePings*/)
+			defer conf.Shutdown()
+			if err != nil {
+				t.Fatalf("error initializing client got %v wanted nil", err)
+			}
+			var resp *confpb.ParseResponse
+			r := make(chan *confpb.ParseResponse)
+			e := make(chan error)
+			go func() {
+				resp, err := conf.Parse(context.Background(), &confpb.ParseRequest{
+					CelSource: "test_crash",
+				})
+				e <- err
+				r <- resp
+			}()
+
+			select {
+			case <-time.After(2 * time.Second):
+				err = errors.New("timeout")
+			case err = <-e:
+				resp = <-r
+			}
+
+			if err == nil {
+				t.Fatalf("Expected error from pipe, got nil")
+			}
+
+			go func() {
+				resp, err := conf.Parse(context.Background(), &confpb.ParseRequest{
+					CelSource: "1 + 1",
+				})
+				e <- err
+				r <- resp
+			}()
+
+			select {
+			case <-time.After(2 * time.Second):
+				err = errors.New("timeout")
+			case err = <-e:
+				resp = <-r
+			}
+
+			if err != nil {
+				t.Fatalf("error from pipe: %v", err)
+			}
+
+			if len(resp.Issues) > 0 {
+				t.Errorf("Issues: got %v expected none", resp.Issues)
+			}
+
+			if resp.GetParsedExpr().GetExpr().GetCallExpr().GetFunction() != "_+_" {
+				t.Errorf("unexpected ast got: %s wanted _+_(1, 1)", resp.GetParsedExpr())
+			}
+		})
+	}
 
 }
 
@@ -90,7 +160,7 @@ func TestPipeEval(t *testing.T) {
 			if err != nil {
 				t.Fatalf("error loading bazel runfile path, %v", err)
 			}
-			conf, err := NewPipeClient(serverCmd, useBase64)
+			conf, err := NewPipeClient(serverCmd, useBase64, false /*usePings*/)
 			defer conf.Shutdown()
 			if err != nil {
 				t.Fatalf("error initializing client got %v wanted nil", err)
@@ -140,7 +210,7 @@ func TestPipeCheck(t *testing.T) {
 			if err != nil {
 				t.Fatalf("error loading bazel runfile path, %v", err)
 			}
-			conf, err := NewPipeClient(serverCmd, useBase64)
+			conf, err := NewPipeClient(serverCmd, useBase64, false /*usePings*/)
 			defer conf.Shutdown()
 			if err != nil {
 				t.Fatalf("error initializing client got %v wanted nil", err)
