@@ -18,9 +18,9 @@ import (
 	"google.golang.org/grpc/reflection"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
-	"google.golang.org/protobuf/types/known/emptypb"
 
 	confpb "google.golang.org/genproto/googleapis/api/expr/conformance/v1alpha1"
+	epb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // ConfClient manages calls to conformance test services.
@@ -46,7 +46,7 @@ type grpcConfClient struct {
 //   - one output line is expected, repeat again.
 type pipeConfClient struct {
 	binary       string
-	cmd_args     []string
+	cmdArgs      []string
 	cmd          *exec.Cmd
 	stdOut       *bufio.Reader
 	stdIn        io.Writer
@@ -139,7 +139,7 @@ func NewPipeClient(serverCmd string, base64Encode bool, pingsEnabled bool) (Conf
 		return &c, fmt.Errorf("server cmd '%s' invalid", serverCmd)
 	}
 	c.binary = fields[0]
-	c.cmd_args = fields[1:]
+	c.cmdArgs = fields[1:]
 
 	return &c, c.reset()
 }
@@ -149,7 +149,7 @@ func (c *pipeConfClient) reset() error {
 	if c.binary == "" {
 		return errors.New("reset on invalid pipe service configuration")
 	}
-	cmd := exec.Command(c.binary, c.cmd_args...)
+	cmd := exec.Command(c.binary, c.cmdArgs...)
 	out, err := cmd.StdoutPipe()
 	if err != nil {
 		return err
@@ -171,7 +171,7 @@ func (c *pipeConfClient) reset() error {
 }
 
 func (c *pipeConfClient) isAlive() bool {
-	m := emptypb.Empty{}
+	m := epb.Empty{}
 	err := c.pipeCommand("ping", &m, &m)
 	return err == nil
 }
