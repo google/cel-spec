@@ -15,11 +15,11 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
-	"google.golang.org/protobuf/types/known/emptypb"
 
 	confpb "google.golang.org/genproto/googleapis/api/expr/conformance/v1alpha1"
 	exprpb "google.golang.org/genproto/googleapis/api/expr/v1alpha1"
 	statuspb "google.golang.org/genproto/googleapis/rpc/status"
+	epb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 type codec struct {
@@ -188,12 +188,12 @@ func processLoop() int {
 				return 1
 			}
 		case "ping":
-			req := emptypb.Empty{}
+			req := epb.Empty{}
 			if err := c.unmarshal(msg, &req); err != nil {
 				fmt.Fprintf(os.Stderr, "bad ping req: %v\n", err)
 				return 1
 			}
-			resp := emptypb.Empty{}
+			resp := epb.Empty{}
 			if err = c.serialize(writer, &resp); err != nil {
 				fmt.Fprintf(os.Stderr, "error serializing ping resp %v\n", err)
 				return 1
