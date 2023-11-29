@@ -341,4 +341,45 @@ message SourceInfo {
   // in the map corresponds to the expression id of the expanded macro, and the
   // value is the call `Expr` that was replaced.
   map<int64, Expr> macro_calls = 5;
+
+  // A list of tags for extensions that were used while parsing or type checking
+  // the source expression. For example, optimizations that require special
+  // runtime support may be specified.
+  //
+  // These are used to check feature support between components in separate
+  // implementations. This can be used to either skip redundant work or
+  // report an error if the extension is unsupported.
+  repeated Extension extensions = 6;
+
+  // An extension that was requested for the source expression.
+  message Extension {
+    message Version {
+      // Major version changes indicate different required support level from
+      // the required components.
+      int64 major = 1;
+      // Minor version changes must not change the observed behavior from
+      // existing implementations, but may be provided informationally.
+      int64 minor = 2;
+    }
+
+    enum Component {
+      COMPONENT_UNSPECIFIED = 0;
+      COMPONENT_PARSER = 1;
+      COMPONENT_TYPE_CHECKER = 2;
+      COMPONENT_RUNTIME = 3;
+    }
+
+    // Identifier for the extension. Example: constant_folding
+    string id = 1;
+
+    // If set, the listed components must understand the extension for the
+    // expression to evaluate correctly.
+    //
+    // This field has set semantics, repeated values should be deduplicated.
+    repeated Component affected_components = 2;
+
+    // Version info. May be skipped if it isn't meaningful for the extension.
+    // (for example constant_folding might always be v0.0).
+    Version version = 3;
+  }
 }
