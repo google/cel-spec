@@ -353,6 +353,7 @@ message SourceInfo {
 
   // An extension that was requested for the source expression.
   message Extension {
+    // Version
     message Version {
       // Major version changes indicate different required support level from
       // the required components.
@@ -362,10 +363,17 @@ message SourceInfo {
       int64 minor = 2;
     }
 
+    // CEL component specifier.
     enum Component {
+      // Unspecified, default.
       COMPONENT_UNSPECIFIED = 0;
+      // Parser. Converts a CEL string to an AST.
       COMPONENT_PARSER = 1;
+      // Type checker. Checks that references in an AST are defined and types
+      // agree.
       COMPONENT_TYPE_CHECKER = 2;
+      // Runtime. Evaluates a parsed and optionally checked CEL AST against a
+      // context.
       COMPONENT_RUNTIME = 3;
     }
 
