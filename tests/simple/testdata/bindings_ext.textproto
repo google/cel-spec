@@ -1,0 +1,41 @@
+name: "bindings_ext"
+description: "Tests for the bindings extension library."
+section: {
+  name: "bind"
+  test: {
+    name: "boolean_literal"
+    expr: "cel.bind(t, true, t)"
+    value: {
+      bool_value: true
+    }
+  }
+  test: {
+    name: "string_concat"
+    expr: "cel.bind(msg, \"hello\", msg + msg + msg)"
+    value: {
+      string_value: "hellohellohello"
+    }
+  }
+  test: {
+    name: "bind_nested"
+    expr: "cel.bind(t1, true, cel.bind(t2, true, t1 && t2))"
+    value: {
+      bool_value: true
+    }
+  }
+  test: {
+    name: "macro_exists"
+    expr: "cel.bind(valid_elems, [1, 2, 3], [3, 4, 5].exists(e, e in valid_elems))"
+    value: {
+      bool_value: true
+    }
+  }
+  test: {
+    name: "macro_not_exists"
+    expr: "cel.bind(valid_elems, [1, 2, 3], ![4, 5].exists(e, e in valid_elems))"
+    value: {
+      bool_value: true
+    }
+  }
+}
+
