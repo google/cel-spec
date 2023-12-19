@@ -1,7 +1,7 @@
 name: "string_ext"
 description: "Tests for the strings extension library."
 section: {
-  name: "charat"
+  name: "char_at"
   test: {
     name: "middle_index"
     expr: "'tacocat'.charAt(3)"
@@ -22,7 +22,7 @@ section: {
   }
 }
 section: {
-  name: "indexof"
+  name: "index_of"
   test: {
     name: "empty_index"
     expr: "'tacocat'.indexOf('')"
