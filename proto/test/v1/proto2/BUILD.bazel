@@ -10,7 +10,10 @@ exports_files(["LICENSE"])
 
 proto_library(
     name = "test_all_types_proto",
-    srcs = [ "test_all_types.proto" ],
+    srcs = [
+        "test_all_types.proto",
+        "test_all_types_extensions.proto",
+    ],
     deps = [
         "@com_google_protobuf//:any_proto",
         "@com_google_protobuf//:duration_proto",

@@ -290,6 +290,8 @@ message TestAllTypes {
   map<string, google.protobuf.StringValue> map_string_string_wrapper = 321;
   map<string, google.protobuf.BoolValue> map_string_bool_wrapper = 322;
   map<string, google.protobuf.BytesValue> map_string_bytes_wrapper = 323;
+
+  extensions 1000 to max;
 }
 
 // This proto includes a recursively nested message.
