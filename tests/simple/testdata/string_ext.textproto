@@ -1,290 +1,367 @@
-name: "strings ext tests"
+name: "string_ext"
 description: "Tests for the strings extension library."
 section: {
-  name: "charAt"
+  name: "charat"
   test: {
+    name: "middle_index"
     expr: "'tacocat'.charAt(3)"
     value: {
       string_value: "o"
     }
   }
   test: {
+    name: "end_index"
     expr: "'tacocat'.charAt(7)"
     value: {
       string_value: ""
     }
   }
   test: {
+    name: "multiple"
     expr: "'©αT'.charAt(0) == '©' && '©αT'.charAt(1) == 'α' && '©αT'.charAt(2) == 'T'"
   }
 }
 section: {
-  name: "indexOf"
+  name: "indexof"
   test: {
+    name: "empty_index"
     expr: "'tacocat'.indexOf('')"
     value: {
       int64_value: 0
     }
   }
   test: {
+    name: "string_index"
     expr: "'tacocat'.indexOf('ac')"
     value: {
       int64_value: 1
     }
   }
   test: {
+    name: "nomatch"
     expr: "'tacocat'.indexOf('none') == -1"
   }
   test: {
+    name: "empty_index"
     expr: "'tacocat'.indexOf('', 3) == 3"
   }
   test: {
+    name: "char_index"
     expr: "'tacocat'.indexOf('a', 3) == 5"
   }
   test: {
+    name: "string_index"
     expr: "'tacocat'.indexOf('at', 3) == 5"
   }
   test: {
+    name: "unicode_char"
     expr: "'ta©o©αT'.indexOf('©') == 2"
   }
   test: {
+    name: "unicode_char_index"
     expr: "'ta©o©αT'.indexOf('©', 3) == 4"
   }
   test: {
+    name: "unicode_string_index"
     expr: "'ta©o©αT'.indexOf('©αT', 3) == 4"
   }
   test: {
+    name: "unicode_string_nomatch_index"
     expr: "'ta©o©αT'.indexOf('©α', 5) == -1"
   }
   test: {
+    name: "char_index"
     expr: "'ijk'.indexOf('k') == 2"
   }
   test: {
+    name: "string_with_space_fullmatch"
     expr: "'hello wello'.indexOf('hello wello') == 0"
   }
   test: {
+    name: "string_with_space_index"
     expr: "'hello wello'.indexOf('ello', 6) == 7"
   }
   test: {
+    name: "string_nomatch_index"
     expr: "'hello wello'.indexOf('elbo room!!') == -1"
-  }
-  test: {
-    expr: "'hello wello'.indexOf('elbo room!!!') == -1"
   }
 }
 section: {
   name: "lastIndexOf"
   test: {
+    name: "empty"
     expr: "'tacocat'.lastIndexOf('') == 7"
   }
   test: {
+    name: "string"
     expr: "'tacocat'.lastIndexOf('at') == 5"
   }
   test: {
+    name: "string_nomatch"
     expr: "'tacocat'.lastIndexOf('none') == -1"
   }
   test: {
+    name: "empty_index"
     expr: "'tacocat'.lastIndexOf('', 3) == 3"
   }
   test: {
+    name: "char_index"
     expr: "'tacocat'.lastIndexOf('a', 3) == 1"
   }
   test: {
+    name: "unicode_char"
     expr: "'ta©o©αT'.lastIndexOf('©') == 4"
   }
   test: {
+    name: "unicode_char_index"
     expr: "'ta©o©αT'.lastIndexOf('©', 3) == 2"
   }
   test: {
+    name: "unicode_string_index"
     expr: "'ta©o©αT'.lastIndexOf('©α', 4) == 4"
   }
   test: {
+    name: "string_with_space_string_index"
     expr: "'hello wello'.lastIndexOf('ello', 6) == 1"
   }
   test: {
+    name: "string_with_space_string_nomatch"
     expr: "'hello wello'.lastIndexOf('low') == -1"
   }
   test: {
+    name: "string_with_space_string_with_space_nomatch"
     expr: "'hello wello'.lastIndexOf('elbo room!!') == -1"
   }
   test: {
-    expr: "'hello wello'.lastIndexOf('elbo room!!!') == -1"
-  }
-  test: {
+    name: "string_with_space_fullmatch"
     expr: "'hello wello'.lastIndexOf('hello wello') == 0"
   }
   test: {
+    name: "repeated_string"
     expr: "'bananananana'.lastIndexOf('nana', 7) == 6"
   }
 }
 section: {
   name: "Ascii casing"
   test: {
+    name: "lowerascii"
     expr: "'TacoCat'.lowerAscii() == 'tacocat'"
   }
   test: {
+    name: "lowerascii_unicode"
     expr: "'TacoCÆt'.lowerAscii() == 'tacocÆt'"
   }
   test: {
+    name: "lowerascii_unicode_with_space"
     expr: "'TacoCÆt Xii'.lowerAscii() == 'tacocÆt xii'"
   }
   test: {
+    name: "upperascii"
     expr: "'tacoCat'.upperAscii() == 'TACOCAT'"
   }
   test: {
+    name: "upperascii_unicode"
     expr: "'tacoCαt'.upperAscii() == 'TACOCαT'"
+  }
+  test: {
+    name: "upperascii_unicode_with_space"
+    expr: "'TacoCÆt Xii'.upperAscii() == 'TACOCÆT XII'"
   }
 }
 section: {
   name: "replace"
   test: {
+    name: "no_placeholder"
     expr: "'12 days 12 hours'.replace('{0}', '2') == '12 days 12 hours'"
   }
   test: {
+    name: "basic"
     expr: "'{0} days {0} hours'.replace('{0}', '2') == '2 days 2 hours'"
   }
   test: {
+    name: "chained"
     expr: "'{0} days {0} hours'.replace('{0}', '2', 1).replace('{0}', '23') == '2 days 23 hours'"
   }
   test: {
+    name: "unicode"
     expr: "'1 ©αT taco'.replace('αT', 'o©α') == '1 ©o©α taco'"
   }
 }
 section: {
   name: "split"
   test: {
+    name: "empty"
     expr: "'hello world'.split(' ') == ['hello', 'world']"
   }
   test: {
+    name: "zero_limit"
     expr: "'hello world events!'.split(' ', 0) == []"
   }
   test: {
+    name: "one_limit"
     expr: "'hello world events!'.split(' ', 1) == ['hello world events!']"
   }
   test: {
+    name: "unicode_negative_limit"
     expr: "'o©o©o©o'.split('©', -1) == ['o', 'o', 'o', 'o']"
   }
 }
 section: {
   name: "substring"
   test: {
+    name: "start"
     expr: "'tacocat'.substring(4) == 'cat'"
   }
   test: {
+    name: "start_with_max_length"
     expr: "'tacocat'.substring(7) == ''"
   }
   test: {
+    name: "start_and_end"
     expr: "'tacocat'.substring(0, 4) == 'taco'"
   }
   test: {
+    name: "start_and_end_equal_value"
     expr: "'tacocat'.substring(4, 4) == ''"
   }
   test: {
+    name: "unicode_start_and_end"
     expr: "'ta©o©αT'.substring(2, 6) == '©o©α'"
   }
   test: {
+    name: "unicode_start_and_end_equal_value"
     expr: "'ta©o©αT'.substring(7, 7) == ''"
   }
 }
 section: {
   name: "trim"
   test: {
+    name: "blank_spaces_escaped_chars"
     expr: "' \\f\\n\\r\\t\\vtext  '.trim() == 'text'"
   }
   test: {
+    name: "unicode_space_chars_1"
     expr: "'\\u0085\\u00a0\\u1680text'.trim() == 'text'"
   }
   test: {
+    name: "unicode_space_chars_2"
     expr: "'text\\u2000\\u2001\\u2002\\u2003\\u2004\\u2004\\u2006\\u2007\\u2008\\u2009'.trim() == 'text'"
   }
   test: {
+    name: "unicode_space_chars_3"
     expr: "'\\u200atext\\u2028\\u2029\\u202F\\u205F\\u3000'.trim() == 'text'"
   }
   test: {
+    name: "unicode_no_trim"
     expr: "'\\u180etext\\u200b\\u200c\\u200d\\u2060\\ufeff'.trim() == '\\u180etext\\u200b\\u200c\\u200d\\u2060\\ufeff'"
   }
 }
 section: {
   name: "join"
   test: {
+    name: "empty_separator"
     expr: "['x', 'y'].join() == 'xy'"
   }
   test: {
+    name: "dash_separator"
     expr: "['x', 'y'].join('-') == 'x-y'"
   }
   test: {
+    name: "empty_string_empty_separator"
     expr: "[].join() == ''"
   }
   test: {
+    name: "empty_string_dash_separator"
     expr: "[].join('-') == ''"
   }
 }
 section: {
   name: "quote"
   test: {
+    name: "multiline"
     expr: "strings.quote(\"first\\nsecond\") == \"\\\"first\\\\nsecond\\\"\""
   }
   test: {
+    name: "escaped"
     expr: "strings.quote(\"bell\\a\") == \"\\\"bell\\\\a\\\"\""
   }
   test: {
+    name: "backspace"
     expr: "strings.quote(\"\\bbackspace\") == \"\\\"\\\\bbackspace\\\"\""
   }
   test: {
+    name: "form_feed"
     expr: "strings.quote(\"\\fform feed\") == \"\\\"\\\\fform feed\\\"\""
   }
   test: {
+    name: "carriage_return"
     expr: "strings.quote(\"carriage \\r return\") == \"\\\"carriage \\\\r return\\\"\""
   }
   test: {
+    name: "horizontal_tab"
     expr: "strings.quote(\"horizontal tab\\t\") == \"\\\"horizontal tab\\\\t\\\"\""
   }
   test: {
+    name: "vertical_tab"
     expr: "strings.quote(\"vertical \\v tab\") == \"\\\"vertical \\\\v tab\\\"\""
   }
   test: {
+    name: "double_slash"
     expr: "strings.quote(\"double \\\\\\\\ slash\") == \"\\\"double \\\\\\\\\\\\\\\\ slash\\\"\""
   }
   test: {
+    name: "two_escape_sequences"
     expr: "strings.quote(\"two escape sequences \\\\a\\\\n\") == \"\\\"two escape sequences \\\\\\\\a\\\\\\\\n\\\"\""
   }
   test: {
+    name: "verbatim"
     expr: "strings.quote(\"verbatim\") == \"\\\"verbatim\\\"\""
   }
   test: {
+    name: "ends_with"
     expr: "strings.quote(\"ends with \\\\\") == \"\\\"ends with \\\\\\\\\\\"\""
   }
   test: {
+    name: "starts_with"
     expr: "strings.quote(\"\\\\ starts with\") == \"\\\"\\\\\\\\ starts with\\\"\""
   }
   test: {
+    name: "printable_unicode"
     expr: "strings.quote(\"printable unicode😀\") == \"\\\"printable unicode😀\\\"\""
   }
   test: {
+    name: "mid_string_quote"
     expr: "strings.quote(\"mid string \\\" quote\") == \"\\\"mid string \\\\\\\" quote\\\"\""
   }
   test: {
+    name: "single_quote_with_double_quote"
     expr: "strings.quote('single-quote with \"double quote\"') == \"\\\"single-quote with \\\\\\\"double quote\\\\\\\"\\\"\""
   }
   test: {
+    name: "size_unicode_char"
     expr: "strings.quote(\"size('ÿ')\") == \"\\\"size('ÿ')\\\"\""
   }
   test: {
+    name: "size_unicode_string"
     expr: "strings.quote(\"size('πέντε')\") == \"\\\"size('πέντε')\\\"\""
   }
   test: {
+    name: "unicode"
     expr: "strings.quote(\"завтра\") == \"\\\"завтра\\\"\""
   }
   test: {
+    name: "unicode_code_points"
     expr: "strings.quote(\"\\U0001F431\\U0001F600\\U0001F61B\")"
     value: {
       string_value: "\"🐱😀😛\""
     }
   }
   test: {
+    name: "unicode_2"
     expr: "strings.quote(\"ta©o©αT\") == \"\\\"ta©o©αT\\\"\""
   }
   test: {
+    name: "empty_quote"
     expr: "strings.quote(\"\")"
     value: {
       string_value: "\"\""
@@ -294,6 +371,7 @@ section: {
 section: {
   name: "value errors"
   test: {
+    name: "charat_out_of_range"
     expr: "'tacocat'.charAt(30) == ''"
     eval_error: {
       errors: {
@@ -302,6 +380,7 @@ section: {
     }
   }
   test: {
+    name: "indexof_out_of_range"
     expr: "'tacocat'.indexOf('a', 30) == -1"
     eval_error: {
       errors: {
@@ -310,6 +389,7 @@ section: {
     }
   }
   test: {
+    name: "lastindexof_negative_index"
     expr: "'tacocat'.lastIndexOf('a', -1) == -1"
     eval_error: {
       errors: {
@@ -318,6 +398,7 @@ section: {
     }
   }
   test: {
+    name: "lastindexof_out_of_range"
     expr: "'tacocat'.lastIndexOf('a', 30) == -1"
     eval_error: {
       errors: {
@@ -326,6 +407,7 @@ section: {
     }
   }
   test: {
+    name: "substring_out_of_range"
     expr: "'tacocat'.substring(40) == 'cat'"
     eval_error: {
       errors: {
@@ -334,6 +416,7 @@ section: {
     }
   }
   test: {
+    name: "substring_negative_index"
     expr: "'tacocat'.substring(-1) == 'cat'"
     eval_error: {
       errors: {
@@ -342,6 +425,7 @@ section: {
     }
   }
   test: {
+    name: "substring_end_index_out_of_range"
     expr: "'tacocat'.substring(1, 50) == 'cat'"
     eval_error: {
       errors: {
@@ -350,6 +434,7 @@ section: {
     }
   }
   test: {
+    name: "substring_begin_index_out_of_range"
     expr: "'tacocat'.substring(49, 50) == 'cat'"
     eval_error: {
       errors: {
@@ -358,6 +443,7 @@ section: {
     }
   }
   test: {
+    name: "substring_end_index_greater_than_begin_index"
     expr: "'tacocat'.substring(4, 3) == ''"
     eval_error: {
       errors: {
@@ -369,6 +455,7 @@ section: {
 section: {
   name: "type errors"
   test: {
+    name: "charat_invalid_type"
     expr: "42.charAt(2) == ''"
     disable_check: true
     eval_error: {
@@ -378,6 +465,7 @@ section: {
     }
   }
   test: {
+    name: "charat_invalid_argument"
     expr: "'hello'.charAt(true) == ''"
     disable_check: true
     eval_error: {
@@ -387,6 +475,7 @@ section: {
     }
   }
   test: {
+    name: "indexof_unary_invalid_type"
     expr: "24.indexOf('2') == 0"
     disable_check: true
     eval_error: {
@@ -396,6 +485,7 @@ section: {
     }
   }
   test: {
+    name: "indexof_unary_invalid_argument"
     expr: "'hello'.indexOf(true) == 1"
     disable_check: true
     eval_error: {
@@ -405,6 +495,7 @@ section: {
     }
   }
   test: {
+    name: "indexof_binary_invalid_argument"
     expr: "42.indexOf('4', 0) == 0"
     disable_check: true
     eval_error: {
@@ -414,6 +505,7 @@ section: {
     }
   }
   test: {
+    name: "indexof_binary_invalid_argument_2"
     expr: "'42'.indexOf(4, 0) == 0"
     disable_check: true
     eval_error: {
@@ -423,6 +515,7 @@ section: {
     }
   }
   test: {
+    name: "indexof_binary_both_invalid_arguments"
     expr: "'42'.indexOf('4', '0') == 0"
     disable_check: true
     eval_error: {
@@ -432,6 +525,7 @@ section: {
     }
   }
   test: {
+    name: "indexof_ternary_invalid_arguments"
     expr: "'42'.indexOf('4', 0, 1) == 0"
     disable_check: true
     eval_error: {
@@ -441,6 +535,7 @@ section: {
     }
   }
   test: {
+    name: "split_invalid_type"
     expr: "42.split('2') == ['4']"
     disable_check: true
     eval_error: {
@@ -450,6 +545,7 @@ section: {
     }
   }
   test: {
+    name: "replace_invalid_type"
     expr: "42.replace(2, 1) == '41'"
     disable_check: true
     eval_error: {
@@ -459,6 +555,7 @@ section: {
     }
   }
   test: {
+    name: "replace_binary_invalid_argument"
     expr: "'42'.replace(2, 1) == '41'"
     disable_check: true
     eval_error: {
@@ -468,6 +565,7 @@ section: {
     }
   }
   test: {
+    name: "replace_binary_invalid_argument_2"
     expr: "'42'.replace('2', 1) == '41'"
     disable_check: true
     eval_error: {
@@ -477,6 +575,7 @@ section: {
     }
   }
   test: {
+    name: "replace_ternary_invalid_argument"
     expr: "42.replace('2', '1', 1) == '41'"
     disable_check: true
     eval_error: {
@@ -486,6 +585,7 @@ section: {
     }
   }
   test: {
+    name: "replace_ternary_invalid_argument_2"
     expr: "'42'.replace(2, '1', 1) == '41'"
     disable_check: true
     eval_error: {
@@ -495,6 +595,7 @@ section: {
     }
   }
   test: {
+    name: "replace_ternary_invalid_argument_3"
     expr: "'42'.replace('2', 1, 1) == '41'"
     disable_check: true
     eval_error: {
@@ -504,6 +605,7 @@ section: {
     }
   }
   test: {
+    name: "replace_ternary_invalid_argument_4"
     expr: "'42'.replace('2', '1', '1') == '41'"
     disable_check: true
     eval_error: {
@@ -513,6 +615,7 @@ section: {
     }
   }
   test: {
+    name: "replace_quaternary_invalid_argument"
     expr: "'42'.replace('2', '1', 1, false) == '41'"
     disable_check: true
     eval_error: {
@@ -522,6 +625,7 @@ section: {
     }
   }
   test: {
+    name: "split_invalid_type_empty_arg"
     expr: "42.split('') == ['4', '2']"
     disable_check: true
     eval_error: {
@@ -531,6 +635,7 @@ section: {
     }
   }
   test: {
+    name: "split_invalid_argument"
     expr: "'42'.split(2) == ['4']"
     disable_check: true
     eval_error: {
@@ -540,6 +645,7 @@ section: {
     }
   }
   test: {
+    name: "split_binary_invalid_type"
     expr: "42.split('2', '1') == ['4']"
     disable_check: true
     eval_error: {
@@ -549,6 +655,7 @@ section: {
     }
   }
   test: {
+    name: "split_binary_invalid_argument"
     expr: "'42'.split(2, 1) == ['4']"
     disable_check: true
     eval_error: {
@@ -558,6 +665,7 @@ section: {
     }
   }
   test: {
+    name: "split_binary_invalid_argument_2"
     expr: "'42'.split('2', '1') == ['4']"
     disable_check: true
     eval_error: {
@@ -567,6 +675,7 @@ section: {
     }
   }
   test: {
+    name: "split_ternary_invalid_argument"
     expr: "'42'.split('2', 1, 1) == ['4']"
     disable_check: true
     eval_error: {
@@ -576,6 +685,7 @@ section: {
     }
   }
   test: {
+    name: "substring_ternary_invalid_argument"
     expr: "'hello'.substring(1, 2, 3) == ''"
     disable_check: true
     eval_error: {
@@ -585,6 +695,7 @@ section: {
     }
   }
   test: {
+    name: "substring_binary_invalid_type"
     expr: "30.substring(true, 3) == ''"
     disable_check: true
     eval_error: {
@@ -594,6 +705,7 @@ section: {
     }
   }
   test: {
+    name: "substring_binary_invalid_argument"
     expr: "'tacocat'.substring(true, 3) == ''"
     disable_check: true
     eval_error: {
@@ -603,6 +715,7 @@ section: {
     }
   }
   test: {
+    name: "substring_binary_invalid_argument_2"
     expr: "'tacocat'.substring(0, false) == ''"
     disable_check: true
     eval_error: {
