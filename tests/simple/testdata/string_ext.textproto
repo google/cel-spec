@@ -87,7 +87,7 @@ section: {
   }
 }
 section: {
-  name: "lastIndexOf"
+  name: "last_index_of"
   test: {
     name: "empty"
     expr: "'tacocat'.lastIndexOf('') == 7"
@@ -142,7 +142,7 @@ section: {
   }
 }
 section: {
-  name: "Ascii casing"
+  name: "ascii_casing"
   test: {
     name: "lowerascii"
     expr: "'TacoCat'.lowerAscii() == 'tacocat'"
@@ -369,7 +369,7 @@ section: {
   }
 }
 section: {
-  name: "value errors"
+  name: "value_errors"
   test: {
     name: "charat_out_of_range"
     expr: "'tacocat'.charAt(30) == ''"
@@ -453,7 +453,7 @@ section: {
   }
 }
 section: {
-  name: "type errors"
+  name: "type_errors"
   test: {
     name: "charat_invalid_type"
     expr: "42.charAt(2) == ''"
@@ -725,3 +725,4 @@ section: {
     }
   }
 }
+
