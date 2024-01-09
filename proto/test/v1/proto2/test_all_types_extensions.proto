@@ -29,4 +29,3 @@ message Proto2ExtensionScopedMessage {
     repeated TestAllTypes message_scoped_repeated_test_all_types = 1008;
   }
 }
-
