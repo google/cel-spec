@@ -1,0 +1,658 @@
+name: "math_ext"
+description: "Tests for the math extension library."
+section: {
+  name: "greatest_int_result"
+  test: {
+    name: "unary_negative"
+    expr: "math.greatest(-5)"
+    value: {
+      int64_value: -5
+    }
+  }
+  test: {
+    name: "unary_positive"
+    expr: "math.greatest(5)"
+    value: {
+      int64_value: 5
+    }
+  }
+  test: {
+    name: "binary_same_args"
+    expr: "math.greatest(1, 1)"
+    value: {
+      int64_value: 1
+    }
+  }
+  test: {
+    name: "binary_with_decimal"
+    expr: "math.greatest(1, 1.0) == 1"
+  }
+  test: {
+    name: "binary_with_uint"
+    expr: "math.greatest(1, 1u) == 1"
+  }
+  test: {
+    name: "binary_first_arg_greater"
+    expr: "math.greatest(3, -3)"
+    value: {
+      int64_value: 3
+    }
+  }
+  test: {
+    name: "binary_second_arg_greater"
+    expr: "math.greatest(-7, 5)"
+    value: {
+      int64_value: 5
+    }
+  }
+  test: {
+    name: "binary_first_arg_int_max"
+    expr: "math.greatest(9223372036854775807, 1)"
+    value: {
+      int64_value: 9223372036854775807
+    }
+  }
+  test: {
+    name: "binary_second_arg_int_max"
+    expr: "math.greatest(1, 9223372036854775807)"
+    value: {
+      int64_value: 9223372036854775807
+    }
+  }
+  test: {
+    name: "binary_first_arg_int_min"
+    expr: "math.greatest(-9223372036854775808, 1)"
+    value: {
+      int64_value: 1
+    }
+  }
+  test: {
+    name: "binary_second_arg_int_min"
+    expr: "math.greatest(1, -9223372036854775808)"
+    value: {
+      int64_value: 1
+    }
+  }
+  test: {
+    name: "ternary_same_args"
+    expr: "math.greatest(1, 1, 1) == 1"
+  }
+  test: {
+    name: "ternary_with_decimal"
+    expr: "math.greatest(1, 1.0, 1.0) == 1"
+  }
+  test: {
+    name: "ternary_with_uint"
+    expr: "math.greatest(1, 1u, 1u) == 1"
+  }
+  test: {
+    name: "ternary_first_arg_greatest"
+    expr: "math.greatest(10, 1, 3) == 10"
+  }
+  test: {
+    name: "ternary_third_arg_greatest"
+    expr: "math.greatest(1, 3, 10) == 10"
+  }
+  test: {
+    name: "ternary_with_negatives"
+    expr: "math.greatest(-1, -2, -3) == -1"
+  }
+  test: {
+    name: "ternary_int_max"
+    expr: "math.greatest(9223372036854775807, 1, 5) == 9223372036854775807"
+  }
+  test: {
+    name: "ternary_int_min"
+    expr: "math.greatest(-9223372036854775807, -1, -5) == -1"
+  }
+  test: {
+    name: "quaternary_mixed"
+    expr: "math.greatest(5.4, 10, 3u, -5.0, 9223372036854775807) == 9223372036854775807"
+  }
+  test: {
+    name: "quaternary_mixed_array"
+    expr: "math.greatest([5.4, 10, 3u, -5.0, 3.5]) == 10"
+  }
+  test: {
+    name: "quaternary_mixed_dyn_array"
+    expr: "math.greatest([dyn(5.4), dyn(10), dyn(3u), dyn(-5.0), dyn(3.5)]) == 10"
+  }
+}
+
+section: {
+  name: "greatest_double_result"
+  test: {
+    name: "unary_negative"
+    expr: "math.greatest(-5.0)"
+    value: {
+      double_value: -5.0
+    }
+  }
+  test: {
+    name: "unary_positive"
+    expr: "math.greatest(5.0)"
+    value: {
+      double_value: 5.0
+    }
+  }
+  test: {
+    name: "binary_same_args"
+    expr: "math.greatest(1.0, 1.0)"
+    value: {
+      double_value: 1.0
+    }
+  }
+  test: {
+    name: "binary_with_int"
+    expr: "math.greatest(1.0, 1) == 1.0"
+  }
+  test: {
+    name: "binary_with_uint"
+    expr: "math.greatest(1.0, 1u) == 1.0"
+  }
+  test: {
+    name: "binary_first_arg_greater"
+    expr: "math.greatest(5.0, -7.0)"
+    value: {
+      double_value: 5.0
+    }
+  }
+  test: {
+    name: "binary_second_arg_greater"
+    expr: "math.greatest(-3.0, 3.0)"
+    value: {
+      double_value: 3.0
+    }
+  }
+  test: {
+    name: "binary_first_arg_double_max"
+    expr: "math.greatest(1.797693e308, 1)"
+    value: {
+      double_value: 1.797693e308
+    }
+  }
+  test: {
+    name: "binary_second_arg_double_max"
+    expr: "math.greatest(1, 1.797693e308)"
+    value: {
+      double_value: 1.797693e308
+    }
+  }
+  test: {
+    name: "binary_first_arg_double_min"
+    expr: "math.greatest(-1.797693e308, 1.5)"
+    value: {
+      double_value: 1.5
+    }
+  }
+  test: {
+    name: "binary_second_arg_double_min"
+    expr: "math.greatest(1.5, -1.797693e308)"
+    value: {
+      double_value: 1.5
+    }
+  }
+  test: {
+    name: "ternary_same_args"
+    expr: "math.greatest(1.0, 1.0, 1.0) == 1.0"
+  }
+  test: {
+    name: "ternary_with_int"
+    expr: "math.greatest(1.0, 1, 1) == 1.0"
+  }
+  test: {
+    name: "ternary_with_uint"
+    expr: "math.greatest(1.0, 1u, 1u) == 1.0"
+  }
+  test: {
+    name: "ternary_first_arg_greatest"
+    expr: "math.greatest(10.5, 1.5, 3.5) == 10.5"
+  }
+  test: {
+    name: "ternary_third_arg_greatest"
+    expr: "math.greatest(1.5, 3.5, 10.5) == 10.5"
+  }
+  test: {
+    name: "ternary_with_negatives"
+    expr: "math.greatest(-1.5, -2.5, -3.5) == -1.5"
+  }
+  test: {
+    name: "ternary_double_max"
+    expr: "math.greatest(1.797693e308, 1, 5) == 1.797693e308"
+  }
+  test: {
+    name: "ternary_double_min"
+    expr: "math.greatest(-1.797693e308, -1, -5) == -1"
+  }
+  test: {
+    name: "quaternary_mixed"
+    expr: "math.greatest(5.4, 10, 3u, -5.0, 1.797693e308) == 1.797693e308"
+  }
+  test: {
+    name: "quaternary_mixed_array"
+    expr: "math.greatest([5.4, 10.5, 3u, -5.0, 3.5]) == 10.5"
+  }
+  test: {
+    name: "quaternary_mixed_dyn_array"
+    expr: "math.greatest([dyn(5.4), dyn(10.5), dyn(3u), dyn(-5.0), dyn(3.5)]) == 10.5"
+  }
+}
+
+section: {
+  name: "greatest_uint_result"
+  test: {
+    name: "unary"
+    expr: "math.greatest(5u)"
+    value: {
+      uint64_value: 5
+    }
+  }
+  test: {
+    name: "binary_same_args"
+    expr: "math.greatest(1u, 1u)"
+    value: {
+      uint64_value: 1
+    }
+  }
+  test: {
+    name: "binary_with_decimal"
+    expr: "math.greatest(1u, 1.0) == 1"
+  }
+  test: {
+    name: "binary_with_int"
+    expr: "math.greatest(1u, 1) == 1u"
+  }
+  test: {
+    name: "binary_first_arg_greater"
+    expr: "math.greatest(5u, -7)"
+    value: {
+      uint64_value: 5
+    }
+  }
+  test: {
+    name: "binary_second_arg_greater"
+    expr: "math.greatest(-3, 3u)"
+    value: {
+      uint64_value: 3
+    }
+  }
+  test: {
+    name: "binary_first_arg_uint_max"
+    expr: "math.greatest(18446744073709551615u, 1u)"
+    value: {
+      uint64_value: 18446744073709551615
+    }
+  }
+  test: {
+    name: "binary_second_arg_uint_max"
+    expr: "math.greatest(1u, 18446744073709551615u)"
+    value: {
+      uint64_value: 18446744073709551615
+    }
+  }
+  test: {
+    name: "ternary_same_args"
+    expr: "math.greatest(1u, 1u, 1u) == 1u"
+  }
+  test: {
+    name: "ternary_with_decimal"
+    expr: "math.greatest(1u, 1.0, 1.0) == 1u"
+  }
+  test: {
+    name: "ternary_with_int"
+    expr: "math.greatest(1u, 1, 1) == 1u"
+  }
+  test: {
+    name: "ternary_first_arg_greatest"
+    expr: "math.greatest(10u, 1u, 3u) == 10u"
+  }
+  test: {
+    name: "ternary_third_arg_greatest"
+    expr: "math.greatest(1u, 3u, 10u) == 10u"
+  }
+  test: {
+    name: "ternary_int_max"
+    expr: "math.greatest(18446744073709551615u, 1u, 5u) == 18446744073709551615u"
+  }
+  test: {
+    name: "quaternary_mixed"
+    expr: "math.greatest(5.4, 10, 3u, -5.0, 18446744073709551615u) == 18446744073709551615u"
+  }
+  test: {
+    name: "quaternary_mixed_array"
+    expr: "math.greatest([5.4, 10u, 3u, -5.0, 3.5]) == 10u"
+  }
+  test: {
+    name: "quaternary_mixed_dyn_array"
+    expr: "math.greatest([dyn(5.4), dyn(10u), dyn(3u), dyn(-5.0), dyn(3.5)]) == 10u"
+  }
+}
+
+section: {
+  name: "least_int_result"
+  test: {
+    name: "unary_negative"
+    expr: "math.least(-5)"
+    value: {
+      int64_value: -5
+    }
+  }
+  test: {
+    name: "unary_positive"
+    expr: "math.least(5)"
+    value: {
+      int64_value: 5
+    }
+  }
+  test: {
+    name: "binary_same_args"
+    expr: "math.least(1, 1)"
+    value: {
+      int64_value: 1
+    }
+  }
+  test: {
+    name: "binary_with_decimal"
+    expr: "math.least(1, 1.0) == 1"
+  }
+  test: {
+    name: "binary_with_uint"
+    expr: "math.least(1, 1u) == 1"
+  }
+  test: {
+    name: "binary_first_arg_least"
+    expr: "math.least(-3, 3)"
+    value: {
+      int64_value: -3
+    }
+  }
+  test: {
+    name: "binary_second_arg_least"
+    expr: "math.least(5, -7)"
+    value: {
+      int64_value: -7
+    }
+  }
+  test: {
+    name: "binary_first_arg_int_max"
+    expr: "math.least(9223372036854775807, 1)"
+    value: {
+      int64_value: 1
+    }
+  }
+  test: {
+    name: "binary_second_arg_int_max"
+    expr: "math.least(1, 9223372036854775807)"
+    value: {
+      int64_value: 1
+    }
+  }
+  test: {
+    name: "binary_first_arg_int_min"
+    expr: "math.least(-9223372036854775808, 1)"
+    value: {
+      int64_value: -9223372036854775808
+    }
+  }
+  test: {
+    name: "binary_second_arg_int_min"
+    expr: "math.least(1, -9223372036854775808)"
+    value: {
+      int64_value: -9223372036854775808
+    }
+  }
+  test: {
+    name: "ternary_same_args"
+    expr: "math.least(1, 1, 1) == 1"
+  }
+  test: {
+    name: "ternary_with_decimal"
+    expr: "math.least(1, 1.0, 1.0) == 1"
+  }
+  test: {
+    name: "ternary_with_uint"
+    expr: "math.least(1, 1u, 1u) == 1"
+  }
+  test: {
+    name: "ternary_first_arg_least"
+    expr: "math.least(0, 1, 3) == 0"
+  }
+  test: {
+    name: "ternary_third_arg_least"
+    expr: "math.least(1, 3, 0) == 0"
+  }
+  test: {
+    name: "ternary_with_negatives"
+    expr: "math.least(-1, -2, -3) == -3"
+  }
+  test: {
+    name: "ternary_int_max"
+    expr: "math.least(9223372036854775807, 1, 5) == 1"
+  }
+  test: {
+    name: "ternary_int_min"
+    expr: "math.least(-9223372036854775808, -1, -5) == -9223372036854775808"
+  }
+  test: {
+    name: "quaternary_mixed"
+    expr: "math.least(5.4, 10, 3u, -5.0, 9223372036854775807) == -5.0"
+  }
+  test: {
+    name: "quaternary_mixed_array"
+    expr: "math.least([5.4, 10, 3u, -5.0, 3.5]) == -5.0"
+  }
+  test: {
+    name: "quaternary_mixed_dyn_array"
+    expr: "math.least([dyn(5.4), dyn(10), dyn(3u), dyn(-5.0), dyn(3.5)]) == -5.0"
+  }
+}
+
+section: {
+  name: "least_double_result"
+  test: {
+    name: "unary_negative"
+    expr: "math.least(-5.5)"
+    value: {
+      double_value: -5.5
+    }
+  }
+  test: {
+    name: "unary_positive"
+    expr: "math.least(5.5)"
+    value: {
+      double_value: 5.5
+    }
+  }
+  test: {
+    name: "binary_same_args"
+    expr: "math.least(1.5, 1.5)"
+    value: {
+      double_value: 1.5
+    }
+  }
+  test: {
+    name: "binary_with_int"
+    expr: "math.least(1.0, 1) == 1"
+  }
+  test: {
+    name: "binary_with_uint"
+    expr: "math.least(1, 1u) == 1"
+  }
+  test: {
+    name: "binary_first_arg_least"
+    expr: "math.least(-3.5, 3.5)"
+    value: {
+      double_value: -3.5
+    }
+  }
+  test: {
+    name: "binary_second_arg_least"
+    expr: "math.least(5.5, -7.5)"
+    value: {
+      double_value: -7.5
+    }
+  }
+  test: {
+    name: "binary_first_arg_double_max"
+    expr: "math.least(1.797693e308, 1.5)"
+    value: {
+      double_value: 1.5
+    }
+  }
+  test: {
+    name: "binary_second_arg_double_max"
+    expr: "math.least(1.5, 1.797693e308)"
+    value: {
+      double_value: 1.5
+    }
+  }
+  test: {
+    name: "binary_first_arg_double_min"
+    expr: "math.least(-1.797693e308, 1.5)"
+    value: {
+      double_value: -1.797693e308
+    }
+  }
+  test: {
+    name: "binary_second_arg_double_min"
+    expr: "math.least(1.5, -1.797693e308)"
+    value: {
+      double_value: -1.797693e308
+    }
+  }
+  test: {
+    name: "ternary_same_args"
+    expr: "math.least(1.5, 1.5, 1.5) == 1.5"
+  }
+  test: {
+    name: "ternary_with_int"
+    expr: "math.least(1.0, 1, 1) == 1.0"
+  }
+  test: {
+    name: "ternary_with_uint"
+    expr: "math.least(1.0, 1u, 1u) == 1"
+  }
+  test: {
+    name: "ternary_first_arg_least"
+    expr: "math.least(0.5, 1.5, 3.5) == 0.5"
+  }
+  test: {
+    name: "ternary_third_arg_least"
+    expr: "math.least(1.5, 3.5, 0.5) == 0.5"
+  }
+  test: {
+    name: "ternary_with_negatives"
+    expr: "math.least(-1.5, -2.5, -3.5) == -3.5"
+  }
+  test: {
+    name: "ternary_double_max"
+    expr: "math.least(1.797693e308, 1, 5) == 1"
+  }
+  test: {
+    name: "ternary_double_min"
+    expr: "math.least(-1.797693e308, -1, -5) == -1.797693e308"
+  }
+  test: {
+    name: "quaternary_mixed"
+    expr: "math.least(5.4, 10, 3u, -5.0, 1.797693e308) == -5.0"
+  }
+  test: {
+    name: "quaternary_mixed_array"
+    expr: "math.least([5.4, 10.5, 3u, -5.0, 3.5]) == -5.0"
+  }
+  test: {
+    name: "quaternary_mixed_dyn_array"
+    expr: "math.least([dyn(5.4), dyn(10.5), dyn(3u), dyn(-5.0), dyn(3.5)]) == -5.0"
+  }
+}
+
+section: {
+  name: "least_uint_result"
+  test: {
+    name: "unary"
+    expr: "math.least(5u)"
+    value: {
+      uint64_value: 5
+    }
+  }
+  test: {
+    name: "binary_same_args"
+    expr: "math.least(1u, 1u)"
+    value: {
+      uint64_value: 1
+    }
+  }
+  test: {
+    name: "binary_with_decimal"
+    expr: "math.least(1u, 1.0) == 1u"
+  }
+  test: {
+    name: "binary_with_int"
+    expr: "math.least(1u, 1) == 1u"
+  }
+  test: {
+    name: "binary_first_arg_least"
+    expr: "math.least(1u, 3u)"
+    value: {
+      uint64_value: 1
+    }
+  }
+  test: {
+    name: "binary_second_arg_least"
+    expr: "math.least(5u, 2u)"
+    value: {
+      uint64_value: 2
+    }
+  }
+  test: {
+    name: "binary_first_arg_uint_max"
+    expr: "math.least(18446744073709551615u, 1u)"
+    value: {
+      uint64_value: 1
+    }
+  }
+  test: {
+    name: "binary_second_arg_uint_max"
+    expr: "math.least(1u, 18446744073709551615u)"
+    value: {
+      uint64_value: 1
+    }
+  }
+  test: {
+    name: "ternary_same_args"
+    expr: "math.least(1u, 1u, 1u) == 1u"
+  }
+  test: {
+    name: "ternary_with_decimal"
+    expr: "math.least(1u, 1.0, 1.0) == 1u"
+  }
+  test: {
+    name: "ternary_with_int"
+    expr: "math.least(1u, 1, 1) == 1u"
+  }
+  test: {
+    name: "ternary_first_arg_least"
+    expr: "math.least(1u, 10u, 3u) == 1u"
+  }
+  test: {
+    name: "ternary_third_arg_least"
+    expr: "math.least(10u, 3u, 1u) == 1u"
+  }
+  test: {
+    name: "ternary_uint_max"
+    expr: "math.least(18446744073709551615u, 1u, 5u) == 1u"
+  }
+  test: {
+    name: "quaternary_mixed"
+    expr: "math.least(5.4, 10, 3u, 1u, 18446744073709551615u) == 1u"
+  }
+  test: {
+    name: "quaternary_mixed_array"
+    expr: "math.least([5.4, 10u, 3u, 1u, 3.5]) == 1u"
+  }
+  test: {
+    name: "quaternary_mixed_dyn_array"
+    expr: "math.least([dyn(5.4), dyn(10u), dyn(3u), dyn(1u), dyn(3.5)]) == 1u"
+  }
+}
+
