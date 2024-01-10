@@ -35,7 +35,7 @@ section: {
         value: {
           object_value: {
             [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]: {
-              [google.api.expr.test.v1.proto2.nested_ext]: { }
+              [google.api.expr.test.v1.proto2.nested_ext]: {}
             }
           }
         }
@@ -55,7 +55,7 @@ section: {
         value: {
           object_value: {
             [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]: {
-              [google.api.expr.test.v1.proto2.test_all_types_ext]: { }
+              [google.api.expr.test.v1.proto2.test_all_types_ext]: {}
             }
           }
         }
@@ -95,7 +95,7 @@ section: {
         value: {
           object_value: {
             [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]: {
-              [google.api.expr.test.v1.proto2.repeated_test_all_types]: [{ single_int64: 1 }, { single_bool: true }]
+              [google.api.expr.test.v1.proto2.repeated_test_all_types]: [ { single_int64: 1 }, { single_bool: true } ]
             }
           }
         }
@@ -135,7 +135,7 @@ section: {
         value: {
           object_value: {
             [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]: {
-              [google.api.expr.test.v1.proto2.Proto2ExtensionScopedMessage.message_scoped_nested_ext]: { }
+              [google.api.expr.test.v1.proto2.Proto2ExtensionScopedMessage.message_scoped_nested_ext]: {}
             }
           }
         }
@@ -175,7 +175,7 @@ section: {
         value: {
           object_value: {
             [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]: {
-              [google.api.expr.test.v1.proto2.Proto2ExtensionScopedMessage.message_scoped_repeated_test_all_types]: [{ single_int64: 1 }, { single_bool: true }]
+              [google.api.expr.test.v1.proto2.Proto2ExtensionScopedMessage.message_scoped_repeated_test_all_types]: [ { single_int64: 1 }, { single_bool: true } ]
             }
           }
         }
@@ -219,7 +219,7 @@ section: {
         value: {
           object_value: {
             [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]: {
-              [google.api.expr.test.v1.proto2.nested_ext]: { }
+              [google.api.expr.test.v1.proto2.nested_ext]: {}
             }
           }
         }
@@ -239,7 +239,7 @@ section: {
         value: {
           object_value: {
             [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]: {
-              [google.api.expr.test.v1.proto2.test_all_types_ext]: { }
+              [google.api.expr.test.v1.proto2.test_all_types_ext]: {}
             }
           }
         }
@@ -279,7 +279,7 @@ section: {
         value: {
           object_value: {
             [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]: {
-              [google.api.expr.test.v1.proto2.repeated_test_all_types]: [{ single_int64: 1 }, { single_bool: true }]
+              [google.api.expr.test.v1.proto2.repeated_test_all_types]: [ { single_int64: 1 }, { single_bool: true } ]
             }
           }
         }
@@ -319,7 +319,7 @@ section: {
         value: {
           object_value: {
             [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]: {
-              [google.api.expr.test.v1.proto2.Proto2ExtensionScopedMessage.message_scoped_nested_ext]: { }
+              [google.api.expr.test.v1.proto2.Proto2ExtensionScopedMessage.message_scoped_nested_ext]: {}
             }
           }
         }
@@ -359,7 +359,7 @@ section: {
         value: {
           object_value: {
             [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]: {
-              [google.api.expr.test.v1.proto2.Proto2ExtensionScopedMessage.message_scoped_repeated_test_all_types]: [{ single_int64: 1 }, { single_bool: true }]
+              [google.api.expr.test.v1.proto2.Proto2ExtensionScopedMessage.message_scoped_repeated_test_all_types]: [ { single_int64: 1 }, { single_bool: true } ]
             }
           }
         }
