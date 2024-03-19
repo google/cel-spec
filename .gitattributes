@@ -1,0 +1,2 @@
+go/**/*.pb.go linguist-generated=true
+go/**/*.pb.go -diff -merge
