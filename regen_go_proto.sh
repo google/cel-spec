@@ -1,5 +1,5 @@
 #!/bin/sh
-bazel build //proto/test/...
+bazel build //proto/cel/expr... //proto/test/...
 files=($(bazel aquery 'kind(proto, //proto/...)' | grep Outputs | grep "[.]pb[.]go" | sed 's/Outputs: \[//' | sed 's/\]//' | tr "," "\n"))
 for src in ${files[@]};
 do
