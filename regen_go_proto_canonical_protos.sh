@@ -1,11 +1,11 @@
-#!/bin/sh
+#!/usr/bin/env bash
 bazel build //proto/cel/expr:all
 
 rm -vrf ./expr
 mkdir ./expr
 
-files=($(bazel aquery 'kind(proto, //proto/cel/expr:all)' | grep Outputs | grep "[.]pb[.]go" | grep "expr_go_proto" | sed 's/Outputs: \[//' | sed 's/\]//' | tr "," "\n"))
-for src in ${files[@]};
+files=( $(bazel cquery //proto/cel/expr:expr_go_proto --output=starlark --starlark:expr="'\n'.join([f.path for f in target.output_groups.go_generated_srcs.to_list()])") )
+for src in "${files[@]}";
 do
   cp -v "${src}" ./expr/
 done
