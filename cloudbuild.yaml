@@ -1,5 +1,5 @@
 steps:
-- name: 'gcr.io/cloud-builders/bazel'
+- name: 'gcr.io/cloud-builders/bazel:6.4.0'
   entrypoint: bazel
   args: ['test', '--test_output=errors', '...']
   id: bazel-test
