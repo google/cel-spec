@@ -73,64 +73,64 @@ section: {
     value: { bool_value: true }
   }
   test {
-    name: "spaghetti_1"
+    name: "optional_chaining_1"
     expr: "optional.ofNonZeroValue('').or(optional.of({'c': {'dashed-index': 'goodbye'}}.c['dashed-index'])).orValue('default value')"
     value: { string_value: "goodbye" }
   }
   test {
-    name: "spaghetti_2"
+    name: "optional_chaining_2"
     expr: "{'c': {'dashed-index': 'goodbye'}}.c[?'dashed-index'].orValue('default value')"
     value: { string_value: "goodbye" }
   }
   test {
-    name: "spaghetti_3"
+    name: "optional_chaining_3"
     expr: "{'c': {}}.c[?'missing-index'].orValue('default value')"
     value: { string_value: "default value" }
   }
   test {
-    name: "spaghetti_4"
+    name: "optional_chaining_4"
     expr: "optional.of({'c': {'index': 'goodbye'}}).c.index.orValue('default value')"
     value: { string_value: "goodbye" }
   }
   test {
-    name: "spaghetti_5"
+    name: "optional_chaining_5"
     expr: "optional.of({'c': {}}).c.missing.or(optional.none()[0]).orValue('default value')"
     value: { string_value: "default value" }
   }
   test {
-    name: "spaghetti_6"
+    name: "optional_chaining_6"
     expr: "optional.of({'c': {}}).c.missing.or(optional.of(['list-value'])[0]).orValue('default value')"
     value: { string_value: "list-value" }
   }
   test {
-    name: "spaghetti_7"
+    name: "optional_chaining_7"
     expr: "optional.of({'c': {'index': 'goodbye'}}).c['index'].orValue('default value')"
     value: { string_value: "goodbye" }
   }
   test {
-    name: "spaghetti_8"
+    name: "optional_chaining_8"
     expr: "optional.of({'c': {}}).c['missing'].orValue('default value')"
     value: { string_value: "default value" }
   }
   test {
-    name: "spaghetti_9"
+    name: "optional_chaining_9"
     expr: "has(optional.of({'c': {'entry': 'hello world'}}).c) && !has(optional.of({'c': {'entry': 'hello world'}}).c.missing)"
     value: { bool_value: true }
   }
   test {
-    name: "spaghetti_10"
+    name: "optional_chaining_10"
     expr: "optional.ofNonZeroValue({'c': {'dashed-index': 'goodbye'}}.a.z).orValue({'c': {'dashed-index': 'goodbye'}}.c['dashed-index'])"
     eval_error: {
       errors: { message: "no such key" }
     }
   }
   test {
-    name: "spaghetti_11"
+    name: "optional_chaining_11"
     expr: "{'c': {'dashed-index': 'goodbye'}}.?c.missing.or({'c': {'dashed-index': 'goodbye'}}.?c['dashed-index']).orValue('').size()"
     value: { int64_value: 7 }
   }
   test {
-    name: "spaghetti_12"
+    name: "optional_chaining_12"
     expr: "{?'nested_map': optional.ofNonZeroValue({?'map': {'c': {'dashed-index': 'goodbye'}}.?c})}"
     value: {
       map_value: {
@@ -156,7 +156,7 @@ section: {
     }
   }
   test {
-    name: "spaghetti_13"
+    name: "optional_chaining_13"
     expr: "{?'nested_map': optional.ofNonZeroValue({?'map': {}.?c}), 'singleton': true}"
     value: {
       map_value: {
@@ -168,17 +168,17 @@ section: {
     }
   }
   test {
-    name: "spaghetti_14"
+    name: "optional_chaining_14"
     expr: "[?{}.?c, ?optional.of(42), ?optional.none()]"
     value: { list_value: { values: { int64_value: 42 } } }
   }
   test {
-    name: "spaghetti_15"
+    name: "optional_chaining_15"
     expr: "[?optional.ofNonZeroValue({'c': []}.?c.orValue(dyn({})))]"
     value: { list_value: {} }
   }
   test {
-    name: "spaghetti_16"
+    name: "optional_chaining_16"
     expr: "optional.ofNonZeroValue({?'nested_map': optional.ofNonZeroValue({?'map': optional.of({}).?c})}).hasValue()"
     value: { bool_value: false }
   }
