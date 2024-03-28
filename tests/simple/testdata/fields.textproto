@@ -460,3 +460,17 @@ section {
     value: { bool_value: false }
   }
 }
+section {
+  name: "comprehensions"
+  description: "Tests for comprehensions for maps."
+  test {
+    name: "map_extract_keys"
+    expr: "{'John': 'smart', 'Paul': 'cute', 'George': 'quiet', 'Ringo': 'funny'}.map(key, key) == ['John', 'Paul', 'George', 'Ringo']"
+    value: { bool_value: true }
+  }
+  test {
+    name: "map_filter_keys"
+    expr: "{'John': 'smart', 'Paul': 'cute', 'George': 'quiet', 'Ringo': 'funny'}.filter(key, key == 'Ringo') == ['Ringo']"
+    value: { bool_value: true }
+  }
+}
