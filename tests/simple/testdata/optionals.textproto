@@ -1,0 +1,237 @@
+name: "optionals"
+description: "Tests for optionals."
+section: {
+  name: "optionals"
+  test {
+    name: "none_or_none_or_value"
+    expr: "optional.none().or(optional.none()).orValue(42)"
+    value: { int64_value: 42 }
+  }
+  test {
+    name: "none_optMap_hasValue"
+    expr: "optional.none().optMap(y, y + 1).hasValue()"
+    value: { bool_value: false }
+  }
+  test {
+    name: "empty_map_optFlatMap_hasValue"
+    expr: "{}.?key.optFlatMap(k, k.?subkey).hasValue()"
+    value: { bool_value: false }
+  }
+  test {
+    name: "map_empty_submap_optFlatMap_hasValue"
+    expr: "{'key': {}}.?key.optFlatMap(k, k.?subkey).hasValue()"
+    value: { bool_value: false }
+  }
+  test {
+    name: "map_submap_subkey_optFlatMap_value"
+    expr: "{'key': {'subkey': 'subvalue'}}.?key.optFlatMap(k, k.?subkey).value()"
+    value: { string_value: "subvalue" }
+  }
+  test {
+    name: "map_submap_optFlatMap_value"
+    expr: "{'key': {'subkey': ''}}.?key.optFlatMap(k, k.?subkey).value()"
+    value: { string_value: "" }
+  }
+  test {
+    name: "map_optindex_optFlatMap_optional_ofNonZeroValue_hasValue"
+    expr: "{'key': {'subkey': ''}}.?key.optFlatMap(k, optional.ofNonZeroValue(k.subkey)).hasValue()"
+    value: { bool_value: false }
+  }
+  test {
+    name: "optional_of_optMap_value"
+    expr: "optional.of(42).optMap(y, y + 1).value()"
+    value: { int64_value: 43 }
+  }
+  test {
+    name: "optional_ofNonZeroValue_or_optional_value"
+    expr: "optional.ofNonZeroValue(42).or(optional.of(20)).value() == 42"
+    value: { bool_value: true }
+  }
+  test {
+    name: "ternary_optional_hasValue"
+    expr: "(has({}.x) ? optional.of({}.x) : optional.none()).hasValue()"
+    value: { bool_value: false }
+  }
+  test {
+    name: "map_optindex_hasValue"
+    expr: "{}.?x.hasValue()"
+    value: { bool_value: false }
+  }
+  test {
+    name: "has_map_optindex"
+    expr: "has({}.?x.y)"
+    value: { bool_value: false }
+  }
+  test {
+    name: "has_map_optindex_field"
+    expr: "has({'x': {'y': 'z'}}.?x.y)"
+    value: { bool_value: true }
+  }
+  test {
+    name: "type"
+    expr: "type(optional.none()) == optional_type"
+    value: { bool_value: true }
+  }
+  test {
+    name: "optional_chaining_1"
+    expr: "optional.ofNonZeroValue('').or(optional.of({'c': {'dashed-index': 'goodbye'}}.c['dashed-index'])).orValue('default value')"
+    value: { string_value: "goodbye" }
+  }
+  test {
+    name: "optional_chaining_2"
+    expr: "{'c': {'dashed-index': 'goodbye'}}.c[?'dashed-index'].orValue('default value')"
+    value: { string_value: "goodbye" }
+  }
+  test {
+    name: "optional_chaining_3"
+    expr: "{'c': {}}.c[?'missing-index'].orValue('default value')"
+    value: { string_value: "default value" }
+  }
+  test {
+    name: "optional_chaining_4"
+    expr: "optional.of({'c': {'index': 'goodbye'}}).c.index.orValue('default value')"
+    value: { string_value: "goodbye" }
+  }
+  test {
+    name: "optional_chaining_5"
+    expr: "optional.of({'c': {}}).c.missing.or(optional.none()[0]).orValue('default value')"
+    value: { string_value: "default value" }
+  }
+  test {
+    name: "optional_chaining_6"
+    expr: "optional.of({'c': {}}).c.missing.or(optional.of(['list-value'])[0]).orValue('default value')"
+    value: { string_value: "list-value" }
+  }
+  test {
+    name: "optional_chaining_7"
+    expr: "optional.of({'c': {'index': 'goodbye'}}).c['index'].orValue('default value')"
+    value: { string_value: "goodbye" }
+  }
+  test {
+    name: "optional_chaining_8"
+    expr: "optional.of({'c': {}}).c['missing'].orValue('default value')"
+    value: { string_value: "default value" }
+  }
+  test {
+    name: "optional_chaining_9"
+    expr: "has(optional.of({'c': {'entry': 'hello world'}}).c) && !has(optional.of({'c': {'entry': 'hello world'}}).c.missing)"
+    value: { bool_value: true }
+  }
+  test {
+    name: "optional_chaining_10"
+    expr: "optional.ofNonZeroValue({'c': {'dashed-index': 'goodbye'}}.a.z).orValue({'c': {'dashed-index': 'goodbye'}}.c['dashed-index'])"
+    eval_error: {
+      errors: { message: "no such key" }
+    }
+  }
+  test {
+    name: "optional_chaining_11"
+    expr: "{'c': {'dashed-index': 'goodbye'}}.?c.missing.or({'c': {'dashed-index': 'goodbye'}}.?c['dashed-index']).orValue('').size()"
+    value: { int64_value: 7 }
+  }
+  test {
+    name: "optional_chaining_12"
+    expr: "{?'nested_map': optional.ofNonZeroValue({?'map': {'c': {'dashed-index': 'goodbye'}}.?c})}"
+    value: {
+      map_value: {
+        entries {
+          key: { string_value: "nested_map" }
+          value: {
+            map_value: {
+              entries {
+                key: { string_value: "map" }
+                value: {
+                  map_value: {
+                    entries {
+                      key: { string_value: "dashed-index" }
+                      value: { string_value: "goodbye" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  test {
+    name: "optional_chaining_13"
+    expr: "{?'nested_map': optional.ofNonZeroValue({?'map': {}.?c}), 'singleton': true}"
+    value: {
+      map_value: {
+        entries {
+          key: { string_value: "singleton" }
+          value: { bool_value: true }
+        }
+      }
+    }
+  }
+  test {
+    name: "optional_chaining_14"
+    expr: "[?{}.?c, ?optional.of(42), ?optional.none()]"
+    value: { list_value: { values: { int64_value: 42 } } }
+  }
+  test {
+    name: "optional_chaining_15"
+    expr: "[?optional.ofNonZeroValue({'c': []}.?c.orValue(dyn({})))]"
+    value: { list_value: {} }
+  }
+  test {
+    name: "optional_chaining_16"
+    expr: "optional.ofNonZeroValue({?'nested_map': optional.ofNonZeroValue({?'map': optional.of({}).?c})}).hasValue()"
+    value: { bool_value: false }
+  }
+  test {
+    name: "has_optional_ofNonZeroValue_struct_optional_ofNonZeroValue_map_optindex_field"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "has(TestAllTypes{?single_double_wrapper: optional.ofNonZeroValue(0.0)}.single_double_wrapper)"
+    value: { bool_value: false }
+  }
+  test {
+    name: "optional_ofNonZeroValue_struct_optional_ofNonZeroValue_map_optindex_field"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "optional.ofNonZeroValue(TestAllTypes{?single_double_wrapper: optional.ofNonZeroValue(0.0)}).hasValue()"
+    value: { bool_value: false }
+  }
+  test {
+    name: "struct_map_optindex_field"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{?map_string_string: {'nested': {}}[?'nested']}.map_string_string"
+    value: { map_value: {} }
+  }
+  test {
+    name: "struct_optional_ofNonZeroValue_map_optindex_field"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{?map_string_string: optional.ofNonZeroValue({'nested': {}}[?'nested'].orValue({}))}.map_string_string"
+    value: { map_value: {} }
+  }
+  test {
+    name: "struct_map_optindex_field_nested"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{?map_string_string: {'nested': {'hello': 'world'}}[?'nested']}.map_string_string"
+    value: {
+      map_value: {
+        entries {
+          key: { string_value: "hello" }
+          value: { string_value: "world" }
+        }
+      }
+    }
+  }
+  test {
+    name: "struct_list_optindex_field"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{repeated_string: ['greetings', ?{'nested': {'hello': 'world'}}.nested.?hello]}.repeated_string"
+    value: {
+      list_value: {
+        values {
+          string_value: "greetings"
+        }
+        values {
+          string_value: "world"
+        }
+      }
+    }
+  }
+}
