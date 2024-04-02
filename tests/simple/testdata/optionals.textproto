@@ -234,4 +234,113 @@ section: {
       }
     }
   }
+  test {
+    name: "optional_empty_map_optindex_hasValue"
+    expr: "optional.of({}).?c.hasValue()"
+    value: {
+      bool_value: false
+    }
+  }
+  test {
+    name: "empty_struct_optindex_hasValue"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{}.?repeated_string.hasValue()"
+    value: {
+      bool_value: false
+    }
+  }
+  test {
+    name: "optional_empty_struct_optindex_hasValue"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "optional.of(TestAllTypes{}).?repeated_string.hasValue()"
+    value: {
+      bool_value: false
+    }
+  }
+  test {
+    name: "optional_none_optselect_hasValue"
+    expr: "optional.none().?repeated_string.hasValue()"
+    value: {
+      bool_value: false
+    }
+  }
+  test {
+    name: "struct_optindex_value"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{repeated_string: ['foo']}.?repeated_string.value()"
+    value: {
+      list_value: {
+        values {
+          string_value: "foo"
+        }
+      }
+    }
+  }
+  test {
+    name: "optional_struct_optindex_value"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "optional.of(TestAllTypes{repeated_string: ['foo']}).?repeated_string.value()"
+    value: {
+      list_value: {
+        values {
+          string_value: "foo"
+        }
+      }
+    }
+  }
+  test {
+    name: "empty_list_optindex_hasValue"
+    expr: "[][?0].hasValue()"
+    value: {
+      bool_value: false
+    }
+  }
+  test {
+    name: "optional_empty_list_optindex_hasValue"
+    expr: "optional.of([])[?0].hasValue()"
+    value: {
+      bool_value: false
+    }
+  }
+  test {
+    name: "optional_none_optindex_hasValue"
+    expr: "optional.none()[?0].hasValue()"
+    value: {
+      bool_value: false
+    }
+  }
+  test {
+    name: "list_optindex_value"
+    expr: "['foo'][?0].value()"
+    value: {
+        string_value: "foo"
+    }
+  }
+  test {
+    name: "optional_list_optindex_value"
+    expr: "optional.of(['foo'])[?0].value()"
+    value: {
+        string_value: "foo"
+    }
+  }
+  test {
+    name: "map_key_mixed_type_optindex_value"
+    expr: "{true: 1, 2: 2, 5u: 3}[?true].value()"
+    value: { int64_value: 1 }
+  }
+  test {
+    name: "map_key_mixed_numbers_double_key_optindex_value"
+    expr: "{1u: 1.0, 2: 2.0, 3u: 3.0}[?3.0].value()"
+    value: { double_value: 3.0 }
+  }
+  test {
+    name: "map_key_mixed_numbers_uint_key_optindex_value"
+    expr: "{1u: 1.0, 2: 2.0, 3u: 3.0}[?2u].value()"
+    value: { double_value: 2.0 }
+  }
+  test {
+    name: "map_key_mixed_numbers_int_key_optindex_value"
+    expr: "{1u: 1.0, 2: 2.0, 3u: 3.0}[?1].value()"
+    value: { double_value: 1.0 }
+  }
 }
