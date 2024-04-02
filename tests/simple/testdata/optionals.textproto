@@ -289,6 +289,14 @@ section: {
     }
   }
   test {
+    name: "optional_struct_optindex_index_value"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "optional.of(TestAllTypes{repeated_string: ['foo']}).?repeated_string[0].value()"
+    value: {
+      string_value: "foo"
+    }
+  }
+  test {
     name: "empty_list_optindex_hasValue"
     expr: "[][?0].hasValue()"
     value: {
@@ -342,5 +350,45 @@ section: {
     name: "map_key_mixed_numbers_int_key_optindex_value"
     expr: "{1u: 1.0, 2: 2.0, 3u: 3.0}[?1].value()"
     value: { double_value: 1.0 }
+  }
+  test {
+    name: "optional_eq_none_none"
+    expr: "optional.none() == optional.none()"
+    value: { bool_value: true }
+  }
+  test {
+    name: "optional_eq_none_int"
+    expr: "optional.none() == optional.of(1)"
+    value: { bool_value: false }
+  }
+  test {
+    name: "optional_eq_int_none"
+    expr: "optional.of(1) == optional.none()"
+    value: { bool_value: false }
+  }
+  test {
+    name: "optional_eq_int_int"
+    expr: "optional.of(1) == optional.of(1)"
+    value: { bool_value: true }
+  }
+  test {
+    name: "optional_ne_none_none"
+    expr: "optional.none() != optional.none()"
+    value: { bool_value: false }
+  }
+  test {
+    name: "optional_ne_none_int"
+    expr: "optional.none() != optional.of(1)"
+    value: { bool_value: true }
+  }
+  test {
+    name: "optional_ne_int_none"
+    expr: "optional.of(1) != optional.none()"
+    value: { bool_value: true }
+  }
+  test {
+    name: "optional_ne_int_int"
+    expr: "optional.of(1) != optional.of(1)"
+    value: { bool_value: false }
   }
 }
