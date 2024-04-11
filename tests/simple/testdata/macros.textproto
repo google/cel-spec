@@ -203,7 +203,11 @@ section {
       errors: { message: "divide by zero" }
     }
   }
-  # The map() macro is currently not supported for maps.
+  test {
+    name: "map_extract_keys"
+    expr: "{'John': 'smart', 'Paul': 'cute', 'George': 'quiet', 'Ringo': 'funny'}.map(key, key) == ['John', 'Paul', 'George', 'Ringo']"
+    value: { bool_value: true }
+  }
 }
 section {
   name: "filter"
@@ -257,7 +261,11 @@ section {
       errors: { message: "divide by zero" }
     }
   }
-  # The filter() macro is currently not supported for maps.
+  test {
+    name: "map_filter_keys"
+    expr: "{'John': 'smart', 'Paul': 'cute', 'George': 'quiet', 'Ringo': 'funny'}.filter(key, key == 'Ringo') == ['Ringo']"
+    value: { bool_value: true }
+  }
 }
 section {
   name: "nested"
