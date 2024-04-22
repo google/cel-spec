@@ -656,3 +656,575 @@ section: {
   }
 }
 
+section: {
+  name: "ceil"
+  test: {
+    name: "negative"
+    expr: "math.ceil(-1.2)"
+    value: {
+      double_value: -1.0
+    }
+  }
+  test: {
+    name: "positive"
+    expr: "math.ceil(1.2)"
+    value: {
+      double_value: 2.0
+    }
+  }
+  test: {
+    name: "dyn_error"
+    expr: "math.ceil(dyn(1))"
+    eval_error: {
+      errors: {
+        message: "no such overload"
+      }
+    }
+  }
+}
+
+section: {
+  name: "floor"
+  test: {
+    name: "negative"
+    expr: "math.floor(-1.2)"
+    value: {
+      double_value: -2.0
+    }
+  }
+  test: {
+    name: "positive"
+    expr: "math.floor(1.2)"
+    value: {
+      double_value: 1.0
+    }
+  }
+  test: {
+    name: "dyn_error"
+    expr: "math.floor(dyn(1))"
+    eval_error: {
+      errors: {
+        message: "no such overload"
+      }
+    }
+  }
+}
+
+section: {
+  name: "round"
+  test: {
+    name: "negative_down"
+    expr: "math.round(-1.6)"
+    value: {
+      double_value: -2.0
+    }
+  }
+  test: {
+    name: "negative_up"
+    expr: "math.round(-1.4)"
+    value: {
+      double_value: -1.0
+    }
+  }
+  test: {
+    name: "negative_mid"
+    expr: "math.round(-1.5)"
+    value: {
+      double_value: -2.0
+    }
+  }
+  test: {
+    name: "positive_down"
+    expr: "math.round(1.2)"
+    value: {
+      double_value: 1.0
+    }
+  }
+  test: {
+    name: "positive_up"
+    expr: "math.round(1.5)"
+    value: {
+      double_value: 2.0
+    }
+  }
+  test: {
+    name: "nan"
+    expr: "math.isNaN(math.round(0.0/0.0))"
+  }
+  test: {
+    name: "dyn_error"
+    expr: "math.round(dyn(1))"
+    eval_error: {
+      errors: {
+        message: "no such overload"
+      }
+    }
+  }
+}
+
+section: {
+  name: "trunc"
+  test: {
+    name: "negative"
+    expr: "math.trunc(-1.2)"
+    value: {
+      double_value: -1.0
+    }
+  }
+  test: {
+    name: "positive"
+    expr: "math.trunc(1.2)"
+    value: {
+      double_value: 1.0
+    }
+  }
+  test: {
+    name: "nan"
+    expr: "math.isNaN(math.trunc(0.0/0.0))"
+  }
+  test: {
+    name: "dyn_error"
+    expr: "math.trunc(dyn(1))"
+    eval_error: {
+      errors: {
+        message: "no such overload"
+      }
+    }
+  }
+}
+
+section: {
+  name: "abs"
+  test: {
+    name: "uint"
+    expr: "math.abs(1u)"
+    value: {
+      uint64_value: 1
+    }
+  }
+  test: {
+    name: "positive_int"
+    expr: "math.abs(1)"
+    value: {
+      int64_value: 1
+    }
+  }
+  test: {
+    name: "negative_int"
+    expr: "math.abs(-11)"
+    value: {
+      int64_value: 11
+    }
+  }
+  test: {
+    name: "positive_double"
+    expr: "math.abs(1.5)"
+    value: {
+      double_value: 1.5
+    }
+  }
+  test: {
+    name: "negative_double"
+    expr: "math.abs(-11.5)"
+    value: {
+      double_value: 11.5
+    }
+  }
+  test: {
+    name: "int_overflow"
+    expr: "math.abs(-9223372036854775808)"
+    eval_error: {
+      errors: {
+        message: "overflow"
+      }
+    }
+  }
+}
+
+section: {
+  name: "sign"
+  test: {
+    name: "positive_uint"
+    expr: "math.sign(100u)"
+    value: {
+      uint64_value: 1
+    }
+  }
+  test: {
+    name: "zero_uint"
+    expr: "math.sign(0u)"
+    value: {
+      uint64_value: 0
+    }
+  }
+  test: {
+    name: "positive_int"
+    expr: "math.sign(100)"
+    value: {
+      int64_value: 1
+    }
+  }
+  test: {
+    name: "negative_int"
+    expr: "math.sign(-11)"
+    value: {
+      int64_value: -1
+    }
+  }
+  test: {
+    name: "zero_int"
+    expr: "math.sign(0)"
+    value: {
+      int64_value: 0
+    }
+  }
+  test: {
+    name: "positive_double"
+    expr: "math.sign(100.5)"
+    value: {
+      double_value: 1.0
+    }
+  }
+  test: {
+    name: "negative_double"
+    expr: "math.sign(-32.0)"
+    value: {
+      double_value: -1.0
+    }
+  }
+  test: {
+    name: "zero_double"
+    expr: "math.sign(0.0)"
+    value: {
+      double_value: 0.0
+    }
+  }
+  test: {
+    name: "dyn_error"
+    expr: "math.sign(dyn(true))"
+    eval_error: {
+      errors: {
+        message: "no such overload"
+      }
+    }
+  }
+}
+
+section: {
+  name: "isNaN"
+  test: {
+    name: "true"
+    expr: "math.isNaN(0.0/0.0)"
+  }
+   test: {
+    name: "false"
+    expr: "!math.isNaN(1.0/0.0)"
+  }
+  test: {
+    name: "dyn_error"
+    expr: "math.isNaN(dyn(true))"
+    eval_error: {
+      errors: {
+        message: "no such overload"
+      }
+    }
+  }
+}
+
+section: {
+  name: "isInf"
+  test: {
+    name: "true"
+    expr: "math.isInf(1.0/0.0)"
+  }
+   test: {
+    name: "false"
+    expr: "!math.isInf(0.0/0.0)"
+  }
+  test: {
+    name: "dyn_error"
+    expr: "math.isInf(dyn(true))"
+    eval_error: {
+      errors: {
+        message: "no such overload"
+      }
+    }
+  }
+}
+
+section: {
+  name: "isFinite"
+  test: {
+    name: "true"
+    expr: "math.isFinite(1.0/1.5)"
+  }
+  test: {
+    name: "false_nan"
+    expr: "!math.isFinite(0.0/0.0)"
+  }
+  test: {
+    name: "false_inf"
+    expr: "!math.isFinite(-1.0/0.0)"
+  }
+  test: {
+    name: "dyn_error"
+    expr: "math.isFinite(dyn(true))"
+    eval_error: {
+      errors: {
+        message: "no such overload"
+      }
+    }
+  }
+}
+
+section: {
+  name: "bit_and"
+  test: {
+    name: "int_int_non_intersect"
+    expr: "math.bitAnd(1, 2)"
+    value: {
+      int64_value: 0
+    }
+  }  
+  test: {
+    name: "int_int_intersect"
+    expr: "math.bitAnd(1, 3)"
+    value: {
+      int64_value: 1
+    }
+  }
+  test: {
+    name: "int_int_intersect_neg"
+    expr: "math.bitAnd(1, -1)"
+    value: {
+      int64_value: 1
+    }
+  }
+  test: {
+    name: "uint_uint_non_intersect"
+    expr: "math.bitAnd(1u, 2u)"
+    value: {
+      uint64_value: 0
+    }
+  }  
+  test: {
+    name: "uint_uint_intersect"
+    expr: "math.bitAnd(1u, 3u)"
+    value: {
+      uint64_value: 1
+    }
+  }
+  test: {
+    name: "int_dyn_error"
+    expr: "math.bitAnd(2u, dyn(''))"
+    eval_error: {
+      errors: {
+        message: "no such overload"
+      }
+    }
+  }
+}
+
+section: {
+  name: "bit_or"
+  test: {
+    name: "int_int_positive"
+    expr: "math.bitOr(1, 2)"
+    value: {
+      int64_value: 3
+    }
+  } 
+  test: {
+    name: "int_int_positive_negative"
+    expr: "math.bitOr(4, -2)"
+    value: {
+      int64_value: -2
+    }
+  }  
+  test: {
+    name: "uint_uint"
+    expr: "math.bitOr(1u, 4u)"
+    value: {
+      uint64_value: 5
+    }
+  }  
+  test: {
+    name: "dyn_int_error"
+    expr: "math.bitOr(dyn(1.2), 1)"
+    eval_error: {
+      errors: {
+        message: "no such overload"
+      }
+    }
+  }
+}
+
+section: {
+  name: "bit_xor"
+  test: {
+    name: "int_int_positive"
+    expr: "math.bitXor(1, 3)"
+    value: {
+      int64_value: 2
+    }
+  } 
+  test: {
+    name: "int_int_positive_negative"
+    expr: "math.bitXor(4, -2)"
+    value: {
+      int64_value: -6
+    }
+  }  
+  test: {
+    name: "uint_uint"
+    expr: "math.bitXor(1u, 3u)"
+    value: {
+      uint64_value: 2
+    }
+  }  
+  test: {
+    name: "dyn_dyn_error"
+    expr: "math.bitXor(dyn([]), dyn([1]))"
+    eval_error: {
+      errors: {
+        message: "no such overload"
+      }
+    }
+  }
+}
+
+section: {
+  name: "bit_not"
+  test: {
+    name: "int_positive"
+    expr: "math.bitNot(1)"
+    value: {
+      int64_value: -2
+    }
+  } 
+  test: {
+    name: "int_negative"
+    expr: "math.bitNot(-1)"
+    value: {
+      int64_value: 0
+    }
+  } 
+  test: {
+    name: "int_zero"
+    expr: "math.bitNot(0)"
+    value: {
+      int64_value: -1
+    }
+  }
+  test: {
+    name: "uint_positive"
+    expr: "math.bitNot(1u)"
+    value: {
+      uint64_value: 18446744073709551614
+    }
+  }  
+  test: {
+    name: "uint_zero"
+    expr: "math.bitNot(0u)"
+    value: {
+      uint64_value: 18446744073709551615
+    }
+  }  
+  test: {
+    name: "dyn_error"
+    expr: "math.bitNot(dyn(''))"
+    eval_error: {
+      errors: {
+        message: "no such overload"
+      }
+    }
+  }
+}
+
+section: {
+  name: "bit_shift_left"
+  test: {
+    name: "int",
+    expr: "math.bitShiftLeft(1, 2) == 4"
+  }
+  test: {
+    name: "int_large_shift",
+    expr: "math.bitShiftLeft(1, 200) == 0"
+  }
+  test: {
+    name: "int_negative_large_shift",
+    expr: "math.bitShiftLeft(-1, 200) == 0"
+  }
+  test: {
+    name: "uint",
+    expr: "math.bitShiftLeft(1u, 2) == 4u"
+  }
+  test: {
+    name: "uint_large_shift",
+    expr: "math.bitShiftLeft(1u, 200) == 0u"
+  }
+  test: {
+    name: "bad_shift",
+    expr: "math.bitShiftLeft(1u, -1)"
+    eval_error: {
+      errors: {
+        message: "negative offset"
+      }
+    }
+  }
+  test: {
+    name: "dyn_int_error"
+    expr: "math.bitShiftLeft(dyn(4.3), 1)"
+    eval_error: {
+      errors: {
+        message: "no such overload"
+      }
+    }
+  }
+}
+
+section: {
+  name: "bit_shift_right"
+  test: {
+    name: "int",
+    expr: "math.bitShiftRight(1024, 2) == 256"
+  }
+  test: {
+    name: "int_large_shift",
+    expr: "math.bitShiftRight(1024, 64) == 0"
+  }
+  test: {
+    name: "int_negative",
+    expr: "math.bitShiftRight(-1024, 3) == -128"
+  }
+  test: {
+    name: "int_negative_large_shift",
+    expr: "math.bitShiftRight(-1024, 64) == -1"
+  }
+  test: {
+    name: "uint",
+    expr: "math.bitShiftRight(1024u, 2) == 256u"
+  }
+  test: {
+    name: "uint_large_shift",
+    expr: "math.bitShiftRight(1024u, 200) == 0u"
+  }
+  test: {
+    name: "bad_shift",
+    expr: "math.bitShiftRight(1u, -1)"
+    eval_error: {
+      errors: {
+        message: "negative offset"
+      }
+    }
+  }
+  test: {
+    name: "dyn_int_error"
+    expr: "math.bitShiftRight(dyn(b'123'), 1)"
+    eval_error: {
+      errors: {
+        message: "no such overload"
+      }
+    }
+  }
+}
