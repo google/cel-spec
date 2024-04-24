@@ -985,7 +985,7 @@ section: {
     value: {
       int64_value: 0
     }
-  }  
+  }
   test: {
     name: "int_int_intersect"
     expr: "math.bitAnd(1, 3)"
@@ -1006,7 +1006,7 @@ section: {
     value: {
       uint64_value: 0
     }
-  }  
+  }
   test: {
     name: "uint_uint_intersect"
     expr: "math.bitAnd(1u, 3u)"
@@ -1033,21 +1033,21 @@ section: {
     value: {
       int64_value: 3
     }
-  } 
+  }
   test: {
     name: "int_int_positive_negative"
     expr: "math.bitOr(4, -2)"
     value: {
       int64_value: -2
     }
-  }  
+  }
   test: {
     name: "uint_uint"
     expr: "math.bitOr(1u, 4u)"
     value: {
       uint64_value: 5
     }
-  }  
+  }
   test: {
     name: "dyn_int_error"
     expr: "math.bitOr(dyn(1.2), 1)"
@@ -1067,21 +1067,21 @@ section: {
     value: {
       int64_value: 2
     }
-  } 
+  }
   test: {
     name: "int_int_positive_negative"
     expr: "math.bitXor(4, -2)"
     value: {
       int64_value: -6
     }
-  }  
+  }
   test: {
     name: "uint_uint"
     expr: "math.bitXor(1u, 3u)"
     value: {
       uint64_value: 2
     }
-  }  
+  }
   test: {
     name: "dyn_dyn_error"
     expr: "math.bitXor(dyn([]), dyn([1]))"
@@ -1101,14 +1101,14 @@ section: {
     value: {
       int64_value: -2
     }
-  } 
+  }
   test: {
     name: "int_negative"
     expr: "math.bitNot(-1)"
     value: {
       int64_value: 0
     }
-  } 
+  }
   test: {
     name: "int_zero"
     expr: "math.bitNot(0)"
@@ -1122,14 +1122,14 @@ section: {
     value: {
       uint64_value: 18446744073709551614
     }
-  }  
+  }
   test: {
     name: "uint_zero"
     expr: "math.bitNot(0u)"
     value: {
       uint64_value: 18446744073709551615
     }
-  }  
+  }
   test: {
     name: "dyn_error"
     expr: "math.bitNot(dyn(''))"
