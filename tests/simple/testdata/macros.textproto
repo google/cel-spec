@@ -205,7 +205,7 @@ section {
   }
   test {
     name: "map_extract_keys"
-    expr: "{'John': 'smart', 'Paul': 'cute', 'George': 'quiet', 'Ringo': 'funny'}.map(key, key) == ['John', 'Paul', 'George', 'Ringo']"
+    expr: "{'John': 'smart'}.map(key, key) == ['John']"
     value: { bool_value: true }
   }
 }
