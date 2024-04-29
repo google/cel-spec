@@ -23,6 +23,18 @@ section: {
     value: { bool_value: false }
   }
   test {
+    name: "map_null_entry_no_such_key"
+    expr: "{'null_key': null}.?null_key.invalid.hasValue()"
+    eval_error: {
+      errors: { message: "no such key" }
+    }
+  }
+  test {
+    name: "map_undefined_entry_hasValue"
+    expr: "{}.?null_key.invalid.hasValue()"
+    value: { bool_value: false }
+  }
+  test {
     name: "map_submap_subkey_optFlatMap_value"
     expr: "{'key': {'subkey': 'subvalue'}}.?key.optFlatMap(k, k.?subkey).value()"
     value: { string_value: "subvalue" }
