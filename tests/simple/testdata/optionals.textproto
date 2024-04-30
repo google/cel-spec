@@ -23,8 +23,25 @@ section: {
     value: { bool_value: false }
   }
   test {
+    name: "map_null_entry_hasValue"
+    expr: "{'null_key': dyn(null)}.?null_key.hasValue()"
+    value: { bool_value: true }
+  }
+  test {
     name: "map_null_entry_no_such_key"
-    expr: "{'null_key': null}.?null_key.invalid.hasValue()"
+    expr: "{'null_key': dyn(null)}.?null_key.invalid.hasValue()"
+    eval_error: {
+      errors: { message: "no such key" }
+    }
+  }
+  test {
+    name: "map_absent_key_absent_field_none"
+    expr: "{true: dyn(0)}[?false].absent.hasValue()"
+    value: { bool_value: false }
+  }
+  test {
+    name: "map_present_key_invalid_field"
+    expr: "{true: dyn(0)}[?true].absent.hasValue()"
     eval_error: {
       errors: { message: "no such key" }
     }
