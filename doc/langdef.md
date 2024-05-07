@@ -932,7 +932,7 @@ than the default costs.
 
 ## Functions
 
-CEL functions have no observable side-effects (there maybe side-effects like
+CEL functions have no observable side-effects (there may be side-effects like
 logging or such which are not observable from CEL). The default argument
 evaluation strategy for functions is strict, with exceptions from this rule
 discussed in [Logical Operators](#logical-operators) and [Macros](#macros).
