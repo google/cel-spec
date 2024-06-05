@@ -96,7 +96,7 @@ message TestAllTypes {
   repeated NestedEnum repeated_nested_enum = 52;
   repeated string repeated_string_piece = 53 [ctype = STRING_PIECE];
   repeated string repeated_cord = 54 [ctype = CORD];
-  repeated NestedMessage repeated_lazy_message = 55 [lazy = true];
+  repeated NestedMessage repeated_lazy_message = 55;
 
   // Repeated wellknown.
   repeated google.protobuf.Any repeated_any = 120;
