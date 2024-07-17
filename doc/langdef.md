@@ -221,8 +221,7 @@ If name qualification is mixed with field selection, the longest prefix of the
 name which resolves in the current lexical scope is used. For example, if
 `a.b.c` resolves to a message declaration, and `a.b` does so as well with `c` a
 possible field selection, then `a.b.c` takes priority over the interpretation
-`(a.b).c`. Explicit parentheses can be used to choose the field selection
-interpretation.
+`(a.b).c`.
 
 ## Values
 
