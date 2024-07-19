@@ -1145,23 +1145,38 @@ section: {
   name: "bit_shift_left"
   test: {
     name: "int",
-    expr: "math.bitShiftLeft(1, 2) == 4"
+    expr: "math.bitShiftLeft(1, 2)"
+    value: {
+      int64_value: 4
+    }
   }
   test: {
     name: "int_large_shift",
-    expr: "math.bitShiftLeft(1, 200) == 0"
+    expr: "math.bitShiftLeft(1, 200)"
+    value: {
+      int64_value: 0
+    }
   }
   test: {
     name: "int_negative_large_shift",
-    expr: "math.bitShiftLeft(-1, 200) == 0"
+    expr: "math.bitShiftLeft(-1, 200)"
+    value: {
+      int64_value: 0
+    }
   }
   test: {
     name: "uint",
-    expr: "math.bitShiftLeft(1u, 2) == 4u"
+    expr: "math.bitShiftLeft(1u, 2)"
+    value: {
+      uint64_value: 4
+    }
   }
   test: {
     name: "uint_large_shift",
-    expr: "math.bitShiftLeft(1u, 200) == 0u"
+    expr: "math.bitShiftLeft(1u, 200)"
+    value: {
+      uint64_value: 0
+    }
   }
   test: {
     name: "bad_shift",
@@ -1187,27 +1202,45 @@ section: {
   name: "bit_shift_right"
   test: {
     name: "int",
-    expr: "math.bitShiftRight(1024, 2) == 256"
+    expr: "math.bitShiftRight(1024, 2)"
+    value: {
+      int64_value: 256
+    }
   }
   test: {
     name: "int_large_shift",
-    expr: "math.bitShiftRight(1024, 64) == 0"
+    expr: "math.bitShiftRight(1024, 64)"
+    value: {
+      int64_value: 0
+    }
   }
   test: {
     name: "int_negative",
-    expr: "math.bitShiftRight(-1024, 3) == -128"
+    expr: "math.bitShiftRight(-1024, 3)"
+    value: {
+      int64_value: 2305843009213693824
+    }
   }
   test: {
     name: "int_negative_large_shift",
-    expr: "math.bitShiftRight(-1024, 64) == -1"
+    expr: "math.bitShiftRight(-1024, 64)"
+    value: {
+      int64_value: 0
+    }
   }
   test: {
     name: "uint",
-    expr: "math.bitShiftRight(1024u, 2) == 256u"
+    expr: "math.bitShiftRight(1024u, 2)"
+    value: {
+      uint64_value: 256
+    }
   }
   test: {
     name: "uint_large_shift",
-    expr: "math.bitShiftRight(1024u, 200) == 0u"
+    expr: "math.bitShiftRight(1024u, 200)"
+    value: {
+      uint64_value: 0
+    }
   }
   test: {
     name: "bad_shift",
