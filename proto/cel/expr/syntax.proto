@@ -185,12 +185,28 @@ message Expr {
   // macro tests whether the property is set to its default. For map and struct
   // types, the macro tests whether the property `x` is defined on `m`.
   //
-  // Comprehension evaluation can be best visualized as the following
-  // pseudocode:
+  // Comprehensions for the standard environment macros evaluation can be best
+  // visualized as the following pseudocode:
   //
   // ```
   // let `accu_var` = `accu_init`
   // for (let `iter_var` in `iter_range`) {
+  //   if (!`loop_condition`) {
+  //     break
+  //   }
+  //   `accu_var` = `loop_step`
+  // }
+  // return `result`
+  // ```
+  //
+  // Comprehensions for the optional V2 macros which support map-to-map
+  // translation differ slightly from the standard environment macros in that
+  // they expose both the key or index in addition to the value for each list
+  // or map entry:
+  //
+  // ```
+  // let `accu_var` = `accu_init`
+  // for (let `iter_var`, `iter_var2` in `iter_range`) {
   //   if (!`loop_condition`) {
   //     break
   //   }
