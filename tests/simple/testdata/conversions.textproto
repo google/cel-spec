@@ -505,3 +505,47 @@ section {
     value: { uint64_value: 300 }
   }
 }
+section {
+  name: "identity"
+  description: "Identity functions"
+  test {
+    name: "bool"
+    expr: "bool(true)"
+    value: { bool_value: true }
+  }
+  test {
+    name: "int"
+    expr: "int(1)"
+    value: { int64_value: 1 }
+  }
+  test {
+    name: "uint"
+    expr: "uint(1u)"
+    value: { uint64_value: 1 }
+  }
+  test {
+    name: "double"
+    expr: "double(5.5)"
+    value: { double_value: 5.5 }
+  }
+  test {
+    name: "string"
+    expr: "string('hello')"
+    value: { string_value: "hello" }
+  }
+  test {
+    name: "bytes"
+    expr: "bytes(bytes('abc'))"
+    value: { bytes_value: "abc" }
+  }
+  test {
+    name: "duration"
+    expr: "duration(duration('100s')) == duration('100s')"
+    value: { bool_value: true }
+  }
+  test {
+    name: "timestamp"
+    expr: "timestamp(timestamp(1000000000)) == timestamp(1000000000)"
+    value: { bool_value: true }
+  }
+}
