@@ -764,3 +764,81 @@ section {
     value { bool_value: true }
   }
 }
+section {
+  name:"set_null"
+  test {
+    name: "single_message"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{single_nested_message: null} == TestAllTypes{}"
+    value: { bool_value: true }
+  }
+  test {
+    name: "single_any"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{single_any: null}.single_any"
+    value { null_value: NULL_VALUE }
+  }
+  test {
+    name: "single_value"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{single_value: null}.single_value"
+    value { null_value: NULL_VALUE }
+  }
+  test {
+    name: "single_duration"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{single_duration: null} == TestAllTypes{}"
+    value: { bool_value: true }
+  }
+  test {
+    name: "single_timestamp"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{single_timestamp: null} == TestAllTypes{}"
+    value: { bool_value: true }
+  }
+  test {
+    name: "single_scalar"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{single_bool: null} == TestAllTypes{}"
+    disable_check: true
+    eval_error: {
+      errors: { message: "unsupported field type" }
+    }
+  }
+  test {
+    name: "repeated"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{repeated_int32: null} == TestAllTypes{}"
+    disable_check: true
+    eval_error: {
+      errors: { message: "unsupported field type" }
+    }
+  }
+  test {
+    name: "map"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{map_string_string: null} == TestAllTypes{}"
+    disable_check: true
+    eval_error: {
+      errors: { message: "unsupported field type" }
+    }
+  }
+  test {
+    name: "list_value"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{list_value: null} == TestAllTypes{}"
+    disable_check: true
+    eval_error: {
+      errors: { message: "unsupported field type" }
+    }
+  }
+  test {
+    name: "single_struct"
+    container: "google.api.expr.test.v1.proto2"
+    expr: "TestAllTypes{single_struct: null} == TestAllTypes{}"
+    disable_check: true
+    eval_error: {
+      errors: { message: "unsupported field type" }
+    }
+  }
+}

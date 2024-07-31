@@ -20,6 +20,14 @@ section {
       bool_value: true
     }
   }
+  test {
+    name: "to_null"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_bool_wrapper: null} == TestAllTypes{}"
+    value {
+      bool_value: true
+    }
+  }
 }
 
 # google.protobuf.Int32Value
@@ -39,6 +47,14 @@ section {
     expr: "TestAllTypes{single_value: google.protobuf.Int32Value{value: 1}}.single_value"
     value {
       double_value: 1
+    }
+  }
+  test {
+    name: "to_null"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_int32_wrapper: null} == TestAllTypes{}"
+    value {
+      bool_value: true
     }
   }
 }
@@ -70,6 +86,14 @@ section {
       string_value: "9223372036854775807"
     }
   }
+  test {
+    name: "to_null"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_int64_wrapper: null} == TestAllTypes{}"
+    value {
+      bool_value: true
+    }
+  }
 }
 
 # google.protobuf.UInt32Value
@@ -89,6 +113,14 @@ section {
     expr: "TestAllTypes{single_value: google.protobuf.UInt32Value{value: 1u}}.single_value"
     value {
       double_value: 1
+    }
+  }
+  test {
+    name: "to_null"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_uint32_wrapper: null} == TestAllTypes{}"
+    value {
+      bool_value: true
     }
   }
 }
@@ -120,6 +152,14 @@ section {
       string_value: "18446744073709551615"
     }
   }
+  test {
+    name: "to_null"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_uint64_wrapper: null} == TestAllTypes{}"
+    value {
+      bool_value: true
+    }
+  }
 }
 
 # google.protobuf.FloatValue
@@ -139,6 +179,14 @@ section {
     expr: "TestAllTypes{single_value: google.protobuf.FloatValue{value: 1.0}}.single_value"
     value {
       double_value: 1
+    }
+  }
+  test {
+    name: "to_null"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_float_wrapper: null} == TestAllTypes{}"
+    value {
+      bool_value: true
     }
   }
 }
@@ -162,6 +210,14 @@ section {
       double_value: 1
     }
   }
+  test {
+    name: "to_null"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_double_wrapper: null} == TestAllTypes{}"
+    value {
+      bool_value: true
+    }
+  }
 }
 
 # google.protobuf.BytesValue
@@ -183,6 +239,14 @@ section {
       string_value: "Zm9v"
     }
   }
+  test {
+    name: "to_null"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_bytes_wrapper: null} == TestAllTypes{}"
+    value {
+      bool_value: true
+    }
+  }
 }
 
 # google.protobuf.StringValue
@@ -202,6 +266,14 @@ section {
     expr: "TestAllTypes{single_value: google.protobuf.StringValue{value: 'foo'}}.single_value"
     value {
       string_value: "foo"
+    }
+  }
+  test {
+    name: "to_null"
+    container: "google.api.expr.test.v1.proto3"
+    expr: "TestAllTypes{single_string_wrapper: null} == TestAllTypes{}"
+    value {
+      bool_value: true
     }
   }
 }

@@ -3,6 +3,16 @@ description: "Tests for optionals."
 section: {
   name: "optionals"
   test {
+    name: "null"
+    expr: "optional.of(null).hasValue()"
+    value: { bool_value: true }
+  }
+  test {
+    name: "null_non_zero_value"
+    expr: "optional.ofNonZeroValue(null).hasValue()"
+    value: { bool_value: false }
+  }
+  test {
     name: "none_or_none_or_value"
     expr: "optional.none().or(optional.none()).orValue(42)"
     value: { int64_value: 42 }
