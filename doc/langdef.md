@@ -1835,7 +1835,7 @@ See [cel-go/issues/9](https://github.com/google/cel-go/issues/9).
     </td>
   </tr>
   <tr>
-    <th rowspan="2">
+    <th rowspan="3">
       bool
     </th>
     <td>
@@ -1851,6 +1851,14 @@ See [cel-go/issues/9](https://github.com/google/cel-go/issues/9).
     </td>
     <td>
       identity
+    </td>
+  </tr>
+  <tr>
+    <td>
+      (string) -> bool
+    </td>
+    <td>
+      type conversion
     </td>
   </tr>
   <tr>
