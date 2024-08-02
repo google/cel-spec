@@ -724,7 +724,7 @@ section {
     eval_error: {
       errors: { message: "unsupported field type" }
     }
-  }  
+  }
   test {
     name: "list_value"
     container: "google.api.expr.test.v1.proto3"
