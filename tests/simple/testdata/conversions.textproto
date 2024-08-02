@@ -558,6 +558,20 @@ section {
     expr: "bool('False')"
     value: { bool_value: false }
   }
+  test {
+    name: "string_true_badcase"
+    expr: "bool('TrUe')"
+    eval_error {
+      errors { message: "Type conversion error" }
+    }
+  }
+  test {
+    name: "string_false_badcase"
+    expr: "bool('FaLsE')"
+    eval_error {
+      errors { message: "Type conversion error" }
+    }
+  }
 }
 section {
   name: "identity"
