@@ -603,7 +603,7 @@ section {
   }
   test {
     name: "bytes"
-    expr: "bytes(bytes('abc'))"
+    expr: "bytes(b'abc')"
     value: { bytes_value: "abc" }
   }
   test {
