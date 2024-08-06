@@ -30,6 +30,11 @@ cc_proto_library(
     deps = [":test_all_types_proto",],
 )
 
+java_proto_library(
+    name = "test_all_types_java_proto",
+    deps = [":test_all_types_proto"],
+)
+
 go_proto_library(
     name = "test_all_types_go_proto",
     proto = ":test_all_types_proto",
