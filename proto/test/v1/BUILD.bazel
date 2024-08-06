@@ -34,6 +34,11 @@ cc_proto_library(
     deps = [":simple_proto",],
 )
 
+java_proto_library(
+    name = "simple_java_proto",
+    deps = [":simple_proto"],
+)
+
 go_proto_library(
     name = "testpb_go_proto",
     protos = [
