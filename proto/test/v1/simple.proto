@@ -6,6 +6,8 @@ package google.api.expr.test.v1;
 
 // Note, run regen_go_proto.sh after making modifications to this file.
 option go_package = "github.com/google/cel-spec/test/v1/testpb";
+option java_outer_classname = "SimpleProto";
+option java_package = "com.google.api.expr.test.v1";
 
 import "google/api/expr/v1alpha1/checked.proto";
 import "google/api/expr/v1alpha1/eval.proto";
