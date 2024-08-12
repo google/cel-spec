@@ -506,6 +506,74 @@ section {
   }
 }
 section {
+  name: "bool"
+  description: "Conversions to bool"
+  test {
+    name: "string_1"
+    expr: "bool('1')"
+    value: { bool_value: true }
+  }
+  test {
+    name: "string_t"
+    expr: "bool('t')"
+    value: { bool_value: true }
+  }
+  test {
+    name: "string_true_lowercase"
+    expr: "bool('true')"
+    value: { bool_value: true }
+  }
+  test {
+    name: "string_true_uppercase"
+    expr: "bool('TRUE')"
+    value: { bool_value: true }
+  }
+  test {
+    name: "string_true_pascalcase"
+    expr: "bool('True')"
+    value: { bool_value: true }
+  }
+  test {
+    name: "string_0"
+    expr: "bool('0')"
+    value: { bool_value: false }
+  }
+  test {
+    name: "string_f"
+    expr: "bool('f')"
+    value: { bool_value: false }
+  }
+  test {
+    name: "string_false_lowercase"
+    expr: "bool('false')"
+    value: { bool_value: false }
+  }
+  test {
+    name: "string_false_uppercase"
+    expr: "bool('FALSE')"
+    value: { bool_value: false }
+  }
+  test {
+    name: "string_false_pascalcase"
+    expr: "bool('False')"
+    value: { bool_value: false }
+  }
+  test {
+    name: "string_true_badcase"
+    expr: "bool('TrUe')"
+    eval_error {
+      errors { message: "Type conversion error" }
+    }
+  }
+  test {
+    name: "string_false_badcase"
+    expr: "bool('FaLsE')"
+    eval_error {
+      errors { message: "Type conversion error" }
+    }
+  }
+}
+section {
   name: "identity"
   description: "Identity functions"
   test {
@@ -535,7 +603,7 @@ section {
   }
   test {
     name: "bytes"
-    expr: "bytes(bytes('abc'))"
+    expr: "bytes(b'abc')"
     value: { bytes_value: "abc" }
   }
   test {
