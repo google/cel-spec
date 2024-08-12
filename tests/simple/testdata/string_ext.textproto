@@ -542,7 +542,7 @@ section: {
     name: "unicode output for scientific notation"
     expr: '"unescaped unicode: %e, escaped unicode: %e".format([2.71828, 2.71828])'
     value: {
-      string_value: 'unescaped unicode: 2.718280 × 10⁰⁰, escaped unicode: 2.718280 × 10⁰⁰',
+      string_value: 'unescaped unicode: 2.718280 × 10⁰⁰, escaped unicode: 2.718280\u202f\u00d7\u202f10\u2070\u2070',
     }
   }
   test: {
@@ -746,6 +746,111 @@ section: {
     expr: '"message field msg.single_int32: %d, msg.single_double: %.1f".format([2, 1.0])'
     value: {
       string_value: 'message field msg.single_int32: 2, msg.single_double: 1.0',
+    }
+  }
+  test: {
+    name: "string substitution in a string variable"
+    expr: 'str_var.format(["filler"])'
+    type_env: {
+      name: "str_var",
+      ident: { type: { primitive: STRING } }
+    }
+    bindings: {
+      key: "str_var"
+      value: { value: { string_value: "str is %s and some more" } }
+    }
+    value: {
+      string_value: 'str is filler and some more',
+    }
+  }
+  test: {
+    name: "multiple substitutions in a string variable"
+    expr: 'str_var.format([1, 2, 3, "A", "B", "C", 4, 5, 6, "D", "E", "F"])'
+    type_env: {
+      name: "str_var",
+      ident: { type: { primitive: STRING } }
+    }
+    bindings: {
+      key: "str_var"
+      value: { value: { string_value: "%d %d %d, %s %s %s, %d %d %d, %s %s %s" } }
+    }
+    value: {
+      string_value: '1 2 3, A B C, 4 5 6, D E F',
+    }
+  }
+  test: {
+    name: "substution inside escaped percent signs in a string variable"
+    expr: 'str_var.format(["text"])'
+    type_env: {
+      name: "str_var",
+      ident: { type: { primitive: STRING } }
+    }
+    bindings: {
+      key: "str_var"
+      value: { value: { string_value: "%%%s%%" } }
+    }
+    value: {
+      string_value: '%text%',
+    }
+  }
+  test: {
+    name: "fixed point formatting clause in a string variable"
+    expr: 'str_var.format([1.2345])'
+    type_env: {
+      name: "str_var",
+      ident: { type: { primitive: STRING } }
+    }
+    bindings: {
+      key: "str_var"
+      value: { value: { string_value: "%.3f" } }
+    }
+    value: {
+      string_value: '1.234',
+    }
+  }
+  test: {
+    name: "binary formatting clause in a string variable"
+    expr: 'str_var.format([5])'
+    type_env: {
+      name: "str_var",
+      ident: { type: { primitive: STRING } }
+    }
+    bindings: {
+      key: "str_var"
+      value: { value: { string_value: "this is 5 in binary: %b" } }
+    }
+    value: {
+      string_value: 'this is 5 in binary: 101',
+    }
+  }
+  test: {
+    name: "scientific notation formatting clause in a string variable"
+    expr: 'str_var.format([1052.032911275])'
+    type_env: {
+      name: "str_var",
+      ident: { type: { primitive: STRING } }
+    }
+    bindings: {
+      key: "str_var"
+      value: { value: { string_value: "%.6e" } }
+    }
+    value: {
+      string_value: '1.052033 × 10⁰³',
+    }
+  }
+  test: {
+    name: "default precision for fixed-point clause in a string variable"
+    expr: 'str_var.format([2.71828])'
+    type_env: {
+      name: "str_var",
+      ident: { type: { primitive: STRING } }
+    }
+    bindings: {
+      key: "str_var"
+      value: { value: { string_value: "%f" } }
+    }
+    value: {
+      string_value: '2.718280',
     }
   }
 }
