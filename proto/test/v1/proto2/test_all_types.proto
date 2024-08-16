@@ -291,6 +291,12 @@ message TestAllTypes {
   map<string, google.protobuf.BoolValue> map_string_bool_wrapper = 322;
   map<string, google.protobuf.BytesValue> map_string_bytes_wrapper = 323;
 
+  oneof kind {
+    NestedTestAllTypes oneof_type = 400;
+    NestedMessage oneof_msg = 401;
+    bool oneof_bool = 402;
+  }
+
   extensions 1000 to max;
 }
 
