@@ -30,8 +30,8 @@ example, given an instance of the `Account` type assigned to the variable
 
 ```proto
 has(account.user_id) || has(account.gaia_id)    // true if either one is set
-size(account.emails) > 0                        // true if emails is non-empty
-matches(account.phone_number, "[0-9-]+")        // true if number matches regexp
+account.emails.size() > 0                       // true if emails is non-empty
+account.phone_number.matches("[0-9-]+")         // true if number matches regexp
 ```
 
 CEL expressions support most operators and functions one would expect when
@@ -60,7 +60,7 @@ doesn't have a matching protocol buffer type. Within CEL, these objects support
 the same accesses and functions as protocol buffer types:
 
 ```proto
-has(account.properties.id) && size(account.properties.id) > 0
+has(account.properties.id) && account.properties.id.size() > 0
 ```
 
 When the expression `account.properties` is evaluated, CEL will automatically

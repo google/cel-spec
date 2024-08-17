@@ -630,7 +630,7 @@ A CEL expression is parsed and evaluated in the scope of a particular protocol
 buffer package, which controls name resolution as described above, and a binding
 context, which binds identifiers to values, errors, and functions. A given
 identifier has different meanings as a function name or as a variable, depending
-on the use. For instance in the expression `size(requests) > size`, the first
+on the use. For instance in the expression `requests.size() > size`, the first
 `size` is a function, and the second is a variable.
 
 The CEL implementation provides mechanisms for adding bindings of variable names
@@ -923,7 +923,7 @@ size of the inputs.
     cost of `O(P * I)`, and see below.
 *   Eliminating all of the above and using only default-cost functions, plus
     aggregate literals, time and space are limited `O(P * I)`.
-    A limiting time example is `size(x) + size(x) + ...`.
+    A limiting time example is `x.size() + x.size() + ...`.
     A limiting time and space example is `[x, x, ..., x]`.
 
 Note that custom function will alter this analysis if they are more expensive
@@ -951,15 +951,15 @@ specified by the following overloads:
       size
     </th>
     <td>
-      (string) -> int
+      string.() -> int
     </td>
     <td>
-      string length
+      number of unicode codepoints in the string
     </td>
   </tr>
   <tr>
     <td>
-      (bytes) -> int
+      bytes.() -> int
     </td>
     <td>
       bytes length
@@ -967,7 +967,7 @@ specified by the following overloads:
   </tr>
   <tr>
     <td>
-      (list(A)) -> int
+      list(A).() -> int
     </td>
     <td>
       list size
@@ -975,7 +975,7 @@ specified by the following overloads:
   </tr>
   <tr>
     <td>
-      (map(A, B)) -> int
+      map(A, B).() -> int
     </td>
     <td>
       map size
@@ -2334,14 +2334,30 @@ See [cel-go/issues/9](https://github.com/google/cel-go/issues/9).
     </td>
   </tr>
   <tr>
-    <th rowspan="4">
+    <th rowspan="8">
       size
     </th>
+    <td>
+      string.() -> int
+    </td>
+    <td>
+      number of unicode codepoints in the string
+    </td>
+  </tr>
+  <tr>
     <td>
       (string) -> int
     </td>
     <td>
-      string length
+      number of unicode codepoints in the string
+    </td>
+  </tr>
+  <tr>
+    <td>
+      bytes.() -> int
+    </td>
+    <td>
+      bytes length
     </td>
   </tr>
   <tr>
@@ -2354,10 +2370,26 @@ See [cel-go/issues/9](https://github.com/google/cel-go/issues/9).
   </tr>
   <tr>
     <td>
+      list(A).() -> int
+    </td>
+    <td>
+      list size. Time cost proportional to the length of the list.
+    </td>
+  </tr>
+  <tr>
+    <td>
       (list(A)) -> int
     </td>
     <td>
       list size. Time cost proportional to the length of the list.
+    </td>
+  </tr>
+  <tr>
+    <td>
+      map(A, B).() -> int
+    </td>
+    <td>
+      map size. Time cost proportional to the number of entries.
     </td>
   </tr>
   <tr>
