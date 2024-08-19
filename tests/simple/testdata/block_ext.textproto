@@ -3,8 +3,8 @@
 # cel.block without the optimizers being present.
 # `cel.block(l, e)` must rewrite itself to be `cel.block(l, e)`
 # `cel.index(N)` must rewrite itself to `@indexN`
-# `cel.iterVar(N)` must rewrite itself to `@c:N`
-# `cel.accuVar(N)` must rewrite itself to `@x:N`
+# `cel.iterVar(N, M)` must rewrite itself to `@it:N:M`
+# `cel.accuVar(N, M)` must rewrite itself to `@ac:N:M`
 
 name: "block_ext"
 description: "Tests for cel.block."
@@ -557,35 +557,42 @@ section: {
   }
   test: {
     name: "multiple_macros_1"
-    expr: "cel.block([[1], [2], cel.iterVar(0) > 0, cel.accuVar(0) || cel.index(2), cel.iterVar(1) > 0, cel.accuVar(1) || cel.index(4), cel.iterVar(2) > 1, cel.accuVar(2) || cel.index(6), cel.iterVar(3) > 1, cel.accuVar(3) || cel.index(8)], size([cel.index(0).exists(cel.iterVar(0), cel.index(2))]) + size([cel.index(0).exists(cel.iterVar(1), cel.index(4))]) + size([cel.index(1).exists(cel.iterVar(2), cel.index(6))]) + size([cel.index(1).exists(cel.iterVar(3), cel.index(8))]))"
+    expr: "cel.@block([[1], cel.iterVar(0, 0) > 0, cel.accuVar(0, 0) || @index1, [2], cel.iterVar(0, 0) > 1, cel.accuVar(0, 0) || @index4], size([@index0.exists(cel.iterVar(0, 0), @index1)]) + size([@index0.exists(cel.iterVar(0, 0), @index1)]) + size([@index3.exists(cel.iterVar(0, 0), @index4)]) + size([@index3.exists(cel.iterVar(0, 0), @index4)]) == 4)"
     value: {
       int64_value: 4
     }
   }
   test: {
     name: "multiple_macros_2"
-    expr: "cel.block([[1], [\"a\"], cel.iterVar(0) > 0, cel.accuVar(0) || cel.index(2), cel.iterVar(1) > 0, cel.accuVar(1) || cel.index(4), cel.iterVar(2) == \"a\", cel.accuVar(2) || cel.index(6), cel.iterVar(3) == \"a\", cel.accuVar(3) || cel.index(8), [true, true, true, true]], [cel.index(0).exists(cel.iterVar(0), cel.index(2))] + [cel.index(0).exists(cel.iterVar(1), cel.index(4))] + [cel.index(1).exists(cel.iterVar(2), cel.index(6))] + [cel.index(1).exists(cel.iterVar(3), cel.index(8))] == cel.index(10))"
+    expr: "cel.@block([[1], cel.iterVar(0, 0) > 0, cel.accuVar(0, 0) || @index1, ['a'], cel.iterVar(0, 1) == 'a', cel.accuVar(0, 1) || @index4, [true, true, true, true]], [@index0.exists(cel.iterVar(0, 0), @index1)] + [@index0.exists(cel.iterVar(0, 0), @index1)] + [@index3.exists(cel.iterVar(0, 1), @index4)] + [@index3.exists(cel.iterVar(0, 1), @index4)] == @index6)"
     value: {
       bool_value: true
     }
   }
   test: {
     name: "multiple_macros_3"
-    expr: "cel.block([[1], cel.iterVar(0) > 0, cel.accuVar(0) || cel.index(1), cel.iterVar(1) > 0, cel.accuVar(1) || cel.index(3), cel.iterVar(2) > 1, cel.accuVar(2) || cel.index(5), [2], cel.iterVar(3) > 1, cel.accuVar(3) || cel.index(8)], cel.index(0).exists(cel.iterVar(0), cel.index(1)) && cel.index(0).exists(cel.iterVar(1), cel.index(3)) && cel.index(0).exists(cel.iterVar(2), cel.index(5)) && cel.index(7).exists(cel.iterVar(3), cel.index(8)))"
+    expr: "cel.@block([[1], cel.iterVar(0, 0) > 0, cel.accuVar(0, 0) || @index1, cel.iterVar(0, 0) > 1, cel.accuVar(0, 0) || @index3, [2]], @index0.exists(cel.iterVar(0, 0), @index1) && @index0.exists(cel.iterVar(0, 0), @index1) && @index0.exists(cel.iterVar(0, 0), @index3) && @index5.exists(cel.iterVar(0, 0), @index3))"
     value: {
       bool_value: true
     }
   }
   test: {
     name: "nested_macros"
-    expr: "cel.block([[1, 2, 3], [2, 3, 4], cel.iterVar(0) + 1, [cel.index(2)], cel.accuVar(0) + cel.index(3), [cel.index(1), cel.index(1), cel.index(1)]], cel.index(0).map(cel.iterVar(1), cel.index(0).map(cel.iterVar(0), cel.index(2))) == cel.index(5))"
+    expr: "cel.@block([[1, 2, 3], [2, 3, 4], cel.iterVar(1, 0) + 1, [@index2], cel.accuVar(1, 0) + @index3, [@index1, @index1, @index1]], @index0.map(cel.iterVar(0, 0), @index0.map(cel.iterVar(1, 0), @index2)) == @index5)"
     value: {
       bool_value: true
     }
   }
   test: {
     name: "nested_macros_2"
-    expr: "cel.block([[1, 2], [1, 2, 3], cel.iterVar(0) == cel.iterVar(1), [cel.iterVar(0)], cel.accuVar(0) + cel.index(3), cel.index(2) ? cel.index(4) : cel.accuVar(0), [1], [2], [cel.index(6), cel.index(7)]], cel.index(0).map(cel.iterVar(1), cel.index(1).filter(cel.iterVar(0), cel.index(2))) == cel.index(8))"
+    expr: "cel.@block([[1, 2], [1, 2, 3], cel.iterVar(1, 0) == cel.iterVar(0, 0), [cel.iterVar(1, 0)], cel.accuVar(1, 0) + @index3, @index2 ? @index4 : cel.accuVar(1, 0), [1], [2], [@index6, @index7]], @index0.map(cel.iterVar(0, 0), @index1.filter(cel.iterVar(1, 0), @index2)) == @index8)"
+    value: {
+      bool_value: true
+    }
+  }
+  test: {
+    name: "adjacent_macros"
+    expr: "cel.@block([[1, 2, 3], cel.iterVar(1, 0) + 1, [@index1], cel.accuVar(1, 0) + @index2], @index0.map(cel.iterVar(0, 0), @index0.map(cel.iterVar(1, 0), @index1)) == @index0.map(cel.iterVar(0, 0), @index0.map(cel.iterVar(1, 0), @index1)))"
     value: {
       bool_value: true
     }
