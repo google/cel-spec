@@ -557,42 +557,42 @@ section: {
   }
   test: {
     name: "multiple_macros_1"
-    expr: "cel.@block([[1], cel.iterVar(0, 0) > 0, cel.accuVar(0, 0) || @index1, [2], cel.iterVar(0, 0) > 1, cel.accuVar(0, 0) || @index4], size([@index0.exists(cel.iterVar(0, 0), @index1)]) + size([@index0.exists(cel.iterVar(0, 0), @index1)]) + size([@index3.exists(cel.iterVar(0, 0), @index4)]) + size([@index3.exists(cel.iterVar(0, 0), @index4)]) == 4)"
+    expr: "cel.block([[1], cel.iterVar(0, 0) > 0, cel.accuVar(0, 0) || @index1, [2], cel.iterVar(0, 0) > 1, cel.accuVar(0, 0) || @index4], size([@index0.exists(cel.iterVar(0, 0), @index1)]) + size([@index0.exists(cel.iterVar(0, 0), @index1)]) + size([@index3.exists(cel.iterVar(0, 0), @index4)]) + size([@index3.exists(cel.iterVar(0, 0), @index4)]) == 4)"
     value: {
       int64_value: 4
     }
   }
   test: {
     name: "multiple_macros_2"
-    expr: "cel.@block([[1], cel.iterVar(0, 0) > 0, cel.accuVar(0, 0) || @index1, ['a'], cel.iterVar(0, 1) == 'a', cel.accuVar(0, 1) || @index4, [true, true, true, true]], [@index0.exists(cel.iterVar(0, 0), @index1)] + [@index0.exists(cel.iterVar(0, 0), @index1)] + [@index3.exists(cel.iterVar(0, 1), @index4)] + [@index3.exists(cel.iterVar(0, 1), @index4)] == @index6)"
+    expr: "cel.block([[1], cel.iterVar(0, 0) > 0, cel.accuVar(0, 0) || @index1, ['a'], cel.iterVar(0, 1) == 'a', cel.accuVar(0, 1) || @index4, [true, true, true, true]], [@index0.exists(cel.iterVar(0, 0), @index1)] + [@index0.exists(cel.iterVar(0, 0), @index1)] + [@index3.exists(cel.iterVar(0, 1), @index4)] + [@index3.exists(cel.iterVar(0, 1), @index4)] == @index6)"
     value: {
       bool_value: true
     }
   }
   test: {
     name: "multiple_macros_3"
-    expr: "cel.@block([[1], cel.iterVar(0, 0) > 0, cel.accuVar(0, 0) || @index1, cel.iterVar(0, 0) > 1, cel.accuVar(0, 0) || @index3, [2]], @index0.exists(cel.iterVar(0, 0), @index1) && @index0.exists(cel.iterVar(0, 0), @index1) && @index0.exists(cel.iterVar(0, 0), @index3) && @index5.exists(cel.iterVar(0, 0), @index3))"
+    expr: "cel.block([[1], cel.iterVar(0, 0) > 0, cel.accuVar(0, 0) || @index1, cel.iterVar(0, 0) > 1, cel.accuVar(0, 0) || @index3, [2]], @index0.exists(cel.iterVar(0, 0), @index1) && @index0.exists(cel.iterVar(0, 0), @index1) && @index0.exists(cel.iterVar(0, 0), @index3) && @index5.exists(cel.iterVar(0, 0), @index3))"
     value: {
       bool_value: true
     }
   }
   test: {
     name: "nested_macros"
-    expr: "cel.@block([[1, 2, 3], [2, 3, 4], cel.iterVar(1, 0) + 1, [@index2], cel.accuVar(1, 0) + @index3, [@index1, @index1, @index1]], @index0.map(cel.iterVar(0, 0), @index0.map(cel.iterVar(1, 0), @index2)) == @index5)"
+    expr: "cel.block([[1, 2, 3], [2, 3, 4], cel.iterVar(1, 0) + 1, [@index2], cel.accuVar(1, 0) + @index3, [@index1, @index1, @index1]], @index0.map(cel.iterVar(0, 0), @index0.map(cel.iterVar(1, 0), @index2)) == @index5)"
     value: {
       bool_value: true
     }
   }
   test: {
     name: "nested_macros_2"
-    expr: "cel.@block([[1, 2], [1, 2, 3], cel.iterVar(1, 0) == cel.iterVar(0, 0), [cel.iterVar(1, 0)], cel.accuVar(1, 0) + @index3, @index2 ? @index4 : cel.accuVar(1, 0), [1], [2], [@index6, @index7]], @index0.map(cel.iterVar(0, 0), @index1.filter(cel.iterVar(1, 0), @index2)) == @index8)"
+    expr: "cel.block([[1, 2], [1, 2, 3], cel.iterVar(1, 0) == cel.iterVar(0, 0), [cel.iterVar(1, 0)], cel.accuVar(1, 0) + @index3, @index2 ? @index4 : cel.accuVar(1, 0), [1], [2], [@index6, @index7]], @index0.map(cel.iterVar(0, 0), @index1.filter(cel.iterVar(1, 0), @index2)) == @index8)"
     value: {
       bool_value: true
     }
   }
   test: {
     name: "adjacent_macros"
-    expr: "cel.@block([[1, 2, 3], cel.iterVar(1, 0) + 1, [@index1], cel.accuVar(1, 0) + @index2], @index0.map(cel.iterVar(0, 0), @index0.map(cel.iterVar(1, 0), @index1)) == @index0.map(cel.iterVar(0, 0), @index0.map(cel.iterVar(1, 0), @index1)))"
+    expr: "cel.block([[1, 2, 3], cel.iterVar(1, 0) + 1, [@index1], cel.accuVar(1, 0) + @index2], @index0.map(cel.iterVar(0, 0), @index0.map(cel.iterVar(1, 0), @index1)) == @index0.map(cel.iterVar(0, 0), @index0.map(cel.iterVar(1, 0), @index1)))"
     value: {
       bool_value: true
     }
