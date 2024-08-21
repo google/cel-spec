@@ -48,6 +48,8 @@ message TestAllTypes {
   bool single_bool = 13;
   string single_string = 14;
   bytes single_bytes = 15;
+  optional bool optional_bool = 16;
+  optional bool optional_string = 17;
 
   // Wellknown.
   google.protobuf.Any single_any = 100;
