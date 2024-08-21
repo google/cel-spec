@@ -297,6 +297,11 @@ message TestAllTypes {
     bool oneof_bool = 402;
   }
 
+  optional group NestedGroup = 403 {
+    optional int32 single_id = 404;
+    optional string single_name = 405;
+  }
+
   extensions 1000 to max;
 }
 
