@@ -38,7 +38,7 @@ java_proto_library(
 go_proto_library(
     name = "test_all_types_go_proto",
     proto = ":test_all_types_proto",
-    importpath = "github.com/google/cel-spec/proto/test/v1/proto2/test_all_types",
+    importpath = "cel.dev/expr/proto/test/v1/proto2/test_all_types",
     deps = [
         "@org_golang_google_protobuf//types/known/anypb:go_default_library",
         "@org_golang_google_protobuf//types/known/durationpb:go_default_library",

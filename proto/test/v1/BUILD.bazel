@@ -45,7 +45,7 @@ go_proto_library(
         ":envcheck_proto",
         ":simple_proto",
     ],
-    importpath = "github.com/google/cel-spec/proto/test/v1/testpb",
+    importpath = "cel.dev/expr/proto/test/v1/testpb",
     deps = [
         "@org_golang_google_genproto_googleapis_api//expr/v1alpha1:go_default_library",
     ],

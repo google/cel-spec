@@ -22,11 +22,11 @@ import (
 	"os"
 	"testing"
 
-	"github.com/google/cel-spec/tools/celrpc"
+	"cel.dev/expr/tools/celrpc"
 
 	"google.golang.org/protobuf/encoding/prototext"
 
-	envpb "github.com/google/cel-spec/proto/test/v1/testpb"
+	envpb "cel.dev/expr/proto/test/v1/testpb"
 )
 
 var (

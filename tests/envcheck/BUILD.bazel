@@ -13,7 +13,7 @@ go_library(
     srcs = [
         "envcheck.go",
     ],
-    importpath = "github.com/google/cel-spec/tests/envcheck",
+    importpath = "cel.dev/expr/tests/envcheck",
     deps = [
         "//tools/celrpc:go_default_library",
         "@com_github_golang_protobuf//proto:go_default_library",

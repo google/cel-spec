@@ -12,19 +12,19 @@ import (
 	"google.golang.org/protobuf/encoding/prototext"
 	"google.golang.org/protobuf/proto"
 
-	"github.com/google/cel-spec/tools/celrpc"
+	"cel.dev/expr/tools/celrpc"
 
 	anypb "google.golang.org/protobuf/types/known/anypb"
 	structpb "google.golang.org/protobuf/types/known/structpb"
 
-	spb "github.com/google/cel-spec/proto/test/v1/testpb"
+	spb "cel.dev/expr/proto/test/v1/testpb"
 	exprpb "google.golang.org/genproto/googleapis/api/expr/v1alpha1"
 
 	// The following are needed to link in these proto libraries
 	// which are needed dynamically, despite not being explicitly
 	// used in the Go source.
-	_ "github.com/google/cel-spec/proto/test/v1/proto2/test_all_types"
-	_ "github.com/google/cel-spec/proto/test/v1/proto3/test_all_types"
+	_ "cel.dev/expr/proto/test/v1/proto2/test_all_types"
+	_ "cel.dev/expr/proto/test/v1/proto3/test_all_types"
 )
 
 type stringArray []string

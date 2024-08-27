@@ -20,37 +20,37 @@
 // Identifier declarations are compiled to an expression of just that
 // identifiers.  For instance, the "int" type identifier produces:
 //
-// 	int
+//	int
 //
 // Function declarations are compiled to a separate expression for
 // each overload.  The expression is an invocation of the overload with
 // "zeroish" arguments of the appropriate type.  The zeroish arguments
 // are:
 //
-// 	int		0
-// 	uint		0u
-// 	double		0.0
-// 	bool		false
-// 	string		""
-// 	bytes		b""
-// 	null_type	null
-// 	type		type
-// 	list<A>		[]
-// 	map<A,B>	{}
-// 	enum E		0
-// 	message M	M{}
+//	int		0
+//	uint		0u
+//	double		0.0
+//	bool		false
+//	string		""
+//	bytes		b""
+//	null_type	null
+//	type		type
+//	list<A>		[]
+//	map<A,B>	{}
+//	enum E		0
+//	message M	M{}
 //
 // For instance, the "_/_" function with overloads
 //
-// 	_/_: (int, int) -> int
-// 	_/_: (uint, uint) -> uint
-// 	_/_: (double, double) -> double
+//	_/_: (int, int) -> int
+//	_/_: (uint, uint) -> uint
+//	_/_: (double, double) -> double
 //
 // compiles to the expressions
 //
-// 	(0)/(0)
-// 	(0u)/(0u)
-// 	(0.0)/(0.0)
+//	(0)/(0)
+//	(0u)/(0u)
+//	(0.0)/(0.0)
 //
 // which are then evaluated.
 //
@@ -60,7 +60,6 @@
 // error other than "no_matching_overload".  For instance, the first
 // two expressions for _/_ will generate division-by-zero errors, but
 // this will pass the test.
-//
 package envcheck
 
 import (
@@ -68,7 +67,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/google/cel-spec/tools/celrpc"
+	"cel.dev/expr/tools/celrpc"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
