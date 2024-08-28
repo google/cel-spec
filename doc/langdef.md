@@ -40,7 +40,7 @@ This page constitutes the reference for CEL. For a gentle introduction, see
     - [Overflow](#overflow)
     - [Timezones](#timezones)
     - [Regular Expressions](#regular-expressions)
-    - [List of Standard Definitions](#list-of-standard-definitions)
+    - [Standard Environment](#standard-environment)
 - [Appendix 1: Legacy Behavior](#appendix-1-legacy-behavior)
     - [Enums as Ints](#enums-as-ints)
 
@@ -108,7 +108,6 @@ Implementations are required to support at least:
     *   12 selection (`.`) operators in a row;
     *   12 indexing (`[_]`) operators in a row;
     *   12 nested list, map, or message literals.
-
 
 This grammar corresponds to the following operator precedence and associativity:
 
@@ -1208,1337 +1207,952 @@ Regular expressions follow the
 matches succeed if they match a substring of the argument. Use explicit anchors
 (`^` and `$`) in the pattern to force full-string matching, if desired.
 
-### List of Standard Definitions
+### Standard Environment
 
-TODO: automatically generate these descriptions from the cel-go implementation.
-See [cel-go/issues/9](https://github.com/google/cel-go/issues/9).
+#### Presence and Comprehension Macros
 
-<table style="width=100%" border="1">
-  <col width="15%">
-  <col width="40%">
-  <col width="45%">
-  <tr>
-    <th>Symbol</th>
-    <th>Type</th>
-    <th>Description</th>
-  </tr>
-  <tr>
-    <th rowspan="1">
-      !_
-    </th>
-    <td>
-      (bool) -> bool
-    </td>
-    <td>
-      logical not
-    </td>
-  </tr>
-  <tr>
-    <th rowspan="2">
-      -_
-    </th>
-    <td>
-      (int) -> int
-    </td>
-    <td>
-      negation
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (double) -> double
-    </td>
-    <td>
-      negation
-    </td>
-  </tr>
-  <tr>
-    <th rowspan="1">
-      _!=_
-    </th>
-    <td>
-      (A, A) -> bool
-    </td>
-    <td>
-      inequality
-    </td>
-  </tr>
-  <tr>
-    <th rowspan="2">
-      _%_
-    </th>
-    <td>
-      (int, int) -> int
-    </td>
-    <td>
-      arithmetic
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (uint, uint) -> uint
-    </td>
-    <td>
-      arithmetic
-    </td>
-  </tr>
-  <tr>
-    <th rowspan="2">
-      _&&_
-    </th>
-    <td>
-      (bool, bool) -> bool
-    </td>
-    <td>
-      logical and
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (bool, ...) -> bool
-    </td>
-    <td>
-      logical and (variadic)
-    </td>
-  </tr>
-  <tr>
-    <th rowspan="3">
-      _*_
-    </th>
-    <td>
-      (int, int) -> int
-    </td>
-    <td>
-      arithmetic
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (uint, uint) -> uint
-    </td>
-    <td>
-      arithmetic
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (double, double) -> double
-    </td>
-    <td>
-      arithmetic
-    </td>
-  </tr>
-  <tr>
-    <th rowspan="9">
-      _+_
-    </th>
-    <td>
-      (int, int) -> int
-    </td>
-    <td>
-      arithmetic
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (uint, uint) -> uint
-    </td>
-    <td>
-      arithmetic
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (double, double) -> double
-    </td>
-    <td>
-      arithmetic
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (string, string) -> string
-    </td>
-    <td>
-      String concatenation. Space and time cost proportional to the sum of the
-      input sizes.
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (bytes, bytes) -> bytes
-    </td>
-    <td>
-      bytes concatenation
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (list(A), list(A)) -> list(A)
-    </td>
-    <td>
-      List concatenation. Space and time cost proportional to the sum of the
-      input sizes.
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (google.protobuf.Timestamp, google.protobuf.Duration) -> google.protobuf.Timestamp
-    </td>
-    <td>
-      arithmetic
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (google.protobuf.Duration, google.protobuf.Timestamp) -> google.protobuf.Timestamp
-    </td>
-    <td>
-      arithmetic
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (google.protobuf.Duration, google.protobuf.Duration) -> google.protobuf.Duration
-    </td>
-    <td>
-      arithmetic
-    </td>
-  </tr>
-  <tr>
-    <th rowspan="6">
-      _-_
-    </th>
-    <td>
-      (int, int) -> int
-    </td>
-    <td>
-      arithmetic
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (uint, uint) -> uint
-    </td>
-    <td>
-      arithmetic
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (double, double) -> double
-    </td>
-    <td>
-      arithmetic
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (google.protobuf.Timestamp, google.protobuf.Timestamp) -> google.protobuf.Duration
-    </td>
-    <td>
-      arithmetic
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (google.protobuf.Timestamp, google.protobuf.Duration) -> google.protobuf.Timestamp
-    </td>
-    <td>
-      arithmetic
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (google.protobuf.Duration, google.protobuf.Duration) -> google.protobuf.Duration
-    </td>
-    <td>
-      arithmetic
-    </td>
-  </tr>
-  <tr>
-    <th rowspan="3">
-      _/_
-    </th>
-    <td>
-      (int, int) -> int
-    </td>
-    <td>
-      arithmetic
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (uint, uint) -> uint
-    </td>
-    <td>
-      arithmetic
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (double, double) -> double
-    </td>
-    <td>
-      arithmetic
-    </td>
-  </tr>
-  <tr>
-    <th rowspan="8">
-      _<=_
-    </th>
-    <td>
-      (bool, bool) -> bool
-    </td>
-    <td>
-      ordering
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (int, int) -> bool
-    </td>
-    <td>
-      ordering
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (uint, uint) -> bool
-    </td>
-    <td>
-      ordering
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (double, double) -> bool
-    </td>
-    <td>
-      ordering
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (string, string) -> bool
-    </td>
-    <td>
-      ordering
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (bytes, bytes) -> bool
-    </td>
-    <td>
-      ordering
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (google.protobuf.Timestamp, google.protobuf.Timestamp) -> bool
-    </td>
-    <td>
-      ordering
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (google.protobuf.Duration, google.protobuf.Duration) -> bool
-    </td>
-    <td>
-      ordering
-    </td>
-  </tr>
-  <tr>
-    <th rowspan="8">
-      _<_
-    </th>
-    <td>
-      (bool, bool) -> bool
-    </td>
-    <td>
-      ordering
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (int, int) -> bool
-    </td>
-    <td>
-      ordering
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (uint, uint) -> bool
-    </td>
-    <td>
-      ordering
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (double, double) -> bool
-    </td>
-    <td>
-      ordering
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (string, string) -> bool
-    </td>
-    <td>
-      ordering
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (bytes, bytes) -> bool
-    </td>
-    <td>
-      ordering
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (google.protobuf.Timestamp, google.protobuf.Timestamp) -> bool
-    </td>
-    <td>
-      ordering
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (google.protobuf.Duration, google.protobuf.Duration) -> bool
-    </td>
-    <td>
-      ordering
-    </td>
-  </tr>
-  <tr>
-    <th rowspan="1">
-      _==_
-    </th>
-    <td>
-      (A, A) -> bool
-    </td>
-    <td>
-      equality
-    </td>
-  </tr>
-  <tr>
-    <th rowspan="8">
-      _>=_
-    </th>
-    <td>
-      (bool, bool) -> bool
-    </td>
-    <td>
-      ordering
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (int, int) -> bool
-    </td>
-    <td>
-      ordering
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (uint, uint) -> bool
-    </td>
-    <td>
-      ordering
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (double, double) -> bool
-    </td>
-    <td>
-      ordering
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (string, string) -> bool
-    </td>
-    <td>
-      ordering
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (bytes, bytes) -> bool
-    </td>
-    <td>
-      ordering
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (google.protobuf.Timestamp, google.protobuf.Timestamp) -> bool
-    </td>
-    <td>
-      ordering
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (google.protobuf.Duration, google.protobuf.Duration) -> bool
-    </td>
-    <td>
-      ordering
-    </td>
-  </tr>
-  <tr>
-    <th rowspan="8">
-      _>_
-    </th>
-    <td>
-      (bool, bool) -> bool
-    </td>
-    <td>
-      ordering
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (int, int) -> bool
-    </td>
-    <td>
-      ordering
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (uint, uint) -> bool
-    </td>
-    <td>
-      ordering
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (double, double) -> bool
-    </td>
-    <td>
-      ordering
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (string, string) -> bool
-    </td>
-    <td>
-      ordering
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (bytes, bytes) -> bool
-    </td>
-    <td>
-      ordering
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (google.protobuf.Timestamp, google.protobuf.Timestamp) -> bool
-    </td>
-    <td>
-      ordering
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (google.protobuf.Duration, google.protobuf.Duration) -> bool
-    </td>
-    <td>
-      ordering
-    </td>
-  </tr>
-  <tr>
-    <th rowspan="1">
-      _?_:_
-    </th>
-    <td>
-      (bool, A, A) -> A
-    </td>
-    <td>
-      The conditional operator. See above for evaluation semantics. Will
-      evaluate the test and only one of the remaining sub-expressions.
-    </td>
-  </tr>
-  <tr>
-    <th rowspan="2">
-      _[_]
-    </th>
-    <td>
-      (list(A), int) -> A
-    </td>
-    <td>
-      list indexing. Constant time cost.
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (map(A, B), A) -> B
-    </td>
-    <td>
-      map indexing.  For string keys, cost is proportional to the size of the
-      map keys times the size of the index string.
-    </td>
-  </tr>
-  <tr>
-    <th rowspan="2">
-      in
-    </th>
-    <td>
-      (A, list(A)) -> bool
-    </td>
-    <td>
-      list membership. Time cost proportional to the product of the size of
-      both arguments.
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (A, map(A, B)) -> bool
-    </td>
-    <td>
-      map key membership. Time cost proportional to the product of the size of
-      both arguments.
-    </td>
-  </tr>
-  <tr>
-    <th rowspan="2">
-      _||_
-    </th>
-    <td>
-      (bool, bool) -> bool
-    </td>
-    <td>
-      logical or
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (bool, ...) -> bool
-    </td>
-    <td>
-      logical or (variadic)
-    </td>
-  </tr>
-  <tr>
-    <th rowspan="3">
-      bool
-    </th>
-    <td>
-      type(bool)
-    </td>
-    <td>
-      type denotation
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (bool) -> bool
-    </td>
-    <td>
-      identity
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (string) -> bool
-    </td>
-    <td>
-      type conversion
-    </td>
-  </tr>
-  <tr>
-    <th rowspan="3">
-      bytes
-    </th>
-    <td>
-      type(bytes)
-    </td>
-    <td>
-      type denotation
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (bytes) -> bytes
-    </td>
-    <td>
-      identity
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (string) -> bytes
-    </td>
-    <td>
-      type conversion
-    </td>
-  </tr>
-  <tr>
-    <th rowspan="1">
-      contains
-    </th>
-    <td>
-      string.(string) -> bool
-    </td>
-    <td>
-      Tests whether the string operand contains the substring. Time cost
-      proportional to the product of sizes of the arguments.
-    </td>
-  </tr>
-  <tr>
-    <th rowspan="5">
-      double
-    </th>
-    <td>
-      type(double)
-    </td>
-    <td>
-      type denotation
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (double) -> double
-    </td>
-    <td>
-      identity
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (int) -> double
-    </td>
-    <td>
-      type conversion
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (uint) -> double
-    </td>
-    <td>
-      type conversion
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (string) -> double
-    </td>
-    <td>
-      type conversion
-    </td>
-  </tr>
-  <tr>
-    <th rowspan="2">
-      duration
-    </th>
-    <td>
-      (google.protobuf.Duration) -> google.protobuf.Duration
-    </td>
-    <td>
-      identity
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (string) -> google.protobuf.Duration
-    </td>
-    <td>
-      Type conversion. Duration strings should support the following suffixes:
-      "h" (hour), "m" (minute), "s" (second), "ms" (millisecond),
-      "us" (microsecond), and "ns" (nanosecond).
-      Duration strings may be zero, negative, fractional, and/or compound.
-      Examples: "0", "-1.5h", "1m6s"
-    </td>
-  </tr>
-  <tr>
-    <th rowspan="2">
-      dyn
-    </th>
-    <td>
-      type(dyn)
-    </td>
-    <td>
-      type denotation
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (A) -> dyn
-    </td>
-    <td>
-      type conversion
-    </td>
-  </tr>
-  <tr>
-    <th rowspan="1">
-      endsWith
-    </th>
-    <td>
-      string.(string) -> bool
-    </td>
-    <td>
-      Tests whether the string operand ends with the suffix argument. Time cost
-      proportional to the product of the sizes of the arguments.
-    </td>
-  </tr>
-  <tr>
-    <th rowspan="2">
-      getDate
-    </th>
-    <td>
-      google.protobuf.Timestamp.() -> int
-    </td>
-    <td>
-      get day of month from the date in UTC, one-based indexing
-    </td>
-  </tr>
-  <tr>
-    <td>
-      google.protobuf.Timestamp.(string) -> int
-    </td>
-    <td>
-      get day of month from the date with timezone, one-based indexing
-    </td>
-  </tr>
-  <tr>
-    <th rowspan="2">
-      getDayOfMonth
-    </th>
-    <td>
-      google.protobuf.Timestamp.() -> int
-    </td>
-    <td>
-      get day of month from the date in UTC, zero-based indexing
-    </td>
-  </tr>
-  <tr>
-    <td>
-      google.protobuf.Timestamp.(string) -> int
-    </td>
-    <td>
-      get day of month from the date with timezone, zero-based indexing
-    </td>
-  </tr>
-  <tr>
-    <th rowspan="2">
-      getDayOfWeek
-    </th>
-    <td>
-      google.protobuf.Timestamp.() -> int
-    </td>
-    <td>
-      get day of week from the date in UTC, zero-based, zero for Sunday
-    </td>
-  </tr>
-  <tr>
-    <td>
-      google.protobuf.Timestamp.(string) -> int
-    </td>
-    <td>
-      get day of week from the date with timezone, zero-based, zero for Sunday
-    </td>
-  </tr>
-  <tr>
-    <th rowspan="2">
-      getDayOfYear
-    </th>
-    <td>
-      google.protobuf.Timestamp.() -> int
-    </td>
-    <td>
-      get day of year from the date in UTC, zero-based indexing
-    </td>
-  </tr>
-  <tr>
-    <td>
-      google.protobuf.Timestamp.(string) -> int
-    </td>
-    <td>
-      get day of year from the date with timezone, zero-based indexing
-    </td>
-  </tr>
-  <tr>
-    <th rowspan="2">
-      getFullYear
-    </th>
-    <td>
-      google.protobuf.Timestamp.() -> int
-    </td>
-    <td>
-      get year from the date in UTC
-    </td>
-  </tr>
-  <tr>
-    <td>
-      google.protobuf.Timestamp.(string) -> int
-    </td>
-    <td>
-      get year from the date with timezone
-    </td>
-  </tr>
-  <tr>
-    <th rowspan="3">
-      getHours
-    </th>
-    <td>
-      google.protobuf.Timestamp.() -> int
-    </td>
-    <td>
-      get hours from the date in UTC, 0-23
-    </td>
-  </tr>
-  <tr>
-    <td>
-      google.protobuf.Timestamp.(string) -> int
-    </td>
-    <td>
-      get hours from the date with timezone, 0-23
-    </td>
-  </tr>
-  <tr>
-    <td>
-      google.protobuf.Duration.() -> int
-    </td>
-    <td>
-      get hours from duration
-    </td>
-  </tr>
-  <tr>
-    <th rowspan="3">
-      getMilliseconds
-    </th>
-    <td>
-      google.protobuf.Timestamp.() -> int
-    </td>
-    <td>
-      get milliseconds from the date in UTC, 0-999
-    </td>
-  </tr>
-  <tr>
-    <td>
-      google.protobuf.Timestamp.(string) -> int
-    </td>
-    <td>
-      get milliseconds from the date with timezone, 0-999
-    </td>
-  </tr>
-  <tr>
-    <td>
-      google.protobuf.Duration.() -> int
-    </td>
-    <td>
-      milliseconds from duration, 0-999
-    </td>
-  </tr>
-  <tr>
-    <th rowspan="3">
-      getMinutes
-    </th>
-    <td>
-      google.protobuf.Timestamp.() -> int
-    </td>
-    <td>
-      get minutes from the date in UTC, 0-59
-    </td>
-  </tr>
-  <tr>
-    <td>
-      google.protobuf.Timestamp.(string) -> int
-    </td>
-    <td>
-      get minutes from the date with timezone, 0-59
-    </td>
-  </tr>
-  <tr>
-    <td>
-      google.protobuf.Duration.() -> int
-    </td>
-    <td>
-      get minutes from duration
-    </td>
-  </tr>
-  <tr>
-    <th rowspan="2">
-      getMonth
-    </th>
-    <td>
-      google.protobuf.Timestamp.() -> int
-    </td>
-    <td>
-      get month from the date in UTC, 0-11
-    </td>
-  </tr>
-  <tr>
-    <td>
-      google.protobuf.Timestamp.(string) -> int
-    </td>
-    <td>
-      get month from the date with timezone, 0-11
-    </td>
-  </tr>
-  <tr>
-    <th rowspan="3">
-      getSeconds
-    </th>
-    <td>
-      google.protobuf.Timestamp.() -> int
-    </td>
-    <td>
-      get seconds from the date in UTC, 0-59
-    </td>
-  </tr>
-  <tr>
-    <td>
-      google.protobuf.Timestamp.(string) -> int
-    </td>
-    <td>
-      get seconds from the date with timezone, 0-59
-    </td>
-  </tr>
-  <tr>
-    <td>
-      google.protobuf.Duration.() -> int
-    </td>
-    <td>
-      get seconds from duration
-    </td>
-  </tr>
-  <tr>
-    <th rowspan="7">
-      int
-    </th>
-    <td>
-      type(int)
-    </td>
-    <td>
-      type denotation
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (int) -> int
-    </td>
-    <td>
-      identity
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (uint) -> int
-    </td>
-    <td>
-      type conversion
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (double) -> int
-    </td>
-    <td>
-      Type conversion. Rounds toward zero, then errors if result is out of
-      range.
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (string) -> int
-    </td>
-    <td>
-      type conversion
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (enum E) -> int
-    </td>
-    <td>
-      type conversion
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (google.protobuf.Timestamp) -> int
-    </td>
-    <td>
-      Convert timestamp to int64 in seconds since Unix epoch.
-    </td>
-  </tr>
-  <tr>
-    <th rowspan="1">
-      list
-    </th>
-    <td>
-      type(list(dyn))
-    </td>
-    <td>
-      type denotation
-    </td>
-  </tr>
-  <tr>
-    <th rowspan="1">
-      map
-    </th>
-    <td>
-      type(map(dyn, dyn))
-    </td>
-    <td>
-      type denotation
-    </td>
-  </tr>
-  <tr>
-    <th rowspan="2">
-      matches
-    </th>
-    <td>
-      (string, string) -> bool
-    </td>
-    <td>
-      Matches first argument against regular expression in second argument.
-      Time cost proportional to the product of the sizes of the arguments.
-    </td>
-  </tr>
-  <tr>
-    <td>
-      string.(string) -> bool
-    </td>
-    <td>
-      Matches the self argument against regular expression in first argument.
-      Time cost proportional to the product of the sizes of the arguments.
-    </td>
-  </tr>
-  <tr>
-    <th rowspan="1">
-      null_type
-    </th>
-    <td>
-      type(null)
-    </td>
-    <td>
-      type denotation
-    </td>
-  </tr>
-  <tr>
-    <th rowspan="4">
-      size
-    </th>
-    <td>
-      (string) -> int
-    </td>
-    <td>
-      string length
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (bytes) -> int
-    </td>
-    <td>
-      bytes length
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (list(A)) -> int
-    </td>
-    <td>
-      list size. Time cost proportional to the length of the list.
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (map(A, B)) -> int
-    </td>
-    <td>
-      map size. Time cost proportional to the number of entries.
-    </td>
-  </tr>
-  <tr>
-    <th rowspan="1">
-      startsWith
-    </th>
-    <td>
-      string.(string) -> bool
-    </td>
-    <td>
-      Tests whether the string operand starts with the prefix argument. Time
-      cost proportional to the product of the sizes of the arguments.
-    </td>
-  </tr>
-  <tr>
-    <th rowspan="8">
-      string
-    </th>
-    <td>
-      type(string)
-    </td>
-    <td>
-      type denotation
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (string) -> string
-    </td>
-    <td>
-      identity
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (int) -> string
-    </td>
-    <td>
-      type conversion
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (uint) -> string
-    </td>
-    <td>
-      type conversion
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (double) -> string
-    </td>
-    <td>
-      type conversion
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (bytes) -> string
-    </td>
-    <td>
-      type conversion
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (timestamp) -> string
-    </td>
-    <td>
-      type conversion, using the same format as timestamp string parsing
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (duration) -> string
-    </td>
-    <td>
-      type conversion, using the same format as duration string parsing
-    </td>
-  </tr>
-  <tr>
-    <th rowspan="2">
-      timestamp
-    </th>
-    <td>
-      (google.protobuf.Timestamp) -> google.protobuf.Timestamp
-    </td>
-    <td>
-      identity
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (string) -> google.protobuf.Timestamp
-    </td>
-    <td>
-      Type conversion of strings to timestamps according to RFC3339.
-      Example: "1972-01-01T10:00:20.021-05:00"
-    </td>
-  </tr>
-  <tr>
-    <th rowspan="2">
-      type
-    </th>
-    <td>
-      type(dyn)
-    </td>
-    <td>
-      type denotation
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (A) -> type(dyn)
-    </td>
-    <td>
-      returns type of value
-    </td>
-  </tr>
-  <tr>
-    <th rowspan="4">
-      uint
-    </th>
-    <td>
-      type(uint)
-    </td>
-    <td>
-      type denotation
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (uint) -> uint
-    </td>
-    <td>
-      identity
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (int) -> uint
-    </td>
-    <td>
-      type conversion
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (double) -> uint
-    </td>
-    <td>
-      Type conversion. Rounds toward zero, then errors if result is out of
-      range.
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (string) -> uint
-    </td>
-    <td>
-      type conversion
-    </td>
-  </tr>
-</table>
+**has(message.field)** \- Checks if a field exists within a message. This macro
+supports proto2, proto3, and map key accesses. Only map accesses using the
+select notation are supported.
+
+**Signatures**
+
+*   `has(message.field) -> bool`
+
+**Examples**
+
+```
+// true if the 'address' field exists in the 'user' message
+has(user.address)
+// true if map 'm' has a key named 'key_name' defined. The value may be null
+// as null does not connote absence in CEL.
+has(m.key_name)
+// false if the 'items' field is not set in the 'order' message
+has(order.items)
+// false if the 'user_id' key is not present in the 'sessions' map has(sessions.user_id)
+```
+
+**all \-** Tests whether all elements in the input list or all keys in a map
+satisfy the given predicate. The all macro behaves in a manner consistent with
+the Logical AND operator including in how it absorbs errors and short-circuits.
+
+**Signatures**
+
+*   `list(A).all(A, predicate(A) -> bool) -> bool`
+*   `map(A, B).all(A, predicate(A) -> bool) -> bool`
+
+**Examples**
+
+```
+[1, 2, 3].all(x, x > 0) // true
+[1, 2, 0].all(x, x > 0) // false
+['apple', 'banana', 'cherry'].all(fruit, fruit.size() > 3) // true
+[3.14, 2.71, 1.61].all(num, num < 3.0) // false
+{'a': 1, 'b': 2, 'c': 3}.all(key, key != 'b') // false
+```
+
+**exists** \- Tests whether any value in the list or any key in the map
+satisfies the predicate expression. The exists macro behaves in a manner
+consistent with the Logical OR operator including in how it absorbs errors and
+short-circuits.
+
+**Signatures**
+
+*   `list(A).exists(A, predicate(A) -> bool) -> bool`
+*   `map(A,B).exists(A, predicate(A) -> bool) -> bool`
+
+**Examples**
+
+```
+[1, 2, 3].exists(i, i % 2 != 0) // true
+[].exists(i, i > 0) // false
+[0, -1, 5].exists(num, num < 0) // true
+{'x': 'foo', 'y': 'bar'}.exists(key, key.startsWith('z')) // false
+```
+
+**exists\_one** \- Tests whether exactly one list element or map key satisfies
+the predicate expression. This macro does not short-circuit in order to remain
+consistent with logical operators being the only operators which can absorb
+errors within CEL.
+
+**Signatures**
+
+*   `list(A).exists_one(A, predicate(A)) -> bool`
+*   `map(A,B).exists_one(A, predicate(A)) -> bool`
+
+**Examples**
+
+```
+[1, 2, 2].exists_one(i, i < 2) // true
+{'a': 'hello', 'aa': 'hellohello'}.exists_one(k, k.startsWith('a')) // false
+[1, 2, 3, 4].exists_one(num, num % 2 == 0) // false
+```
+
+**filter** \- Returns a list containing only the elements from the input list
+that satisfy the given predicate
+
+**Signatures**
+
+*   `list(A).filter(A, function(A) -> bool) -> list(A)`
+*   `map(A, B).filter(A, function(A) -> bool) -> list(A)`
+
+**Examples**
+
+```
+[1, 2, 3].filter(x, x > 1) // [2, 3]
+['cat', 'dog', 'bird', 'fish'].filter(pet, pet.size() == 3) // ['cat', 'dog']
+[{'a': 10, 'b': 5, 'c': 20}].map(m, m.filter(key, m[key] > 10)) // [['c']]
+```
+
+**map** \- Returns a list where each element is the result of applying the
+transform expression to the corresponding input list element or input map key.
+
+There are two forms of the map macro:
+
+* The three argument form transforms all elements.
+* The four argument form transforms only elements which satisfy the predicate.
+
+The four argument form of the macro exists to simplify combined filter / map
+operations.
+
+**Signatures**
+
+*   `list(A).map(A, function(A) -> T) -> list(T)`
+*   `list(A).map(A, function(A) -> bool, function(A) -> T) -> list(T)`
+*   `map(A, B).map(A, function(A) -> T) -> list(T)`
+*   `map(A, B).map(A, function(A) -> bool, function(A) -> T) -> list(T)`
+
+**Examples**
+
+```
+[1, 2, 3].map(x, x * 2) // [2, 4, 6]
+[5, 10, 15].map(x, x / 5) // [1, 2, 3]
+['apple', 'banana'].map(fruit, fruit.upperAscii()) // ['APPLE', 'BANANA']
+[1, 2, 3, 4].map(num, num % 2 == 0, num * 2) // [4, 8]
+```
+
+#### Logical Operators
+
+**Logical NOT (\!)** \- Takes a boolean value as input and returns the opposite
+boolean value.
+
+**Signatures:**
+
+*   `!bool -> bool`
+
+**Examples:**
+
+```
+!true  // false
+!false // true
+!error // error
+```
+
+**Logical OR (||)** \- Compute the logical OR of two or more values. Errors and
+unknown values are considered valid inputs to this operator and will not halt
+evaluation.
+
+**Signatures:**
+
+*   `bool || bool -> bool`
+
+**Examples:**
+
+```
+true || false  // true
+false || false // false
+error || true  // true
+error || false //  error
+```
+
+**Logical AND (&&)** \- Compute the logical AND of two or more values. Errors
+and unknown values are considered valid inputs to this operator and will not
+halt evaluation.
+
+**Signatures:**
+
+*   `bool && bool -> bool`
+
+**Examples:**
+
+```
+true && true   // true
+true && false  // false
+error && true  // error
+error && false // false
+```
+
+**Conditional Operator (? : )** \- The conditional or ternary operator which
+evaluates the test condition and only one of the remaining sub-expressions
+
+**Signatures:**
+
+*   `bool ? A : A -> A`
+
+**Examples:**
+
+```
+true ? 1 : 2 // 1
+false ? "a" : "b" // "b"
+true ? error : value // error
+false ? error : value // value
+(2 < 5) ? 'yes' : 'no' // 'yes'
+('hello'.size() > 10) ? 1 / 0 : 42 // 42
+```
+
+**Note:**
+
+*   `error` is a special value in CEL that represents an error condition.
+    Operations involving `error` typically propagate the error.
+*   This documentation provides examples for a few CEL operators. The complete
+    CEL specification includes many more operators and functions.
+
+#### Arithmetic Operators
+
+**Negation (-)** \- Takes a numeric value (int or double) as input and returns
+its negated value.
+
+**Signatures:**
+
+*   `-int -> int`
+*   `-double -> double`
+
+**Examples:**
+
+```
+-5    // -5
+-3.14 // -3.14
+```
+
+**Addition (+)** \- Adds two numeric values or concatenates two strings, bytes,
+or lists.
+
+**Signatures:**
+
+*   Numeric addition
+    *   `int + int -> int`
+    *   `uint + uint -> uint`
+    *   `double + double -> double`
+*   Time and duration addition
+    *   `google.protobuf.Timestamp + google.protobuf.Duration ->
+        google.protobuf.Timestamp`
+    *   `google.protobuf.Duration + google.protobuf.Timestamp ->
+        google.protobuf.Timestamp`
+    *   `google.protobuf.Duration + google.protobuf.Duration ->
+        google.protobuf.Duration`
+*   Concatenation
+    *   `string + string -> string`
+    *   `bytes + bytes -> bytes`
+    *   `list(A) + list(A) -> list(A)`
+
+**Examples:**
+
+```
+1 + 2 // 3
+3.14 + 1.59 // 4.73
+"Hello, " + "world!" // "Hello, world!"
+[1] + [2, 3] // [1, 2, 3]
+duration('1m') + duration('1s') // duration('1m1s')
+timestamp('2023-01-01T00:00:00Z')
+  +   duration('24h') // timestamp('2023-01-02T00:00:00Z')
+```
+
+**Subtraction (-)** \- Subtracts two numeric values or calculates the duration
+between two timestamps.
+
+**Signatures:**
+
+*   Numeric subtraction
+    *   `int - int -> int`
+    *   `uint - uint -> uint`
+    *   `double - double -> double`
+*   Time and duration subtraction
+    *   `google.protobuf.Timestamp - google.protobuf.Timestamp ->
+        google.protobuf.Duration`
+    *   `google.protobuf.Timestamp - google.protobuf.Duration ->
+        google.protobuf.Timestamp`
+    *   `google.protobuf.Duration - google.protobuf.Duration ->
+        google.protobuf.Duration`
+
+**Examples:**
+
+```
+5 - 3 // 2
+10.5 - 2.0 // 8.5
+duration('1m') - duration('1s') // duration('59s')
+timestamp('2023-01-10T12:00:00Z')
+  -   timestamp('2023-01-10T00:00:00Z') // duration('12h')
+```
+
+**Division (/)** \- Divides two numeric values.
+
+**Signatures:**
+
+*   `int / int -> int`
+*   `uint / uint -> uint`
+*   `double / double -> double`
+
+**Examples:**
+
+```
+10 / 2 // 5
+7.0 / 2.0 // 3.5
+```
+
+#### Comparison Operators
+
+Comparisons require strict type equality at type-check time. If types do not
+agree, then type-conversion is required in order to be explicit about the
+intention and inherent risks of comparing across types.
+
+The one exception to this rule is numeric comparisons at runtime. Since CEL
+supports JSON in addition to Protocol Buffers, it must handle cases where the
+user intent was to compare an integer value to a JSON value within the int53
+range. For this reason, numeric comparisons across type are supported at
+runtime as all numeric representations may be considered to exist along a
+shared number line independent of their representation in memory.
+
+**Equality (==)** \- Compares two values of the same type and returns `true` if
+they are equal, and `false` otherwise
+
+**Signatures:**
+
+*   `A == A -> bool` (where A can be any comparable type)
+
+**Examples:**
+
+```
+1 == 1 // true
+"hello" == "world" // false
+bytes('hello') == b'hello' // true
+duration('1h') == duration('60m') // true
+dyn(3.0) == 3 // true
+```
+
+**Inequality (\!=)** \- Takes two values of the same type and returns `true` if
+they are not equal, and `false` otherwise.
+
+**Signatures:**
+
+*   `A != A -> bool` (where A can be any comparable type)
+
+**Examples:**
+
+```
+1 != 2     // true
+"a" != "a" // false
+3.0 != 3.1 // true
+```
+
+**Less Than or Equal To (\<=)** \- Compares two values and returns `true` if the
+first value is less than or equal to the second value, and `false` otherwise
+
+**Signatures:**
+
+*   `bool <= bool -> bool`
+*   `int <= int -> bool`
+*   `uint <= uint -> bool`
+*   `double <= double -> bool`
+*   `string <= string -> bool`
+*   `bytes <= bytes -> bool`
+*   `google.protobuf.Timestamp <= google.protobuf.Timestamp -> bool`
+*   `google.protobuf.Duration <= google.protobuf.Duration -> bool`
+
+**Examples:**
+
+```
+2 <= 3 // true
+'a' <= 'b' // true
+timestamp('2023-08-25T12:00:00Z') <= timestamp('2023-08-26T12:00:00Z') // true
+```
+
+**Less Than (\<)** \- Compares two values and returns `true` if the first value
+is less than the second value, and `false` otherwise
+
+**Signatures:**
+
+*   `bool < bool -> bool`
+*   `int < int -> bool`
+*   `uint < uint -> bool`
+*   `double < double -> bool`
+*   `string < string -> bool`
+*   `bytes < bytes -> bool`
+*   `google.protobuf.Timestamp < google.protobuf.Timestamp -> bool`
+*   `google.protobuf.Duration < google.protobuf.Duration -> bool`
+
+**Examples:**
+
+```
+2 < 3 // true
+'a' < 'b' // true
+duration('2h') < duration('3h') // true
+-1 < dyn(1u) // true
+```
+
+**Greater Than or Equal To (\>=)** \- Compares two values and returns `true` if
+the first value is greater than or equal to the second value, and `false`
+otherwise
+
+**Signatures:**
+
+*   `bool >= bool -> bool`
+*   `int >= int -> bool`
+*   `uint >= uint -> bool`
+*   `double >= double -> bool`
+*   `string >= string -> bool`
+*   `bytes >= bytes -> bool`
+*   `google.protobuf.Timestamp >= google.protobuf.Timestamp -> bool`
+*   `google.protobuf.Duration >= google.protobuf.Duration -> bool`
+
+**Examples:**
+
+```
+3 >= 2 // true
+'b' >= 'a' // true
+duration('2h') + duration('1h1m') >= duration('3h') // true
+1 >= dyn(18446744073709551615u) // false
+```
+
+**Greater Than (\>)** \- Compares two values and returns `true` if the first
+value is greater than the second value, and `false` otherwise
+
+**Signatures:**
+
+*   `bool > bool -> bool`
+*   `int > int -> bool`
+*   `uint > uint -> bool`
+*   `double > double -> bool`
+*   `string > string -> bool`
+*   `bytes > bytes -> bool`
+*   `google.protobuf.Timestamp > google.protobuf.Timestamp -> bool`
+*   `google.protobuf.Duration > google.protobuf.Duration -> bool`
+
+**Examples:**
+
+```
+3 > 2 // true
+'b' > 'a' // true
+5u > 3u // true
+```
+
+#### List Operators
+
+**List Indexing (\[\])** \- list indexing. Constant time cost
+
+**Signatures:**
+
+*   `list(A)[int] -> A`
+
+**Examples:**
+
+```
+[1, 2, 3][1] // 2
+```
+
+**List Membership (in)** \- Checks if a value is present in a list. Time cost is
+proportional to the product of the size of both arguments.
+
+**Signatures:**
+
+*   `A in list(A) -> bool`
+
+**Examples:**
+
+```
+2 in [1, 2, 3] // true
+"a" in ["b", "c"] // false
+```
+
+**size** \- Determine the number of elements in the list.
+
+**Signatures:**
+
+*   `list.size() -> int`
+*   `size(list) -> int`
+
+**Examples:**
+
+```
+['hello', 'world'].size() // 2
+size(['first', 'second', 'third']) // 3
+```
+
+#### Map Operators
+
+**Map Indexing (\[\])** \- map indexing. Expected time complexity is O(1).
+Some implementations may not guarantee O(1) lookup times, please check with
+the CEL implementation to verify. In the worst case for string keys, the 
+lookup cost could be proportional to the size of the map keys times the
+size of the index string.
+
+**Signatures:**
+
+*   `map(A, B)[A] -> B`
+
+**Examples:**
+
+```
+{'key1': 'value1', 'key2': 'value2'}['key1'] // 'value1'
+{'name': 'Bob', 'age': 42}['age'] // 42
+```
+
+**Map Key Membership (in)** \- Checks if a key exists in a map. Expected time
+complexity is O(1). 
+
+Some implementations may not guarantee O(1) lookup times, please check with
+the CEL implementation to verify. In the worst case for string keys, the 
+lookup cost could be proportional to the size of the map keys times the
+size of the index string.
+
+**Signatures:**
+
+*   `A in map(A, B) -> bool`
+
+**Examples:**
+
+```
+'key1' in {'key1': 'value1', 'key2': 'value2'} // true
+3 in {1: "one", 2: "two"} // false
+```
+
+**size** \- Determine the number of entries in the map.
+
+**Signatures:**
+
+*   `map.size() -> int`
+*   `size(map) -> int`
+
+**Examples:**
+
+```
+{'hello': 'world'}.size() // 1
+size({1: true, 2: false}) // 2
+```
+
+#### Bytes Functions
+
+**size** \- Determine the number of bytes in the sequence.
+
+**Signatures:**
+
+*   `bytes.size() -> int`
+*   `size(bytes) -> int`
+
+**Examples:**
+
+```
+b'hello'.size() // 5
+size(b'world!') // 6
+```
+
+#### String Functions
+
+**contains** \- Tests whether the string operand contains the substring. Time
+complexity is proportional to the product of the sizes of the arguments.
+
+**Signatures:**
+
+*   `string.contains(string) -> bool`
+
+**Examples:**
+
+```
+"hello world".contains("world") // true
+"foobar".contains("baz") // false
+```
+
+**endsWith** \- Tests whether the string operand ends with the specified suffix.
+Average time complexity is linear with respect to the size of the suffix string.
+Worst-cast time complexity is proportional to the product of the sizes of the
+arguments.
+
+**Signatures:**
+
+*   `string.endsWith(string) -> bool`
+
+**Examples:**
+
+```
+"hello world".endsWith("world") // true
+"foobar".endsWith("bar") // true
+```
+
+**matches** \- Tests whether a string matches a given RE2 regular expression.
+Time complexity is proportional to the product of the sizes of the arguments
+as guaranteed by the [RE2 design](https://github.com/google/re2/wiki/WhyRE2).
+
+**Signatures:**
+
+*   `matches(string, string) -> bool`
+*   `string.matches(string) -> bool`
+
+**Examples:**
+
+```
+matches("foobar", "foo.*") // true
+"foobar".matches("foo.*") // true
+```
+
+**startsWith** \- Tests whether the string operand starts with the specified
+prefix. Average time complexity is linear with respect to the size of the
+prefix. Worst-cast time complexity is proportional to the product of the sizes
+of the arguments.
+
+**Signatures:**
+
+*   `string.startsWith(string) -> bool`
+
+**Examples:**
+
+```
+"hello world".startsWith("hello") // true
+"foobar".startsWith("foo") // true
+```
+
+**size** \- Determine the length of the string in terms of the number of unicode
+codepoints
+
+**Signatures:**
+
+*   `string.size() -> int`
+*   `size(string) -> int`
+
+**Examples:**
+
+```
+"hello".size() // 5
+size("world!") // 6
+```
+
+#### Date/Time Functions
+
+**getDate** \- Get the day of the month from a timestamp (one-based indexing).
+
+**Signatures:**
+
+*   `google.protobuf.Timestamp.getDate() -> int` (in UTC)
+*   `google.protobuf.Timestamp.getDate(string) -> int` (with timezone)
+
+**Examples:**
+
+```
+timestamp("2023-12-25T12:00:00Z").getDate() // 25
+timestamp("2023-12-25T12:00:00Z").getDate("America/Los_Angeles") // 24 
+```
+
+**getDayOfMonth** \- Get the day of the month from a timestamp (zero-based
+indexing).
+
+**Signatures:**
+
+*   `google.protobuf.Timestamp.getDayOfMonth() -> int` (in UTC)
+*   `google.protobuf.Timestamp.getDayOfMonth(string) -> int` (with timezone)
+
+**Examples:**
+
+```
+timestamp("2023-12-25T12:00:00Z").getDayOfMonth() // 24
+timestamp("2023-12-25T12:00:00Z").getDayOfMonth("America/Los_Angeles") // 23
+```
+
+**getDayOfWeek** \- Get the day of the week from a timestamp (zero-based, zero
+for Sunday).
+
+**Signatures:**
+
+*   `google.protobuf.Timestamp.getDayOfWeek() -> int` (in UTC)
+*   `google.protobuf.Timestamp.getDayOfWeek(string) -> int` (with timezone)
+
+**Examples:**
+
+```
+timestamp("2023-12-25T12:00:00Z").getDayOfWeek() // 1 (Monday)
+```
+
+**getDayOfYear** \- Get the day of the year from a timestamp (zero-based
+indexing).
+
+**Signatures:**
+
+*   `google.protobuf.Timestamp.getDayOfYear() -> int` (in UTC)
+*   `google.protobuf.Timestamp.getDayOfYear(string) -> int` (with timezone)
+
+**Examples:**
+
+```
+timestamp("2023-12-25T12:00:00Z").getDayOfYear() // 358
+```
+
+**getFullYear** \- Get the year from a timestamp.
+
+**Signatures:**
+
+*   `google.protobuf.Timestamp.getFullYear() -> int` (in UTC)
+*   `google.protobuf.Timestamp.getFullYear(string) -> int` (with timezone)
+
+**Examples:**
+
+```
+timestamp("2023-12-25T12:00:00Z").getFullYear() // 2023
+```
+
+**getHours** \- Get the hour from a timestamp or duration
+
+**Signatures:**
+
+*   `google.protobuf.Timestamp.getHours() -> int` (in UTC)
+*   `google.protobuf.Timestamp.getHours(string) -> int` (with timezone)
+*   `google.protobuf.Duration.getHours() -> int`
+
+**Examples:**
+
+```
+timestamp("2023-12-25T12:00:00Z").getHours() // 12
+duration("3h").getHours() // 3
+```
+
+**getMilliseconds** \- Get the milliseconds from a timestamp or duration
+
+**Signatures:**
+
+*   `google.protobuf.Timestamp.getMilliseconds() -> int` (in UTC)
+*   `google.protobuf.Timestamp.getMilliseconds(string) -> int` (with timezone)
+*   `google.protobuf.Duration.getMilliseconds() -> int`
+
+**Examples:**
+
+```
+timestamp("2023-12-25T12:00:00.500Z").getMilliseconds() // 500
+duration("1.234s").getMilliseconds() // 234
+```
+
+**getMinutes** \- Get the minutes from a timestamp or duration
+
+**Signatures:**
+
+*   `google.protobuf.Timestamp.getMinutes() -> int` (in UTC)
+*   `google.protobuf.Timestamp.getMinutes(string) -> int` (with timezone)
+*   `google.protobuf.Duration.getMinutes() -> int`
+
+**Examples:**
+
+```
+timestamp("2023-12-25T12:30:00Z").getMinutes() // 30
+duration("1h30m").getMinutes() // 30
+```
+
+**getMonth** \- Get the month from a timestamp (zero-based, 0 for January).
+
+**Signatures:**
+
+*   `google.protobuf.Timestamp.getMonth() -> int` (in UTC)
+*   `google.protobuf.Timestamp.getMonth(string) -> int` (with timezone)
+
+**Examples:**
+
+```
+timestamp("2023-12-25T12:00:00Z").getMonth() // 11 (December)
+```
+
+**getSeconds** \- Get the seconds from a timestamp or duration.
+
+**Signatures:**
+
+*   `google.protobuf.Timestamp.getSeconds() -> int` (in UTC)
+*   `google.protobuf.Timestamp.getSeconds(string) -> int` (with timezone)
+*   `google.protobuf.Duration.getSeconds() -> int`
+
+**Examples:**
+
+```
+timestamp("2023-12-25T12:30:30Z").getSeconds() // 30
+duration("1m30s").getSeconds() // 30
+```
+
+#### Types and Conversions
+
+**bool** `type(bool)` \- Type denotation
+
+**Signatures:**
+
+*   `bool(bool) -> bool` (identity)
+*   `bool(string) -> bool` (type conversion)
+
+**Examples:**
+
+```
+bool(true) // true
+bool("true") // true
+bool("FALSE") // false
+```
+
+**bytes** `type(bytes)` \- Type denotation
+
+**Signatures:**
+
+*   `bytes(bytes) -> bytes` (identity)
+*   `bytes(string) -> bytes` (type conversion)
+
+**Examples:**
+
+```
+bytes("hello") // b'hello'
+```
+
+**double** `type(double)` \- Type denotation
+
+**Signatures:**
+
+*   `double(double) -> double` (identity)
+*   `double(int) -> double` (type conversion)
+*   `double(uint) -> double` (type conversion)
+*   `double(string) -> double` (type conversion)
+
+**Examples:**
+
+```
+double(3.14) // 3.14
+double(10) // 10.0
+double("3.14") // 3.14 (if successful, otherwise an error)
+```
+
+**duration**
+
+**Signatures:**
+
+*   `duration(google.protobuf.Duration) -> google.protobuf.Duration`
+*   `duration(string) -> google.protobuf.Duration`
+
+**Examples:**
+
+```
+duration("1h30m") // google.protobuf.Duration representing 1 hour and 30 minutes
+```
+
+**dyn** `type(dyn)` \- Type denotation
+
+The `dyn` types does not exist at runtime, but provides a hint to the
+type-checker to disable strong type agreement checks.
+
+**Signatures:**
+
+*   `dyn(A) -> dyn` (type conversion) (where A is any type)
+
+**Examples:**
+
+```
+dyn(123) // integer 123 marked `dyn` during type-checking
+dyn("hello") // string "hello" marked `dyn` during type-checking
+```
+
+**int** `type(int)` \- Type denotation
+
+**Signatures:**
+
+*   `int(int) -> int` (identity)
+*   `int(uint) -> int` (type conversion)
+*   `int(double) -> int` (type conversion, rounds toward zero, errors if out of
+    range)
+*   `int(string) -> int` (type conversion)
+*   `int(enum E) -> int` (type conversion)
+*   `int(google.protobuf.Timestamp) -> int` converts to seconds since Unix
+    epoch
+
+**Examples:**
+
+```
+int(123) // 123
+int(3.14) // 3
+int("123") // 123 (if successful, otherwise an error)
+```
+
+**list** `type(list(dyn))` \- Type denotation
+
+**map** `type(map(dyn, dyn))` \- Type denotation
+
+**null\_type** `type(null)` \- Type denotation
+
+**string** `type(string)` \- Type denotation
+
+**Signatures:**
+
+*   `string(string) -> string` (identity)
+*   `string(bool) -> string` converts `true` to `"true"` and `false` to 
+    `"false"`
+*   `string(int) -> string` converts integer values to base 10 representation
+*   `string(uint) -> string` converts unsigned integer values to base 10
+    representation
+*   `string(double) -> string` converts a double to a string
+*   `string(bytes) -> string` converts a byte sequence to a utf-8 string
+*   `string(timestamp) -> string` converts a timestamp value to 
+    [RFC3339](https://datatracker.ietf.org/doc/html/rfc3339) format
+*   `string(duration) -> string` converts a duration value to seconds and
+     fractional subseconds with an 's' suffix
+
+**Examples:**
+
+```
+string(123) // "123"
+string(123u) // "123u"
+string(3.14) // "3.14"
+string(b'hello') // 'hello'
+string(duration('1m1ms')) // '60.001s'
+```
+
+**timestamp**
+
+**Signatures:**
+
+*   `timestamp(google.protobuf.Timestamp) -> google.protobuf.Timestamp`
+    (identity)
+*   `timestamp(string) -> google.protobuf.Timestamp` (type conversion, according
+    to RFC3339)
+
+**Examples:**
+
+```
+// google.protobuf.Timestamp representing August 26, 2023 at 12:39 PM PDT
+timestamp("2023-08-26T12:39:00-07:00")
+```
+
+**type** `type` \- Type denotation
+
+**Signatures:**
+
+*   `type(A) -> type` (returns the type of the value, where A is any type)
+
+**Examples:**
+
+```
+type(123) // int
+type("hello") // string
+```
+
+**uint** `type(uint)` \- Type denotation
+
+**Signatures:**
+
+*   `uint(uint) -> uint` (identity)
+*   `uint(int) -> uint` (type conversion)
+*   `uint(double) -> uint` (type conversion, rounds toward zero, errors if out
+    of range)
+*   `uint(string) -> uint` (type conversion)
+
+**Examples:**
+
+```
+uint(123) // 123u
+uint(3.14) // 3u
+uint("123") // 123u (if successful, otherwise an error)
+```
 
 ## Appendix 1: Legacy Behavior
 
 ### Homogeneous Equality
 
-Prior to cel-spec v0.7.0, CEL runtimes only supported homogeneous equality
-to be consistent with the homogeneous equality defined by the type-checker.
-The original runtime definition for equality is as follows:
+Prior to cel-spec v0.7.0, CEL runtimes only supported homogeneous equality to be
+consistent with the homogeneous equality defined by the type-checker. The
+original runtime definition for equality is as follows:
 
 ```
 Equality and inequality are homogeneous; comparing values of different runtime
