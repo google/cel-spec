@@ -1498,6 +1498,17 @@ timestamp('2023-01-10T12:00:00Z')
 
 #### Comparison Operators
 
+Comparisons require strict type equality at type-check time. If types do not
+agree, then type-conversion is required in order to be explicit about the
+intention and inherent risks of comparing across types.
+
+The one exception to this rule is numeric comparisons at runtime. Since CEL
+supports JSON in addition to Protocol Buffers, it must handle cases where the
+user intent was to compare an integer value to a JSON value within the int53
+range. For this reason, numeric comparisons across type are supported at
+runtime as all numeric representations may be considered to exist along a
+shared number line independent of their representation in memory.
+
 **Equality (==)** \- Compares two values of the same type and returns `true` if
 they are equal, and `false` otherwise
 
@@ -1512,6 +1523,7 @@ they are equal, and `false` otherwise
 "hello" == "world" // false
 bytes('hello') == b'hello' // true
 duration('1h') == duration('60m') // true
+dyn(3.0) == 3 // true
 ```
 
 **Inequality (\!=)** \- Takes two values of the same type and returns `true` if
@@ -1571,6 +1583,7 @@ is less than the second value, and `false` otherwise
 2 < 3 // true
 'a' < 'b' // true
 duration('2h') < duration('3h') // true
+-1 < dyn(1u) // true
 ```
 
 **Greater Than or Equal To (\>=)** \- Compares two values and returns `true` if
@@ -1594,6 +1607,7 @@ otherwise
 3 >= 2 // true
 'b' >= 'a' // true
 duration('2h') + duration('1h1m') >= duration('3h') // true
+1 >= dyn(18446744073709551615u) // false
 ```
 
 **Greater Than (\>)** \- Compares two values and returns `true` if the first
@@ -2027,8 +2041,8 @@ dyn("hello") // string "hello" marked `dyn` during type-checking
     range)
 *   `int(string) -> int` (type conversion)
 *   `int(enum E) -> int` (type conversion)
-*   `int(google.protobuf.Timestamp) -> int` (type conversion, converts to
-    seconds since Unix epoch)
+*   `int(google.protobuf.Timestamp) -> int` converts to seconds since Unix
+    epoch
 
 **Examples:**
 
@@ -2049,13 +2063,17 @@ int("123") // 123 (if successful, otherwise an error)
 **Signatures:**
 
 *   `string(string) -> string` (identity)
-*   `string(int) -> string` (type conversion)
-*   `string(uint) -> string` (type conversion)
-*   `string(double) -> string` (type conversion)
-*   `string(bytes) -> string` (type conversion)
-*   `string(timestamp) -> string` (type conversion, using RFC3339 format)
-*   `string(duration) -> string` (type conversion, using duration string parsing
-    format)
+*   `string(bool) -> string` converts `true` to `"true"` and `false` to 
+    `"false"`
+*   `string(int) -> string` converts integer values to base 10 representation
+*   `string(uint) -> string` converts unsigned integer values to base 10
+    representation
+*   `string(double) -> string` converts a double to a string
+*   `string(bytes) -> string` converts a byte sequence to a utf-8 string
+*   `string(timestamp) -> string` converts a timestamp value to 
+    [RFC3339](https://datatracker.ietf.org/doc/html/rfc3339) format
+*   `string(duration) -> string` converts a duration value to seconds and
+     fractional subseconds with an 's' suffix
 
 **Examples:**
 
@@ -2064,7 +2082,7 @@ string(123) // "123"
 string(123u) // "123u"
 string(3.14) // "3.14"
 string(b'hello') // 'hello'
-string(duration('1m')) // '60s'
+string(duration('1m1ms')) // '60.001s'
 ```
 
 **timestamp**
