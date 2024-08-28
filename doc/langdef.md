@@ -1307,10 +1307,13 @@ that satisfy the given predicate
 **map** \- Returns a list where each element is the result of applying the
 transform expression to the corresponding input list element or input map key.
 
-There are both three argument and four argument forms of the macro. The three
-argument forms transform all elements. The four argument forms transform only
-elements which satisfy the predicate. This enlarged form of the macro exists to
-simplify combined filter / map operations.
+There are two forms of the map macro:
+
+* The three argument form transforms all elements.
+* The four argument form transforms only elements which satisfy the predicate.
+
+The four argument form of the macro exists to simplify combined filter / map
+operations.
 
 **Signatures**
 
@@ -1676,8 +1679,11 @@ size(['first', 'second', 'third']) // 3
 
 #### Map Operators
 
-**Map Indexing (\[\])** \- map indexing. For string keys, cost is proportional
-to the size of the map keys times the size of the index string
+**Map Indexing (\[\])** \- map indexing. Expected time complexity is O(1).
+Some implementations may not guarantee O(1) lookup times, please check with
+the CEL implementation to verify. In the worst case for string keys, the 
+lookup cost could be proportional to the size of the map keys times the
+size of the index string.
 
 **Signatures:**
 
@@ -1690,9 +1696,13 @@ to the size of the map keys times the size of the index string
 {'name': 'Bob', 'age': 42}['age'] // 42
 ```
 
-**Map Key Membership (in)** \- Checks if a key exists in a map. Time complexity
-is proportional to size of the map keys times the size of the input in the worst
-case, best case O(1). The behavior is implementation specific.
+**Map Key Membership (in)** \- Checks if a key exists in a map. Expected time
+complexity is O(1). 
+
+Some implementations may not guarantee O(1) lookup times, please check with
+the CEL implementation to verify. In the worst case for string keys, the 
+lookup cost could be proportional to the size of the map keys times the
+size of the index string.
 
 **Signatures:**
 
@@ -1752,7 +1762,9 @@ complexity is proportional to the product of the sizes of the arguments.
 ```
 
 **endsWith** \- Tests whether the string operand ends with the specified suffix.
-Time complexity is proportional to the product of the sizes of the arguments.
+Average time complexity is linear with respect to the size of the suffix string.
+Worst-cast time complexity is proportional to the product of the sizes of the
+arguments.
 
 **Signatures:**
 
@@ -1765,8 +1777,9 @@ Time complexity is proportional to the product of the sizes of the arguments.
 "foobar".endsWith("bar") // true
 ```
 
-**matches** \- Tests whether a string matches a given regular expression. Time
-complexity is proportional to the product of the sizes of the arguments.
+**matches** \- Tests whether a string matches a given RE2 regular expression.
+Time complexity is proportional to the product of the sizes of the arguments
+as guaranteed by the [RE2 design](https://github.com/google/re2/wiki/WhyRE2).
 
 **Signatures:**
 
@@ -1781,8 +1794,9 @@ matches("foobar", "foo.*") // true
 ```
 
 **startsWith** \- Tests whether the string operand starts with the specified
-prefix. Time complexity is proportional to the product of the sizes of the
-arguments.
+prefix. Average time complexity is linear with respect to the size of the
+prefix. Worst-cast time complexity is proportional to the product of the sizes
+of the arguments.
 
 **Signatures:**
 
