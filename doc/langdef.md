@@ -5,44 +5,44 @@ This page constitutes the reference for CEL. For a gentle introduction, see
 
 ## Contents
 
-- [Overview](#overview)
-- [Syntax](#syntax)
-    - [Name Resolution](#name-resolution)
-- [Values](#values)
-    - [Numeric Values](#numeric-values)
-    - [String and Bytes Values](#string-and-bytes-values)
-    - [Aggregate Values](#aggregate-values)
-    - [Booleans and Null](#booleans-and-null)
-    - [Type Values](#type-values)
-    - [Abstract Types](#abstract-types)
-    - [Protocol Buffer Data Conversion](#protocol-buffer-data-conversion)
-    - [Dynamic Values](#dynamic-values)
-- [JSON Data Conversion](#json-data-conversion)
-- [Gradual Type Checking](#gradual-type-checking)
-- [Evaluation](#evaluation)
-    - [Evaluation Environment](#evaluation-environment)
-    - [Runtime Errors](#runtime-errors)
-    - [Logical Operators](#logical-operators)
-    - [Macros](#macros)
-    - [Field Selection](#field-selection)
-- [Performance](#performance)
-    - [Abstract Sizes](#abstract-sizes)
-    - [Time Complexity](#time-complexity)
-    - [Space Complexity](#space-complexity)
-    - [Macro Performance](#macro-performance)
-    - [Performance Limits](#performance-limits)
-- [Functions](#functions)
-    - [Extension Functions](#extension-functions)
-    - [Receiver Call Style](#receiver-call-style)
-- [Standard Definitions](#standard-definitions)
-    - [Equality](#equality)
-    - [Ordering](#ordering)
-    - [Overflow](#overflow)
-    - [Timezones](#timezones)
-    - [Regular Expressions](#regular-expressions)
-    - [Standard Environment](#standard-environment)
-- [Appendix 1: Legacy Behavior](#appendix-1-legacy-behavior)
-    - [Enums as Ints](#enums-as-ints)
+-   [Overview](#overview)
+-   [Syntax](#syntax)
+    -   [Name Resolution](#name-resolution)
+-   [Values](#values)
+    -   [Numeric Values](#numeric-values)
+    -   [String and Bytes Values](#string-and-bytes-values)
+    -   [Aggregate Values](#aggregate-values)
+    -   [Booleans and Null](#booleans-and-null)
+    -   [Type Values](#type-values)
+    -   [Abstract Types](#abstract-types)
+    -   [Protocol Buffer Data Conversion](#protocol-buffer-data-conversion)
+    -   [Dynamic Values](#dynamic-values)
+-   [JSON Data Conversion](#json-data-conversion)
+-   [Gradual Type Checking](#gradual-type-checking)
+-   [Evaluation](#evaluation)
+    -   [Evaluation Environment](#evaluation-environment)
+    -   [Runtime Errors](#runtime-errors)
+    -   [Logical Operators](#logical-operators)
+    -   [Macros](#macros)
+    -   [Field Selection](#field-selection)
+-   [Performance](#performance)
+    -   [Abstract Sizes](#abstract-sizes)
+    -   [Time Complexity](#time-complexity)
+    -   [Space Complexity](#space-complexity)
+    -   [Macro Performance](#macro-performance)
+    -   [Performance Limits](#performance-limits)
+-   [Functions](#functions)
+    -   [Extension Functions](#extension-functions)
+    -   [Receiver Call Style](#receiver-call-style)
+-   [Standard Definitions](#standard-definitions)
+    -   [Equality](#equality)
+    -   [Ordering](#ordering)
+    -   [Overflow](#overflow)
+    -   [Timezones](#timezones)
+    -   [Regular Expressions](#regular-expressions)
+    -   [Standard Environment](#standard-environment)
+-   [Appendix 1: Legacy Behavior](#appendix-1-legacy-behavior)
+    -   [Enums as Ints](#enums-as-ints)
 
 ## Overview
 
@@ -109,7 +109,6 @@ Implementations are required to support at least:
     *   12 indexing (`[_]`) operators in a row;
     *   12 nested list, map, or message literals.
 
-
 This grammar corresponds to the following operator precedence and associativity:
 
 Precedence | Operator        | Description                    | Associativity
@@ -134,8 +133,8 @@ Precedence | Operator        | Description                    | Associativity
 The lexis is defined below. As is typical, the `WHITESPACE` and `COMMENT`
 productions are only used to recognize separate lexical elements and are ignored
 by the grammar. Please note, that in the lexer `[]` denotes a character range,
-`*` represents zero or more, `+` represents one or more, and `?` denotes zero
-or one occurrence.
+`*` represents zero or more, `+` represents one or more, and `?` denotes zero or
+one occurrence.
 
 ```
 IDENT          ::= [_a-zA-Z][_a-zA-Z0-9]* - RESERVED
@@ -170,22 +169,21 @@ WHITESPACE     ::= [\t\n\f\r ]+
 COMMENT        ::= '//' ~NEWLINE* NEWLINE
 ```
 
-For the sake of a readable representation, the escape
-sequences (`ESCAPE`) are kept implicit in string tokens. This means that strings
-without the `r` or `R` (raw) prefix process `ESCAPE` sequences, while in strings
-with the raw prefix they stay uninterpreted. See documentation of string
-literals below.
+For the sake of a readable representation, the escape sequences (`ESCAPE`) are
+kept implicit in string tokens. This means that strings without the `r` or `R`
+(raw) prefix process `ESCAPE` sequences, while in strings with the raw prefix
+they stay uninterpreted. See documentation of string literals below.
 
 The following identifiers are reserved due to their use as literal values or in
 the syntax:
 
-    false in null true
+ false in null true
 
 The following identifiers are reserved to allow easier embedding of CEL into a
 host language.
 
-    as break const continue else for function if import let loop package
-    namespace return var void while
+ as break const continue else for function if import let loop package  namespace
+return var void while
 
 In general it is a bad idea for those defining contexts or extensions to use
 identifiers that are reserved words in programming languages which might embed
@@ -207,9 +205,9 @@ combination of one or more of:
 *   Protocol buffer package names: a simple or qualified name could represent an
     absolute or relative name in the protocol buffer package namespace. Package
     names must be followed by a message type, or enum constant.
-*   Protocol buffer message types and enum constants: following an
-    optional protocol buffer package name, a simple or qualified name could
-    refer to a message type or an enum constant in the package's namespace.
+*   Protocol buffer message types and enum constants: following an optional
+    protocol buffer package name, a simple or qualified name could refer to a
+    message type or an enum constant in the package's namespace.
 
 Resolution works as follows. If `a.b` is a name to be resolved in the context of
 a protobuf declaration with scope `A.B`, then resolution is attempted, in order,
@@ -322,22 +320,17 @@ Escape sequences are a backslash (`\ `) followed by one of the following:
 
 Examples:
 
-CEL Literal   | Meaning
-------------- | ---------------------------------------------------
-`""`          | Empty string
-`'""'`        | String of two double-quote characters
-`'''x''x'''`  | String of four characters "x''x"
-`"\""`        | String of one double-quote character
-`"\\"`        | String of one backslash character
-`r"\\"`       | String of two backslash characters
-`b"abc"`      | Byte sequence of 97, 98, 99
-`b"ÿ"`        | Sequence of bytes 195 and 191 (UTF-8 of &yuml;)
-`b"\303\277"` | Also sequence of bytes 195 and 191
-`"\303\277"`  | String of "&Atilde;&iquest;" (code points 195, 191)
-`"\377"`      | String of "&yuml;" (code point 255)
-`b"\377"`     | Sequence of byte 255 (_not_ UTF-8 of &yuml;)
-`"\xFF"`      | String of "&yuml;" (code point 255)
-`b"\xFF"`     | Sequence of byte 255 (_not_ UTF-8 of &yuml;)
+CEL Literal | Meaning
+------------- | --------------------------------------------------- `""` | Empty
+string `'""'` | String of two double-quote characters `'''x''x'''` | String of
+four characters "x''x" `"\""` | String of one double-quote character `"\\"` |
+String of one backslash character `r"\\"` | String of two backslash characters
+`b"abc"` | Byte sequence of 97, 98, 99 `b"ÿ"` | Sequence of bytes 195 and 191
+(UTF-8 of &yuml;) `b"\303\277"` | Also sequence of bytes 195 and 191
+`"\303\277"` | String of "&Atilde;&iquest;" (code points 195, 191) `"\377"` |
+String of "&yuml;" (code point 255) `b"\377"` | Sequence of byte 255 (_not_
+UTF-8 of &yuml;) `"\xFF"` | String of "&yuml;" (code point 255) `b"\xFF"` |
+Sequence of byte 255 (_not_ UTF-8 of &yuml;)
 
 While strings must be sequences of valid Unicode code points, no Unicode
 normalization is attempted on strings, as there are several normal forms, they
@@ -361,10 +354,10 @@ maps are the union of what's allowed in protocol buffer maps and JSON objects.
 Note that the type checker uses a finer-grained notion of list and map types.
 Lists are `list(A)` for the homogeneous type `A` of list elements. Maps are
 `map(K, V)` for maps with keys of type `K` and values of type `V`. The type
-`dyn` is used for heterogeneous values See
-[Gradual Type Checking](#gradual-type-checking). But these constraints are only
-enforced within the type checker; at runtime, lists and maps can have
-heterogeneous types.
+`dyn` is used for heterogeneous values See [Gradual Type
+Checking](#gradual-type-checking). But these constraints are only enforced
+within the type checker; at runtime, lists and maps can have heterogeneous
+types.
 
 Any protocol buffer message is a CEL value, and each message type is its own CEL
 type, represented as its fully-qualified name.
@@ -432,15 +425,14 @@ converted in the other direction when initializing a field. In general, protocol
 buffer data can be converted to CEL without error, but range errors are possible
 in the other direction.
 
-Protocol Buffer Field Type                       | CEL Type
+Protocol Buffer Field Type | CEL Type
 ------------------------------------------------ | --------
 int32, int64, sint32, sint64, sfixed32, sfixed64 | `int`
 uint32, uint64, fixed32, fixed64                 | `uint`
 float, double                                    | `double`
 bool, string, bytes                              | same
 enum E                                           | `int`
-repeated                                         | `list`
-map<K, V>                                        | `map`
+repeated                                         | `list` map<K, V> | `map`
 oneof                                            | options expanded individually, at most one is set
 message M                                        | M, except for conversions below
 
@@ -488,11 +480,10 @@ CEL automatically converts certain protocol buffer messages in the
 `google.protobuf` package to other types.
 
 google.protobuf message | CEL Conversion
------------------------ | --------------
-`Any`                   | dynamically converted to the contained message type, or error
-`ListValue`             | list of `Value` messages
-`Struct`                | map (with string keys, `Value` values)
-`Value`                 | dynamically converted to the contained type (null, double, string, bool, `Struct`, or `ListValue`)
+----------------------- | -------------- `Any` | dynamically converted to the
+contained message type, or error `ListValue` | list of `Value` messages `Struct`
+| map (with string keys, `Value` values) `Value` | dynamically converted to the
+contained type (null, double, string, bool, `Struct`, or `ListValue`)
 wrapper types           | converted as eponymous field type
 
 The wrapper types are `BoolValue`, `BytesValue`, `DoubleValue`, `FloatValue`,
@@ -513,14 +504,13 @@ using these dynamic values.
 ## JSON Data Conversion
 
 CEL can also work with JSON data. Since there is a natural correspondence of
-most CEL data with protocol buffer data, and protocol buffers have a
-[defined mapping](https://developers.google.com/protocol-buffers/docs/proto3#json)
-to JSON, this creates a natural mapping of CEL to JSON. This creates an exact
+most CEL data with protocol buffer data, and protocol buffers have a [defined
+mapping](https://developers.google.com/protocol-buffers/docs/proto3#json) to
+JSON, this creates a natural mapping of CEL to JSON. This creates an exact
 bidirectional mapping between JSON types and a subset of CEL data:
 
 JSON Type | CEL Type
---------- | -----------------------------------------------
-`null`    | `null`
+--------- | ----------------------------------------------- `null` | `null`
 Boolean   | `bool`
 Number    | `double` (except infinities or NaN)
 String    | `string`
@@ -530,19 +520,18 @@ Object    | `map` (with string keys, bi-convertible values)
 We define JSON mappings for much of the remainder of CEL data, but note that
 this data will not map back in to CEL as the same value:
 
-CEL Data                                               | JSON Data
------------------------------------------------------- | ---------
-`int`                                                  | Number if in interoperable range, otherwise decimal String.
-`uint`                                                 | Number if in interoperable range, otherwise decimal String.
+CEL Data | JSON Data
+------------------------------------------------------ | --------- `int` |
+Number if in interoperable range, otherwise decimal String. `uint` | Number if
+in interoperable range, otherwise decimal String.
 double infinity                                        | String `"Infinity"` or `"-Infinity"`
-double NaN                                             | String "NaN"
-`bytes`                                                | String of base64-encoded bytes
+double NaN                                             | String "NaN" `bytes` |
+String of base64-encoded bytes
 message                                                | JSON conversion of protobuf message.
-`list` of convertible elements                         | JSON Array of converted values
-`list` with a non-convertible element                  | none
-`map` with string keys and convertible values          | JSON Object with converted values
-`map` with a non-string key or a non-convertible value | none
-`type`                                                 | none
+`list` of convertible elements | JSON Array of converted values `list` with a
+non-convertible element | none `map` with string keys and convertible values |
+JSON Object with converted values `map` with a non-string key or a
+non-convertible value | none `type` | none
 
 The "interoperable" range of integer values is `-(2^53-1)` to `2^53 - 1`.
 
@@ -553,8 +542,8 @@ variables and expressions might not be known until runtime. However, CEL has an
 optional type-checking phase that takes annotation giving the types of all
 variables and tries to deduce the type of the expression and of all its
 sub-expressions. This is not always possible, due to the dynamic expansion of
-certain messages like `Struct`, `Value`, and `Any` (see
-[Dynamic Values](#dynamic-values)). However, if a CEL program does not use
+certain messages like `Struct`, `Value`, and `Any` (see [Dynamic
+Values](#dynamic-values)). However, if a CEL program does not use
 dynamically-expanded messages, it can be statically type-checked.
 
 The type checker uses a richer type system than the types of the dynamic values:
@@ -572,12 +561,11 @@ function `dyn` has no effect at runtime, but signals to the type checker that
 its argument should be considered of type `dyn`, `list(dyn)`, or a `dyn`-valued
 map.
 
-A CEL type checker attempts to identify possible runtime errors (see
-[Runtime Errors](#runtime-errors)), particularly `no_matching_overload` and
-`no_such_field`, ahead of runtime. It also serves to optimize execution speed
-by narrowing down the number of possible matching overloads for a function
-call, and by allowing for a more efficient (unboxed) runtime representation of
-values.
+A CEL type checker attempts to identify possible runtime errors (see [Runtime
+Errors](#runtime-errors)), particularly `no_matching_overload` and
+`no_such_field`, ahead of runtime. It also serves to optimize execution speed by
+narrowing down the number of possible matching overloads for a function call,
+and by allowing for a more efficient (unboxed) runtime representation of values.
 
 By construction, a CEL expression that does not use the dynamic features coming
 from `Struct`, `Value`, or `Any`, can be fully statically type-checked and all
@@ -650,8 +638,8 @@ the conversion fails.
 ### Runtime Errors
 
 In general, when a runtime error is produced, expression evaluation is
-terminated; exceptions to this rule are discussed in
-[Logical Operators](#logical-operators) and [Macros](#macros).
+terminated; exceptions to this rule are discussed in [Logical
+Operators](#logical-operators) and [Macros](#macros).
 
 CEL provides the following built-in runtime errors:
 
@@ -704,27 +692,29 @@ macros are:
     rest to `false`. Any other combination of boolean results evaluates to
     `false`, and any predicate error causes the macro to raise an error.
 *   `e.map(x, t)`:
-    *    transforms a list `e` by taking each element `x` to the
-         function given by the expression `t`, which can use the variable `x`. For
-         instance, `[1, 2, 3].map(n, n * n)` evaluates to `[1, 4, 9]`. Any evaluation
-         error for any element causes the macro to raise an error.
-    *    transforms a map `e` by taking each key in the map `x` to the function
-         given by the expression `t`, which can use the variable `x`. For
-         instance, `{'one': 1, 'two': 2}.map(k, k)` evaluates to `['one', 'two']`.
-         Any evaluation error for any element causes the macro to raise an error.
+    *   transforms a list `e` by taking each element `x` to the function given
+        by the expression `t`, which can use the variable `x`. For instance,
+        `[1, 2, 3].map(n, n * n)` evaluates to `[1, 4, 9]`. Any evaluation error
+        for any element causes the macro to raise an error.
+    *   transforms a map `e` by taking each key in the map `x` to the function
+        given by the expression `t`, which can use the variable `x`. For
+        instance, `{'one': 1, 'two': 2}.map(k, k)` evaluates to `['one',
+        'two']`. Any evaluation error for any element causes the macro to raise
+        an error.
 *   `e.map(x, p, t)`: Same as the two-arg map but with a conditional `p` filter
     before the value is transformed.
 *   `e.filter(x, p)`:
-    *    for a list `e`, returns the sublist of all elements `x` which
-         evaluate to `true` in the predicate expression `p` (which can use variable
-         `x`). For instance, `[1, 2, 3].filter(i, i % 2 > 0)` evaluates to `[1, 3]`.
-         If no elements evaluate to `true`, the result is an empty list. Any
-         evaluation error for any element causes the macro to raise an error.
-    *    for a map `e`, returns the list of all map keys `x` which
-         evaluate to `true` in the predicate expression `p` (which can use variable
-         `x`). For instance, `{'one': 1, 'two': 2}.filter(k, k == 'one')` evaluates
-         to `['one']`. If no elements evaluate to `true`, the result is an empty
-         list. Any evaluation error for any element causes the macro to raise an error.
+    *   for a list `e`, returns the sublist of all elements `x` which evaluate
+        to `true` in the predicate expression `p` (which can use variable `x`).
+        For instance, `[1, 2, 3].filter(i, i % 2 > 0)` evaluates to `[1, 3]`. If
+        no elements evaluate to `true`, the result is an empty list. Any
+        evaluation error for any element causes the macro to raise an error.
+    *   for a map `e`, returns the list of all map keys `x` which evaluate to
+        `true` in the predicate expression `p` (which can use variable `x`). For
+        instance, `{'one': 1, 'two': 2}.filter(k, k == 'one')` evaluates to
+        `['one']`. If no elements evaluate to `true`, the result is an empty
+        list. Any evaluation error for any element causes the macro to raise an
+        error.
 
 ### Field Selection
 
@@ -733,12 +723,12 @@ maps. For maps, selection is interpreted as the field being a string key.
 
 The semantics depends on the type of the result of evaluating expression `e`:
 
-1.  If `e` evaluates to a message and `f` is not declared in this message, the runtime
-    error `no_such_field` is raised.
-2.  If `e` evaluates to a message and `f` is declared, but the field is not set, the
-    default value of the field's type will be produced. Note that this is `null`
-    for messages or the according primitive default value as determined by
-    proto2 or proto3 semantics.
+1.  If `e` evaluates to a message and `f` is not declared in this message, the
+    runtime error `no_such_field` is raised.
+2.  If `e` evaluates to a message and `f` is declared, but the field is not set,
+    the default value of the field's type will be produced. Note that this is
+    `null` for messages or the according primitive default value as determined
+    by proto2 or proto3 semantics.
 3.  If `e` evaluates to a map, then `e.f` is equivalent to `e['f']` (where `f`
     is still being used as a meta-variable, e.g. the expression `x.foo` is
     equivalent to the expression `x['foo']` when `x` evaluates to a map).
@@ -755,8 +745,8 @@ used.
     defined field:
     -   If `f` is a repeated field or map field, `has(e.f)` indicates whether
         the field is non-empty.
-    -   If `f` is a singular or  oneof field, `has(e.f)` indicates
-        whether the field is set.
+    -   If `f` is a singular or  oneof field, `has(e.f)` indicates whether the
+        field is set.
 4.  If `e` evaluates to a protocol buffers version 3 message and `f` is a
     defined field:
     -   If `f` is a repeated field or map field, `has(e.f)` indicates whether
@@ -771,14 +761,14 @@ used.
 ## Performance
 
 Since one of the main applications for CEL is for execution of untrusted
-expressions with reliable containment, the time and space cost of evaluation
-is an essential part of the specification of the language. But we also want to
-give considerable freedom in how to implement the language. To balance these
+expressions with reliable containment, the time and space cost of evaluation is
+an essential part of the specification of the language. But we also want to give
+considerable freedom in how to implement the language. To balance these
 concerns, we specify only the time and space computational complexity of
 language constructs and standard functions (see [Functions](#functions)).
 
-CEL applications are responsible for noting the computational complexity of
-any extension functions they provide.
+CEL applications are responsible for noting the computational complexity of any
+extension functions they provide.
 
 ### Abstract Sizes
 
@@ -805,8 +795,8 @@ The size of a CEL program is:
 Thus, the size of a CEL program is bounded by either the length of the source
 text string or the bytes of the proto-encoded AST.
 
-The inputs to a CEL expression are the _bindings_ given to the evaluator and
-the _literals_ within the expression itself.
+The inputs to a CEL expression are the _bindings_ given to the evaluator and the
+_literals_ within the expression itself.
 
 ### Time Complexity
 
@@ -815,36 +805,36 @@ time complexity of its sub-expressions, plus the sum of the sizes of the
 sub-expression values, plus a constant.
 
 For instance, an expression `x` has constant time complexity since it has no
-sub-expressions.  An expression `x != y` takes time proportional to the sum of
+sub-expressions. An expression `x != y` takes time proportional to the sum of
 sizes of the bindings of `x` and `y`, plus a constant.
 
 Some functions cost less than this:
 
 *   The conditional expression `_?_:_`, only evaluates one of the alternative
     sub-expressions.
-*   For the `size()` function on lists and maps, the time is proportional to
-    the length of its input, not its total size (plus the time of the
+*   For the `size()` function on lists and maps, the time is proportional to the
+    length of its input, not its total size (plus the time of the
     sub-expression).
 *   The index operator on lists takes constant time (plus the time of the
     sub-expressions).
 *   The select operator on messages takes constant time (plus the time of the
     sub-expression).
 
-Some functions take more time than this.  The following functions take time
+Some functions take more time than this. The following functions take time
 proportional to the _product_ of their input sizes (plus the time of the
 sub-expressions):
 
-*    The index operator on maps.
-*    The select operator on maps.
-*    The in operator.
-*    The `contains`, `startsWith`, `endsWith`, and `matches` functions on
-     strings.
+*   The index operator on maps.
+*   The select operator on maps.
+*   The in operator.
+*   The `contains`, `startsWith`, `endsWith`, and `matches` functions on
+    strings.
 
 See below for the time cost of macros.
 
 Implementations are free to provide a more performant implementation. For
-instance, a hashing implementation of maps would make indexing/selection
-faster, but we do not require such sophistication from all implementations.
+instance, a hashing implementation of maps would make indexing/selection faster,
+but we do not require such sophistication from all implementations.
 
 ### Space Complexity
 
@@ -858,13 +848,13 @@ space complexity of its sub-expressions, plus a constant. The exceptions are:
 
 See below for the space cost of macros.
 
-We'll assume that bytes-to-string and string-to-bytes conversions do not need
-to allocate new space.
+We'll assume that bytes-to-string and string-to-bytes conversions do not need to
+allocate new space.
 
 ### Macro Performance
 
-Macros can take considerably more time and space than other constructs, and
-can lead to exponential behavior when nested or chained.  For instance,
+Macros can take considerably more time and space than other constructs, and can
+lead to exponential behavior when nested or chained. For instance,
 
 ```
 [0,1].all(x,
@@ -905,26 +895,25 @@ of evaluation. Let `P` be the non-literal size of the expression, `L` be the
 size of the literals, `B` be the size of the bindings, and `I=B+L` be the total
 size of the inputs.
 
-*   The macros other than `has()` are the only avenue for exponential
-    behavior. This can be curtailed by the implementation allowing applications
-    to set limits on the recursion or chaining of macros, or disable them
-    entirely.
+*   The macros other than `has()` are the only avenue for exponential behavior.
+    This can be curtailed by the implementation allowing applications to set
+    limits on the recursion or chaining of macros, or disable them entirely.
 *   The concatenation operator `_+_` is the only operator that dramatically
     increases the space complexity, with the program `x + x + ... + x` taking
     time and space `O(B * P^2)`.
 *   The string-detection functions (`contains()` and friends) yield a boolean
-    result, thus cannot be nested to drive exponential or even higher
-    polynomial cost.  We can bound the time cost by `O(B^2 * P)`, with a
-    limiting case being `x.contains(y) || x.contains(y) || ...`.
-*   The map indexing operators yield a smaller result than their input, and
-    thus are also limited in their ability to increase the cost. A particularly
-    bad case would be an expensive selection that returns a subcomponent that
-    contains the majority of the size of the aggregate, resulting in a time
-    cost of `O(P * I)`, and see below.
+    result, thus cannot be nested to drive exponential or even higher polynomial
+    cost.  We can bound the time cost by `O(B^2 * P)`, with a limiting case
+    being `x.contains(y) || x.contains(y) || ...`.
+*   The map indexing operators yield a smaller result than their input, and thus
+    are also limited in their ability to increase the cost. A particularly bad
+    case would be an expensive selection that returns a subcomponent that
+    contains the majority of the size of the aggregate, resulting in a time cost
+    of `O(P * I)`, and see below.
 *   Eliminating all of the above and using only default-cost functions, plus
-    aggregate literals, time and space are limited `O(P * I)`.
-    A limiting time example is `size(x) + size(x) + ...`.
-    A limiting time and space example is `[x, x, ..., x]`.
+    aggregate literals, time and space are limited `O(P * I)`. A limiting time
+    example is `size(x) + size(x) + ...`. A limiting time and space example is
+    `[x, x, ..., x]`.
 
 Note that custom function will alter this analysis if they are more expensive
 than the default costs.
@@ -941,46 +930,46 @@ and type of arguments and the type of the result, as well as an opaque
 computation. Argument and result types can use type variables to express
 overloads which work on lists and maps. At runtime, a matching overload is
 selected and the according computation invoked. If no overload matches, the
-runtime error `no_matching_overload` is raised (see also
-[Runtime Errors](#errors)). For example, the standard function `size` is
-specified by the following overloads:
+runtime error `no_matching_overload` is raised (see also [Runtime
+Errors](#errors)). For example, the standard function `size` is specified by the
+following overloads:
 
 <table border="1">
-  <tr>
-   <th rowspan="4">
-      size
-    </th>
-    <td>
-      (string) -> int
-    </td>
-    <td>
-      string length
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (bytes) -> int
-    </td>
-    <td>
-      bytes length
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (list(A)) -> int
-    </td>
-    <td>
-      list size
-    </td>
-  </tr>
-  <tr>
-    <td>
-      (map(A, B)) -> int
-    </td>
-    <td>
-      map size
-    </td>
-  </tr>
+ <tr>
+ <th rowspan="4">
+ size
+ </th>
+ <td>
+ (string) -> int
+ </td>
+ <td>
+ string length
+ </td>
+ </tr>
+ <tr>
+ <td>
+ (bytes) -> int
+ </td>
+ <td>
+ bytes length
+ </td>
+ </tr>
+ <tr>
+ <td>
+ (list(A)) -> int
+ </td>
+ <td>
+ list size
+ </td>
+ </tr>
+ <tr>
+ <td>
+ (map(A, B)) -> int
+ </td>
+ <td>
+ map size
+ </td>
+ </tr>
 </table>
 
 Overloads must have non-overlapping argument types, after erasure of all type
@@ -1020,8 +1009,8 @@ notation like `_+_` where `_` is a placeholder for an argument.
 ### Equality
 
 Equality (`_==_`) and inequality (`_!=_`) are defined for all types. Inequality
-is the logical negation of equality, i.e. `e1 != e2` is the same as
-`!(e1 == e2)` for all expressions `e1` and `e2`.
+is the logical negation of equality, i.e. `e1 != e2` is the same as `!(e1 ==
+e2)` for all expressions `e1` and `e2`.
 
 Type-checking asserts that arguments to equality operators must be the same
 type. If the argument types differ, the type-checker will raise an error.
@@ -1030,8 +1019,8 @@ considers all arguments dynamic and defers type-agreement checks to the
 interpreter.
 
 The type-checker uses homogeneous equality to surface potential logical errors
-during static analysis, but the runtime uses heterogeneous equality with
-a definition of [numeric equality](#Numbers) which treats all numeric types as
+during static analysis, but the runtime uses heterogeneous equality with a
+definition of [numeric equality](#Numbers) which treats all numeric types as
 though they exist on a continuous number line. Semantically, equality would be
 expressed within in CEL as follows:
 
@@ -1043,9 +1032,9 @@ type(x) in [double, int, uint]
 ```
 
 CEL's support for boxed primitives relies on heterogeneous equality to ensure
-that comparisons to `null` evaluate to `true` or `false` rather than error.
-This behavior is also useful for evaluating JSON data where all numbers may
-be provided as `double` or, depending on the underlying JSON implementation,
+that comparisons to `null` evaluate to `true` or `false` rather than error. This
+behavior is also useful for evaluating JSON data where all numbers may be
+provided as `double` or, depending on the underlying JSON implementation,
 possibly `int`. This potential discrepancy between how runtimes handle dynamic
 data is further motivation for supporting separate behaviors at type-check and
 interpretation.
@@ -1054,14 +1043,14 @@ interpretation.
 
 The numeric types of `int`, `uint`, and `double` are compared as though they
 exist on a continuous number line where two numbers `x` and `y` are equal if
-`!(x < y || x > y)`. Since it is possible to compare numeric types without
-type conversion, CEL uses this definition for `numericEquals` to support
-comparison across numeric types.
+`!(x < y || x > y)`. Since it is possible to compare numeric types without type
+conversion, CEL uses this definition for `numericEquals` to support comparison
+across numeric types.
 
-This property of cross-type numeric equality is essential for supporting
-JSON in a way which mostly closely matches user expectations. The following
-expressions are equivalent as the type-checker cannot infer the type of the
-`json.number` in the expression since it is considered `dyn` typed:
+This property of cross-type numeric equality is essential for supporting JSON in
+a way which mostly closely matches user expectations. The following expressions
+are equivalent as the type-checker cannot infer the type of the `json.number` in
+the expression since it is considered `dyn` typed:
 
 Index into a map:
 
@@ -1101,40 +1090,41 @@ comparisons are `true`, the result is true.
 
 #### Protocol Buffers
 
-CEL uses the C++ [`MessageDifferencer::Equals`](https://developers.google.com/protocol-buffers/docs/reference/cpp/google.protobuf.util.message_differencer#MessageDifferencer.Equals.details)
+CEL uses the C++
+[`MessageDifferencer::Equals`](https://developers.google.com/protocol-buffers/docs/reference/cpp/google.protobuf.util.message_differencer#MessageDifferencer.Equals.details)
 semantics for comparing Protocol Buffer messages across all runtimes. For two
 messages to be equal:
 
-- Both messages must share the same type name and `Descriptor` instance;
-- Both messages must have the same set fields;
-- All primitive typed fields compare equal by value, e.g. `string`, `int64`;
-- All elements of `repeated` fields compare in-order as `true`;
-- All entries of `map` fields compare order-independently as `true`;
-- All fields of `message` and `group` typed fields compare true, with the
-  comparison being performed as if by recursion.
-- All unknown fields compare true using byte equality.
+-   Both messages must share the same type name and `Descriptor` instance;
+-   Both messages must have the same set fields;
+-   All primitive typed fields compare equal by value, e.g. `string`, `int64`;
+-   All elements of `repeated` fields compare in-order as `true`;
+-   All entries of `map` fields compare order-independently as `true`;
+-   All fields of `message` and `group` typed fields compare true, with the
+    comparison being performed as if by recursion.
+-   All unknown fields compare true using byte equality.
 
 In addition to the publicly documented behaviors for C++ protobuf equality,
 there are some implementation behaviors which are important to mention:
 
-- The `double` type follows the IEEE 754 standard where not-a-number (`NaN`)
-  values compare as inequal, e.g. `NaN == NaN // false` and
-  `NaN != NaN // true`.
-- All `google.protobuf.Any` typed fields are unpacked before comparison,
-  unless the `type_url` cannot be resolved, in which case the comparison
-  falls back to byte equality.
+-   The `double` type follows the IEEE 754 standard where not-a-number (`NaN`)
+    values compare as inequal, e.g. `NaN == NaN // false` and `NaN != NaN //
+    true`.
+-   All `google.protobuf.Any` typed fields are unpacked before comparison,
+    unless the `type_url` cannot be resolved, in which case the comparison falls
+    back to byte equality.
 
 Protocol buffer equality semantics in C++ are generally consistent with CEL's
 definition of heterogeneous equality. Note, Java and Go proto equality
 implementations do not follow IEEE 754 for `NaN` values and do not unpack
-`google.protobuf.Any` values before comparison. These comparison differences
-can result in false negatives or false positives; consequently, CEL provides
-a uniform definition across runtimes to ensure consistent evaluation across
+`google.protobuf.Any` values before comparison. These comparison differences can
+result in false negatives or false positives; consequently, CEL provides a
+uniform definition across runtimes to ensure consistent evaluation across
 runtimes.
 
-There is one edge case where CEL and protobuf equality will produce
-different results; however, this edge case is sufficiently unlikely that
-the difference is acceptable:
+There is one edge case where CEL and protobuf equality will produce different
+results; however, this edge case is sufficiently unlikely that the difference is
+acceptable:
 
 ```
 // Protocol buffer definition
@@ -1163,28 +1153,28 @@ supported across `int`, `uint`, and `double` for consistency with the runtime
 equality definition for numeric types.
 
 Strings obey lexicographic ordering of the code points, and bytes obey
-lexicographic ordering of the byte values. The ordering operators obey the
-usual algebraic properties, i.e. `e1 <= e2` gives the same result as
-`!(e1 > e2)` as well as `(e1 < e2) || (e1 == e2)` when the expressions
-involved do not have side effects.
+lexicographic ordering of the byte values. The ordering operators obey the usual
+algebraic properties, i.e. `e1 <= e2` gives the same result as `!(e1 > e2)` as
+well as `(e1 < e2) || (e1 == e2)` when the expressions involved do not have side
+effects.
 
 ### Overflow
 
 Arithmetic operations raise an error when the results exceed the range of the
-integer type (int, uint) or the timestamp or duration type.  An error is also
+integer type (int, uint) or the timestamp or duration type. An error is also
 raised for conversions which exceed the range of the target type.
 
-There are a few additional considerations to keep in mind with respect to
-how and when certain types will overflow:
+There are a few additional considerations to keep in mind with respect to how
+and when certain types will overflow:
 
-*  Duration values are limited to a single int64 value, or roughly +-290 years.
-*  Timestamp values are limited to the range of values which can be serialized
+*   Duration values are limited to a single int64 value, or roughly +-290 years.
+*   Timestamp values are limited to the range of values which can be serialized
    as a string: ["0001-01-01T00:00:00Z", "9999-12-31T23:59:59.999999999Z"].
-*  Double to int conversions are limited to (minInt, maxInt) non-inclusive.
+*   Double to int conversions are limited to (minInt, maxInt) non-inclusive.
 
-Note, that whether the minimum or maximum integer value will roundtrip successfully
-int -> double -> int can be compiler dependent which is the motivation for the
-conservative round-tripping behavior.
+Note, that whether the minimum or maximum integer value will roundtrip
+successfully int -> double -> int can be compiler dependent which is the
+motivation for the conservative round-tripping behavior.
 
 ### Timezones
 
@@ -1203,40 +1193,44 @@ names are like `Europe/Paris`, `CET`, or `US/Central`.
 
 ### Regular Expressions
 
-Regular expressions follow the
-[RE2 syntax](https://github.com/google/re2/wiki/Syntax). Regular expression
-matches succeed if they match a substring of the argument. Use explicit anchors
-(`^` and `$`) in the pattern to force full-string matching, if desired.
+Regular expressions follow the [RE2
+syntax](https://github.com/google/re2/wiki/Syntax). Regular expression matches
+succeed if they match a substring of the argument. Use explicit anchors (`^` and
+`$`) in the pattern to force full-string matching, if desired.
 
 ### Standard Environment
 
 #### Presence and Comprehension Macros
 
-**has(message.field)** \- Checks if a field exists within a message.
+**has(message.field)** \- Checks if a field exists within a message. This macro
+supports proto2, proto3, and map key accesses. Map accesses using the select
+notation
 
 **Signatures**
 
-* `has(message.field) -> bool`
+*   `has(message.field) -> bool`
 
 **Examples**
 
 ```
 // true if the 'address' field exists in the 'user' message
-has(user.address) 
+has(user.address)
 // true if map 'm' has a key named 'key_name' defined. The value may be null
 // as null does not connote absence in CEL.
 has(m.key_name)
 // false if the 'items' field is not set in the 'order' message
-has(order.items) 
-// false if the 'user_id' key is not present in the 'sessions' map has(sessions.user_id) 
+has(order.items)
+// false if the 'user_id' key is not present in the 'sessions' map has(sessions.user_id)
 ```
 
-**all \-**  Tests whether all elements in the input list or all keys in a map satisfy the given predicate. The all macro behaves in a manner consistent with the Logical AND operator including in how it absorbs errors and short-circuits.
+**all \-** Tests whether all elements in the input list or all keys in a map
+satisfy the given predicate. The all macro behaves in a manner consistent with
+the Logical AND operator including in how it absorbs errors and short-circuits.
 
 **Signatures**
 
-* `list(A).all(A, predicate(A) -> bool) -> bool`  
-* `map(A, B).all(A, predicate(A) -> bool) -> bool`
+*   `list(A).all(A, predicate(A) -> bool) -> bool`
+*   `map(A, B).all(A, predicate(A) -> bool) -> bool`
 
 **Examples**
 
@@ -1248,12 +1242,15 @@ has(order.items)
 {'a': 1, 'b': 2, 'c': 3}.all(key, key != 'b') // false
 ```
 
-**exists** \- Tests whether any value in the list or any key in the map satisfies the predicate expression. The exists macro behaves in a manner consistent with the Logical OR operator including in how it absorbs errors and short-circuits.
+**exists** \- Tests whether any value in the list or any key in the map
+satisfies the predicate expression. The exists macro behaves in a manner
+consistent with the Logical OR operator including in how it absorbs errors and
+short-circuits.
 
 **Signatures**
 
-* `list(A).exists(A, predicate(A) -> bool) -> bool`  
-* `map(A,B).exists(A, predicate(A) -> bool) -> bool`
+*   `list(A).exists(A, predicate(A) -> bool) -> bool`
+*   `map(A,B).exists(A, predicate(A) -> bool) -> bool`
 
 **Examples**
 
@@ -1264,12 +1261,15 @@ has(order.items)
 {'x': 'foo', 'y': 'bar'}.exists(key, key.startsWith('z')) // false
 ```
 
-**exists\_one** \- Tests whether exactly one list element or map key satisfies the predicate expression. This macro does not short-circuit in order to remain consistent with logical operators being the only operators which can absorb errors within CEL. 
+**exists\_one** \- Tests whether exactly one list element or map key satisfies
+the predicate expression. This macro does not short-circuit in order to remain
+consistent with logical operators being the only operators which can absorb
+errors within CEL.
 
 **Signatures**
 
-* `list(A).exists_one(A, predicate(A)) -> bool`  
-* `map(A,B).exists_one(A, predicate(A)) -> bool`
+*   `list(A).exists_one(A, predicate(A)) -> bool`
+*   `map(A,B).exists_one(A, predicate(A)) -> bool`
 
 **Examples**
 
@@ -1279,12 +1279,13 @@ has(order.items)
 [1, 2, 3, 4].exists_one(num, num % 2 == 0) // false
 ```
 
-**filter** \- Returns a list containing only the elements from the input list that satisfy the given predicate
+**filter** \- Returns a list containing only the elements from the input list
+that satisfy the given predicate
 
 **Signatures**
 
-* `list(A).filter(A, function(A) -> bool) -> list(A)`  
-* `map(A, B).filter(A, function(A) -> bool) -> list(A)`
+*   `list(A).filter(A, function(A) -> bool) -> list(A)`
+*   `map(A, B).filter(A, function(A) -> bool) -> list(A)`
 
 **Examples**
 
@@ -1294,16 +1295,20 @@ has(order.items)
 [{'a': 10, 'b': 5, 'c': 20}].map(m, m.filter(key, m[key] > 10)) // [['c']]
 ```
 
-**map**  \- Returns a list where each element is the result of applying the transform expression to the corresponding input list element or input map key. 
+**map** \- Returns a list where each element is the result of applying the
+transform expression to the corresponding input list element or input map key.
 
-There are both three argument and four argument forms of the macro. The three argument forms transform all elements. The four argument forms transform only elements which satisfy the predicate. This enlarged form of the macro exists to simplify combined filter / map operations.
+There are both three argument and four argument forms of the macro. The three
+argument forms transform all elements. The four argument forms transform only
+elements which satisfy the predicate. This enlarged form of the macro exists to
+simplify combined filter / map operations.
 
 **Signatures**
 
-* `list(A).map(A, function(A) -> T) -> list(T)`  
-* `list(A).map(A, function(A) -> bool, function(A) -> T) -> list(T)`  
-* `map(A, B).map(A, function(A) -> T) -> list(T)`  
-* `map(A, B).map(A, function(A) -> bool, function(A) -> T) -> list(T)`
+*   `list(A).map(A, function(A) -> T) -> list(T)`
+*   `list(A).map(A, function(A) -> bool, function(A) -> T) -> list(T)`
+*   `map(A, B).map(A, function(A) -> T) -> list(T)`
+*   `map(A, B).map(A, function(A) -> bool, function(A) -> T) -> list(T)`
 
 **Examples**
 
@@ -1316,25 +1321,28 @@ There are both three argument and four argument forms of the macro. The three ar
 
 #### Logical Operators
 
-**Logical NOT (\!)** \- Takes a boolean value as input and returns the opposite boolean value.
+**Logical NOT (\!)** \- Takes a boolean value as input and returns the opposite
+boolean value.
 
 **Signatures:**
 
-* `!bool -> bool`
+*   `!bool -> bool`
 
 **Examples:**
 
 ```
 !true  // false
 !false // true
-!error // error 
+!error // error
 ```
 
-**Logical OR (||)** \- Compute the logical OR of two or more values. Errors and unknown values are considered valid inputs to this operator and will not halt evaluation.
+**Logical OR (||)** \- Compute the logical OR of two or more values. Errors and
+unknown values are considered valid inputs to this operator and will not halt
+evaluation.
 
 **Signatures:**
 
-* `bool || bool -> bool`
+*   `bool || bool -> bool`
 
 **Examples:**
 
@@ -1345,11 +1353,13 @@ error || true  // true
 error || false //  error
 ```
 
-**Logical AND (&&)** \- Compute the logical AND of two or more values. Errors and unknown values are considered valid inputs to this operator and will not halt evaluation.
+**Logical AND (&&)** \- Compute the logical AND of two or more values. Errors
+and unknown values are considered valid inputs to this operator and will not
+halt evaluation.
 
 **Signatures:**
 
-* `bool && bool -> bool`
+*   `bool && bool -> bool`
 
 **Examples:**
 
@@ -1360,12 +1370,12 @@ error && true  // error
 error && false // false
 ```
 
-**Conditional Operator (? : )** \- The conditional or ternary operator which evaluates the test condition and only one of the remaining sub-expressions
+**Conditional Operator (? : )** \- The conditional or ternary operator which
+evaluates the test condition and only one of the remaining sub-expressions
 
 **Signatures:**
 
-* `bool ? A : A -> A`
-
+*   `bool ? A : A -> A`
 
 **Examples:**
 
@@ -1380,17 +1390,20 @@ false ? error : value // value
 
 **Note:**
 
-* `error` is a special value in CEL that represents an error condition. Operations involving `error` typically propagate the error.  
-* This documentation provides examples for a few CEL operators. The complete CEL specification includes many more operators and functions.
+*   `error` is a special value in CEL that represents an error condition.
+    Operations involving `error` typically propagate the error.
+*   This documentation provides examples for a few CEL operators. The complete
+    CEL specification includes many more operators and functions.
 
 #### Arithmetic Operators
 
-**Negation (-)** \- Takes a numeric value (int or double) as input and returns its negated value.
+**Negation (-)** \- Takes a numeric value (int or double) as input and returns
+its negated value.
 
 **Signatures:**
 
-* `-int -> int`  
-* `-double -> double`
+*   `-int -> int`
+*   `-double -> double`
 
 **Examples:**
 
@@ -1399,22 +1412,26 @@ false ? error : value // value
 -3.14 // -3.14
 ```
 
-**Addition (+)** \- Adds two numeric values or concatenates two strings, bytes, or lists.
+**Addition (+)** \- Adds two numeric values or concatenates two strings, bytes,
+or lists.
 
 **Signatures:**
 
-* Numeric addition  
-  * `int + int -> int`  
-  * `uint + uint -> uint`  
-  * `double + double -> double`  
-* Time and duration addition  
-  * `google.protobuf.Timestamp + google.protobuf.Duration -> google.protobuf.Timestamp`  
-  * `google.protobuf.Duration + google.protobuf.Timestamp -> google.protobuf.Timestamp`  
-  * `google.protobuf.Duration + google.protobuf.Duration -> google.protobuf.Duration`  
-* Concatenation  
-  * `string + string -> string`  
-  * `bytes + bytes -> bytes`  
-  * `list(A) + list(A) -> list(A)`
+*   Numeric addition
+    *   `int + int -> int`
+    *   `uint + uint -> uint`
+    *   `double + double -> double`
+*   Time and duration addition
+    *   `google.protobuf.Timestamp + google.protobuf.Duration ->
+        google.protobuf.Timestamp`
+    *   `google.protobuf.Duration + google.protobuf.Timestamp ->
+        google.protobuf.Timestamp`
+    *   `google.protobuf.Duration + google.protobuf.Duration ->
+        google.protobuf.Duration`
+*   Concatenation
+    *   `string + string -> string`
+    *   `bytes + bytes -> bytes`
+    *   `list(A) + list(A) -> list(A)`
 
 **Examples:**
 
@@ -1424,22 +1441,26 @@ false ? error : value // value
 "Hello, " + "world!" // "Hello, world!"
 [1] + [2, 3] // [1, 2, 3]
 duration('1m') + duration('1s') // duration('1m1s')
-timestamp('2023-01-01T00:00:00Z') 
-  + duration('24h') // timestamp('2023-01-02T00:00:00Z')
+timestamp('2023-01-01T00:00:00Z')
+  +   duration('24h') // timestamp('2023-01-02T00:00:00Z')
 ```
 
-**Subtraction (-)** \- Subtracts two numeric values or calculates the duration between two timestamps.
+**Subtraction (-)** \- Subtracts two numeric values or calculates the duration
+between two timestamps.
 
 **Signatures:**
 
-* Numeric subtraction  
-  * `int - int -> int`  
-  * `uint - uint -> uint`  
-  * `double - double -> double`  
-* Time and duration subtraction  
-  * `google.protobuf.Timestamp - google.protobuf.Timestamp -> google.protobuf.Duration`  
-  * `google.protobuf.Timestamp - google.protobuf.Duration -> google.protobuf.Timestamp`  
-  * `google.protobuf.Duration - google.protobuf.Duration -> google.protobuf.Duration`
+*   Numeric subtraction
+    *   `int - int -> int`
+    *   `uint - uint -> uint`
+    *   `double - double -> double`
+*   Time and duration subtraction
+    *   `google.protobuf.Timestamp - google.protobuf.Timestamp ->
+        google.protobuf.Duration`
+    *   `google.protobuf.Timestamp - google.protobuf.Duration ->
+        google.protobuf.Timestamp`
+    *   `google.protobuf.Duration - google.protobuf.Duration ->
+        google.protobuf.Duration`
 
 **Examples:**
 
@@ -1447,17 +1468,17 @@ timestamp('2023-01-01T00:00:00Z')
 5 - 3 // 2
 10.5 - 2.0 // 8.5
 duration('1m') - duration('1s') // duration('59s')
-timestamp('2023-01-10T12:00:00Z') 
-  - timestamp('2023-01-10T00:00:00Z') // duration('12h')
+timestamp('2023-01-10T12:00:00Z')
+  -   timestamp('2023-01-10T00:00:00Z') // duration('12h')
 ```
 
 **Division (/)** \- Divides two numeric values.
 
 **Signatures:**
 
-* `int / int -> int`  
-* `uint / uint -> uint`  
-* `double / double -> double`
+*   `int / int -> int`
+*   `uint / uint -> uint`
+*   `double / double -> double`
 
 **Examples:**
 
@@ -1468,11 +1489,12 @@ timestamp('2023-01-10T12:00:00Z')
 
 #### Comparison Operators
 
-**Equality (==)** \- Compares two values of the same type and returns `true` if they are equal, and `false` otherwise
+**Equality (==)** \- Compares two values of the same type and returns `true` if
+they are equal, and `false` otherwise
 
 **Signatures:**
 
-* `A == A -> bool` (where A can be any comparable type)
+*   `A == A -> bool` (where A can be any comparable type)
 
 **Examples:**
 
@@ -1483,11 +1505,12 @@ bytes('hello') == b'hello' // true
 duration('1h') == duration('60m') // true
 ```
 
-**Inequality (\!=)** \- Takes two values of the same type and returns `true` if they are not equal, and `false` otherwise.
+**Inequality (\!=)** \- Takes two values of the same type and returns `true` if
+they are not equal, and `false` otherwise.
 
 **Signatures:**
 
-* `A != A -> bool` (where A can be any comparable type)
+*   `A != A -> bool` (where A can be any comparable type)
 
 **Examples:**
 
@@ -1497,18 +1520,19 @@ duration('1h') == duration('60m') // true
 3.0 != 3.1 // true
 ```
 
-**Less Than or Equal To (\<=)** \-  Compares two values and returns `true` if the first value is less than or equal to the second value, and `false` otherwise
+**Less Than or Equal To (\<=)** \- Compares two values and returns `true` if the
+first value is less than or equal to the second value, and `false` otherwise
 
 **Signatures:**
 
-* `bool <= bool -> bool`  
-* `int <= int -> bool`  
-* `uint <= uint -> bool`  
-* `double <= double -> bool`  
-* `string <= string -> bool`  
-* `bytes <= bytes -> bool`  
-* `google.protobuf.Timestamp <= google.protobuf.Timestamp -> bool`  
-* `google.protobuf.Duration <= google.protobuf.Duration -> bool`
+*   `bool <= bool -> bool`
+*   `int <= int -> bool`
+*   `uint <= uint -> bool`
+*   `double <= double -> bool`
+*   `string <= string -> bool`
+*   `bytes <= bytes -> bool`
+*   `google.protobuf.Timestamp <= google.protobuf.Timestamp -> bool`
+*   `google.protobuf.Duration <= google.protobuf.Duration -> bool`
 
 **Examples:**
 
@@ -1518,18 +1542,19 @@ duration('1h') == duration('60m') // true
 timestamp('2023-08-25T12:00:00Z') <= timestamp('2023-08-26T12:00:00Z') // true
 ```
 
-**Less Than (\<)** \- Compares two values and returns `true` if the first value is less than the second value, and `false` otherwise
+**Less Than (\<)** \- Compares two values and returns `true` if the first value
+is less than the second value, and `false` otherwise
 
 **Signatures:**
 
-* `bool < bool -> bool`  
-* `int < int -> bool`  
-* `uint < uint -> bool`  
-* `double < double -> bool`  
-* `string < string -> bool`  
-* `bytes < bytes -> bool`  
-* `google.protobuf.Timestamp < google.protobuf.Timestamp -> bool`  
-* `google.protobuf.Duration < google.protobuf.Duration -> bool`
+*   `bool < bool -> bool`
+*   `int < int -> bool`
+*   `uint < uint -> bool`
+*   `double < double -> bool`
+*   `string < string -> bool`
+*   `bytes < bytes -> bool`
+*   `google.protobuf.Timestamp < google.protobuf.Timestamp -> bool`
+*   `google.protobuf.Duration < google.protobuf.Duration -> bool`
 
 **Examples:**
 
@@ -1539,18 +1564,20 @@ timestamp('2023-08-25T12:00:00Z') <= timestamp('2023-08-26T12:00:00Z') // true
 duration('2h') < duration('3h') // true
 ```
 
-**Greater Than or Equal To (\>=)** \- Compares two values and returns `true` if the first value is greater than or equal to the second value, and `false` otherwise
+**Greater Than or Equal To (\>=)** \- Compares two values and returns `true` if
+the first value is greater than or equal to the second value, and `false`
+otherwise
 
 **Signatures:**
 
-* `bool >= bool -> bool`  
-* `int >= int -> bool`  
-* `uint >= uint -> bool`  
-* `double >= double -> bool`  
-* `string >= string -> bool`  
-* `bytes >= bytes -> bool`  
-* `google.protobuf.Timestamp >= google.protobuf.Timestamp -> bool`  
-* `google.protobuf.Duration >= google.protobuf.Duration -> bool`
+*   `bool >= bool -> bool`
+*   `int >= int -> bool`
+*   `uint >= uint -> bool`
+*   `double >= double -> bool`
+*   `string >= string -> bool`
+*   `bytes >= bytes -> bool`
+*   `google.protobuf.Timestamp >= google.protobuf.Timestamp -> bool`
+*   `google.protobuf.Duration >= google.protobuf.Duration -> bool`
 
 **Examples:**
 
@@ -1560,18 +1587,19 @@ duration('2h') < duration('3h') // true
 duration('2h') + duration('1h1m') >= duration('3h') // true
 ```
 
-**Greater Than (\>)** \- Compares two values and returns `true` if the first value is greater than the second value, and `false` otherwise
+**Greater Than (\>)** \- Compares two values and returns `true` if the first
+value is greater than the second value, and `false` otherwise
 
 **Signatures:**
 
-* `bool > bool -> bool`  
-* `int > int -> bool`  
-* `uint > uint -> bool`  
-* `double > double -> bool`  
-* `string > string -> bool`  
-* `bytes > bytes -> bool`  
-* `google.protobuf.Timestamp > google.protobuf.Timestamp -> bool`  
-* `google.protobuf.Duration > google.protobuf.Duration -> bool`
+*   `bool > bool -> bool`
+*   `int > int -> bool`
+*   `uint > uint -> bool`
+*   `double > double -> bool`
+*   `string > string -> bool`
+*   `bytes > bytes -> bool`
+*   `google.protobuf.Timestamp > google.protobuf.Timestamp -> bool`
+*   `google.protobuf.Duration > google.protobuf.Duration -> bool`
 
 **Examples:**
 
@@ -1587,8 +1615,7 @@ duration('2h') + duration('1h1m') >= duration('3h') // true
 
 **Signatures:**
 
-* `list(A)[int] -> A`
-
+*   `list(A)[int] -> A`
 
 **Examples:**
 
@@ -1596,11 +1623,12 @@ duration('2h') + duration('1h1m') >= duration('3h') // true
 [1, 2, 3][1] // 2
 ```
 
-**List Membership (in)** \- Checks if a value is present in a list. Time cost is proportional to the product of the size of both arguments.
+**List Membership (in)** \- Checks if a value is present in a list. Time cost is
+proportional to the product of the size of both arguments.
 
 **Signatures:**
 
-* `A in list(A) -> bool`
+*   `A in list(A) -> bool`
 
 **Examples:**
 
@@ -1609,12 +1637,12 @@ duration('2h') + duration('1h1m') >= duration('3h') // true
 "a" in ["b", "c"] // false
 ```
 
-**size** \- Determine the number of elements in the list. 
+**size** \- Determine the number of elements in the list.
 
 **Signatures:**
 
-* `list.size() -> int`  
-* `size(list) -> int`
+*   `list.size() -> int`
+*   `size(list) -> int`
 
 **Examples:**
 
@@ -1625,12 +1653,12 @@ size(['first', 'second', 'third']) // 3
 
 #### Map Operators
 
-**Map Indexing (\[\])** \- map indexing. For string keys, cost is proportional to the size of the map keys times the size of the index string
+**Map Indexing (\[\])** \- map indexing. For string keys, cost is proportional
+to the size of the map keys times the size of the index string
 
 **Signatures:**
 
-* `map(A, B)[A] -> B`
-
+*   `map(A, B)[A] -> B`
 
 **Examples:**
 
@@ -1639,11 +1667,13 @@ size(['first', 'second', 'third']) // 3
 {'name': 'Bob', 'age': 42}['age'] // 42
 ```
 
-**Map Key Membership (in)** \- Checks if a key exists in a map. Time complexity is proportional to size of the map keys times the size of the input in the worst case, best case O(1). The behavior is implementation specific.
+**Map Key Membership (in)** \- Checks if a key exists in a map. Time complexity
+is proportional to size of the map keys times the size of the input in the worst
+case, best case O(1). The behavior is implementation specific.
 
 **Signatures:**
 
-* `A in map(A, B) -> bool`
+*   `A in map(A, B) -> bool`
 
 **Examples:**
 
@@ -1652,12 +1682,12 @@ size(['first', 'second', 'third']) // 3
 3 in {1: "one", 2: "two"} // false
 ```
 
-**size** \- Determine the number of entries in the map. 
+**size** \- Determine the number of entries in the map.
 
 **Signatures:**
 
-* `map.size() -> int`  
-* `size(map) -> int`
+*   `map.size() -> int`
+*   `size(map) -> int`
 
 **Examples:**
 
@@ -1668,12 +1698,12 @@ size({1: true, 2: false}) // 2
 
 #### Bytes Functions
 
-**size** \- Determine the number of bytes in the sequence. 
+**size** \- Determine the number of bytes in the sequence.
 
 **Signatures:**
 
-* `bytes.size() -> int`  
-* `size(bytes) -> int`
+*   `bytes.size() -> int`
+*   `size(bytes) -> int`
 
 **Examples:**
 
@@ -1684,11 +1714,12 @@ size(b'world!') // 6
 
 #### String Functions
 
-**contains** \- Tests whether the string operand contains the substring. Time complexity is proportional to the product of the sizes of the arguments.
+**contains** \- Tests whether the string operand contains the substring. Time
+complexity is proportional to the product of the sizes of the arguments.
 
 **Signatures:**
 
-* `string.contains(string) -> bool`
+*   `string.contains(string) -> bool`
 
 **Examples:**
 
@@ -1697,11 +1728,12 @@ size(b'world!') // 6
 "foobar".contains("baz") // false
 ```
 
-**endsWith** \- Tests whether the string operand ends with the specified suffix. Time complexity is proportional to the product of the sizes of the arguments.
+**endsWith** \- Tests whether the string operand ends with the specified suffix.
+Time complexity is proportional to the product of the sizes of the arguments.
 
 **Signatures:**
 
-* `string.endsWith(string) -> bool`
+*   `string.endsWith(string) -> bool`
 
 **Examples:**
 
@@ -1710,12 +1742,13 @@ size(b'world!') // 6
 "foobar".endsWith("bar") // true
 ```
 
-**matches** \- Tests whether a string matches a given regular expression. Time complexity is proportional to the product of the sizes of the arguments.
+**matches** \- Tests whether a string matches a given regular expression. Time
+complexity is proportional to the product of the sizes of the arguments.
 
 **Signatures:**
 
-* `matches(string, string) -> bool`  
-* `string.matches(string) -> bool`
+*   `matches(string, string) -> bool`
+*   `string.matches(string) -> bool`
 
 **Examples:**
 
@@ -1724,11 +1757,13 @@ matches("foobar", "foo.*") // true
 "foobar".matches("foo.*") // true
 ```
 
-**startsWith** \- Tests whether the string operand starts with the specified prefix. Time complexity is proportional to the product of the sizes of the arguments.
+**startsWith** \- Tests whether the string operand starts with the specified
+prefix. Time complexity is proportional to the product of the sizes of the
+arguments.
 
 **Signatures:**
 
-* `string.startsWith(string) -> bool`
+*   `string.startsWith(string) -> bool`
 
 **Examples:**
 
@@ -1737,12 +1772,13 @@ matches("foobar", "foo.*") // true
 "foobar".startsWith("foo") // true
 ```
 
-**size** \- Determine the length of the string in terms of the number of unicode codepoints 
+**size** \- Determine the length of the string in terms of the number of unicode
+codepoints
 
 **Signatures:**
 
-* `string.size() -> int`  
-* `size(string) -> int`
+*   `string.size() -> int`
+*   `size(string) -> int`
 
 **Examples:**
 
@@ -1757,8 +1793,8 @@ size("world!") // 6
 
 **Signatures:**
 
-* `google.protobuf.Timestamp.getDate() -> int` (in UTC)  
-* `google.protobuf.Timestamp.getDate(string) -> int` (with timezone)
+*   `google.protobuf.Timestamp.getDate() -> int` (in UTC)
+*   `google.protobuf.Timestamp.getDate(string) -> int` (with timezone)
 
 **Examples:**
 
@@ -1767,12 +1803,13 @@ timestamp("2023-12-25T12:00:00Z").getDate() // 25
 timestamp("2023-12-25T12:00:00Z").getDate("America/Los_Angeles") // 24 
 ```
 
-**getDayOfMonth** \- Get the day of the month from a timestamp (zero-based indexing).
+**getDayOfMonth** \- Get the day of the month from a timestamp (zero-based
+indexing).
 
 **Signatures:**
 
-* `google.protobuf.Timestamp.getDayOfMonth() -> int` (in UTC)  
-* `google.protobuf.Timestamp.getDayOfMonth(string) -> int` (with timezone)
+*   `google.protobuf.Timestamp.getDayOfMonth() -> int` (in UTC)
+*   `google.protobuf.Timestamp.getDayOfMonth(string) -> int` (with timezone)
 
 **Examples:**
 
@@ -1781,12 +1818,13 @@ timestamp("2023-12-25T12:00:00Z").getDayOfMonth() // 24
 timestamp("2023-12-25T12:00:00Z").getDayOfMonth("America/Los_Angeles") // 23
 ```
 
-**getDayOfWeek** \- Get the day of the week from a timestamp (zero-based, zero for Sunday).
+**getDayOfWeek** \- Get the day of the week from a timestamp (zero-based, zero
+for Sunday).
 
 **Signatures:**
 
-* `google.protobuf.Timestamp.getDayOfWeek() -> int` (in UTC)  
-* `google.protobuf.Timestamp.getDayOfWeek(string) -> int` (with timezone)
+*   `google.protobuf.Timestamp.getDayOfWeek() -> int` (in UTC)
+*   `google.protobuf.Timestamp.getDayOfWeek(string) -> int` (with timezone)
 
 **Examples:**
 
@@ -1794,12 +1832,13 @@ timestamp("2023-12-25T12:00:00Z").getDayOfMonth("America/Los_Angeles") // 23
 timestamp("2023-12-25T12:00:00Z").getDayOfWeek() // 1 (Monday)
 ```
 
-**getDayOfYear** \- Get the day of the year from a timestamp (zero-based indexing).
+**getDayOfYear** \- Get the day of the year from a timestamp (zero-based
+indexing).
 
 **Signatures:**
 
-* `google.protobuf.Timestamp.getDayOfYear() -> int` (in UTC)  
-* `google.protobuf.Timestamp.getDayOfYear(string) -> int` (with timezone)
+*   `google.protobuf.Timestamp.getDayOfYear() -> int` (in UTC)
+*   `google.protobuf.Timestamp.getDayOfYear(string) -> int` (with timezone)
 
 **Examples:**
 
@@ -1811,8 +1850,8 @@ timestamp("2023-12-25T12:00:00Z").getDayOfYear() // 358
 
 **Signatures:**
 
-* `google.protobuf.Timestamp.getFullYear() -> int` (in UTC)  
-* `google.protobuf.Timestamp.getFullYear(string) -> int` (with timezone)
+*   `google.protobuf.Timestamp.getFullYear() -> int` (in UTC)
+*   `google.protobuf.Timestamp.getFullYear(string) -> int` (with timezone)
 
 **Examples:**
 
@@ -1824,9 +1863,9 @@ timestamp("2023-12-25T12:00:00Z").getFullYear() // 2023
 
 **Signatures:**
 
-* `google.protobuf.Timestamp.getHours() -> int` (in UTC)  
-* `google.protobuf.Timestamp.getHours(string) -> int` (with timezone)  
-* `google.protobuf.Duration.getHours() -> int`
+*   `google.protobuf.Timestamp.getHours() -> int` (in UTC)
+*   `google.protobuf.Timestamp.getHours(string) -> int` (with timezone)
+*   `google.protobuf.Duration.getHours() -> int`
 
 **Examples:**
 
@@ -1839,9 +1878,9 @@ duration("3h").getHours() // 3
 
 **Signatures:**
 
-* `google.protobuf.Timestamp.getMilliseconds() -> int` (in UTC)  
-* `google.protobuf.Timestamp.getMilliseconds(string) -> int` (with timezone)  
-* `google.protobuf.Duration.getMilliseconds() -> int`
+*   `google.protobuf.Timestamp.getMilliseconds() -> int` (in UTC)
+*   `google.protobuf.Timestamp.getMilliseconds(string) -> int` (with timezone)
+*   `google.protobuf.Duration.getMilliseconds() -> int`
 
 **Examples:**
 
@@ -1854,9 +1893,9 @@ duration("1.234s").getMilliseconds() // 234
 
 **Signatures:**
 
-* `google.protobuf.Timestamp.getMinutes() -> int` (in UTC)  
-* `google.protobuf.Timestamp.getMinutes(string) -> int` (with timezone)  
-* `google.protobuf.Duration.getMinutes() -> int`
+*   `google.protobuf.Timestamp.getMinutes() -> int` (in UTC)
+*   `google.protobuf.Timestamp.getMinutes(string) -> int` (with timezone)
+*   `google.protobuf.Duration.getMinutes() -> int`
 
 **Examples:**
 
@@ -1869,8 +1908,8 @@ duration("1h30m").getMinutes() // 30
 
 **Signatures:**
 
-* `google.protobuf.Timestamp.getMonth() -> int` (in UTC)  
-* `google.protobuf.Timestamp.getMonth(string) -> int` (with timezone)
+*   `google.protobuf.Timestamp.getMonth() -> int` (in UTC)
+*   `google.protobuf.Timestamp.getMonth(string) -> int` (with timezone)
 
 **Examples:**
 
@@ -1882,9 +1921,9 @@ timestamp("2023-12-25T12:00:00Z").getMonth() // 11 (December)
 
 **Signatures:**
 
-* `google.protobuf.Timestamp.getSeconds() -> int` (in UTC)  
-* `google.protobuf.Timestamp.getSeconds(string) -> int` (with timezone)  
-* `google.protobuf.Duration.getSeconds() -> int`
+*   `google.protobuf.Timestamp.getSeconds() -> int` (in UTC)
+*   `google.protobuf.Timestamp.getSeconds(string) -> int` (with timezone)
+*   `google.protobuf.Duration.getSeconds() -> int`
 
 **Examples:**
 
@@ -1899,8 +1938,8 @@ duration("1m30s").getSeconds() // 30
 
 **Signatures:**
 
-* `bool(bool) -> bool` (identity)  
-* `bool(string) -> bool` (type conversion)
+*   `bool(bool) -> bool` (identity)
+*   `bool(string) -> bool` (type conversion)
 
 **Examples:**
 
@@ -1914,8 +1953,8 @@ bool("FALSE") // false
 
 **Signatures:**
 
-* `bytes(bytes) -> bytes` (identity)  
-* `bytes(string) -> bytes` (type conversion)
+*   `bytes(bytes) -> bytes` (identity)
+*   `bytes(string) -> bytes` (type conversion)
 
 **Examples:**
 
@@ -1927,10 +1966,10 @@ bytes("hello") // b'hello'
 
 **Signatures:**
 
-* `double(double) -> double` (identity)  
-* `double(int) -> double` (type conversion)  
-* `double(uint) -> double` (type conversion)  
-* `double(string) -> double` (type conversion)
+*   `double(double) -> double` (identity)
+*   `double(int) -> double` (type conversion)
+*   `double(uint) -> double` (type conversion)
+*   `double(string) -> double` (type conversion)
 
 **Examples:**
 
@@ -1944,8 +1983,8 @@ double("3.14") // 3.14 (if successful, otherwise an error)
 
 **Signatures:**
 
-* `duration(google.protobuf.Duration) -> google.protobuf.Duration`  
-* `duration(string) -> google.protobuf.Duration`
+*   `duration(google.protobuf.Duration) -> google.protobuf.Duration`
+*   `duration(string) -> google.protobuf.Duration`
 
 **Examples:**
 
@@ -1955,11 +1994,12 @@ duration("1h30m") // google.protobuf.Duration representing 1 hour and 30 minutes
 
 **dyn** `type(dyn)` \- Type denotation
 
-The `dyn` types does not exist at runtime, but provides a hint to the type-checker to disable strong type agreement checks.
+The `dyn` types does not exist at runtime, but provides a hint to the
+type-checker to disable strong type agreement checks.
 
 **Signatures:**
 
-* `dyn(A) -> dyn` (type conversion) (where A is any type)
+*   `dyn(A) -> dyn` (type conversion) (where A is any type)
 
 **Examples:**
 
@@ -1972,12 +2012,14 @@ dyn("hello") // string "hello" marked `dyn` during type-checking
 
 **Signatures:**
 
-* `int(int) -> int` (identity)  
-* `int(uint) -> int` (type conversion)  
-* `int(double) -> int` (type conversion, rounds toward zero, errors if out of range)  
-* `int(string) -> int` (type conversion)  
-* `int(enum E) -> int` (type conversion)  
-* `int(google.protobuf.Timestamp) -> int` (type conversion, converts to seconds since Unix epoch)
+*   `int(int) -> int` (identity)
+*   `int(uint) -> int` (type conversion)
+*   `int(double) -> int` (type conversion, rounds toward zero, errors if out of
+    range)
+*   `int(string) -> int` (type conversion)
+*   `int(enum E) -> int` (type conversion)
+*   `int(google.protobuf.Timestamp) -> int` (type conversion, converts to
+    seconds since Unix epoch)
 
 **Examples:**
 
@@ -1997,13 +2039,14 @@ int("123") // 123 (if successful, otherwise an error)
 
 **Signatures:**
 
-* `string(string) -> string` (identity)  
-* `string(int) -> string` (type conversion)  
-* `string(uint) -> string` (type conversion)  
-* `string(double) -> string` (type conversion)  
-* `string(bytes) -> string` (type conversion)  
-* `string(timestamp) -> string` (type conversion, using RFC3339 format)  
-* `string(duration) -> string` (type conversion, using duration string parsing format)
+*   `string(string) -> string` (identity)
+*   `string(int) -> string` (type conversion)
+*   `string(uint) -> string` (type conversion)
+*   `string(double) -> string` (type conversion)
+*   `string(bytes) -> string` (type conversion)
+*   `string(timestamp) -> string` (type conversion, using RFC3339 format)
+*   `string(duration) -> string` (type conversion, using duration string parsing
+    format)
 
 **Examples:**
 
@@ -2019,21 +2062,23 @@ string(duration('1m')) // '60s'
 
 **Signatures:**
 
-* `timestamp(google.protobuf.Timestamp) -> google.protobuf.Timestamp` (identity)  
-* `timestamp(string) -> google.protobuf.Timestamp` (type conversion, according to RFC3339)
+*   `timestamp(google.protobuf.Timestamp) -> google.protobuf.Timestamp`
+    (identity)
+*   `timestamp(string) -> google.protobuf.Timestamp` (type conversion, according
+    to RFC3339)
 
 **Examples:**
 
 ```
 // google.protobuf.Timestamp representing August 26, 2023 at 12:39 PM PDT
-timestamp("2023-08-26T12:39:00-07:00") 
+timestamp("2023-08-26T12:39:00-07:00")
 ```
 
 **type** `type` \- Type denotation
 
 **Signatures:**
 
-* `type(A) -> type` (returns the type of the value, where A is any type)
+*   `type(A) -> type` (returns the type of the value, where A is any type)
 
 **Examples:**
 
@@ -2046,10 +2091,11 @@ type("hello") // string
 
 **Signatures:**
 
-* `uint(uint) -> uint` (identity)  
-* `uint(int) -> uint` (type conversion)  
-* `uint(double) -> uint` (type conversion, rounds toward zero, errors if out of range)  
-* `uint(string) -> uint` (type conversion)
+*   `uint(uint) -> uint` (identity)
+*   `uint(int) -> uint` (type conversion)
+*   `uint(double) -> uint` (type conversion, rounds toward zero, errors if out
+    of range)
+*   `uint(string) -> uint` (type conversion)
 
 **Examples:**
 
@@ -2063,9 +2109,9 @@ uint("123") // 123u (if successful, otherwise an error)
 
 ### Homogeneous Equality
 
-Prior to cel-spec v0.7.0, CEL runtimes only supported homogeneous equality
-to be consistent with the homogeneous equality defined by the type-checker.
-The original runtime definition for equality is as follows:
+Prior to cel-spec v0.7.0, CEL runtimes only supported homogeneous equality to be
+consistent with the homogeneous equality defined by the type-checker. The
+original runtime definition for equality is as follows:
 
 ```
 Equality and inequality are homogeneous; comparing values of different runtime
