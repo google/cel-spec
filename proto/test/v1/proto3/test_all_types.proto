@@ -11,7 +11,7 @@ import "google/protobuf/timestamp.proto";
 import "google/protobuf/wrappers.proto";
 
 // Note, run regen_go_proto.sh after making modifications to this file.
-option go_package = "github.com/google/cel-spec/test/v1/proto3/test_all_types";
+option go_package = "cel.dev/expr/test/v1/proto3/test_all_types";
 option cc_enable_arenas = true;
 option java_outer_classname = "TestAllTypesProto";
 option java_package = "com.google.api.expr.test.v1.proto3";

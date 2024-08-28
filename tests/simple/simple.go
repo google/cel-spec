@@ -32,7 +32,6 @@ Example test data:
 	    expr: "1 + 1 == 2"
 	  }
 	}
-
 */
 package simple
 
@@ -41,11 +40,11 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/google/cel-spec/tools/celrpc"
+	"cel.dev/expr/tools/celrpc"
 
 	"google.golang.org/protobuf/encoding/prototext"
 
-	spb "github.com/google/cel-spec/proto/test/v1/testpb"
+	spb "cel.dev/expr/proto/test/v1/testpb"
 
 	confpb "google.golang.org/genproto/googleapis/api/expr/conformance/v1alpha1"
 	exprpb "google.golang.org/genproto/googleapis/api/expr/v1alpha1"
@@ -99,8 +98,8 @@ func Match(t *spb.SimpleTest, actual *exprpb.ExprValue) error {
 
 // MatchValue returns whether the actual value is equal to the
 // expected value, modulo the following normalization:
-//	1) All floating-point NaN values are equal.
-//	2) Map comparisons ignore order.
+//  1. All floating-point NaN values are equal.
+//  2. Map comparisons ignore order.
 func MatchValue(tag string, expected *exprpb.Value, actual *exprpb.Value) error {
 	// TODO: make floating point NaN values compare equal.
 	switch expected.GetKind().(type) {

@@ -13,7 +13,7 @@ go_library(
     srcs = [
         "simple.go",
     ],
-    importpath = "github.com/google/cel-spec/tests/simple",
+    importpath = "cel.dev/expr/tests/simple",
     deps = [
         "//proto/test/v1:testpb_go_proto",
         "//tools/celrpc:go_default_library",
