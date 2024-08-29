@@ -1681,7 +1681,7 @@ size(['first', 'second', 'third']) // 3
 
 **Map Indexing (\[\])** \- map indexing. Expected time complexity is O(1).
 Some implementations may not guarantee O(1) lookup times, please check with
-the CEL implementation to verify. In the worst case for string keys, the 
+the CEL implementation to verify. In the worst case for string keys, the
 lookup cost could be proportional to the size of the map keys times the
 size of the index string.
 
@@ -1697,10 +1697,10 @@ size of the index string.
 ```
 
 **Map Key Membership (in)** \- Checks if a key exists in a map. Expected time
-complexity is O(1). 
+complexity is O(1).
 
 Some implementations may not guarantee O(1) lookup times, please check with
-the CEL implementation to verify. In the worst case for string keys, the 
+the CEL implementation to verify. In the worst case for string keys, the
 lookup cost could be proportional to the size of the map keys times the
 size of the index string.
 
@@ -1826,6 +1826,10 @@ size("world!") // 6
 
 #### Date/Time Functions
 
+All timestamp functions which take accept a timezone argument can use any of
+the supported [Joda Timezones](http://joda-time.sourceforge.net/timezones.html)
+either using the numeric format or the geographic region.
+
 **getDate** \- Get the day of the month from a timestamp (one-based indexing).
 
 **Signatures:**
@@ -1837,7 +1841,7 @@ size("world!") // 6
 
 ```
 timestamp("2023-12-25T12:00:00Z").getDate() // 25
-timestamp("2023-12-25T12:00:00Z").getDate("America/Los_Angeles") // 24 
+timestamp("2023-12-25T12:00:00Z").getDate("America/Los_Angeles") // 24
 ```
 
 **getDayOfMonth** \- Get the day of the month from a timestamp (zero-based
@@ -1896,13 +1900,13 @@ timestamp("2023-12-25T12:00:00Z").getDayOfYear() // 358
 timestamp("2023-12-25T12:00:00Z").getFullYear() // 2023
 ```
 
-**getHours** \- Get the hour from a timestamp or duration
+**getHours** \- Get the hour from a timestamp or convert the duration to hours
 
 **Signatures:**
 
 *   `google.protobuf.Timestamp.getHours() -> int` (in UTC)
 *   `google.protobuf.Timestamp.getHours(string) -> int` (with timezone)
-*   `google.protobuf.Duration.getHours() -> int`
+*   `google.protobuf.Duration.getHours() -> int` convert the duration to hours
 
 **Examples:**
 
@@ -1911,13 +1915,18 @@ timestamp("2023-12-25T12:00:00Z").getHours() // 12
 duration("3h").getHours() // 3
 ```
 
-**getMilliseconds** \- Get the milliseconds from a timestamp or duration
+**getMilliseconds** \- Get the milliseconds from a timestamp or the
+milliseconds portion of the duration
 
 **Signatures:**
 
-*   `google.protobuf.Timestamp.getMilliseconds() -> int` (in UTC)
-*   `google.protobuf.Timestamp.getMilliseconds(string) -> int` (with timezone)
-*   `google.protobuf.Duration.getMilliseconds() -> int`
+*   `google.protobuf.Timestamp.getMilliseconds() -> int` obtain the
+    milliseconds component of the timestamp in UTC.
+*   `google.protobuf.Timestamp.getMilliseconds(string) -> int` obtain the
+    milliseconds component with a timezone.
+*   `google.protobuf.Duration.getMilliseconds() -> int` obtain the milliseconds
+    portion of the duration value. Other time unit functions convert the
+    duration to that format; however, this method does not.
 
 **Examples:**
 
@@ -1926,19 +1935,23 @@ timestamp("2023-12-25T12:00:00.500Z").getMilliseconds() // 500
 duration("1.234s").getMilliseconds() // 234
 ```
 
-**getMinutes** \- Get the minutes from a timestamp or duration
+**getMinutes** \- Get the minutes from a timestamp or convert a duration to
+minutes
 
 **Signatures:**
 
-*   `google.protobuf.Timestamp.getMinutes() -> int` (in UTC)
-*   `google.protobuf.Timestamp.getMinutes(string) -> int` (with timezone)
-*   `google.protobuf.Duration.getMinutes() -> int`
+*   `google.protobuf.Timestamp.getMinutes() -> int` get the minutes component
+    of a timestamp in UTC.
+*   `google.protobuf.Timestamp.getMinutes(string) -> int` get the minutes
+    component of a timestamp within a given timezone.
+*   `google.protobuf.Duration.getMinutes() -> int` convert the duration to
+    minutes.
 
 **Examples:**
 
 ```
 timestamp("2023-12-25T12:30:00Z").getMinutes() // 30
-duration("1h30m").getMinutes() // 30
+duration("1h30m").getMinutes() // 90
 ```
 
 **getMonth** \- Get the month from a timestamp (zero-based, 0 for January).
@@ -1954,19 +1967,23 @@ duration("1h30m").getMinutes() // 30
 timestamp("2023-12-25T12:00:00Z").getMonth() // 11 (December)
 ```
 
-**getSeconds** \- Get the seconds from a timestamp or duration.
+**getSeconds** \- Get the seconds from a timestamp or convert the duration to
+seconds
 
 **Signatures:**
 
-*   `google.protobuf.Timestamp.getSeconds() -> int` (in UTC)
-*   `google.protobuf.Timestamp.getSeconds(string) -> int` (with timezone)
-*   `google.protobuf.Duration.getSeconds() -> int`
+*   `google.protobuf.Timestamp.getSeconds() -> int` get the seconds component
+    of the timestamp in UTC.
+*   `google.protobuf.Timestamp.getSeconds(string) -> int` get the seconds
+    component of the timestamp with a provided timezone.
+*   `google.protobuf.Duration.getSeconds() -> int` convert the duration to
+    seconds.
 
 **Examples:**
 
 ```
 timestamp("2023-12-25T12:30:30Z").getSeconds() // 30
-duration("1m30s").getSeconds() // 30
+duration("1m30s").getSeconds() // 90
 ```
 
 #### Types and Conversions
@@ -2077,14 +2094,14 @@ int("123") // 123 (if successful, otherwise an error)
 **Signatures:**
 
 *   `string(string) -> string` (identity)
-*   `string(bool) -> string` converts `true` to `"true"` and `false` to 
+*   `string(bool) -> string` converts `true` to `"true"` and `false` to
     `"false"`
 *   `string(int) -> string` converts integer values to base 10 representation
 *   `string(uint) -> string` converts unsigned integer values to base 10
     representation
 *   `string(double) -> string` converts a double to a string
 *   `string(bytes) -> string` converts a byte sequence to a utf-8 string
-*   `string(timestamp) -> string` converts a timestamp value to 
+*   `string(timestamp) -> string` converts a timestamp value to
     [RFC3339](https://datatracker.ietf.org/doc/html/rfc3339) format
 *   `string(duration) -> string` converts a duration value to seconds and
      fractional subseconds with an 's' suffix
