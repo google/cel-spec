@@ -125,17 +125,11 @@ java_proto_library(
 load("@io_bazel_rules_go//proto:def.bzl", "go_proto_library")
 
 go_proto_library(
-    name = "google_rpc_status_go_proto",
-    importpath = "google.golang.org/genproto/googleapis/rpc/status",
-    protos = ["@com_google_googleapis//google/rpc:status_proto"],
-)
-
-go_proto_library(
     name = "expr_go_proto",
     importpath = "cel.dev/expr",
     protos = [":expr_proto"],
     deps = [
-        ":google_rpc_status_go_proto",
+        "@org_golang_google_genproto_googleapis_rpc//status:go_default_library",
     ],
 )
 
@@ -164,7 +158,7 @@ go_proto_library(
     importpath = "cel.dev/expr",
     protos = [":eval_proto"],
     deps = [
-        ":google_rpc_status_go_proto",
+        "@org_golang_google_genproto_googleapis_rpc//status:go_default_library",
     ],
 )
 

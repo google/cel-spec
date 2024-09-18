@@ -85,7 +85,7 @@ go_proto_library(
     protos = [":conformance_proto"],
     deps = [
         "//proto/cel/expr:expr_go_proto",
-        "//proto/cel/expr:google_rpc_status_go_proto",
+        "@org_golang_google_genproto_googleapis_rpc//status:go_default_library",
     ],
 )
 
@@ -95,7 +95,7 @@ go_proto_library(
     protos = [":conformance_service_proto"],
     deps = [
         "//proto/cel/expr:expr_go_proto",
-        "//proto/cel/expr:google_rpc_status_go_proto",
+        "@org_golang_google_genproto_googleapis_rpc//status:go_default_library",
     ],
 )
 
