@@ -1,6 +1,8 @@
 module cel.dev/expr
 
-go 1.18
+go 1.21.1
+
+toolchain go1.23.0
 
 require (
 	github.com/bazelbuild/rules_go v0.49.0
