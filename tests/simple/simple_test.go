@@ -65,8 +65,6 @@ func init() {
 	flag.BoolVar(&flagPipe, "pipe", false, "Use pipes instead of gRPC")
 	flag.BoolVar(&flagPipeBase64, "pipe_base64", true, "Use base64 encoded wire format proto in pipes (if disabled, use JSON).")
 	flag.BoolVar(&flagPipePings, "pipe_pings", false, "Enable pinging pipe client to subprocess status.")
-
-	flag.Parse()
 }
 
 // Server binaries specified by flags
