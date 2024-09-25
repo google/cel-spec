@@ -2191,7 +2191,7 @@ section {
     expr: "x"
     type_env {
       name: "x"
-      ident { type { message_type: "google.protubuf.Any" } }
+      ident { type { message_type: "google.protobuf.Any" } }
     }
     bindings {
       key: "x"
