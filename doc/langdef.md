@@ -1144,14 +1144,14 @@ message Msg {
 // CEL - Produces false according to protobuf equality since the types of
 //       Int32Value and FloatValue are not equal.
 Msg{values: [google.protobuf.Int32Value{value: 1}]}
-  == Msg{values: [google.protbuf.FloatValue{value: 1.0}]}
+  == Msg{values: [google.protobuf.FloatValue{value: 1.0}]}
 
 // CEL - Produces true according to CEL equality with well-known
 //       protobuf type unwrapping of the list elements within `values`
 //       where the list values are unwrapped to CEL numbers and compared
 //       using `numericEquals`.
 Msg{values: [google.protobuf.Int32Value{value: 1}]}.values
-  == Msg{values: [google.protbuf.FloatValue{value: 1.0}]}.values
+  == Msg{values: [google.protobuf.FloatValue{value: 1.0}]}.values
 ```
 
 ### Ordering
