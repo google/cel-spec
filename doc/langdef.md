@@ -334,9 +334,9 @@ CEL Literal   | Meaning
 `b"\303\277"` | Also sequence of bytes 195 and 191
 `"\303\277"`  | String of "&Atilde;&iquest;" (code points 195, 191)
 `"\377"`      | String of "&yuml;" (code point 255)
-`b"\377"`     | Sequence of byte 255 (_not_ UTF-8 of &yuml;)
+`b"\377"`     | Sequence of byte 255 (*not* UTF-8 of &yuml;)
 `"\xFF"`      | String of "&yuml;" (code point 255)
-`b"\xFF"`     | Sequence of byte 255 (_not_ UTF-8 of &yuml;)
+`b"\xFF"`     | Sequence of byte 255 (*not* UTF-8 of &yuml;)
 
 While strings must be sequences of valid Unicode code points, no Unicode
 normalization is attempted on strings, as there are several normal forms, they
