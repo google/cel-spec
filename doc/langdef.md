@@ -1840,8 +1840,8 @@ either using the numeric format or the geographic region.
 **Examples:**
 
 ```
-timestamp("2023-12-25T12:00:00Z").getDate() // 25
-timestamp("2023-12-25T12:00:00Z").getDate("America/Los_Angeles") // 24
+timestamp("2023-12-25T00:00:00Z").getDate() // 25
+timestamp("2023-12-25T00:00:00Z").getDate("America/Los_Angeles") // 24
 ```
 
 **getDayOfMonth** \- Get the day of the month from a timestamp (zero-based
@@ -1855,8 +1855,8 @@ indexing).
 **Examples:**
 
 ```
-timestamp("2023-12-25T12:00:00Z").getDayOfMonth() // 24
-timestamp("2023-12-25T12:00:00Z").getDayOfMonth("America/Los_Angeles") // 23
+timestamp("2023-12-25T00:00:00Z").getDayOfMonth() // 24
+timestamp("2023-12-25T00:00:00Z").getDayOfMonth("America/Los_Angeles") // 23
 ```
 
 **getDayOfWeek** \- Get the day of the week from a timestamp (zero-based, zero
