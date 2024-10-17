@@ -16,7 +16,6 @@ go_library(
     importpath = "cel.dev/expr/tests/envcheck",
     deps = [
         "//tools/celrpc:go_default_library",
-        "@com_github_golang_protobuf//proto:go_default_library",
         "@org_golang_google_genproto_googleapis_api//expr/v1alpha1:go_default_library",
         "@org_golang_google_genproto_googleapis_api//expr/conformance/v1alpha1:go_default_library",
         "@org_golang_google_genproto_googleapis_rpc//status:go_default_library",
