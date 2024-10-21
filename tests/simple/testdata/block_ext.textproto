@@ -267,6 +267,10 @@ section: {
     value: {
       int64_value: 6
     }
+    type_env: {
+      name: "msg"
+      ident: { type: { message_type: "google.api.expr.test.v1.proto3.TestAllTypes" }}
+    }
     bindings: {
       key: "msg"
       value: {
@@ -308,6 +312,10 @@ section: {
     expr: "cel.block([msg.oneof_type, cel.index(0).payload, cel.index(1).single_int64, cel.index(1).single_int32, cel.index(2) + cel.index(3), cel.index(4) + cel.index(2), msg.single_int64, cel.index(5) + cel.index(6), cel.index(1).oneof_type, cel.index(8).payload, cel.index(9).single_int64, cel.index(7) + cel.index(10)], cel.index(11))"
     value: {
       int64_value: 31
+    }
+    type_env: {
+      name: "msg"
+      ident: { type: { message_type: "google.api.expr.test.v1.proto3.TestAllTypes" }}
     }
     bindings: {
       key: "msg"
@@ -351,6 +359,10 @@ section: {
     value: {
       bool_value: true
     }
+    type_env: {
+      name: "msg"
+      ident: { type: { message_type: "google.api.expr.test.v1.proto3.TestAllTypes" }}
+    }
     bindings: {
       key: "msg"
       value: {
@@ -392,6 +404,10 @@ section: {
     expr: "cel.block([msg.oneof_type, cel.index(0).payload, cel.index(1).map_int32_int64, cel.index(2)[1], cel.index(3) + cel.index(3), cel.index(4) + cel.index(3)], cel.index(5))"
     value: {
       int64_value: 15
+    }
+    type_env: {
+      name: "msg"
+      ident: { type: { message_type: "google.api.expr.test.v1.proto3.TestAllTypes" }}
     }
     bindings: {
       key: "msg"
@@ -435,6 +451,10 @@ section: {
     value: {
       int64_value: 8
     }
+    type_env: {
+      name: "msg"
+      ident: { type: { message_type: "google.api.expr.test.v1.proto3.TestAllTypes" }}
+    }
     bindings: {
       key: "msg"
       value: {
@@ -477,6 +497,10 @@ section: {
     value: {
       int64_value: 3
     }
+    type_env: {
+      name: "msg"
+      ident: { type: { message_type: "google.api.expr.test.v1.proto3.TestAllTypes" }}
+    }
     bindings: {
       key: "msg"
       value: {
@@ -518,6 +542,10 @@ section: {
     expr: "cel.block([msg.single_int64, msg.single_int32, cel.index(0) > 0, cel.index(1) > 0, cel.index(0) + cel.index(1), cel.index(3) ? cel.index(4) : 0, cel.index(2) ? cel.index(5) : 0], cel.index(6))"
     value: {
       int64_value: 8
+    }
+    type_env: {
+      name: "msg"
+      ident: { type: { message_type: "google.api.expr.test.v1.proto3.TestAllTypes" }}
     }
     bindings: {
       key: "msg"
@@ -671,6 +699,10 @@ section: {
     value: {
       bool_value: true
     }
+    type_env: {
+      name: "x"
+      ident: { type: { primitive: INT64 }}
+    }
     bindings: {
       key: "x"
       value: {
@@ -759,6 +791,10 @@ section: {
         }
       }
     }
+    type_env: {
+      name: "x"
+      ident: { type: { primitive: INT64 }}
+    }
     bindings: {
       key: "x"
       value: {
@@ -802,6 +838,10 @@ section: {
     value: {
       int64_value: 10
     }
+    type_env: {
+      name: "msg"
+      ident: { type: { message_type: "google.api.expr.test.v1.proto3.TestAllTypes" }}
+    }
     bindings: {
       key: "msg"
       value: {
@@ -843,6 +883,10 @@ section: {
     expr: "cel.block([msg.oneof_type, cel.index(0).payload, cel.index(1).single_int64, has(cel.index(0).payload), cel.index(2) * 0, cel.index(3) ? cel.index(2) : cel.index(4)], cel.index(5))"
     value: {
       int64_value: 10
+    }
+    type_env: {
+      name: "msg"
+      ident: { type: { message_type: "google.api.expr.test.v1.proto3.TestAllTypes" }}
     }
     bindings: {
       key: "msg"
@@ -886,6 +930,10 @@ section: {
     value: {
       int64_value: 10
     }
+    type_env: {
+      name: "msg"
+      ident: { type: { message_type: "google.api.expr.test.v1.proto3.TestAllTypes" }}
+    }
     bindings: {
       key: "msg"
       value: {
@@ -928,6 +976,10 @@ section: {
     value: {
       bool_value: true
     }
+    type_env: {
+      name: "msg"
+      ident: { type: { message_type: "google.api.expr.test.v1.proto3.TestAllTypes" }}
+    }
     bindings: {
       key: "msg"
       value: {
@@ -969,6 +1021,10 @@ section: {
     expr: "cel.block([optional.none(), [?cel.index(0), ?optional.of(opt_x)], [5], [10, ?cel.index(0), cel.index(1), cel.index(1)], [10, cel.index(2), cel.index(2)]], cel.index(3) == cel.index(4))"
     value: {
       bool_value: true
+    }
+    type_env: {
+      name: "opt_x"
+      ident: { type: { primitive: INT64 }}
     }
     bindings: {
       key: "opt_x",
