@@ -3,11 +3,6 @@ module(
 )
 
 bazel_dep(
-    name = "abseil-cpp",
-    version = "20240116.0",
-    repo_name = "com_google_absl",
-)
-bazel_dep(
     name = "bazel_skylib",
     version = "1.7.1",
 )
@@ -38,10 +33,6 @@ bazel_dep(
 bazel_dep(
     name = "rules_java",
     version = "7.6.5",
-)
-bazel_dep(
-    name = "rules_pkg",
-    version = "0.7.0",
 )
 bazel_dep(
     name = "rules_proto",
