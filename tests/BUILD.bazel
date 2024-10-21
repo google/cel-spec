@@ -4,8 +4,4 @@ package(
 
 licenses(["notice"])  # Apache 2.0
 
-exports_files([
-    "LICENSE",
-    "conftest.sh",
-    "conftest-nofail.sh",
-])
+exports_files(["LICENSE"])
