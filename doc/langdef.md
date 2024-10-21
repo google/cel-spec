@@ -153,7 +153,7 @@ STRING_LIT     ::= [rR]? ( "    ~( " | NEWLINE )*  "
                          )
 BYTES_LIT      ::= [bB] STRING_LIT
 ESCAPE         ::= \ [abfnrtv\?"'`]
-                 | \ x HEXDIGIT HEXDIGIT
+                 | \ [xX] HEXDIGIT HEXDIGIT
                  | \ u HEXDIGIT HEXDIGIT HEXDIGIT HEXDIGIT
                  | \ U HEXDIGIT HEXDIGIT HEXDIGIT HEXDIGIT HEXDIGIT HEXDIGIT HEXDIGIT HEXDIGIT
                  | \ [0-3] [0-7] [0-7]
