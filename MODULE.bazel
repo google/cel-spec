@@ -17,7 +17,7 @@ bazel_dep(
     repo_name = "bazel_gazelle",
 )
 bazel_dep(
-    name = "googleapis", 
+    name = "googleapis",
     version = "0.0.0-20240819-fe8ba054a",
     repo_name = "com_google_googleapis",
 )
@@ -67,6 +67,5 @@ use_repo(
     go_deps,
     "org_golang_google_genproto_googleapis_api",
     "org_golang_google_genproto_googleapis_rpc",
-    "org_golang_google_grpc",
     "org_golang_google_protobuf",
 )
