@@ -1,3 +1,6 @@
+# proto-file: ../../../proto/test/v1/simple.proto
+# proto-message: google.api.expr.test.v1.SimpleTestFile
+
 name: "proto2"
 description: "Protocol buffer version 2 tests.  See notes for the available set of protos for tests."
 

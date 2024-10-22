@@ -1,3 +1,6 @@
+# proto-file: ../../../proto/test/v1/simple.proto
+# proto-message: google.api.expr.test.v1.SimpleTestFile
+
 name: "lists"
 description: "Tests for list operations."
 section {
@@ -90,8 +93,63 @@ section {
     value: { string_value: "Ringo" }
   }
   test {
-    name: "range"
+    name: "index_out_of_bounds"
     expr: "[1, 2, 3][3]"
+    eval_error {
+      errors { message: "invalid_argument" }
+    }
+  }
+  test {
+    name: "index_out_of_bounds_or_false"
+    expr: "dyn([1, 2, 3][3]) || false"
+    eval_error {
+      errors { message: "invalid_argument" }
+    }
+  }
+  test {
+    name: "index_out_of_bounds_or_true"
+    expr: "dyn([1, 2, 3][3]) || true"
+    value: { bool_value: true }
+  }
+  test {
+    name: "index_out_of_bounds_and_false"
+    expr: "dyn([1, 2, 3][3]) && false"
+    value: { bool_value: false }
+  }
+  test {
+    name: "index_out_of_bounds_and_true"
+    expr: "dyn([1, 2, 3][3]) && true"
+    eval_error {
+      errors { message: "invalid_argument" }
+    }
+  }
+  test {
+    name: "bad_index_type"
+    expr: "[1, 2, 3][dyn('')]"
+    eval_error {
+      errors { message: "invalid_argument" }
+    }
+  }
+  test {
+    name: "bad_index_type_or_false"
+    expr: "dyn([1, 2, 3][dyn('')]) || false"
+    eval_error {
+      errors { message: "invalid_argument" }
+    }
+  }
+  test {
+    name: "bad_index_type_or_true"
+    expr: "dyn([1, 2, 3][dyn('')]) || true"
+    value: { bool_value: true }
+  }
+  test {
+    name: "bad_index_type_and_false"
+    expr: "dyn([1, 2, 3][dyn('')]) && false"
+    value: { bool_value: false }
+  }
+  test {
+    name: "bad_index_type_and_true"
+    expr: "dyn([1, 2, 3][dyn('')]) && true"
     eval_error {
       errors { message: "invalid_argument" }
     }

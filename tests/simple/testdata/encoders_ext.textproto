@@ -1,3 +1,6 @@
+# proto-file: ../../../proto/test/v1/simple.proto
+# proto-message: google.api.expr.test.v1.SimpleTestFile
+
 name: "encoders_ext"
 description: "Tests for the encoders extension library."
 section: {

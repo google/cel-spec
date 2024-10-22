@@ -1,2 +1,5 @@
+# proto-file: ../../../proto/test/v1/simple.proto
+# proto-message: google.api.expr.test.v1.SimpleTestFile
+
 name: "unknowns"
 description: "Tests for evaluation with unknown inputs."

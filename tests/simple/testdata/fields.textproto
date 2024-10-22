@@ -1,3 +1,6 @@
+# proto-file: ../../../proto/test/v1/simple.proto
+# proto-message: google.api.expr.test.v1.SimpleTestFile
+
 name: "fields"
 description: "Tests for field access in maps."
 section {
@@ -87,8 +90,183 @@ section {
     }
   }
   test {
+    name: "map_no_such_key_or_false"
+    expr: "dyn({0:1,2:2,5:3}[1]) || false"
+    eval_error: {
+      errors: { message: "no such key" }
+    }
+  }
+  test {
+    name: "map_no_such_key_or_true"
+    expr: "dyn({0:1,2:2,5:3}[1]) || true"
+    value: { bool_value: true }
+  }
+  test {
+    name: "map_no_such_key_and_false"
+    expr: "dyn({0:1,2:2,5:3}[1]) && false"
+    value: { bool_value: false }
+  }
+  test {
+    name: "map_no_such_key_and_true"
+    expr: "dyn({0:1,2:2,5:3}[1]) && true"
+    eval_error: {
+      errors: { message: "no such key" }
+    }
+  }
+  test {
+    name: "map_bad_key_type"
+    expr: "{0:1,2:2,5:3}[dyn(b'')]"
+    eval_error: {
+      errors: { message: "no such key" }
+    }
+  }
+  test {
+    name: "map_bad_key_type_or_false"
+    expr: "dyn({0:1,2:2,5:3}[dyn(b'')]) || false"
+    eval_error: {
+      errors: { message: "no such key" }
+    }
+  }
+  test {
+    name: "map_bad_key_type_or_true"
+    expr: "dyn({0:1,2:2,5:3}[dyn(b'')]) || true"
+    value: { bool_value: true }
+  }
+  test {
+    name: "map_bad_key_type_and_false"
+    expr: "dyn({0:1,2:2,5:3}[dyn(b'')]) && false"
+    value: { bool_value: false }
+  }
+  test {
+    name: "map_bad_key_type_and_true"
+    expr: "dyn({0:1,2:2,5:3}[dyn(b'')]) && true"
+    eval_error: {
+      errors: { message: "no such key" }
+    }
+  }
+  test {
     name: "map_field_select_no_such_key"
     expr: "x.name"
+    type_env: {
+      name: "x",
+      ident: {
+        type: {
+          map_type: {
+            key_type: {primitive: STRING}
+            value_type: {primitive: STRING}
+          }
+        }
+      }
+    }
+    bindings: {
+      key: "x",
+      value: {
+        value: {
+          map_value: {
+            entries {
+              key: { string_value: "holiday" }
+              value: { string_value: "field" }
+            }
+          }
+        }
+      }
+    }
+    eval_error: {
+      errors: { message:"no such key: 'name'" }
+    }
+  }
+  test {
+    name: "map_field_select_no_such_key_or_false"
+    expr: "dyn(x.name) || false"
+    type_env: {
+      name: "x",
+      ident: {
+        type: {
+          map_type: {
+            key_type: {primitive: STRING}
+            value_type: {primitive: STRING}
+          }
+        }
+      }
+    }
+    bindings: {
+      key: "x",
+      value: {
+        value: {
+          map_value: {
+            entries {
+              key: { string_value: "holiday" }
+              value: { string_value: "field" }
+            }
+          }
+        }
+      }
+    }
+    eval_error: {
+      errors: { message:"no such key: 'name'" }
+    }
+  }
+  test {
+    name: "map_field_select_no_such_key_or_true"
+    expr: "dyn(x.name) || true"
+    type_env: {
+      name: "x",
+      ident: {
+        type: {
+          map_type: {
+            key_type: {primitive: STRING}
+            value_type: {primitive: STRING}
+          }
+        }
+      }
+    }
+    bindings: {
+      key: "x",
+      value: {
+        value: {
+          map_value: {
+            entries {
+              key: { string_value: "holiday" }
+              value: { string_value: "field" }
+            }
+          }
+        }
+      }
+    }
+    value: { bool_value: true }
+  }
+  test {
+    name: "map_field_select_no_such_key_and_false"
+    expr: "dyn(x.name) && false"
+    type_env: {
+      name: "x",
+      ident: {
+        type: {
+          map_type: {
+            key_type: {primitive: STRING}
+            value_type: {primitive: STRING}
+          }
+        }
+      }
+    }
+    bindings: {
+      key: "x",
+      value: {
+        value: {
+          map_value: {
+            entries {
+              key: { string_value: "holiday" }
+              value: { string_value: "field" }
+            }
+          }
+        }
+      }
+    }
+    value: { bool_value: false }
+  }
+  test {
+    name: "map_field_select_no_such_key_and_true"
+    expr: "dyn(x.name) && true"
     type_env: {
       name: "x",
       ident: {

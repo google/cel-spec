@@ -1,3 +1,6 @@
+# proto-file: ../../../proto/test/v1/simple.proto
+# proto-message: google.api.expr.test.v1.SimpleTestFile
+
 # This conformance test relies on the test-only macros cel.block, cel.index,
 # cel.iterVar, and cel.accuVar. These test-only macros allow excercising
 # cel.block without the optimizers being present.
