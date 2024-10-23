@@ -1,5 +1,5 @@
-# proto-file: ../../../proto/test/v1/simple.proto
-# proto-message: google.api.expr.test.v1.SimpleTestFile
+# proto-file: ../../../proto/cel/expr/conformance/test/simple.proto
+# proto-message: cel.expr.conformance.test.SimpleTestFile
 
 name: "proto2"
 description: "Protocol buffer version 2 tests.  See notes for the available set of protos for tests."
@@ -10,10 +10,10 @@ section {
 
   test {
     name: "int64_nocontainer"
-    expr: "google.api.expr.test.v1.proto2.TestAllTypes{single_int64: 17}"
+    expr: "cel.expr.conformance.proto2.TestAllTypes{single_int64: 17}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_int64: 17 }
       }
     }
@@ -21,11 +21,11 @@ section {
 
   test {
     name: "int32"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_int32: -34}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_int32: -34 }
       }
     }
@@ -61,11 +61,11 @@ section {
 
   test {
     name: "int64"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_int64: 17}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_int64: 17 }
       }
     }
@@ -73,11 +73,11 @@ section {
 
   test {
     name: "uint32"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_uint32: 1u}"
     value {
       object_value: {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_uint32: 1 }
       }
     }
@@ -113,11 +113,11 @@ section {
 
   test {
     name: "uint64"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_uint64: 9999u}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_uint64: 9999 }
       }
     }
@@ -125,11 +125,11 @@ section {
 
   test {
     name: "sint32"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_sint32: -3}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_sint32: -3 }
       }
     }
@@ -137,11 +137,11 @@ section {
 
   test {
     name: "sint64"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_sint64: 255}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_sint64: 255 }
       }
     }
@@ -149,11 +149,11 @@ section {
 
   test {
     name: "fixed32"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_fixed32: 43u}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_fixed32: 43 }
       }
     }
@@ -161,11 +161,11 @@ section {
 
   test {
     name: "fixed64"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_fixed64: 1880u}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_fixed64: 1880 }
       }
     }
@@ -173,11 +173,11 @@ section {
 
   test {
     name: "sfixed32"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_sfixed32: -404}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_sfixed32: -404 }
       }
     }
@@ -185,11 +185,11 @@ section {
 
   test {
     name: "sfixed64"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_sfixed64: -1}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_sfixed64: -1 }
       }
     }
@@ -197,11 +197,11 @@ section {
 
   test {
     name: "float"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_float: 3.1416}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_float: 3.1416 }
       }
     }
@@ -237,11 +237,11 @@ section {
 
   test {
     name: "double"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_double: 6.022e23}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_double: 6.022e23 }
       }
     }
@@ -249,11 +249,11 @@ section {
 
   test {
     name: "bool"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_bool: true}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_bool: true }
       }
     }
@@ -261,11 +261,11 @@ section {
 
   test {
     name: "string"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_string: 'foo'}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_string: 'foo' }
       }
     }
@@ -273,11 +273,11 @@ section {
 
   test {
     name: "bytes"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_bytes: b'\\377'}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_bytes: '\377' }
       }
     }
@@ -290,13 +290,13 @@ section {
 
   test {
     name: "any"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_any: TestAllTypes{single_int32: 1}}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes] {
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes] {
         single_any {
-          [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes] {
+          [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes] {
             single_int32: 1
             }
           }
@@ -307,11 +307,11 @@ section {
 
   test {
     name: "duration"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_duration: duration('123s')}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes] {
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes] {
           single_duration {
             seconds: 123
           }
@@ -322,11 +322,11 @@ section {
 
   test {
     name: "timestamp"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_timestamp: timestamp('2009-02-13T23:31:30Z')}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes] {
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes] {
           single_timestamp {
             seconds: 1234567890
           }
@@ -337,11 +337,11 @@ section {
 
   test {
     name: "struct"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_struct: {'one': 1, 'two': 2}}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes] {
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes] {
           single_struct {
             fields {
               key: "one"
@@ -359,11 +359,11 @@ section {
 
   test {
     name: "value"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_value: 'foo'}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes] {
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes] {
           single_value {
             string_value: "foo"
           }
@@ -374,11 +374,11 @@ section {
 
   test {
     name: "int64_wrapper"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_int64_wrapper: -321}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes] {
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes] {
           single_int64_wrapper {
             value: -321
           }
@@ -389,11 +389,11 @@ section {
 
   test {
     name: "int32_wrapper"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_int32_wrapper: -456}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes] {
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes] {
           single_int32_wrapper {
             value: -456
           }
@@ -404,11 +404,11 @@ section {
 
   test {
     name: "double_wrapper"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_double_wrapper: 2.71828}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes] {
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes] {
           single_double_wrapper {
             value: 2.71828
           }
@@ -419,11 +419,11 @@ section {
 
   test {
     name: "float_wrapper"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_float_wrapper: 2.99792e8}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes] {
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes] {
           single_float_wrapper {
             value: 2.99792e8
           }
@@ -434,11 +434,11 @@ section {
 
   test {
     name: "uint64_wrapper"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_uint64_wrapper: 8675309u}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes] {
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes] {
           single_uint64_wrapper {
             value: 8675309
           }
@@ -449,11 +449,11 @@ section {
 
   test {
     name: "uint32_wrapper"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_uint32_wrapper: 987u}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes] {
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes] {
           single_uint32_wrapper {
             value: 987
           }
@@ -464,11 +464,11 @@ section {
 
   test {
     name: "string_wrapper"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_string_wrapper: 'hubba'}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes] {
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes] {
           single_string_wrapper {
             value: "hubba"
           }
@@ -479,11 +479,11 @@ section {
 
   test {
     name: "bool_wrapper"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_bool_wrapper: true}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes] {
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes] {
           single_bool_wrapper {
             value: true
           }
@@ -494,11 +494,11 @@ section {
 
   test {
     name: "bytes_wrapper"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_bytes_wrapper: b'\\301\\103'}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes] {
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes] {
           single_bytes_wrapper {
             value: "\301\103"
           }
@@ -518,12 +518,12 @@ section {
     expr: "x.single_int32"
     type_env: {
       name: "x"
-      ident: { type: { message_type: "google.api.expr.test.v1.proto2.TestAllTypes" } }
+      ident: { type: { message_type: "cel.expr.conformance.proto2.TestAllTypes" } }
     }
     bindings: {
       key: "x"
       value: { value: { object_value: {
-            [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+            [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
             { single_int32: 17 }
           }}}
     }
@@ -535,12 +535,12 @@ section {
     expr: "x.single_int64"
     type_env: {
       name: "x"
-      ident { type { message_type: "google.api.expr.test.v1.proto2.TestAllTypes" } }
+      ident { type { message_type: "cel.expr.conformance.proto2.TestAllTypes" } }
     }
     bindings: {
       key: "x"
       value: { value: { object_value: {
-            [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+            [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
             { single_int64: -99 }
           }}}
     }
@@ -554,58 +554,58 @@ section {
 
   test {
     name: "scalar_with_default"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{}.single_int32"
     value: { int64_value: -32 }
   }
 
   test {
     name: "scalar_no_default"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{}.single_fixed32"
     value: { uint64_value: 0 }
   }
 
   test {
     name: "nested_message"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{}.single_nested_message"
     value: { object_value: {
-            [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes.NestedMessage]
+            [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes.NestedMessage]
             { }}}
   }
 
   test {
     name: "nested_message_subfield"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{}.single_nested_message.bb"
     value: { int64_value: 0 }
   }
 
   test {
     name: "wkt"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{}.single_int64_wrapper"
     value: { null_value: NULL_VALUE }
   }
 
   test {
     name: "repeated_scalar"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{}.repeated_int64"
     value: { list_value: {} }
   }
 
   test {
     name: "repeated_nested"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{}.repeated_nested_message"
     value: { list_value: {} }
   }
 
   test {
     name: "map"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{}.map_string_string"
     value: { map_value: {} }
   }
@@ -615,7 +615,7 @@ section {
   description: "Tests for the has() macro on proto2 messages."
   test {
     name: "undefined"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "has(TestAllTypes{}.no_such_field)"
     disable_check: true
     eval_error: {
@@ -624,145 +624,145 @@ section {
   }
   test {
     name: "repeated_none_implicit"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "has(TestAllTypes{}.repeated_int32)"
     value { bool_value: false }
   }
   test {
     name: "repeated_none_explicit"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "has(TestAllTypes{repeated_int32: []}.repeated_int32)"
     value { bool_value: false }
   }
   test {
     name: "repeated_one"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "has(TestAllTypes{repeated_int32: [1]}.repeated_int32)"
     value { bool_value: true }
   }
   test {
     name: "repeated_many"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "has(TestAllTypes{repeated_int32: [1, 2, 3]}.repeated_int32)"
     value { bool_value: true }
   }
   test {
     name: "map_none_implicit"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "has(TestAllTypes{}.map_string_string)"
     value { bool_value: false }
   }
   test {
     name: "map_none_explicit"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "has(TestAllTypes{map_string_string: {}}.map_string_string)"
     value { bool_value: false }
   }
   test {
     name: "map_one_default"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "has(TestAllTypes{map_string_string: {'MT': ''}}.map_string_string)"
     value { bool_value: true }
   }
   test {
     name: "map_one"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "has(TestAllTypes{map_string_string: {'one': 'uno'}}.map_string_string)"
     value { bool_value: true }
   }
   test {
     name: "map_many"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "has(TestAllTypes{map_string_string: {'one': 'uno', 'two': 'dos'}}.map_string_string)"
     value { bool_value: true }
   }
   test {
     name: "required"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "has(TestRequired{required_int32: 4}.required_int32)"
     value { bool_value: true }
   }
   test {
     name: "optional_unset_no_default"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "has(TestAllTypes{}.single_sint32)"
     value { bool_value: false }
   }
   test {
     name: "optional_set_no_default"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "has(TestAllTypes{single_sint32: -4}.single_sint32)"
     value { bool_value: true }
   }
   test {
     name: "optional_unset_with_default"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "has(TestAllTypes{}.single_int32)"
     value { bool_value: false }
   }
   test {
     name: "optional_set_with_default"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "has(TestAllTypes{single_int32: 16}.single_int32)"
     value { bool_value: true }
   }
   test {
     name: "optional_set_to_default"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "has(TestAllTypes{single_int32: -32}.single_int32)"
     value { bool_value: true }
   }
   test {
     name: "optional_message_unset"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "has(TestAllTypes{}.standalone_message)"
     value { bool_value: false }
   }
   test {
     name: "optional_message_set"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "has(TestAllTypes{standalone_message: TestAllTypes.NestedMessage{}}.standalone_message)"
     value { bool_value: true }
   }
   test {
     name: "optional_enum_unset"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "has(TestAllTypes{}.standalone_enum)"
     value { bool_value: false }
   }
   test {
     name: "optional_enum_set"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "has(TestAllTypes{standalone_enum: TestAllTypes.NestedEnum.BAR}.standalone_enum)"
     value { bool_value: true }
   }
   test {
     name: "optional_enum_set_zero"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "has(TestAllTypes{standalone_enum: TestAllTypes.NestedEnum.FOO}.standalone_enum)"
     value { bool_value: true }
   }
   test {
     name: "oneof_unset"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "has(TestAllTypes{}.single_nested_message)"
     value { bool_value: false }
   }
   test {
     name: "oneof_other_set"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "has(TestAllTypes{single_nested_enum: TestAllTypes.NestedEnum.BAZ}.single_nested_message)"
     value { bool_value: false }
   }
   test {
     name: "oneof_set"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "has(TestAllTypes{single_nested_message: TestAllTypes.NestedMessage{}}.single_nested_message)"
     value { bool_value: true }
   }
   test {
     name: "oneof_set_default"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "has(TestAllTypes{single_nested_enum: TestAllTypes.NestedEnum.FOO}.single_nested_enum)"
     value { bool_value: true }
   }
@@ -771,37 +771,37 @@ section {
   name:"set_null"
   test {
     name: "single_message"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_nested_message: null} == TestAllTypes{}"
     value: { bool_value: true }
   }
   test {
     name: "single_any"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_any: null}.single_any"
     value { null_value: NULL_VALUE }
   }
   test {
     name: "single_value"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_value: null}.single_value"
     value { null_value: NULL_VALUE }
   }
   test {
     name: "single_duration"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_duration: null} == TestAllTypes{}"
     value: { bool_value: true }
   }
   test {
     name: "single_timestamp"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_timestamp: null} == TestAllTypes{}"
     value: { bool_value: true }
   }
   test {
     name: "single_scalar"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_bool: null} == TestAllTypes{}"
     disable_check: true
     eval_error: {
@@ -810,7 +810,7 @@ section {
   }
   test {
     name: "repeated"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{repeated_int32: null} == TestAllTypes{}"
     disable_check: true
     eval_error: {
@@ -819,7 +819,7 @@ section {
   }
   test {
     name: "map"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{map_string_string: null} == TestAllTypes{}"
     disable_check: true
     eval_error: {
@@ -828,7 +828,7 @@ section {
   }
   test {
     name: "list_value"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{list_value: null} == TestAllTypes{}"
     disable_check: true
     eval_error: {
@@ -837,7 +837,7 @@ section {
   }
   test {
     name: "single_struct"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_struct: null} == TestAllTypes{}"
     disable_check: true
     eval_error: {

@@ -2,7 +2,7 @@
 
 The test data files for the `simple` conformance test suite
 are described by the `SimpleTestFile` message defined in
-[`simple.proto`](../../../proto/test/v1/simple.proto).
+[`simple.proto`](../../../proto/cel/expr/conformance/test/simple.proto).
 See the documentation in that file for the meaning of the various fields.
 
 A run of the simple tests chooses one or more data files and attempts

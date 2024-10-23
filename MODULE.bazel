@@ -18,7 +18,7 @@ bazel_dep(
 )
 bazel_dep(
     name = "protobuf",
-    version = "23.1",
+    version = "26.0",
     repo_name = "com_google_protobuf",
 )
 bazel_dep(
