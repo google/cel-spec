@@ -1,5 +1,5 @@
-# proto-file: ../../../proto/test/v1/simple.proto
-# proto-message: google.api.expr.test.v1.SimpleTestFile
+# proto-file: ../../../proto/cel/expr/conformance/test/simple.proto
+# proto-message: cel.expr.conformance.test.SimpleTestFile
 
 name: "string_ext"
 description: "Tests for the strings extension library."
@@ -935,31 +935,31 @@ section: {
   }
   test: {
     name: "object not allowed"
-    expr: '"object is %s".format([google.api.expr.test.v1.proto3.TestAllTypes{}])'
+    expr: '"object is %s".format([cel.expr.conformance.proto3.TestAllTypes{}])'
     disable_check: true
     eval_error: {
       errors: {
-        message: 'error during formatting: string clause can only be used on strings, bools, bytes, ints, doubles, maps, lists, types, durations, and timestamps, was given google.api.expr.test.v1.proto3.TestAllTypes'
+        message: 'error during formatting: string clause can only be used on strings, bools, bytes, ints, doubles, maps, lists, types, durations, and timestamps, was given cel.expr.conformance.proto3.TestAllTypes'
       }
     }
   }
   test: {
     name: "object inside list"
-    expr: '"%s".format([[1, 2, google.api.expr.test.v1.proto3.TestAllTypes{}]])'
+    expr: '"%s".format([[1, 2, cel.expr.conformance.proto3.TestAllTypes{}]])'
     disable_check: true
     eval_error: {
       errors: {
-        message: 'error during formatting: string clause can only be used on strings, bools, bytes, ints, doubles, maps, lists, types, durations, and timestamps, was given google.api.expr.test.v1.proto3.TestAllTypes'
+        message: 'error during formatting: string clause can only be used on strings, bools, bytes, ints, doubles, maps, lists, types, durations, and timestamps, was given cel.expr.conformance.proto3.TestAllTypes'
       }
     }
   }
   test: {
     name: "object inside map"
-    expr: '"%s".format([{1: "a", 2: google.api.expr.test.v1.proto3.TestAllTypes{}}])'
+    expr: '"%s".format([{1: "a", 2: cel.expr.conformance.proto3.TestAllTypes{}}])'
     disable_check: true
     eval_error: {
       errors: {
-        message: 'error during formatting: string clause can only be used on strings, bools, bytes, ints, doubles, maps, lists, types, durations, and timestamps, was given google.api.expr.test.v1.proto3.TestAllTypes'
+        message: 'error during formatting: string clause can only be used on strings, bools, bytes, ints, doubles, maps, lists, types, durations, and timestamps, was given cel.expr.conformance.proto3.TestAllTypes'
       }
     }
   }
@@ -1391,4 +1391,3 @@ section: {
     }
   }
 }
-

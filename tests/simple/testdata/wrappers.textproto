@@ -1,5 +1,5 @@
-# proto-file: ../../../proto/test/v1/simple.proto
-# proto-message: google.api.expr.test.v1.SimpleTestFile
+# proto-file: ../../../proto/cel/expr/conformance/test/simple.proto
+# proto-message: cel.expr.conformance.test.SimpleTestFile
 
 name: "wrappers"
 description: "Conformance tests related to wrapper types."
@@ -9,7 +9,7 @@ section {
   name: "bool"
   test {
     name: "to_any"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_any: google.protobuf.BoolValue{value: true}}.single_any"
     value {
       bool_value: true
@@ -17,7 +17,7 @@ section {
   }
   test {
     name: "to_json"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_value: google.protobuf.BoolValue{value: true}}.single_value"
     value {
       bool_value: true
@@ -25,7 +25,7 @@ section {
   }
   test {
     name: "to_null"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_bool_wrapper: null} == TestAllTypes{}"
     value {
       bool_value: true
@@ -38,7 +38,7 @@ section {
   name: "int32"
   test {
     name: "to_any"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_any: google.protobuf.Int32Value{value: 1}}.single_any"
     value {
       int64_value: 1
@@ -46,7 +46,7 @@ section {
   }
   test {
     name: "to_json"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_value: google.protobuf.Int32Value{value: 1}}.single_value"
     value {
       double_value: 1
@@ -54,7 +54,7 @@ section {
   }
   test {
     name: "to_null"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_int32_wrapper: null} == TestAllTypes{}"
     value {
       bool_value: true
@@ -67,7 +67,7 @@ section {
   name: "int64"
   test {
     name: "to_any"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_any: google.protobuf.Int64Value{value: 1}}.single_any"
     value {
       int64_value: 1
@@ -75,7 +75,7 @@ section {
   }
   test {
     name: "to_json_number"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_value: google.protobuf.Int64Value{value: 1}}.single_value"
     value {
       double_value: 1
@@ -83,7 +83,7 @@ section {
   }
   test {
     name: "to_json_string"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_value: google.protobuf.Int64Value{value: 9223372036854775807}}.single_value"
     value {
       string_value: "9223372036854775807"
@@ -91,7 +91,7 @@ section {
   }
   test {
     name: "to_null"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_int64_wrapper: null} == TestAllTypes{}"
     value {
       bool_value: true
@@ -104,7 +104,7 @@ section {
   name: "uint32"
   test {
     name: "to_any"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_any: google.protobuf.UInt32Value{value: 1u}}.single_any"
     value {
       uint64_value: 1
@@ -112,7 +112,7 @@ section {
   }
   test {
     name: "to_json"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_value: google.protobuf.UInt32Value{value: 1u}}.single_value"
     value {
       double_value: 1
@@ -120,7 +120,7 @@ section {
   }
   test {
     name: "to_null"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_uint32_wrapper: null} == TestAllTypes{}"
     value {
       bool_value: true
@@ -133,7 +133,7 @@ section {
   name: "uint64"
   test {
     name: "to_any"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_any: google.protobuf.UInt64Value{value: 1u}}.single_any"
     value {
       uint64_value: 1
@@ -141,7 +141,7 @@ section {
   }
   test {
     name: "to_json_number"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_value: google.protobuf.UInt64Value{value: 1u}}.single_value"
     value {
       double_value: 1
@@ -149,7 +149,7 @@ section {
   }
   test {
     name: "to_json_string"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_value: google.protobuf.UInt64Value{value: 18446744073709551615u}}.single_value"
     value {
       string_value: "18446744073709551615"
@@ -157,7 +157,7 @@ section {
   }
   test {
     name: "to_null"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_uint64_wrapper: null} == TestAllTypes{}"
     value {
       bool_value: true
@@ -170,7 +170,7 @@ section {
   name: "float"
   test {
     name: "to_any"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_any: google.protobuf.FloatValue{value: 1.0}}.single_any"
     value {
       double_value: 1
@@ -178,7 +178,7 @@ section {
   }
   test {
     name: "to_json"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_value: google.protobuf.FloatValue{value: 1.0}}.single_value"
     value {
       double_value: 1
@@ -186,7 +186,7 @@ section {
   }
   test {
     name: "to_null"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_float_wrapper: null} == TestAllTypes{}"
     value {
       bool_value: true
@@ -199,7 +199,7 @@ section {
   name: "double"
   test {
     name: "to_any"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_any: google.protobuf.DoubleValue{value: 1.0}}.single_any"
     value {
       double_value: 1
@@ -207,7 +207,7 @@ section {
   }
   test {
     name: "to_json"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_value: google.protobuf.DoubleValue{value: 1.0}}.single_value"
     value {
       double_value: 1
@@ -215,7 +215,7 @@ section {
   }
   test {
     name: "to_null"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_double_wrapper: null} == TestAllTypes{}"
     value {
       bool_value: true
@@ -228,7 +228,7 @@ section {
   name: "bytes"
   test {
     name: "to_any"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_any: google.protobuf.BytesValue{value: b'foo'}}.single_any"
     value {
       bytes_value: "foo"
@@ -236,7 +236,7 @@ section {
   }
   test {
     name: "to_json"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_value: google.protobuf.BytesValue{value: b'foo'}}.single_value"
     value {
       string_value: "Zm9v"
@@ -244,7 +244,7 @@ section {
   }
   test {
     name: "to_null"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_bytes_wrapper: null} == TestAllTypes{}"
     value {
       bool_value: true
@@ -257,7 +257,7 @@ section {
   name: "string"
   test {
     name: "to_any"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_any: google.protobuf.StringValue{value: 'foo'}}.single_any"
     value {
       string_value: "foo"
@@ -265,7 +265,7 @@ section {
   }
   test {
     name: "to_json"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_value: google.protobuf.StringValue{value: 'foo'}}.single_value"
     value {
       string_value: "foo"
@@ -273,7 +273,7 @@ section {
   }
   test {
     name: "to_null"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_string_wrapper: null} == TestAllTypes{}"
     value {
       bool_value: true
@@ -286,7 +286,7 @@ section {
   name: "value"
   test {
     name: "default_to_json"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_any: TestAllTypes{}.single_value}.single_any"
     value {
       null_value: NULL_VALUE
@@ -300,7 +300,7 @@ section {
   description: ""
   test {
     name: "literal_to_any"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_any: []}.single_any"
     value {
       list_value {}
@@ -313,7 +313,7 @@ section {
   name: "struct"
   test {
     name: "literal_to_any"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_any: {}}.single_any"
     value {
       map_value {}
@@ -326,7 +326,7 @@ section {
   name: "field_mask"
   test {
     name: "to_json"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_value: google.protobuf.FieldMask{paths: ['foo', 'bar']}}.single_value"
     value {
       string_value: "foo,bar"
@@ -339,7 +339,7 @@ section {
   name: "duration"
   test {
     name: "to_json"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_value: duration('1000000s')}.single_value"
     value {
       string_value: "1000000s"
@@ -352,7 +352,7 @@ section {
   name: "timestamp"
   test {
     name: "to_json"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_value: timestamp('9999-12-31T23:59:59.999999999Z')}.single_value"
     value {
       string_value: "9999-12-31T23:59:59.999999999Z"
@@ -365,7 +365,7 @@ section {
   name: "empty"
   test {
     name: "to_json"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_value: google.protobuf.Empty{}}.single_value"
     value {
       map_value {}

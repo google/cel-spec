@@ -1,4 +1,4 @@
-# proto-file: ../../../proto/test/v1/simple.proto
+# proto-file: ../../../proto/cel/expr/conformance/test/simple.proto
 # proto-message: google.api.expr.test.v1.SimpleTestFile
 
 name: "plumbing"

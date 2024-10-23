@@ -1,5 +1,5 @@
-# proto-file: ../../../proto/test/v1/simple.proto
-# proto-message: google.api.expr.test.v1.SimpleTestFile
+# proto-file: ../../../cel/expr/conformance/test/simple.proto
+# proto-message: cel.expr.conformance.test.SimpleTestFile
 
 name: "dynamic"
 description: "Tests for 'dynamic' proto behavior, including JSON, wrapper, and Any messages."
@@ -42,51 +42,51 @@ section {
   }
   test {
     name: "field_assign_proto2"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_int32_wrapper: 432}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_int32_wrapper { value: 432 } }
       }
     }
   }
   test {
     name: "field_assign_proto2_zero"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_int32_wrapper: 0}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_int32_wrapper { } }
       }
     }
   }
   test {
     name: "field_assign_proto2_max"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_int32_wrapper: 2147483647}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_int32_wrapper { value: 2147483647 } }
       }
     }
   }
   test {
     name: "field_assign_proto2_min"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_int32_wrapper: -2147483648}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_int32_wrapper { value: -2147483648 } }
       }
     }
   }
   test {
     name: "field_assign_proto2_range"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_int32_wrapper: 12345678900}"
     eval_error {
       errors { message: "range error" }
@@ -94,69 +94,69 @@ section {
   }
   test {
     name: "field_read_proto2"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_int32_wrapper: 642}.single_int32_wrapper"
     value { int64_value: 642 }
   }
   test {
     name: "field_read_proto2_zero"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_int32_wrapper: 0}.single_int32_wrapper"
     value { int64_value: 0 }
   }
   test {
     name: "field_read_proto2_unset"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{}.single_int32_wrapper"
     value { null_value: NULL_VALUE }
   }
   test {
     name: "field_assign_proto3"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_int32_wrapper: -975}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
         { single_int32_wrapper { value: -975 } }
       }
     }
   }
   test {
     name: "field_assign_proto3_zero"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_int32_wrapper: 0}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
         { single_int32_wrapper { } }
       }
     }
   }
   test {
     name: "field_assign_proto3_max"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_int32_wrapper: 2147483647}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
         { single_int32_wrapper { value: 2147483647 } }
       }
     }
   }
   test {
     name: "field_assign_proto3_min"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_int32_wrapper: -2147483648}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
         { single_int32_wrapper { value: -2147483648 } }
       }
     }
   }
   test {
     name: "field_assign_proto3_range"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_int32_wrapper: -998877665544332211}"
     eval_error {
       errors { message: "range error" }
@@ -164,19 +164,19 @@ section {
   }
   test {
     name: "field_read_proto3"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_int32_wrapper: 642}.single_int32_wrapper"
     value { int64_value: 642 }
   }
   test {
     name: "field_read_proto3_zero"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_int32_wrapper: 0}.single_int32_wrapper"
     value { int64_value: 0 }
   }
   test {
     name: "field_read_proto3_unset"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{}.single_int32_wrapper"
     value { null_value: NULL_VALUE }
   }
@@ -220,44 +220,44 @@ section {
   }
   test {
     name: "field_assign_proto2"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_int64_wrapper: 432}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_int64_wrapper { value: 432 } }
       }
     }
   }
   test {
     name: "field_assign_proto2_zero"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_int64_wrapper: 0}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_int64_wrapper { } }
       }
     }
   }
   test {
     name: "field_assign_proto3"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_int64_wrapper: -975}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
         { single_int64_wrapper { value: -975 } }
       }
     }
   }
   test {
     name: "field_assign_proto3_zero"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_int64_wrapper: 0}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
         { single_int64_wrapper { } }
       }
     }
@@ -302,40 +302,40 @@ section {
   }
   test {
     name: "field_assign_proto2"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_uint32_wrapper: 432u}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_uint32_wrapper { value: 432 } }
       }
     }
   }
   test {
     name: "field_assign_proto2_zero"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_uint32_wrapper: 0u}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_uint32_wrapper { } }
       }
     }
   }
   test {
     name: "field_assign_proto2_max"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_uint32_wrapper: 4294967295u}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_uint32_wrapper { value: 4294967295} }
       }
     }
   }
   test {
     name: "field_assign_proto2_range"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_uint32_wrapper: 6111222333u}"
     eval_error {
       errors { message: "range error" }
@@ -343,40 +343,40 @@ section {
   }
   test {
     name: "field_assign_proto3"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_uint32_wrapper: 975u}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
         { single_uint32_wrapper { value: 975 } }
       }
     }
   }
   test {
     name: "field_assign_proto3_zero"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_uint32_wrapper: 0u}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
         { single_uint32_wrapper { } }
       }
     }
   }
   test {
     name: "field_assign_proto3_max"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_uint32_wrapper: 4294967295u}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
         { single_uint32_wrapper { value: 4294967295 } }
       }
     }
   }
   test {
     name: "field_assign_proto3_range"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_uint32_wrapper: 6111222333u}"
     eval_error {
       errors { message: "range error" }
@@ -384,19 +384,19 @@ section {
   }
   test {
     name: "field_read_proto2"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_uint32_wrapper: 258u}.single_uint32_wrapper"
     value { uint64_value: 258 }
   }
   test {
     name: "field_read_proto2_zero"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_uint32_wrapper: 0u}.single_uint32_wrapper"
     value { uint64_value: 0 }
   }
   test {
     name: "field_read_proto2_unset"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{}.single_uint32_wrapper"
     value { null_value: NULL_VALUE }
   }
@@ -440,63 +440,63 @@ section {
   }
   test {
     name: "field_assign_proto2"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_uint64_wrapper: 432u}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_uint64_wrapper { value: 432 } }
       }
     }
   }
   test {
     name: "field_assign_proto2_zero"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_uint64_wrapper: 0u}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_uint64_wrapper { } }
       }
     }
   }
   test {
     name: "field_assign_proto3"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_uint64_wrapper: 975u}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
         { single_uint64_wrapper { value: 975 } }
       }
     }
   }
   test {
     name: "field_assign_proto3_zero"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_uint64_wrapper: 0u}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
         { single_uint64_wrapper { } }
       }
     }
   }
   test {
     name: "field_read_proto2"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_uint64_wrapper: 5123123123u}.single_uint64_wrapper"
     value { uint64_value: 5123123123 }
   }
   test {
     name: "field_read_proto2_zero"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_uint64_wrapper: 0u}.single_uint64_wrapper"
     value { uint64_value: 0 }
   }
   test {
     name: "field_read_proto2_unset"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{}.single_uint64_wrapper"
     value { null_value: NULL_VALUE }
   }
@@ -546,22 +546,22 @@ section {
   }
   test {
     name: "field_assign_proto2"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_float_wrapper: 86.75}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_float_wrapper { value: 86.75 } }
       }
     }
   }
   test {
     name: "field_assign_proto2_zero"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_float_wrapper: 0.0}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_float_wrapper { } }
       }
     }
@@ -569,11 +569,11 @@ section {
   test {
     name: "field_assign_proto2_subnorm"
     description: "Subnormal single floats range from ~1e-38 to ~1e-45."
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_float_wrapper: 1e-40}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_float_wrapper { value: 1e-40 } }
       }
     }
@@ -581,11 +581,11 @@ section {
   test {
     name: "field_assign_proto2_round_to_zero"
     description: "Subnormal single floats range from ~1e-38 to ~1e-45."
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_float_wrapper: 1e-50}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_float_wrapper { } }
       }
     }
@@ -593,51 +593,51 @@ section {
   test {
     name: "field_assign_proto2_range"
     description: "Single float max is about 3.4e38"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_float_wrapper: 1.4e55}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_float_wrapper { value: inf } }
       }
     }
   }
   test {
     name: "field_read_proto2"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_float_wrapper: -12.375}.single_float_wrapper"
     value { double_value: -12.375 }
   }
   test {
     name: "field_read_proto2_zero"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_float_wrapper: 0.0}.single_float_wrapper"
     value { double_value: 0.0 }
   }
   test {
     name: "field_read_proto2_unset"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{}.single_float_wrapper"
     value { null_value: NULL_VALUE }
   }
   test {
     name: "field_assign_proto3"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_float_wrapper: -9.75}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
         { single_float_wrapper { value: -9.75 } }
       }
     }
   }
   test {
     name: "field_assign_proto3_zero"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_float_wrapper: 0.0}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
         { single_float_wrapper { } }
       }
     }
@@ -645,22 +645,22 @@ section {
   test {
     name: "field_assign_proto2_subnorm"
     description: "Subnormal single floats range from ~1e-38 to ~1e-45."
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_float_wrapper: 1e-40}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_float_wrapper { value: 1e-40 } }
       }
     }
   }
   test {
     name: "field_assign_proto3_round_to_zero"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_float_wrapper: -9.9e-100}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
         { single_float_wrapper { value: -0 } }
       }
     }
@@ -668,30 +668,30 @@ section {
   test {
     name: "field_assign_proto3_range"
     description: "Single float min is about -3.4e38"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_float_wrapper: -9.9e100}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
         { single_float_wrapper { value: -inf } }
       }
     }
   }
   test {
     name: "field_read_proto3"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_float_wrapper: 64.25}.single_float_wrapper"
     value { double_value: 64.25 }
   }
   test {
     name: "field_read_proto3_zero"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_float_wrapper: 0.0}.single_float_wrapper"
     value { double_value: 0.0 }
   }
   test {
     name: "field_read_proto3_unset"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{}.single_float_wrapper"
     value { null_value: NULL_VALUE }
   }
@@ -735,103 +735,103 @@ section {
   }
   test {
     name: "field_assign_proto2"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_double_wrapper: 86.75}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_double_wrapper { value: 86.75 } }
       }
     }
   }
   test {
     name: "field_assign_proto2_zero"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_double_wrapper: 0.0}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_double_wrapper { } }
       }
     }
   }
   test {
     name: "field_assign_proto2_range"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_double_wrapper: 1.4e55}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_double_wrapper { value: 1.4e55 } }
       }
     }
   }
   test {
     name: "field_read_proto2"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_double_wrapper: -12.375}.single_double_wrapper"
     value { double_value: -12.375 }
   }
   test {
     name: "field_read_proto2_zero"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_int32_wrapper: 0}.single_int32_wrapper"
     value { int64_value: 0 }
   }
   test {
     name: "field_read_proto2_unset"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{}.single_double_wrapper"
     value { null_value: NULL_VALUE }
   }
   test {
     name: "field_assign_proto3"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_double_wrapper: -9.75}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
         { single_double_wrapper { value: -9.75 } }
       }
     }
   }
   test {
     name: "field_assign_proto3_zero"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_double_wrapper: 0.0}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
         { single_double_wrapper { } }
       }
     }
   }
   test {
     name: "field_assign_proto3_range"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_double_wrapper: -9.9e100}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
         { single_double_wrapper { value: -9.9e100 } }
       }
     }
   }
   test {
     name: "field_read_proto3"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_double_wrapper: 64.25}.single_double_wrapper"
     value { double_value: 64.25 }
   }
   test {
     name: "field_read_proto3_zero"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_double_wrapper: 0.0}.single_double_wrapper"
     value { double_value: 0.0 }
   }
   test {
     name: "field_read_proto3_unset"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{}.single_double_wrapper"
     value { null_value: NULL_VALUE }
   }
@@ -875,44 +875,44 @@ section {
   }
   test {
     name: "field_assign_proto2"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_bool_wrapper: true}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_bool_wrapper { value: true } }
       }
     }
   }
   test {
     name: "field_assign_proto2_false"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_bool_wrapper: false}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_bool_wrapper { } }
       }
     }
   }
   test {
     name: "field_assign_proto3"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_bool_wrapper: true}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
         { single_bool_wrapper { value: true } }
       }
     }
   }
   test {
     name: "field_assign_proto3_false"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_bool_wrapper: false}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
         { single_bool_wrapper { } }
       }
     }
@@ -962,44 +962,44 @@ section {
   }
   test {
     name: "field_assign_proto2"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_string_wrapper: 'baz'}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_string_wrapper { value: "baz" } }
       }
     }
   }
   test {
     name: "field_assign_proto2_empty"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_string_wrapper: ''}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_string_wrapper { } }
       }
     }
   }
   test {
     name: "field_assign_proto3"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_string_wrapper: 'bletch'}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
         { single_string_wrapper { value: "bletch" } }
       }
     }
   }
   test {
     name: "field_assign_proto3_empty"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_string_wrapper: ''}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
         { single_string_wrapper { } }
       }
     }
@@ -1049,44 +1049,44 @@ section {
   }
   test {
     name: "field_assign_proto2"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_bytes_wrapper: b'baz'}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_bytes_wrapper { value: "baz" } }
       }
     }
   }
   test {
     name: "field_assign_proto2_empty"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_bytes_wrapper: b''}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_bytes_wrapper { } }
       }
     }
   }
   test {
     name: "field_assign_proto3"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_bytes_wrapper: b'bletch'}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
         { single_bytes_wrapper { value: "bletch" } }
       }
     }
   }
   test {
     name: "field_assign_proto3_empty"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_bytes_wrapper: b''}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
         { single_bytes_wrapper { } }
       }
     }
@@ -1153,11 +1153,11 @@ section {
   }
   test {
     name: "field_assign_proto2"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{list_value: [1.0, 'one']}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { list_value {
             values: { number_value: 1.0 }
             values: { string_value: "one" }
@@ -1167,18 +1167,18 @@ section {
   }
   test {
     name: "field_assign_proto2_empty"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{list_value: []}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { list_value { } }
       }
     }
   }
   test {
     name: "field_read_proto2"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{list_value: [1.0, 'one']}.list_value"
     value {
       list_value {
@@ -1189,24 +1189,24 @@ section {
   }
   test {
     name: "field_read_proto2_empty"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{list_value: []}.list_value"
     value { list_value { } }
   }
   test {
     name: "field_read_proto2_unset"
     description: "Not a wrapper type, so doesn't convert to null."
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{}.list_value"
     value { list_value { } }
   }
   test {
     name: "field_assign_proto3"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{list_value: [1.0, 'one']}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
         { list_value {
             values: { number_value: 1.0 }
             values: { string_value: "one" }
@@ -1216,18 +1216,18 @@ section {
   }
   test {
     name: "field_assign_proto3_empty"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{list_value: []}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
         { list_value { } }
       }
     }
   }
   test {
     name: "field_read_proto3"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{list_value: [1.0, 'one']}.list_value"
     value {
       list_value {
@@ -1238,14 +1238,14 @@ section {
   }
   test {
     name: "field_read_proto3_empty"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{list_value: []}.list_value"
     value { list_value { } }
   }
   test {
     name: "field_read_proto3_unset"
     description: "Not a wrapper type, so doesn't convert to null."
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{}.list_value"
     value { list_value { } }
   }
@@ -1320,11 +1320,11 @@ section {
   }
   test {
     name: "field_assign_proto2"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_struct: {'un': 1.0, 'deux': 2.0}}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_struct {
             fields {
               key: "un"
@@ -1340,18 +1340,18 @@ section {
   }
   test {
     name: "field_assign_proto2_empty"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_struct: {}}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_struct { } }
       }
     }
   }
   test {
     name: "field_assign_proto2_bad"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_struct: {1: 'uno'}}"
     disable_check: true
     eval_error {
@@ -1360,7 +1360,7 @@ section {
   }
   test {
     name: "field_read_proto2"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_struct: {'one': 1.0}}.single_struct"
     value {
       map_value {
@@ -1373,24 +1373,24 @@ section {
   }
   test {
     name: "field_read_proto2_empty"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_struct: {}}.single_struct"
     value { map_value { } }
   }
   test {
     name: "field_read_proto2_unset"
     description: "Not a wrapper type, so doesn't convert to null."
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{}.single_struct"
     value { map_value { } }
   }
   test {
     name: "field_assign_proto3"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_struct: {'un': 1.0, 'deux': 2.0}}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
         { single_struct {
             fields {
               key: "un"
@@ -1406,18 +1406,18 @@ section {
   }
   test {
     name: "field_assign_proto3_empty"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_struct: {}}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
         { single_struct { } }
       }
     }
   }
   test {
     name: "field_assign_proto3_bad"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_struct: {1: 'uno'}}"
     disable_check: true
     eval_error {
@@ -1426,7 +1426,7 @@ section {
   }
   test {
     name: "field_read_proto3"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_struct: {'one': 1.0}}.single_struct"
     value {
       map_value {
@@ -1439,14 +1439,14 @@ section {
   }
   test {
     name: "field_read_proto3_empty"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_struct: {}}.single_struct"
     value { map_value { } }
   }
   test {
     name: "field_read_proto3_unset"
     description: "Not a wrapper type, so doesn't convert to null."
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{}.single_struct"
     value { map_value { } }
   }
@@ -1492,47 +1492,47 @@ section {
   }
   test {
     name: "field_assign_proto2"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_value: null}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_value { null_value: NULL_VALUE } }
       }
     }
   }
   test {
     name: "field_read_proto2"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_value: null}.single_value"
     value { null_value: NULL_VALUE }
   }
   test {
     name: "field_read_proto2_unset"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{}.single_value"
     value { null_value: NULL_VALUE }
   }
   test {
     name: "field_assign_proto3"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_value: null}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
         { single_value { null_value: NULL_VALUE } }
       }
     }
   }
   test {
     name: "field_read_proto3"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_value: null}.single_value"
     value { null_value: NULL_VALUE }
   }
   test {
     name: "field_read_proto3_unset"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{}.single_value"
     value { null_value: NULL_VALUE }
   }
@@ -1576,69 +1576,69 @@ section {
   }
   test {
     name: "field_assign_proto2"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_value: 7e23}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_value { number_value: 7e23 } }
       }
     }
   }
   test {
     name: "field_assign_proto2_zero"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_value: 0.0}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_value { number_value: 0.0 } }
       }
     }
   }
   test {
     name: "field_read_proto2"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_value: 7e23}.single_value"
     value { double_value: 7e23 }
   }
   test {
     name: "field_read_proto2_zero"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_value: 0.0}.single_value"
     value { double_value: 0.0 }
   }
   test {
     name: "field_assign_proto3"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_value: 7e23}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
         { single_value { number_value: 7e23 } }
       }
     }
   }
   test {
     name: "field_assign_proto3_zero"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_value: 0.0}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
         { single_value { number_value: 0.0 } }
       }
     }
   }
   test {
     name: "field_read_proto3"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_value: 7e23}.single_value"
     value { double_value: 7e23 }
   }
   test {
     name: "field_read_proto3_zero"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_value: 0.0}.single_value"
     value { double_value: 0.0 }
   }
@@ -1682,69 +1682,69 @@ section {
   }
   test {
     name: "field_assign_proto2"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_value: 'baz'}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_value { string_value: "baz" } }
       }
     }
   }
   test {
     name: "field_assign_proto2_empty"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_value: ''}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_value { string_value: "" } }
       }
     }
   }
   test {
     name: "field_read_proto2"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_value: 'bletch'}.single_value"
     value { string_value: "bletch" }
   }
   test {
     name: "field_read_proto2_zero"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_value: ''}.single_value"
     value { string_value: "" }
   }
   test {
     name: "field_assign_proto3"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_value: 'baz'}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
         { single_value { string_value: "baz" } }
       }
     }
   }
   test {
     name: "field_assign_proto3_empty"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_value: ''}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
         { single_value { string_value: "" } }
       }
     }
   }
   test {
     name: "field_read_proto3"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_value: 'bletch'}.single_value"
     value { string_value: "bletch" }
   }
   test {
     name: "field_read_proto3_zero"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_value: ''}.single_value"
     value { string_value: "" }
   }
@@ -1788,69 +1788,69 @@ section {
   }
   test {
     name: "field_assign_proto2"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_value: true}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_value { bool_value: true } }
       }
     }
   }
   test {
     name: "field_assign_proto2_false"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_value: false}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_value { bool_value: false } }
       }
     }
   }
   test {
     name: "field_read_proto2"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_value: true}.single_value"
     value { bool_value: true }
   }
   test {
     name: "field_read_proto2_false"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_value: false}.single_value"
     value { bool_value: false }
   }
   test {
     name: "field_assign_proto3"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_value: true}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
         { single_value { bool_value: true } }
       }
     }
   }
   test {
     name: "field_assign_proto3_false"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_value: false}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
         { single_value { bool_value: false } }
       }
     }
   }
   test {
     name: "field_read_proto3"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_value: true}.single_value"
     value { bool_value: true }
   }
   test {
     name: "field_read_proto3_false"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_value: false}.single_value"
     value { bool_value: false }
   }
@@ -1925,11 +1925,11 @@ section {
   }
   test {
     name: "field_assign_proto2"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_value: {'un': 1.0, 'deux': 2.0}}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_value { struct_value {
               fields {
                 key: "un"
@@ -1945,18 +1945,18 @@ section {
   }
   test {
     name: "field_assign_proto2_empty"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_value: {}}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_value { struct_value: { } } }
       }
     }
   }
   test {
     name: "field_read_proto2"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_value: {'i': true}}.single_value"
     value {
       map_value {
@@ -1969,17 +1969,17 @@ section {
   }
   test {
     name: "field_read_proto2_empty"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_value: {}}.single_value"
     value { map_value: { } }
   }
   test {
     name: "field_assign_proto3"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_value: {'un': 1.0, 'deux': 2.0}}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
         { single_value { struct_value {
               fields {
                 key: "un"
@@ -1995,18 +1995,18 @@ section {
   }
   test {
     name: "field_assign_proto3_empty"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_value: {}}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
         { single_value { struct_value: { } } }
       }
     }
   }
   test {
     name: "field_read_proto3"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_value: {'i': true}}.single_value"
     value {
       map_value {
@@ -2019,7 +2019,7 @@ section {
   }
   test {
     name: "field_read_proto3_empty"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_value: {}}.single_value"
     value { map_value: { } }
   }
@@ -2078,11 +2078,11 @@ section {
   }
   test {
     name: "field_assign_proto2"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_value: ['un', 1.0]}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_value { list_value {
               values { string_value: "un" }
               values { number_value: 1.0 }
@@ -2092,18 +2092,18 @@ section {
   }
   test {
     name: "field_assign_proto2_empty"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_value: []}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_value { list_value: { } } }
       }
     }
   }
   test {
     name: "field_read_proto2"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_value: ['i', true]}.single_value"
     value {
       list_value {
@@ -2114,17 +2114,17 @@ section {
   }
   test {
     name: "field_read_proto2_empty"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_value: []}.single_value"
     value { list_value: { } }
   }
   test {
     name: "field_assign_proto3"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_value: ['un', 1.0]}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
         { single_value { list_value {
               values { string_value: "un" }
               values { number_value: 1.0 }
@@ -2134,18 +2134,18 @@ section {
   }
   test {
     name: "field_assign_proto3_empty"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_value: []}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
         { single_value { list_value: { } } }
       }
     }
   }
   test {
     name: "field_read_proto3"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_value: ['i', true]}.single_value"
     value {
       list_value {
@@ -2156,7 +2156,7 @@ section {
   }
   test {
     name: "field_read_proto3_empty"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_value: []}.single_value"
     value { list_value: { } }
   }
@@ -2166,17 +2166,17 @@ section {
   description: "Tests for Any conversion."
   test {
     name: "literal"
-    expr: "google.protobuf.Any{type_url: 'type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes', value: b'\\x08\\x96\\x01'}"
+    expr: "google.protobuf.Any{type_url: 'type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes', value: b'\\x08\\x96\\x01'}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_int32: 150 }
       }
     }
   }
   test {
     name: "literal_no_field_access"
-    expr: "google.protobuf.Any{type_url: 'type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes', value: b'\\x08\\x96\\x01'}.type_url"
+    expr: "google.protobuf.Any{type_url: 'type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes', value: b'\\x08\\x96\\x01'}.type_url"
     disable_check: true
     eval_error {
       errors { message: "no_matching_overload" }
@@ -2201,28 +2201,28 @@ section {
       value { value { object_value {
             [type.googleapis.com/google.protobuf.Any]
             {
-              type_url: "type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes"
+              type_url: "type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes"
               value: "\x08\x96\x01"
             }
           } } }
     }
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_int32: 150 }
       }
     }
   }
   test {
     name: "field_assign_proto2"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_any: TestAllTypes{single_int32: 150}}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         {
           single_any {
-            type_url: "type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes"
+            type_url: "type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes"
             value: "\x08\x96\x01"
           }
         }
@@ -2231,25 +2231,25 @@ section {
   }
   test {
     name: "field_read_proto2"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{single_any: TestAllTypes{single_int32: 150}}.single_any"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]
         { single_int32: 150 }
       }
     }
   }
   test {
     name: "field_assign_proto3"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_any: TestAllTypes{single_int32: 150}}"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
         {
           single_any {
-            type_url: "type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes"
+            type_url: "type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes"
             value: "\x08\x96\x01"
           }
         }
@@ -2258,11 +2258,11 @@ section {
   }
   test {
     name: "field_read_proto3"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_any: TestAllTypes{single_int32: 150}}.single_any"
     value {
       object_value {
-        [type.googleapis.com/google.api.expr.test.v1.proto3.TestAllTypes]
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
         { single_int32: 150 }
       }
     }
@@ -2273,7 +2273,7 @@ section {
   description: "Tests combining various dynamic conversions."
   test {
     name: "any_list_map"
-    container: "google.api.expr.test.v1.proto3"
+    container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_any: [{'almost': 'done'}]}.single_any"
     value {
       list_value {

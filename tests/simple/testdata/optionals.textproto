@@ -1,5 +1,5 @@
-# proto-file: ../../../proto/test/v1/simple.proto
-# proto-message: google.api.expr.test.v1.SimpleTestFile
+# proto-file: ../../../proto/cel/expr/conformance/test/simple.proto
+# proto-message: cel.expr.conformance.test.SimpleTestFile
 
 name: "optionals"
 description: "Tests for optionals."
@@ -226,31 +226,31 @@ section: {
   }
   test {
     name: "has_optional_ofNonZeroValue_struct_optional_ofNonZeroValue_map_optindex_field"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "has(TestAllTypes{?single_double_wrapper: optional.ofNonZeroValue(0.0)}.single_double_wrapper)"
     value: { bool_value: false }
   }
   test {
     name: "optional_ofNonZeroValue_struct_optional_ofNonZeroValue_map_optindex_field"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "optional.ofNonZeroValue(TestAllTypes{?single_double_wrapper: optional.ofNonZeroValue(0.0)}).hasValue()"
     value: { bool_value: false }
   }
   test {
     name: "struct_map_optindex_field"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{?map_string_string: {'nested': {}}[?'nested']}.map_string_string"
     value: { map_value: {} }
   }
   test {
     name: "struct_optional_ofNonZeroValue_map_optindex_field"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{?map_string_string: optional.ofNonZeroValue({'nested': {}}[?'nested'].orValue({}))}.map_string_string"
     value: { map_value: {} }
   }
   test {
     name: "struct_map_optindex_field_nested"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{?map_string_string: {'nested': {'hello': 'world'}}[?'nested']}.map_string_string"
     value: {
       map_value: {
@@ -263,7 +263,7 @@ section: {
   }
   test {
     name: "struct_list_optindex_field"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{repeated_string: ['greetings', ?{'nested': {'hello': 'world'}}.nested.?hello]}.repeated_string"
     value: {
       list_value: {
@@ -285,7 +285,7 @@ section: {
   }
   test {
     name: "empty_struct_optindex_hasValue"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{}.?repeated_string.hasValue()"
     value: {
       bool_value: false
@@ -293,7 +293,7 @@ section: {
   }
   test {
     name: "optional_empty_struct_optindex_hasValue"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "optional.of(TestAllTypes{}).?repeated_string.hasValue()"
     value: {
       bool_value: false
@@ -308,7 +308,7 @@ section: {
   }
   test {
     name: "struct_optindex_value"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "TestAllTypes{repeated_string: ['foo']}.?repeated_string.value()"
     value: {
       list_value: {
@@ -320,7 +320,7 @@ section: {
   }
   test {
     name: "optional_struct_optindex_value"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "optional.of(TestAllTypes{repeated_string: ['foo']}).?repeated_string.value()"
     value: {
       list_value: {
@@ -332,7 +332,7 @@ section: {
   }
   test {
     name: "optional_struct_optindex_index_value"
-    container: "google.api.expr.test.v1.proto2"
+    container: "cel.expr.conformance.proto2"
     expr: "optional.of(TestAllTypes{repeated_string: ['foo']}).?repeated_string[0].value()"
     value: {
       string_value: "foo"

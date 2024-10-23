@@ -1,9 +1,25 @@
+// Copyright 2024 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 syntax = "proto3";
 
 package cel.expr.conformance.proto3;
 
 import "google/protobuf/any.proto";
 import "google/protobuf/duration.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/field_mask.proto";
 import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/wrappers.proto";
@@ -46,6 +62,8 @@ message TestAllTypes {
   bool single_bool = 13;
   string single_string = 14;
   bytes single_bytes = 15;
+  optional bool optional_bool = 16;
+  optional bool optional_string = 17;
 
   // Wellknown.
   google.protobuf.Any single_any = 100;
@@ -65,6 +83,8 @@ message TestAllTypes {
   google.protobuf.ListValue list_value = 114;
   google.protobuf.NullValue null_value = 115;
   optional google.protobuf.NullValue optional_null_value = 116;
+  google.protobuf.FieldMask field_mask = 117;
+  google.protobuf.Empty empty = 118;
 
   // Nested messages
   oneof nested_type {
@@ -286,6 +306,12 @@ message TestAllTypes {
   map<string, google.protobuf.StringValue> map_string_string_wrapper = 321;
   map<string, google.protobuf.BoolValue> map_string_bool_wrapper = 322;
   map<string, google.protobuf.BytesValue> map_string_bytes_wrapper = 323;
+
+  oneof kind {
+    NestedTestAllTypes oneof_type = 400;
+    NestedMessage oneof_msg = 401;
+    bool oneof_bool = 402;
+  }
 }
 
 // This proto includes a recursively nested message.

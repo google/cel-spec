@@ -1,5 +1,5 @@
-# proto-file: ../../../proto/test/v1/simple.proto
-# proto-message: google.api.expr.test.v1.SimpleTestFile
+# proto-file: ../../../proto/cel/expr/conformance/test/simple.proto
+# proto-message: cel.expr.conformance.test.SimpleTestFile
 
 name: "proto2_ext"
 description: "Tests for the proto extension library."
@@ -7,18 +7,18 @@ section: {
   name: "has_ext"
   test: {
     name: "package_scoped_int32"
-    expr: "proto.hasExt(msg, google.api.expr.test.v1.proto2.int32_ext)"
+    expr: "proto.hasExt(msg, cel.expr.conformance.proto2.int32_ext)"
     type_env: {
       name: "msg"
-      ident: { type: { message_type: "google.api.expr.test.v1.proto2.TestAllTypes" } }
+      ident: { type: { message_type: "cel.expr.conformance.proto2.TestAllTypes" } }
     }
     bindings: {
       key: "msg"
       value: {
         value: {
           object_value: {
-            [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]: {
-              [google.api.expr.test.v1.proto2.int32_ext]: 42
+            [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]: {
+              [cel.expr.conformance.proto2.int32_ext]: 42
             }
           }
         }
@@ -27,18 +27,18 @@ section: {
   }
   test: {
     name: "package_scoped_nested_ext"
-    expr: "proto.hasExt(msg, google.api.expr.test.v1.proto2.nested_ext)"
+    expr: "proto.hasExt(msg, cel.expr.conformance.proto2.nested_ext)"
     type_env: {
       name: "msg"
-      ident: { type: { message_type: "google.api.expr.test.v1.proto2.TestAllTypes" } }
+      ident: { type: { message_type: "cel.expr.conformance.proto2.TestAllTypes" } }
     }
     bindings: {
       key: "msg"
       value: {
         value: {
           object_value: {
-            [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]: {
-              [google.api.expr.test.v1.proto2.nested_ext]: {}
+            [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]: {
+              [cel.expr.conformance.proto2.nested_ext]: {}
             }
           }
         }
@@ -47,18 +47,18 @@ section: {
   }
   test: {
     name: "package_scoped_test_all_types_ext"
-    expr: "proto.hasExt(msg, google.api.expr.test.v1.proto2.test_all_types_ext)"
+    expr: "proto.hasExt(msg, cel.expr.conformance.proto2.test_all_types_ext)"
     type_env: {
       name: "msg"
-      ident: { type: { message_type: "google.api.expr.test.v1.proto2.TestAllTypes" } }
+      ident: { type: { message_type: "cel.expr.conformance.proto2.TestAllTypes" } }
     }
     bindings: {
       key: "msg"
       value: {
         value: {
           object_value: {
-            [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]: {
-              [google.api.expr.test.v1.proto2.test_all_types_ext]: {}
+            [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]: {
+              [cel.expr.conformance.proto2.test_all_types_ext]: {}
             }
           }
         }
@@ -67,18 +67,18 @@ section: {
   }
   test: {
     name: "package_scoped_test_all_types_nested_enum_ext"
-    expr: "proto.hasExt(msg, google.api.expr.test.v1.proto2.nested_enum_ext)"
+    expr: "proto.hasExt(msg, cel.expr.conformance.proto2.nested_enum_ext)"
     type_env: {
       name: "msg"
-      ident: { type: { message_type: "google.api.expr.test.v1.proto2.TestAllTypes" } }
+      ident: { type: { message_type: "cel.expr.conformance.proto2.TestAllTypes" } }
     }
     bindings: {
       key: "msg"
       value: {
         value: {
           object_value: {
-            [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]: {
-              [google.api.expr.test.v1.proto2.nested_enum_ext]: BAR
+            [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]: {
+              [cel.expr.conformance.proto2.nested_enum_ext]: BAR
             }
           }
         }
@@ -87,18 +87,18 @@ section: {
   }
   test: {
     name: "package_scoped_repeated_test_all_types"
-    expr: "proto.hasExt(msg, google.api.expr.test.v1.proto2.repeated_test_all_types)"
+    expr: "proto.hasExt(msg, cel.expr.conformance.proto2.repeated_test_all_types)"
     type_env: {
       name: "msg"
-      ident: { type: { message_type: "google.api.expr.test.v1.proto2.TestAllTypes" } }
+      ident: { type: { message_type: "cel.expr.conformance.proto2.TestAllTypes" } }
     }
     bindings: {
       key: "msg"
       value: {
         value: {
           object_value: {
-            [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]: {
-              [google.api.expr.test.v1.proto2.repeated_test_all_types]: [ { single_int64: 1 }, { single_bool: true } ]
+            [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]: {
+              [cel.expr.conformance.proto2.repeated_test_all_types]: [ { single_int64: 1 }, { single_bool: true } ]
             }
           }
         }
@@ -107,18 +107,18 @@ section: {
   }
   test: {
     name: "message_scoped_int64"
-    expr: "proto.hasExt(msg, google.api.expr.test.v1.proto2.Proto2ExtensionScopedMessage.int64_ext)"
+    expr: "proto.hasExt(msg, cel.expr.conformance.proto2.Proto2ExtensionScopedMessage.int64_ext)"
     type_env: {
       name: "msg"
-      ident: { type: { message_type: "google.api.expr.test.v1.proto2.TestAllTypes" } }
+      ident: { type: { message_type: "cel.expr.conformance.proto2.TestAllTypes" } }
     }
     bindings: {
       key: "msg"
       value: {
         value: {
           object_value: {
-            [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]: {
-              [google.api.expr.test.v1.proto2.Proto2ExtensionScopedMessage.int64_ext]: 42
+            [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]: {
+              [cel.expr.conformance.proto2.Proto2ExtensionScopedMessage.int64_ext]: 42
             }
           }
         }
@@ -127,18 +127,18 @@ section: {
   }
   test: {
     name: "message_scoped_nested_ext"
-    expr: "proto.hasExt(msg, google.api.expr.test.v1.proto2.Proto2ExtensionScopedMessage.message_scoped_nested_ext)"
+    expr: "proto.hasExt(msg, cel.expr.conformance.proto2.Proto2ExtensionScopedMessage.message_scoped_nested_ext)"
     type_env: {
       name: "msg"
-      ident: { type: { message_type: "google.api.expr.test.v1.proto2.TestAllTypes" } }
+      ident: { type: { message_type: "cel.expr.conformance.proto2.TestAllTypes" } }
     }
     bindings: {
       key: "msg"
       value: {
         value: {
           object_value: {
-            [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]: {
-              [google.api.expr.test.v1.proto2.Proto2ExtensionScopedMessage.message_scoped_nested_ext]: {}
+            [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]: {
+              [cel.expr.conformance.proto2.Proto2ExtensionScopedMessage.message_scoped_nested_ext]: {}
             }
           }
         }
@@ -147,18 +147,18 @@ section: {
   }
   test: {
     name: "message_scoped_nested_enum_ext"
-    expr: "proto.hasExt(msg, google.api.expr.test.v1.proto2.Proto2ExtensionScopedMessage.nested_enum_ext)"
+    expr: "proto.hasExt(msg, cel.expr.conformance.proto2.Proto2ExtensionScopedMessage.nested_enum_ext)"
     type_env: {
       name: "msg"
-      ident: { type: { message_type: "google.api.expr.test.v1.proto2.TestAllTypes" } }
+      ident: { type: { message_type: "cel.expr.conformance.proto2.TestAllTypes" } }
     }
     bindings: {
       key: "msg"
       value: {
         value: {
           object_value: {
-            [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]: {
-              [google.api.expr.test.v1.proto2.Proto2ExtensionScopedMessage.nested_enum_ext]: BAR
+            [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]: {
+              [cel.expr.conformance.proto2.Proto2ExtensionScopedMessage.nested_enum_ext]: BAR
             }
           }
         }
@@ -167,18 +167,18 @@ section: {
   }
   test: {
     name: "message_scoped_repeated_test_all_types"
-    expr: "proto.hasExt(msg, google.api.expr.test.v1.proto2.Proto2ExtensionScopedMessage.message_scoped_repeated_test_all_types)"
+    expr: "proto.hasExt(msg, cel.expr.conformance.proto2.Proto2ExtensionScopedMessage.message_scoped_repeated_test_all_types)"
     type_env: {
       name: "msg"
-      ident: { type: { message_type: "google.api.expr.test.v1.proto2.TestAllTypes" } }
+      ident: { type: { message_type: "cel.expr.conformance.proto2.TestAllTypes" } }
     }
     bindings: {
       key: "msg"
       value: {
         value: {
           object_value: {
-            [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]: {
-              [google.api.expr.test.v1.proto2.Proto2ExtensionScopedMessage.message_scoped_repeated_test_all_types]: [ { single_int64: 1 }, { single_bool: true } ]
+            [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]: {
+              [cel.expr.conformance.proto2.Proto2ExtensionScopedMessage.message_scoped_repeated_test_all_types]: [ { single_int64: 1 }, { single_bool: true } ]
             }
           }
         }
@@ -191,18 +191,18 @@ section: {
   name: "get_ext"
   test: {
     name: "package_scoped_int32"
-    expr: "proto.getExt(msg, google.api.expr.test.v1.proto2.int32_ext) == 42"
+    expr: "proto.getExt(msg, cel.expr.conformance.proto2.int32_ext) == 42"
     type_env: {
       name: "msg"
-      ident: { type: { message_type: "google.api.expr.test.v1.proto2.TestAllTypes" } }
+      ident: { type: { message_type: "cel.expr.conformance.proto2.TestAllTypes" } }
     }
     bindings: {
       key: "msg"
       value: {
         value: {
           object_value: {
-            [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]: {
-              [google.api.expr.test.v1.proto2.int32_ext]: 42
+            [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]: {
+              [cel.expr.conformance.proto2.int32_ext]: 42
             }
           }
         }
@@ -211,18 +211,18 @@ section: {
   }
   test: {
     name: "package_scoped_nested_ext"
-    expr: "proto.getExt(msg, google.api.expr.test.v1.proto2.nested_ext) == google.api.expr.test.v1.proto2.TestAllTypes{}"
+    expr: "proto.getExt(msg, cel.expr.conformance.proto2.nested_ext) == cel.expr.conformance.proto2.TestAllTypes{}"
     type_env: {
       name: "msg"
-      ident: { type: { message_type: "google.api.expr.test.v1.proto2.TestAllTypes" } }
+      ident: { type: { message_type: "cel.expr.conformance.proto2.TestAllTypes" } }
     }
     bindings: {
       key: "msg"
       value: {
         value: {
           object_value: {
-            [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]: {
-              [google.api.expr.test.v1.proto2.nested_ext]: {}
+            [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]: {
+              [cel.expr.conformance.proto2.nested_ext]: {}
             }
           }
         }
@@ -231,18 +231,18 @@ section: {
   }
   test: {
     name: "package_scoped_test_all_types_ext"
-    expr: "proto.getExt(msg, google.api.expr.test.v1.proto2.test_all_types_ext) == google.api.expr.test.v1.proto2.TestAllTypes{}"
+    expr: "proto.getExt(msg, cel.expr.conformance.proto2.test_all_types_ext) == cel.expr.conformance.proto2.TestAllTypes{}"
     type_env: {
       name: "msg"
-      ident: { type: { message_type: "google.api.expr.test.v1.proto2.TestAllTypes" } }
+      ident: { type: { message_type: "cel.expr.conformance.proto2.TestAllTypes" } }
     }
     bindings: {
       key: "msg"
       value: {
         value: {
           object_value: {
-            [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]: {
-              [google.api.expr.test.v1.proto2.test_all_types_ext]: {}
+            [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]: {
+              [cel.expr.conformance.proto2.test_all_types_ext]: {}
             }
           }
         }
@@ -251,18 +251,18 @@ section: {
   }
   test: {
     name: "package_scoped_test_all_types_nested_enum_ext"
-    expr: "proto.getExt(msg, google.api.expr.test.v1.proto2.nested_enum_ext) == google.api.expr.test.v1.proto2.TestAllTypes.NestedEnum.BAR"
+    expr: "proto.getExt(msg, cel.expr.conformance.proto2.nested_enum_ext) == cel.expr.conformance.proto2.TestAllTypes.NestedEnum.BAR"
     type_env: {
       name: "msg"
-      ident: { type: { message_type: "google.api.expr.test.v1.proto2.TestAllTypes" } }
+      ident: { type: { message_type: "cel.expr.conformance.proto2.TestAllTypes" } }
     }
     bindings: {
       key: "msg"
       value: {
         value: {
           object_value: {
-            [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]: {
-              [google.api.expr.test.v1.proto2.nested_enum_ext]: BAR
+            [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]: {
+              [cel.expr.conformance.proto2.nested_enum_ext]: BAR
             }
           }
         }
@@ -271,18 +271,18 @@ section: {
   }
   test: {
     name: "package_scoped_repeated_test_all_types"
-    expr: "proto.getExt(msg, google.api.expr.test.v1.proto2.repeated_test_all_types) == [google.api.expr.test.v1.proto2.TestAllTypes{single_int64: 1}, google.api.expr.test.v1.proto2.TestAllTypes{single_bool: true}]"
+    expr: "proto.getExt(msg, cel.expr.conformance.proto2.repeated_test_all_types) == [cel.expr.conformance.proto2.TestAllTypes{single_int64: 1}, cel.expr.conformance.proto2.TestAllTypes{single_bool: true}]"
     type_env: {
       name: "msg"
-      ident: { type: { message_type: "google.api.expr.test.v1.proto2.TestAllTypes" } }
+      ident: { type: { message_type: "cel.expr.conformance.proto2.TestAllTypes" } }
     }
     bindings: {
       key: "msg"
       value: {
         value: {
           object_value: {
-            [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]: {
-              [google.api.expr.test.v1.proto2.repeated_test_all_types]: [ { single_int64: 1 }, { single_bool: true } ]
+            [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]: {
+              [cel.expr.conformance.proto2.repeated_test_all_types]: [ { single_int64: 1 }, { single_bool: true } ]
             }
           }
         }
@@ -291,18 +291,18 @@ section: {
   }
   test: {
     name: "message_scoped_int64"
-    expr: "proto.getExt(msg, google.api.expr.test.v1.proto2.Proto2ExtensionScopedMessage.int64_ext) == 42"
+    expr: "proto.getExt(msg, cel.expr.conformance.proto2.Proto2ExtensionScopedMessage.int64_ext) == 42"
     type_env: {
       name: "msg"
-      ident: { type: { message_type: "google.api.expr.test.v1.proto2.TestAllTypes" } }
+      ident: { type: { message_type: "cel.expr.conformance.proto2.TestAllTypes" } }
     }
     bindings: {
       key: "msg"
       value: {
         value: {
           object_value: {
-            [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]: {
-              [google.api.expr.test.v1.proto2.Proto2ExtensionScopedMessage.int64_ext]: 42
+            [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]: {
+              [cel.expr.conformance.proto2.Proto2ExtensionScopedMessage.int64_ext]: 42
             }
           }
         }
@@ -311,18 +311,18 @@ section: {
   }
   test: {
     name: "message_scoped_nested_ext"
-    expr: "proto.getExt(msg, google.api.expr.test.v1.proto2.Proto2ExtensionScopedMessage.message_scoped_nested_ext) == google.api.expr.test.v1.proto2.TestAllTypes{}"
+    expr: "proto.getExt(msg, cel.expr.conformance.proto2.Proto2ExtensionScopedMessage.message_scoped_nested_ext) == cel.expr.conformance.proto2.TestAllTypes{}"
     type_env: {
       name: "msg"
-      ident: { type: { message_type: "google.api.expr.test.v1.proto2.TestAllTypes" } }
+      ident: { type: { message_type: "cel.expr.conformance.proto2.TestAllTypes" } }
     }
     bindings: {
       key: "msg"
       value: {
         value: {
           object_value: {
-            [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]: {
-              [google.api.expr.test.v1.proto2.Proto2ExtensionScopedMessage.message_scoped_nested_ext]: {}
+            [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]: {
+              [cel.expr.conformance.proto2.Proto2ExtensionScopedMessage.message_scoped_nested_ext]: {}
             }
           }
         }
@@ -331,18 +331,18 @@ section: {
   }
   test: {
     name: "message_scoped_nested_enum_ext"
-    expr: "proto.getExt(msg, google.api.expr.test.v1.proto2.Proto2ExtensionScopedMessage.nested_enum_ext) == google.api.expr.test.v1.proto2.TestAllTypes.NestedEnum.BAR"
+    expr: "proto.getExt(msg, cel.expr.conformance.proto2.Proto2ExtensionScopedMessage.nested_enum_ext) == cel.expr.conformance.proto2.TestAllTypes.NestedEnum.BAR"
     type_env: {
       name: "msg"
-      ident: { type: { message_type: "google.api.expr.test.v1.proto2.TestAllTypes" } }
+      ident: { type: { message_type: "cel.expr.conformance.proto2.TestAllTypes" } }
     }
     bindings: {
       key: "msg"
       value: {
         value: {
           object_value: {
-            [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]: {
-              [google.api.expr.test.v1.proto2.Proto2ExtensionScopedMessage.nested_enum_ext]: BAR
+            [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]: {
+              [cel.expr.conformance.proto2.Proto2ExtensionScopedMessage.nested_enum_ext]: BAR
             }
           }
         }
@@ -351,18 +351,18 @@ section: {
   }
   test: {
     name: "message_scoped_repeated_test_all_types"
-    expr: "proto.getExt(msg, google.api.expr.test.v1.proto2.Proto2ExtensionScopedMessage.message_scoped_repeated_test_all_types) == [google.api.expr.test.v1.proto2.TestAllTypes{single_int64: 1}, google.api.expr.test.v1.proto2.TestAllTypes{single_bool: true}]"
+    expr: "proto.getExt(msg, cel.expr.conformance.proto2.Proto2ExtensionScopedMessage.message_scoped_repeated_test_all_types) == [cel.expr.conformance.proto2.TestAllTypes{single_int64: 1}, cel.expr.conformance.proto2.TestAllTypes{single_bool: true}]"
     type_env: {
       name: "msg"
-      ident: { type: { message_type: "google.api.expr.test.v1.proto2.TestAllTypes" } }
+      ident: { type: { message_type: "cel.expr.conformance.proto2.TestAllTypes" } }
     }
     bindings: {
       key: "msg"
       value: {
         value: {
           object_value: {
-            [type.googleapis.com/google.api.expr.test.v1.proto2.TestAllTypes]: {
-              [google.api.expr.test.v1.proto2.Proto2ExtensionScopedMessage.message_scoped_repeated_test_all_types]: [ { single_int64: 1 }, { single_bool: true } ]
+            [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes]: {
+              [cel.expr.conformance.proto2.Proto2ExtensionScopedMessage.message_scoped_repeated_test_all_types]: [ { single_int64: 1 }, { single_bool: true } ]
             }
           }
         }
@@ -370,4 +370,3 @@ section: {
     }
   }
 }
-
