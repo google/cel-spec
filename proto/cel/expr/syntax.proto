@@ -216,13 +216,12 @@ message Expr {
   // ```
   message Comprehension {
     // The name of the first iteration variable.
-    // When the iter_range is a list, this variable is the list element.
-    // When the iter_range is a map, this variable is the map entry key.
+    // For the single iteration variable macros, when iter_range is a list, this
+    // variable is the list element and when the iter_range is a map, this
+    // variable is the map key.
     string iter_var = 1;
 
     // The name of the second iteration variable, empty if not set.
-    // When the iter_range is a list, this variable is the integer index.
-    // When the iter_range is a map, this variable is the map entry value.
     // This field is only set for comprehension v2 macros.
     string iter_var2 = 8;
 
