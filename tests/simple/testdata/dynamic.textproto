@@ -1,4 +1,4 @@
-# proto-file: ../../../cel/expr/conformance/test/simple.proto
+# proto-file: ../../../proto/cel/expr/conformance/test/simple.proto
 # proto-message: cel.expr.conformance.test.SimpleTestFile
 
 name: "dynamic"
