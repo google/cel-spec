@@ -76,6 +76,9 @@ message SimpleTest {
   // Disables the check phase.
   bool disable_check = 5;
 
+  // Disables the evaluate phase.
+  bool check_only = 15;
+
   // The type environment to use for the check phase.
   repeated cel.expr.Decl type_env = 6;
 
@@ -97,6 +100,9 @@ message SimpleTest {
     // *   a floating point NaN should match any NaN.
     cel.expr.Value value = 8;
 
+    // A result and deduced expression type.
+    TypedResult typed_result = 16;
+
     // Matches error evaluation results.
     cel.expr.ErrorSet eval_error = 9;
 
@@ -111,7 +117,17 @@ message SimpleTest {
     // (Using explicit message since oneof can't handle repeated.)
     UnknownSetMatcher any_unknowns = 12;
   }
-  // Next is 15.
+  // Next is 17.
+}
+
+// Matches a result along with deduced expression type.
+message TypedResult {
+  // A normal value, which must match the evaluation result exactly
+  // via value equality semantics. This is ignored if the test is `check_only`.
+  cel.expr.Value result = 1;
+
+  // The deduced type of the expression as reported by the checker.
+  cel.expr.Type deduced_type = 2;
 }
 
 // Matches error results from Eval.
