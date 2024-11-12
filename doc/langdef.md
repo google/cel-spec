@@ -247,7 +247,7 @@ floating-point. We only support positive, decimal integer literals; negative
 integers are produced by the unary negation operator. Note that the integer 7 as
 an `int` is a different value than 7 as a `uint`, which would be written `7u`.
 Double-precision floating-point is also supported, and the integer 7 would be
-written `7.`, `7.0`, `7e0`, or any equivalent representation using a decimal
+written `7.0`, `7e0`, `.700e1`, or any equivalent representation using a decimal
 point or exponent.
 
 Note that currently there are no automatic arithmetic conversions for the
