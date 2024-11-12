@@ -107,7 +107,8 @@ Implementations are required to support at least:
     *   12 nested function calls;
     *   12 selection (`.`) operators in a row;
     *   12 indexing (`[_]`) operators in a row;
-    *   12 nested list, map, or message literals.
+    *   12 nested list, map, or message literals;
+    *   12 (`.`-separated) segments in a protocol buffer package name.
 
 This grammar corresponds to the following operator precedence and associativity:
 
