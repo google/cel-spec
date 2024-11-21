@@ -1,0 +1,262 @@
+# proto-file: ../../../proto/cel/expr/conformance/test/simple.proto
+# proto-message: cel.expr.conformance.test.SimpleTestFile
+
+name: "type_deductions"
+description: "Tests for type checker deduced types"
+
+section {
+  name: "constant_literals"
+  test {
+    name: "bool"
+    expr: "true"
+    typed_result {
+      result {
+        bool_value: true
+      }
+      deduced_type: {
+        primitive: BOOL
+      }
+    }
+  }
+  test {
+    name: "int"
+    expr: "42"
+    typed_result {
+      result {
+        int64_value: 42
+      }
+      deduced_type: {
+        primitive: INT64
+      }
+    }
+  }
+  test {
+    name: "uint"
+    expr: "42u"
+    typed_result {
+      result {
+        uint64_value: 42
+      }
+      deduced_type: {
+        primitive: UINT64
+      }
+    }
+  }
+  test {
+    name: "double"
+    expr: "0.1"
+    typed_result {
+      result {
+        double_value: 0.1
+      }
+      deduced_type: {
+        primitive: DOUBLE
+      }
+    }
+  }
+  test {
+    name: "string"
+    expr: "\"test\""
+    typed_result {
+      result {
+        string_value: "test"
+      }
+      deduced_type: {
+        primitive: STRING
+      }
+    }
+  }
+  test {
+    name: "bytes"
+    expr: "b\"test\""
+    typed_result {
+      result {
+        bytes_value: "test"
+      }
+      deduced_type: {
+        primitive: BYTES
+      }
+    }
+  }
+  test {
+    name: "null"
+    expr: "null"
+    typed_result {
+      result {
+        null_value: NULL_VALUE
+      }
+      deduced_type: {
+        null: NULL_VALUE
+      }
+    }
+  }
+}
+
+section {
+  name: "complex_intializers"
+  test {
+    name: "list"
+    expr: "[1]"
+    typed_result {
+      result {
+        list_value {
+          values {
+            int64_value: 1
+          }
+        }
+      }
+      deduced_type {
+        list_type { elem_type { primitive: INT64 } }
+      }
+    }
+  }
+  test {
+    name: "map"
+    expr: "{'abc': 123}"
+    typed_result {
+      result {
+        map_value {
+          entries {
+            key { string_value: "abc" }
+            value { int64_value: 123 }
+          }
+        }
+      }
+      deduced_type {
+        map_type {
+
+          key_type: { primitive: STRING }
+          value_type: { primitive: INT64 }
+        }
+      }
+    }
+  }
+  test {
+    name: "struct"
+    container: "cel.expr.conformance.proto3"
+    expr: "TestAllTypes{single_int64: 1}"
+    typed_result {
+      result {
+        object_value: {
+          [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes] {
+            single_int64: 1
+          }
+        }
+      }
+      deduced_type {
+        message_type: "cel.expr.conformance.proto3.TestAllTypes"
+      }
+    }
+  }
+}
+
+section {
+  name: "field_access"
+  test {
+    name: "int_field"
+    container: "cel.expr.conformance.proto3"
+    expr: "TestAllTypes{single_int64: 1}.single_int64"
+    typed_result {
+      result {
+        int64_value: 1
+      }
+      deduced_type {
+        primitive: INT64
+      }
+    }
+  }
+  test {
+    name: "repeated_int_field"
+    container: "cel.expr.conformance.proto3"
+    expr: "TestAllTypes{}.repeated_int64"
+    typed_result {
+      result {
+        list_value {}
+      }
+      deduced_type {
+        list_type: { elem_type: { primitive: INT64 } }
+      }
+    }
+  }
+  test {
+    name: "map_bool_int"
+    container: "cel.expr.conformance.proto3"
+    expr: "TestAllTypes{}.map_bool_int64"
+    typed_result {
+      result {
+        map_value {}
+      }
+      deduced_type {
+        map_type: {
+          key_type: { primitive: BOOL }
+          value_type: { primitive: INT64 }
+        }
+      }
+    }
+  }
+}
+
+section {
+  name: "indexing"
+  test {
+    name: "list"
+    expr: "['foo'][0]"
+    typed_result {
+      result {
+        string_value: "foo"
+      }
+      deduced_type {
+        primitive: STRING
+      }
+    }
+  }
+  test {
+    name: "map"
+    expr: "{'abc': 123}['abc']"
+    typed_result {
+      result {
+        int64_value: 123
+      }
+      deduced_type {
+        primitive: INT64
+      }
+    }
+  }
+}
+
+section {
+  name: "functions"
+  test {
+    name: "nested_calls"
+    expr: "('foo' + 'bar').startsWith('foo')"
+    typed_result {
+      result {
+        bool_value: true
+      }
+      deduced_type {
+        primitive: BOOL
+      }
+    }
+  }
+  test {
+    name: "function_result_type"
+    expr: "fn('abc', 123)"
+    check_only: true
+    type_env {
+      name: "fn"
+      function: {
+        overloads {
+          overload_id: "fn_string_int"
+          result_type: { primitive: STRING }
+          params { primitive: STRING }
+          params { primitive: INT64 }
+        }
+      }
+    }
+    typed_result {
+      deduced_type {
+        primitive: STRING
+      }
+    }
+  }
+}
