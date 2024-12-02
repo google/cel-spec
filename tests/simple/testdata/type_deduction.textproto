@@ -13,7 +13,7 @@ section {
       result {
         bool_value: true
       }
-      deduced_type: {
+      deduced_type {
         primitive: BOOL
       }
     }
@@ -25,7 +25,7 @@ section {
       result {
         int64_value: 42
       }
-      deduced_type: {
+      deduced_type {
         primitive: INT64
       }
     }
@@ -37,7 +37,7 @@ section {
       result {
         uint64_value: 42
       }
-      deduced_type: {
+      deduced_type {
         primitive: UINT64
       }
     }
@@ -49,7 +49,7 @@ section {
       result {
         double_value: 0.1
       }
-      deduced_type: {
+      deduced_type {
         primitive: DOUBLE
       }
     }
@@ -61,7 +61,7 @@ section {
       result {
         string_value: "test"
       }
-      deduced_type: {
+      deduced_type {
         primitive: STRING
       }
     }
@@ -73,7 +73,7 @@ section {
       result {
         bytes_value: "test"
       }
-      deduced_type: {
+      deduced_type {
         primitive: BYTES
       }
     }
@@ -85,7 +85,7 @@ section {
       result {
         null_value: NULL_VALUE
       }
-      deduced_type: {
+      deduced_type {
         null: NULL_VALUE
       }
     }
@@ -124,7 +124,6 @@ section {
       }
       deduced_type {
         map_type {
-
           key_type: { primitive: STRING }
           value_type: { primitive: INT64 }
         }
