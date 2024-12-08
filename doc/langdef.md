@@ -1763,7 +1763,7 @@ complexity is proportional to the product of the sizes of the arguments.
 
 **endsWith** \- Tests whether the string operand ends with the specified suffix.
 Average time complexity is linear with respect to the size of the suffix string.
-Worst-cast time complexity is proportional to the product of the sizes of the
+Worst-case time complexity is proportional to the product of the sizes of the
 arguments.
 
 **Signatures:**
@@ -1795,7 +1795,7 @@ matches("foobar", "foo.*") // true
 
 **startsWith** \- Tests whether the string operand starts with the specified
 prefix. Average time complexity is linear with respect to the size of the
-prefix. Worst-cast time complexity is proportional to the product of the sizes
+prefix. Worst-case time complexity is proportional to the product of the sizes
 of the arguments.
 
 **Signatures:**
