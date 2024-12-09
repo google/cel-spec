@@ -124,8 +124,8 @@ section {
       }
       deduced_type {
         map_type {
-          key_type: { primitive: STRING }
-          value_type: { primitive: INT64 }
+          key_type { primitive: STRING }
+          value_type { primitive: INT64 }
         }
       }
     }
@@ -136,7 +136,7 @@ section {
     expr: "TestAllTypes{single_int64: 1}"
     typed_result {
       result {
-        object_value: {
+        object_value {
           [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes] {
             single_int64: 1
           }
@@ -173,7 +173,7 @@ section {
         list_value {}
       }
       deduced_type {
-        list_type: { elem_type: { primitive: INT64 } }
+        list_type { elem_type { primitive: INT64 } }
       }
     }
   }
@@ -186,9 +186,9 @@ section {
         map_value {}
       }
       deduced_type {
-        map_type: {
-          key_type: { primitive: BOOL }
-          value_type: { primitive: INT64 }
+        map_type {
+          key_type { primitive: BOOL }
+          value_type { primitive: INT64 }
         }
       }
     }
@@ -243,10 +243,10 @@ section {
     check_only: true
     type_env {
       name: "fn"
-      function: {
+      function {
         overloads {
           overload_id: "fn_string_int"
-          result_type: { primitive: STRING }
+          result_type { primitive: STRING }
           params { primitive: STRING }
           params { primitive: INT64 }
         }
@@ -255,6 +255,500 @@ section {
     typed_result {
       deduced_type {
         primitive: STRING
+      }
+    }
+  }
+}
+
+# These are somewhat complex expressions for edge cases in type inference. The
+# result values are not interesting, but the inferred types are.
+section {
+  name: "flexible_type_parameter_assignment"
+  test {
+    name: "list_parameter"
+    expr: "[[], [[]], [[[]]], [[[[]]]]]"
+    check_only: true
+    typed_result {
+      deduced_type {
+        list_type {
+          elem_type {
+            list_type {
+              elem_type {
+                list_type {
+                  elem_type {
+                    list_type {
+                      elem_type {
+                        list_type {
+                          elem_type { dyn {} }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  test {
+    name: "list_parameter_order_independent"
+    expr: "[[[[[]]]], [], [[[]]]]"
+    check_only: true
+    typed_result {
+      deduced_type {
+        list_type {
+          elem_type {
+            list_type {
+              elem_type {
+                list_type {
+                  elem_type {
+                    list_type {
+                      elem_type {
+                        list_type {
+                          elem_type { dyn {} }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  test {
+    name: "list_parameters_do_not_unify"
+    expr: "[msg.single_int64_wrapper, msg.single_string_wrapper]"
+    type_env {
+      name: "msg"
+      ident {
+        type {
+          message_type: "cel.expr.conformance.proto3.TestAllTypes"
+        }
+      }
+    }
+    check_only: true
+    typed_result {
+      deduced_type {
+        list_type {
+          elem_type {
+            dyn {}
+          }
+        }
+      }
+    }
+  }
+  test {
+    name: "optional_none"
+    expr: "[optional.none(), optional.of(1)]"
+    check_only: true
+    typed_result {
+      deduced_type {
+        list_type {
+          elem_type {
+            abstract_type {
+              name: "optional_type"
+              parameter_types { primitive: INT64 }
+            }
+          }
+        }
+      }
+    }
+  }
+  test {
+    name: "optional_none_2"
+    expr: "[optional.of(1), optional.none()]"
+    check_only: true
+    typed_result {
+      deduced_type {
+        list_type {
+          elem_type {
+            abstract_type {
+              name: "optional_type"
+              parameter_types { primitive: INT64 }
+            }
+          }
+        }
+      }
+    }
+  }
+  test {
+    name: "optional_dyn_promotion"
+    expr: "[optional.of(1), optional.of(dyn(1))]"
+    check_only: true
+    typed_result {
+      deduced_type {
+        list_type {
+          elem_type {
+            abstract_type {
+              name: "optional_type"
+              parameter_types { dyn {} }
+            }
+          }
+        }
+      }
+    }
+  }
+  test {
+    name: "optional_dyn_promotion_2"
+    expr: "[optional.of(dyn(1)), optional.of(1)]"
+    check_only: true
+    typed_result {
+      deduced_type {
+        list_type {
+          elem_type {
+            abstract_type {
+              name: "optional_type"
+              parameter_types { dyn {} }
+            }
+          }
+        }
+      }
+    }
+  }
+  test {
+    name: "optional_in_ternary"
+    expr: "true ? optional.of(dyn(1)) : optional.of(1)"
+    check_only: true
+    typed_result {
+      deduced_type {
+        abstract_type {
+          name: "optional_type"
+          parameter_types { dyn {} }
+        }
+      }
+    }
+  }
+}
+
+# Wrapper types have some special handling. They generally behave like a union
+# type e.g. `null | int64` with auto-unboxing, but there are some quirks.
+section {
+  name: "wrappers"
+  test {
+    name: "wrapper_promotion"
+    type_env {
+      name: "msg"
+      ident {
+        type {
+          message_type: "cel.expr.conformance.proto3.TestAllTypes"
+        }
+      }
+    }
+    expr: "[msg.single_int64_wrapper, msg.single_int64]"
+    check_only: true
+    typed_result {
+      deduced_type {
+        list_type {
+          elem_type {
+            wrapper: INT64
+          }
+        }
+      }
+    }
+  }
+  test {
+    name: "wrapper_promotion_2"
+    type_env {
+      name: "msg"
+      ident {
+        type {
+          message_type: "cel.expr.conformance.proto3.TestAllTypes"
+        }
+      }
+    }
+    expr: "[msg.single_int64, msg.single_int64_wrapper]"
+    check_only: true
+    typed_result {
+      deduced_type {
+        list_type {
+          elem_type {
+            wrapper: INT64
+          }
+        }
+      }
+    }
+  }
+  test {
+    name: "wrapper_dyn_promotion"
+    type_env {
+      name: "msg"
+      ident {
+        type {
+          message_type: "cel.expr.conformance.proto3.TestAllTypes"
+        }
+      }
+    }
+    expr: "[msg.single_int64_wrapper, msg.single_int64, dyn(1)]"
+    check_only: true
+    typed_result {
+      deduced_type {
+        list_type {
+          elem_type {
+            dyn {}
+          }
+        }
+      }
+    }
+  }
+  test {
+    name: "wrapper_dyn_promotion_2"
+    type_env {
+      name: "msg"
+      ident {
+        type {
+          message_type: "cel.expr.conformance.proto3.TestAllTypes"
+        }
+      }
+    }
+    expr: "[dyn(1), msg.single_int64_wrapper, msg.single_int64]"
+    check_only: true
+    typed_result {
+      deduced_type {
+        list_type {
+          elem_type {
+            dyn {}
+          }
+        }
+      }
+    }
+  }
+  test {
+    name: "wrapper_dyn_promotion_2"
+    type_env {
+      name: "msg"
+      ident {
+        type {
+          message_type: "cel.expr.conformance.proto3.TestAllTypes"
+        }
+      }
+    }
+    expr: "[dyn(1), msg.single_int64_wrapper, msg.single_int64]"
+    check_only: true
+    typed_result {
+      deduced_type {
+        list_type {
+          elem_type {
+            dyn {}
+          }
+        }
+      }
+    }
+  }
+}
+
+section {
+  name: "type_parameters"
+  test {
+    name: "multiple_parameters_generality"
+    check_only: true
+    expr: "[tuple(1, 2u, 3.0), tuple(dyn(1), dyn(2u), dyn(3.0))][0]"
+    type_env {
+      name: "tuple"
+      function {
+        overloads {
+          overload_id: "tuple_T_U_V"
+          params { type_param: "T" }
+          params { type_param: "U" }
+          params { type_param: "V" }
+          result_type {
+            abstract_type {
+              name: "tuple"
+              parameter_types { type_param: "T" }
+              parameter_types { type_param: "U" }
+              parameter_types { type_param: "V" }
+            }
+          }
+        }
+      }
+    }
+    typed_result {
+      deduced_type {
+        abstract_type {
+          name: "tuple"
+          parameter_types { dyn {} }
+          parameter_types { dyn {} }
+          parameter_types { dyn {} }
+        }
+      }
+    }
+  }
+  test {
+    name: "multiple_parameters_generality"
+    check_only: true
+    expr: "sort(tuple(dyn(1), 2u, 3.0))"
+    type_env {
+      name: "tuple"
+      function {
+        overloads {
+          overload_id: "tuple_T_U_V"
+          params { type_param: "T" }
+          params { type_param: "U" }
+          params { type_param: "V" }
+          result_type {
+            abstract_type {
+              name: "tuple"
+              parameter_types { type_param: "T" }
+              parameter_types { type_param: "U" }
+              parameter_types { type_param: "V" }
+            }
+          }
+        }
+      }
+    }
+    type_env {
+      name: "sort"
+      function {
+        overloads {
+          overload_id: "sort_tuple_T_T_T"
+          params {
+            abstract_type {
+              name: "tuple"
+              parameter_types { type_param: "T" }
+              parameter_types { type_param: "T" }
+              parameter_types { type_param: "T" }
+            }
+          }
+          result_type {
+            abstract_type {
+              name: "tuple"
+              parameter_types { type_param: "T" }
+              parameter_types { type_param: "T" }
+              parameter_types { type_param: "T" }
+            }
+          }
+        }
+      }
+    }
+    typed_result {
+      deduced_type {
+        abstract_type {
+          name: "tuple"
+          parameter_types { dyn {} }
+          parameter_types { dyn {} }
+          parameter_types { dyn {} }
+        }
+      }
+    }
+  }
+}
+
+# Messages, some well-known types, and abstract can be assigned from null in the
+# CEL type checkers for historical reasons. For backward compatibiliy, we
+# maintain this behavior but it's a bit inconsistent with the intended meaning
+# of null (a singleton representing a JSON null literal) in CEL.
+section {
+  name: "legacy_nullable_types"
+  test {
+    name: "null_assignable_to_message_parameter_candidate"
+    type_env {
+      name: "msg"
+      ident {
+        type {
+          message_type: "cel.expr.conformance.proto3.TestAllTypes"
+        }
+      }
+    }
+    bindings {
+      key: "msg"
+      value {
+        value {
+          object_value {
+            [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes] {}
+          }
+        }
+      }
+    }
+    expr: "[msg, null][0]"
+    typed_result {
+      deduced_type {
+        message_type: "cel.expr.conformance.proto3.TestAllTypes"
+      }
+      result {
+        object_value {
+          [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes] {}
+        }
+      }
+    }
+  }
+  test {
+    name: "null_assignable_to_duration_parameter_candidate"
+    type_env {
+      name: "msg"
+      ident {
+        type {
+          message_type: "cel.expr.conformance.proto3.TestAllTypes"
+        }
+      }
+    }
+    bindings {
+      key: "msg"
+      value {
+        value {
+          object_value {
+            [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes] {}
+          }
+        }
+      }
+    }
+    expr: "[msg.single_duration, null][0]"
+    typed_result {
+      deduced_type {
+        well_known: DURATION
+      }
+      result {
+        object_value {
+          [type.googleapis.com/google.protobuf.Duration] {}
+        }
+      }
+    }
+  }
+  test {
+    name: "null_assignable_to_timestamp_parameter_candidate"
+    type_env {
+      name: "msg"
+      ident {
+        type {
+          message_type: "cel.expr.conformance.proto3.TestAllTypes"
+        }
+      }
+    }
+    bindings {
+      key: "msg"
+      value {
+        value {
+          object_value {
+            [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes] {}
+          }
+        }
+      }
+    }
+    expr: "[msg.single_timestamp, null][0]"
+    typed_result {
+      deduced_type {
+        well_known: TIMESTAMP
+      }
+      result {
+        object_value {
+          [type.googleapis.com/google.protobuf.Timestamp] {}
+        }
+      }
+    }
+  }
+  test {
+    name: "null_assignable_to_abstract_parameter_candidate"
+    expr: "[optional.of(1), null][0]"
+    check_only: true
+    typed_result {
+      deduced_type {
+        abstract_type {
+          name: "optional_type"
+          parameter_types { primitive: INT64 }
+        }
       }
     }
   }
