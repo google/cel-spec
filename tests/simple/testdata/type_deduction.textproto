@@ -518,7 +518,7 @@ section {
     }
   }
   test {
-    name: "wrapper_dyn_promotion_2"
+    name: "wrapper_primitive_assignable"
     type_env {
       name: "msg"
       ident {
@@ -527,15 +527,65 @@ section {
         }
       }
     }
-    expr: "[dyn(1), msg.single_int64_wrapper, msg.single_int64]"
+    expr: "msg.single_int64_wrapper + 1"
     check_only: true
     typed_result {
       deduced_type {
-        list_type {
-          elem_type {
-            dyn {}
-          }
+        primitive: INT64
+      }
+    }
+  }
+  test {
+    name: "wrapper_null_assignable"
+    type_env {
+      name: "msg"
+      ident {
+        type {
+          message_type: "cel.expr.conformance.proto3.TestAllTypes"
         }
+      }
+    }
+    expr: "msg.single_int64_wrapper == null"
+    check_only: true
+    typed_result {
+      deduced_type {
+        primitive: BOOL
+      }
+    }
+  }
+  test {
+    name: "wrapper_ternary_parameter_assignment"
+    type_env {
+      name: "msg"
+      ident {
+        type {
+          message_type: "cel.expr.conformance.proto3.TestAllTypes"
+        }
+      }
+    }
+    expr: "false ? msg.single_int64_wrapper : null"
+    check_only: true
+    typed_result {
+      deduced_type {
+        wrapper: INT64
+      }
+    }
+  }
+  test {
+    name: "wrapper_ternary_parameter_assignment_2"
+    type_env {
+      name: "msg"
+      ident {
+        type {
+          message_type: "cel.expr.conformance.proto3.TestAllTypes"
+        }
+      }
+    }
+    expr: "true ? msg.single_int64_wrapper : 42"
+    check_only: true
+    typed_result {
+      deduced_type {
+        wrapper: INT64
       }
     }
   }
@@ -578,7 +628,7 @@ section {
     }
   }
   test {
-    name: "multiple_parameters_generality"
+    name: "multiple_parameters_generality_2"
     check_only: true
     expr: "sort(tuple(dyn(1), 2u, 3.0))"
     type_env {
@@ -632,6 +682,64 @@ section {
           parameter_types { dyn {} }
           parameter_types { dyn {} }
         }
+      }
+    }
+  }
+  test {
+    name: "multiple_parameters_parameterized_ovl"
+    check_only: true
+    expr: "tuple(1, 2u, 3.0) == tuple(1, dyn(2u), dyn(3.0))"
+    type_env {
+      name: "tuple"
+      function {
+        overloads {
+          overload_id: "tuple_T_U_V"
+          params { type_param: "T" }
+          params { type_param: "U" }
+          params { type_param: "V" }
+          result_type {
+            abstract_type {
+              name: "tuple"
+              parameter_types { type_param: "T" }
+              parameter_types { type_param: "U" }
+              parameter_types { type_param: "V" }
+            }
+          }
+        }
+      }
+    }
+    typed_result {
+      deduced_type {
+        primitive: BOOL
+      }
+    }
+  }
+  test {
+    name: "multiple_parameters_parameterized_ovl_2"
+    check_only: true
+    expr: "tuple(dyn(1), dyn(2u), 3.0) == tuple(1, 2u, 3.0)"
+    type_env {
+      name: "tuple"
+      function {
+        overloads {
+          overload_id: "tuple_T_U_V"
+          params { type_param: "T" }
+          params { type_param: "U" }
+          params { type_param: "V" }
+          result_type {
+            abstract_type {
+              name: "tuple"
+              parameter_types { type_param: "T" }
+              parameter_types { type_param: "U" }
+              parameter_types { type_param: "V" }
+            }
+          }
+        }
+      }
+    }
+    typed_result {
+      deduced_type {
+        primitive: BOOL
       }
     }
   }
