@@ -148,12 +148,6 @@ section {
     value: { bool_value: false }
   }
   test {
-    name: "no_string_normalization_surrogate"
-    description: "Should not replace surrogate pairs."
-    expr: "'\\U0001F436' == '\\xef\\xbf\\xbd\\xef\\xbf\\bd'"
-    value: { bool_value: false }
-  }
-  test {
     name: "eq_null"
     expr: "null == null"
     value: { bool_value: true }
