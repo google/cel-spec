@@ -120,7 +120,7 @@ section {
     }
   }
   test {
-    name: "negtive_zero"
+    name: "negative_zero"
     expr: "-(0)"
     value: { int64_value: 0 }
   }
@@ -312,7 +312,7 @@ section {
     value: { uint64_value: 2 }
   }
   test {
-    name: "negtive_no_overload"
+    name: "negative_no_overload"
     expr: "-(5u)"
     disable_check: true
     eval_error: {

@@ -25,7 +25,7 @@ section {
     value { int64_value: 0 }
   }
   test {
-    name: "comparision"
+    name: "comparison"
     container: "cel.expr.conformance.proto2"
     expr: "GlobalEnum.GAR == 1"
     value { bool_value: true }
@@ -127,7 +127,7 @@ section {
     value { int64_value: 0 }
   }
   test {
-    name: "comparision"
+    name: "comparison"
     container: "cel.expr.conformance.proto3"
     expr: "GlobalEnum.GAR == 1"
     value { bool_value: true }
@@ -340,13 +340,13 @@ section {
     }
   }
   test {
-    name: "comparision_true"
+    name: "comparison_true"
     container: "cel.expr.conformance.proto2"
     expr: "GlobalEnum.GAR == GlobalEnum.GAR"
     value { bool_value: true }
   }
   test {
-    name: "comparision_false"
+    name: "comparison_false"
     container: "cel.expr.conformance.proto2"
     expr: "GlobalEnum.GAR == GlobalEnum.GAZ"
     value { bool_value: false }
@@ -544,13 +544,13 @@ section {
     }
   }
   test {
-    name: "comparision_true"
+    name: "comparison_true"
     container: "cel.expr.conformance.proto3"
     expr: "GlobalEnum.GAR == GlobalEnum.GAR"
     value { bool_value: true }
   }
   test {
-    name: "comparision_false"
+    name: "comparison_false"
     container: "cel.expr.conformance.proto3"
     expr: "GlobalEnum.GAR == GlobalEnum.GAZ"
     value { bool_value: false }
