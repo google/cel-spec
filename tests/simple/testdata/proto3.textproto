@@ -432,7 +432,7 @@ section {
 
 section {
   name: "singular_bind"
-  description: "Binding the singlular fields."
+  description: "Binding the singular fields."
 
   test {
     name: "int32"

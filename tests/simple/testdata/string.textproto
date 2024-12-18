@@ -170,7 +170,7 @@ section {
   }
 }
 section {
-  name: "concatentation"
+  name: "concatenation"
   description: "Tests for string concatenation."
   test {
     name: "concat_true"
