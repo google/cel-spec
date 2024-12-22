@@ -306,7 +306,7 @@ section {
     expr: "dyn"
     disable_check: true
     eval_error {
-      errors { message: "unknown varaible" }
+      errors { message: "unknown variable" }
     }
   }
   test {
