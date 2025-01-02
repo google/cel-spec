@@ -694,10 +694,11 @@ macros are:
     `e` or keys of a map `e`. Here `x` is a simple identifier to be used in `p`
     which binds to the element or key. The `all()` macro combines per-element
     predicate results with the "and" (`&&`) operator, so if any predicate
-    evaluates to false, the macro evaluates to false, ignoring any errors from
-    other predicates.
+    evaluates to `false`, the macro evaluates to `false`, ignoring any errors
+    from other predicates.
 *   `e.exists(x, p)`: like the `all()` macro, but combines the predicate results
-    with the "or" (`||`) operator.
+    with the "or" (`||`) operator, so if any predicate evaluates to `true`, the
+    macro evaluates to `true`, ignoring any errors from other predicates.
 *   `e.exists_one(x,p)`: like the `exists()` macro, but evaluates to `true` only
     if the predicate of exactly one element/key evaluates to `true`, and the
     rest to `false`. Any other combination of boolean results evaluates to
@@ -763,7 +764,7 @@ used.
     -   If `f` is a oneof or singular message field, `has(e.f)` indicates
         whether the field is set.
     -   If `f` is some other singular field, `has(e.f)` indicates whether the
-        field's value is its default value (zero for numeric fields, false for
+        field's value is its default value (zero for numeric fields, `false` for
         booleans, empty for strings and bytes).
 5.  In all other cases, `has(e.f)` evaluates to an error.
 
@@ -1096,7 +1097,7 @@ a[k1] == b[k1] && a[k2] == b[k2] && ... && a[kN] == b[kN]
 ```
 
 In short, when `list` lengths / `map` key sets are the same, and all element
-comparisons are `true`, the result is true.
+comparisons are `true`, the result is `true`.
 
 #### Protocol Buffers
 
@@ -1111,7 +1112,7 @@ messages to be equal:
 - All entries of `map` fields compare order-independently as `true`;
 - All fields of `message` and `group` typed fields compare true, with the
   comparison being performed as if by recursion.
-- All unknown fields compare true using byte equality.
+- All unknown fields compare `true` using byte equality.
 
 In addition to the publicly documented behaviors for C++ protobuf equality,
 there are some implementation behaviors which are important to mention:
@@ -1141,12 +1142,12 @@ message Msg {
   repeated google.protobuf.Any values;
 }
 
-// CEL - Produces false according to protobuf equality since the types of
+// CEL - Produces `false` according to protobuf equality since the types of
 //       Int32Value and FloatValue are not equal.
 Msg{values: [google.protobuf.Int32Value{value: 1}]}
   == Msg{values: [google.protobuf.FloatValue{value: 1.0}]}
 
-// CEL - Produces true according to CEL equality with well-known
+// CEL - Produces `true` according to CEL equality with well-known
 //       protobuf type unwrapping of the list elements within `values`
 //       where the list values are unwrapped to CEL numbers and compared
 //       using `numericEquals`.
@@ -1222,14 +1223,14 @@ select notation are supported.
 **Examples**
 
 ```
-// true if the 'address' field exists in the 'user' message
+// `true` if the 'address' field exists in the 'user' message
 has(user.address)
-// true if map 'm' has a key named 'key_name' defined. The value may be null
+// `true` if map 'm' has a key named 'key_name' defined. The value may be null
 // as null does not connote absence in CEL.
 has(m.key_name)
-// false if the 'items' field is not set in the 'order' message
+// `false` if the 'items' field is not set in the 'order' message
 has(order.items)
-// false if the 'user_id' key is not present in the 'sessions' map has(sessions.user_id)
+// `false` if the 'user_id' key is not present in the 'sessions' map has(sessions.user_id)
 ```
 
 **all \-** Tests whether all elements in the input list or all keys in a map
@@ -2173,7 +2174,7 @@ original runtime definition for equality is as follows:
 
 ```
 Equality and inequality are homogeneous; comparing values of different runtime
-types results in a runtime error. Thus `2 == 3` is false, but `2 == 2.0` is an
+types results in a runtime error. Thus `2 == 3` is `false`, but `2 == 2.0` is an
 error.
 
 For `double`, all not-a-number (`NaN`) values compare equal. This is different
