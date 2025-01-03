@@ -291,10 +291,10 @@ representation of the string literal. In addition, the octal escape sequence are
 interpreted as octet values rather than as Unicode code points. Both raw and
 multiline string literals can be used for byte literals.
 
-Escape sequences are a backslash (`\ `) followed by one of the following:
+Escape sequences are a backslash (`` \ ``) followed by one of the following:
 
 *   A punctuation mark representing itself:
-    *   `\ `: backslash
+    *   `` \ ``: backslash
     *   `?`: question mark
     *   `"`: double quote
     *   `'`: single quote
@@ -344,7 +344,7 @@ can be expensive to convert, and we don't know which is desired. If Unicode
 normalization is desired, it should be performed outside of CEL, or done as a
 custom extension function.
 
-Likewise, no advanced collation is attempted on strings, as this depnds on the
+Likewise, no advanced collation is attempted on strings, as this depends on the
 normalization and can be locale-dependent. Strings are simply treated as
 sequences of code points and are ordered with lexicographic ordering based on
 the numeric value of the code points.
@@ -617,8 +617,8 @@ evaluated:
     overload based on the types of the sub-expression values. See
     [Functions](#functions).
 
-Because CEL is free of side-effects, the order of evaluation among
-sub-expressions is not guaranteed. If multiple subexpressions would evaluate to
+Because CEL is free of side effects, the order of evaluation among
+sub-expressions is not guaranteed. If multiple sub-expressions would evaluate to
 errors causing the enclosing expression to evaluate to an error, it will
 propagate one or more of the sub-expression errors, but it is not specified
 which ones.
@@ -699,7 +699,7 @@ macros are:
 *   `e.exists(x, p)`: like the `all()` macro, but combines the predicate results
     with the "or" (`||`) operator, so if any predicate evaluates to `true`, the
     macro evaluates to `true`, ignoring any errors from other predicates.
-*   `e.exists_one(x,p)`: like the `exists()` macro, but evaluates to `true` only
+*   `e.exists_one(x, p)`: like the `exists()` macro, but evaluates to `true` only
     if the predicate of exactly one element/key evaluates to `true`, and the
     rest to `false`. Any other combination of boolean results evaluates to
     `false`, and any predicate error causes the macro to raise an error.
@@ -882,19 +882,19 @@ takes exponential (in the size of the expression) time to evaluate, while
 is exponential in both time and space.
 
 The time and space cost of macros is the cost of the range sub-expression `e`,
-plus the follwing:
+plus the following:
 
 *   `has(e.f)`: Space is constant.
     *   If `e` is a map, time is linear in size of `e`.
     *   If `e` is a message, time is constant.
-*   `e.all(x,p)`, `e.exists(x,p)`, and `e.exists_one(x,p)`
+*   `e.all(x, p)`, `e.exists(x, p)`, and `e.exists_one(x, p)`
     *   Time is the sum of the time of `p` for each element of `e`.
     *   Space is constant.
-*   `e.map(x,t)`
-    *   Time is the sum of time of`t` for each element of `e`.
+*   `e.map(x, t)`
+    *   Time is the sum of time of `t` for each element of `e`.
     *   Space is the sum of space of `t` for each element of `e`, plus a
         constant.
-*   `e.filter(x,t)`
+*   `e.filter(x, t)`
     *   Time is the sum of time of `t` for each element of `e`.
     *   Space is the space of `e`.
 
@@ -931,7 +931,7 @@ than the default costs.
 
 ## Functions
 
-CEL functions have no observable side-effects (there may be side-effects like
+CEL functions have no observable side effects (there may be side effects like
 logging or such which are not observable from CEL). The default argument
 evaluation strategy for functions is strict, with exceptions from this rule
 discussed in [Logical Operators](#logical-operators) and [Macros](#macros).
@@ -988,9 +988,9 @@ variables (similar as type erasure in Java). Thus an implementation can
 implement overload resolution by simply mapping all argument types to a strong
 hash.
 
-Operator subexpressions are treated as calls to specially-named built-in
+Operator sub-expressions are treated as calls to specially-named built-in
 functions. For instance, the expression `e1 + e2` is dispatched to the function
-`_+_` with arguments `e1` and `e2`. Note that since`_+_` is not an identifier,
+`_+_` with arguments `e1` and `e2`. Note that since `_+_` is not an identifier,
 there would be no way to write this as a normal function call.
 
 See [Standard Definitions](#standard-definitions) for the list of all predefined
@@ -1078,7 +1078,7 @@ int(json.number) in [1, 2, 3]
 ```
 
 The `double` type follows the IEEE 754 standard. Not-a-number (`NaN`) values
-compare as inequal, e.g. `NaN == NaN // false` and `NaN != NaN // true`.
+compare as unequal, e.g. `NaN == NaN // false` and `NaN != NaN // true`.
 
 #### Lists and Maps
 
@@ -1118,7 +1118,7 @@ In addition to the publicly documented behaviors for C++ protobuf equality,
 there are some implementation behaviors which are important to mention:
 
 - The `double` type follows the IEEE 754 standard where not-a-number (`NaN`)
-  values compare as inequal, e.g. `NaN == NaN // false` and
+  values compare as unequal, e.g. `NaN == NaN // false` and
   `NaN != NaN // true`.
 - All `google.protobuf.Any` typed fields are unpacked before comparison,
   unless the `type_url` cannot be resolved, in which case the comparison
@@ -1193,7 +1193,7 @@ Timezones are expressed in the following grammar:
 ```grammar
 TimeZone = "UTC" | LongTZ | FixedTZ ;
 LongTZ = ? list available at
-           http://joda-time.sourceforge.net/timezones.html ? ;
+           https://www.joda.org/joda-time/timezones.html ? ;
 FixedTZ = ( "+" | "-" ) Digit Digit ":" Digit Digit ;
 Digit = "0" | "1" | ... | "9" ;
 ```
@@ -1810,7 +1810,7 @@ of the arguments.
 "foobar".startsWith("foo") // true
 ```
 
-**size** \- Determine the length of the string in terms of the number of unicode
+**size** \- Determine the length of the string in terms of the number of Unicode
 codepoints
 
 **Signatures:**
@@ -1828,7 +1828,7 @@ size("world!") // 6
 #### Date/Time Functions
 
 All timestamp functions which take accept a timezone argument can use any of
-the supported [Joda Timezones](http://joda-time.sourceforge.net/timezones.html)
+the supported [Joda Timezones](https://www.joda.org/joda-time/timezones.html)
 either using the numeric format or the geographic region.
 
 **getDate** \- Get the day of the month from a timestamp (one-based indexing).
@@ -2105,7 +2105,7 @@ int("123") // 123 (if successful, otherwise an error)
 *   `string(timestamp) -> string` converts a timestamp value to
     [RFC3339](https://datatracker.ietf.org/doc/html/rfc3339) format
 *   `string(duration) -> string` converts a duration value to seconds and
-     fractional subseconds with an 's' suffix
+     fractional seconds with an 's' suffix
 
 **Examples:**
 

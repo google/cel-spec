@@ -204,7 +204,7 @@ section {
   }
   test {
     name: "double_big_precision"
-    description: "Beyond exact range (2^53), but loses precisons (2^55 + 1)."
+    description: "Beyond exact range (2^53), but loses precision (2^55 + 1)."
     expr: "int(double(36028797018963969))"
     value { int64_value: 36028797018963968 }
   }
@@ -306,7 +306,7 @@ section {
     expr: "dyn"
     disable_check: true
     eval_error {
-      errors { message: "unknown varaible" }
+      errors { message: "unknown variable" }
     }
   }
   test {
@@ -483,7 +483,7 @@ section {
   }
   test {
     name: "double_big_precision"
-    description: "Beyond exact range (2^53), but loses precisons (2^55 + 1)."
+    description: "Beyond exact range (2^53), but loses precision (2^55 + 1)."
     expr: "uint(double(36028797018963969u))"
     value { uint64_value: 36028797018963968 }
   }

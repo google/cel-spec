@@ -395,7 +395,7 @@ section: {
     }
   }
   test: {
-    name: "substution inside escaped percent signs"
+    name: "substitution inside escaped percent signs"
     expr: '"%%%s%%".format(["text"])'
     value: {
       string_value: '%text%',
@@ -782,7 +782,7 @@ section: {
     }
   }
   test: {
-    name: "substution inside escaped percent signs in a string variable"
+    name: "substitution inside escaped percent signs in a string variable"
     expr: 'str_var.format(["text"])'
     type_env: {
       name: "str_var",

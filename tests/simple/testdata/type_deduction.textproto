@@ -93,7 +93,7 @@ section {
 }
 
 section {
-  name: "complex_intializers"
+  name: "complex_initializers"
   test {
     name: "list"
     expr: "[1]"
@@ -746,7 +746,7 @@ section {
 }
 
 # Messages, some well-known types, and abstract can be assigned from null in the
-# CEL type checkers for historical reasons. For backward compatibiliy, we
+# CEL type checkers for historical reasons. For backward compatibility, we
 # maintain this behavior but it's a bit inconsistent with the intended meaning
 # of null (a singleton representing a JSON null literal) in CEL.
 section {
