@@ -2,7 +2,7 @@
 # proto-message: cel.expr.conformance.test.SimpleTestFile
 
 # This conformance test relies on the test-only macros cel.block, cel.index,
-# cel.iterVar, and cel.accuVar. These test-only macros allow excercising
+# cel.iterVar, and cel.accuVar. These test-only macros allow exercising
 # cel.block without the optimizers being present.
 # `cel.block(l, e)` must rewrite itself to be `cel.block(l, e)`
 # `cel.index(N)` must rewrite itself to `@indexN`

@@ -4,7 +4,7 @@
 name: "lists"
 description: "Tests for list operations."
 section {
-  name: "concatentation"
+  name: "concatenation"
   description: "Tests for list concatenation."
   test {
     name: "list_append"
