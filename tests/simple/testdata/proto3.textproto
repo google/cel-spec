@@ -13,8 +13,7 @@ section {
     expr: "cel.expr.conformance.proto3.TestAllTypes{single_int64: 17}"
     value {
       object_value {
-        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
-        { single_int64: 17 }
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes] { single_int64: 17 }
       }
     }
   }
@@ -25,8 +24,7 @@ section {
     expr: "TestAllTypes{single_int32: -34}"
     value {
       object_value {
-        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
-        { single_int32: -34 }
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes] { single_int32: -34 }
       }
     }
   }
@@ -37,8 +35,7 @@ section {
     expr: "TestAllTypes{single_int64: 17}"
     value {
       object_value {
-        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
-        { single_int64: 17 }
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes] { single_int64: 17 }
       }
     }
   }
@@ -49,8 +46,7 @@ section {
     expr: "TestAllTypes{single_uint32: 1u}"
     value {
       object_value: {
-        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
-        { single_uint32: 1 }
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes] { single_uint32: 1 }
       }
     }
   }
@@ -61,8 +57,7 @@ section {
     expr: "TestAllTypes{single_uint64: 9999u}"
     value {
       object_value {
-        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
-        { single_uint64: 9999 }
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes] { single_uint64: 9999 }
       }
     }
   }
@@ -73,8 +68,7 @@ section {
     expr: "TestAllTypes{single_sint32: -3}"
     value {
       object_value {
-        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
-        { single_sint32: -3 }
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes] { single_sint32: -3 }
       }
     }
   }
@@ -85,8 +79,7 @@ section {
     expr: "TestAllTypes{single_sint64: 255}"
     value {
       object_value {
-        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
-        { single_sint64: 255 }
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes] { single_sint64: 255 }
       }
     }
   }
@@ -97,8 +90,7 @@ section {
     expr: "TestAllTypes{single_fixed32: 43u}"
     value {
       object_value {
-        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
-        { single_fixed32: 43 }
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes] { single_fixed32: 43 }
       }
     }
   }
@@ -109,8 +101,7 @@ section {
     expr: "TestAllTypes{single_fixed64: 1880u}"
     value {
       object_value {
-        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
-        { single_fixed64: 1880 }
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes] { single_fixed64: 1880 }
       }
     }
   }
@@ -121,8 +112,7 @@ section {
     expr: "TestAllTypes{single_sfixed32: -404}"
     value {
       object_value {
-        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
-        { single_sfixed32: -404 }
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes] { single_sfixed32: -404 }
       }
     }
   }
@@ -133,8 +123,7 @@ section {
     expr: "TestAllTypes{single_sfixed64: -1}"
     value {
       object_value {
-        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
-        { single_sfixed64: -1 }
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes] { single_sfixed64: -1 }
       }
     }
   }
@@ -145,8 +134,7 @@ section {
     expr: "TestAllTypes{single_float: 3.1416}"
     value {
       object_value {
-        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
-        { single_float: 3.1416 }
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes] { single_float: 3.1416 }
       }
     }
   }
@@ -157,8 +145,7 @@ section {
     expr: "TestAllTypes{single_double: 6.022e23}"
     value {
       object_value {
-        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
-        { single_double: 6.022e23 }
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes] { single_double: 6.022e23 }
       }
     }
   }
@@ -169,8 +156,7 @@ section {
     expr: "TestAllTypes{single_bool: true}"
     value {
       object_value {
-        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
-        { single_bool: true }
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes] { single_bool: true }
       }
     }
   }
@@ -181,8 +167,7 @@ section {
     expr: "TestAllTypes{single_string: 'foo'}"
     value {
       object_value {
-        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
-        { single_string: 'foo' }
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes] { single_string: "foo" }
       }
     }
   }
@@ -193,8 +178,7 @@ section {
     expr: "TestAllTypes{single_bytes: b'\\377'}"
     value {
       object_value {
-        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
-        { single_bytes: '\377' }
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes] { single_bytes: "\377" }
       }
     }
   }
@@ -211,9 +195,9 @@ section {
     value {
       object_value {
         [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes] {
-        single_any {
-          [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes] {
-            single_int32: 1
+          single_any {
+            [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes] {
+              single_int32: 1
             }
           }
         }
@@ -348,7 +332,6 @@ section {
     }
   }
 
-
   test {
     name: "uint64_wrapper"
     container: "cel.expr.conformance.proto3"
@@ -363,7 +346,6 @@ section {
       }
     }
   }
-
 
   test {
     name: "uint32_wrapper"
@@ -380,7 +362,6 @@ section {
     }
   }
 
-
   test {
     name: "string_wrapper"
     container: "cel.expr.conformance.proto3"
@@ -396,7 +377,6 @@ section {
     }
   }
 
-
   test {
     name: "bool_wrapper"
     container: "cel.expr.conformance.proto3"
@@ -411,7 +391,6 @@ section {
       }
     }
   }
-
 
   test {
     name: "bytes_wrapper"
@@ -443,10 +422,13 @@ section {
     }
     bindings: {
       key: "x"
-      value: { value: { object_value: {
-            [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
-            { single_int32: 17 }
-          }}}
+      value: {
+        value: {
+          object_value: {
+            [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes] { single_int32: 17 }
+          }
+        }
+      }
     }
     value: { int64_value: 17 }
   }
@@ -460,10 +442,13 @@ section {
     }
     bindings: {
       key: "x"
-      value: { value: { object_value: {
-            [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes]
-            { single_int64: -99 }
-          }}}
+      value: {
+        value: {
+          object_value: {
+            [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes] { single_int64: -99 }
+          }
+        }
+      }
     }
     value: { int64_value: -99 }
   }
@@ -484,9 +469,11 @@ section {
     name: "nested_message"
     container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{}.single_nested_message"
-    value: { object_value: {
-            [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes.NestedMessage]
-            { }}}
+    value: {
+      object_value: {
+        [type.googleapis.com/cel.expr.conformance.proto3.TestAllTypes.NestedMessage] {}
+      }
+    }
   }
 
   test {
@@ -670,7 +657,7 @@ section {
   }
 }
 section {
-  name:"set_null"
+  name: "set_null"
   test {
     name: "single_message"
     container: "cel.expr.conformance.proto3"
@@ -745,5 +732,20 @@ section {
     eval_error: {
       errors: { message: "unsupported field type" }
     }
+  }
+}
+section {
+  name: "quoted_fields"
+  test {
+    name: "set_field"
+    container: "cel.expr.conformance.proto3"
+    expr: "TestAllTypes{`in`: true} == TestAllTypes{}"
+    value: { bool_value: false }
+  }
+  test {
+    name: "get_field"
+    container: "cel.expr.conformance.proto3"
+    expr: "TestAllTypes{`in`: true}.`in`"
+    value: { bool_value: true }
   }
 }
