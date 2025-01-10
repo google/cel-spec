@@ -146,8 +146,8 @@ FLOAT_LIT      ::= -? DIGIT* . DIGIT+ EXPONENT? | -? DIGIT+ EXPONENT
 DIGIT          ::= [0-9]
 HEXDIGIT       ::= [0-9abcdefABCDEF]
 EXPONENT       ::= [eE] [+-]? DIGIT+
-STRING_LIT     ::= [rR]? ( "    ~( " | NEWLINE )*  "
-                         | '    ~( ' | NEWLINE )*  '
+STRING_LIT     ::= [rR]? ( "    ~( " | \r | \n )*  "
+                         | '    ~( ' | \r | \n )*  '
                          | """  ~"""*              """
                          | '''  ~'''*              '''
                          )
@@ -157,7 +157,6 @@ ESCAPE         ::= \ [abfnrtv\?"'`]
                  | \ u HEXDIGIT HEXDIGIT HEXDIGIT HEXDIGIT
                  | \ U HEXDIGIT HEXDIGIT HEXDIGIT HEXDIGIT HEXDIGIT HEXDIGIT HEXDIGIT HEXDIGIT
                  | \ [0-3] [0-7] [0-7]
-NEWLINE        ::= \r\n | \r | \n
 BOOL_LIT       ::= "true" | "false"
 NULL_LIT       ::= "null"
 RESERVED       ::= BOOL_LIT | NULL_LIT | "in"
@@ -166,7 +165,7 @@ RESERVED       ::= BOOL_LIT | NULL_LIT | "in"
                  | "loop" | "package" | "namespace" | "return"
                  | "var" | "void" | "while"
 WHITESPACE     ::= [\t\n\f\r ]+
-COMMENT        ::= '//' ~NEWLINE* NEWLINE
+COMMENT        ::= '//' ~\n* \n
 ```
 
 For the sake of a readable representation, the escape
