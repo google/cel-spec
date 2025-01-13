@@ -130,3 +130,47 @@ section {
     value { int64_value: 30 }
   }
 }
+section {
+  name: "whitespace"
+  description: "Check that whitespace is ignored by the grammar."
+  test {
+    name: "spaces"
+    description: "Check that spaces are ignored."
+    expr: "[ . cel. expr .conformance. proto3. TestAllTypes { single_int64 : int ( 17 ) } . single_int64 ] [ 0 ] == ( 18 - 1 ) && ! false ? 1 : 2"
+    value { int64_value: 1 }
+  }
+  test {
+    name: "tabs"
+    description: "Check that tabs (`\\t`) are ignored."
+    expr: "[\t.\tcel.\texpr\t.conformance.\tproto3.\tTestAllTypes\t{\tsingle_int64\t:\tint\t(\t17\t)\t}\t.\tsingle_int64\t]\t[\t0\t]\t==\t(\t18\t-\t1\t)\t&&\t!\tfalse\t?\t1\t:\t2"
+    value { int64_value: 1 }
+  }
+  test {
+    name: "new_lines"
+    description: "Check that new lines (`\\n`) are ignored."
+    expr: "[\n.\ncel.\nexpr\n.conformance.\nproto3.\nTestAllTypes\n{\nsingle_int64\n:\nint\n(\n17\n)\n}\n.\nsingle_int64\n]\n[\n0\n]\n==\n(\n18\n-\n1\n)\n&&\n!\nfalse\n?\n1\n:\n2"
+    value { int64_value: 1 }
+  }
+  test {
+    name: "new_pages"
+    description: "Check that new pages (`\\f`) are ignored."
+    expr: "[\f.\fcel.\fexpr\f.conformance.\fproto3.\fTestAllTypes\f{\fsingle_int64\f:\fint\f(\f17\f)\f}\f.\fsingle_int64\f]\f[\f0\f]\f==\f(\f18\f-\f1\f)\f&&\f!\ffalse\f?\f1\f:\f2"
+    value { int64_value: 1 }
+  }
+  test {
+    name: "carriage_returns"
+    description: "Check that carriage returns (`\\r`) are ignored."
+    expr: "[\r.\rcel.\rexpr\r.conformance.\rproto3.\rTestAllTypes\r{\rsingle_int64\r:\rint\r(\r17\r)\r}\r.\rsingle_int64\r]\r[\r0\r]\r==\r(\r18\r-\r1\r)\r&&\r!\rfalse\r?\r1\r:\r2"
+    value { int64_value: 1 }
+  }
+}
+section {
+  name: "comments"
+  description: "Check that comments are ignored by the grammar. Note that carriage returns alone cannot terminate comments."
+  test {
+    name: "new_line_terminated"
+    description: "Check that new-line-terminated comments are ignored."
+    expr: "[// @\n.// @\ncel.// @\nexpr// @\n.conformance.// @\nproto3.// @\nTestAllTypes// @\n{// @\nsingle_int64// @\n:// @\nint// @\n(// @\n17// @\n)// @\n}// @\n.// @\nsingle_int64// @\n]// @\n[// @\n0// @\n]// @\n==// @\n(// @\n18// @\n-// @\n1// @\n)// @\n&&// @\n!// @\nfalse// @\n?// @\n1// @\n:// @\n2"
+    value { int64_value: 1 }
+  }
+}
