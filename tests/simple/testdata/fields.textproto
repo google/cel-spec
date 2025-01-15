@@ -327,7 +327,7 @@ section {
   }
   test {
     name: "map_value_bytes"
-    expr: "{0:b\"\"}[0]"
+    expr: "{0:b''}[0]"
     value: { bytes_value: "" }
   }
   test {
@@ -341,7 +341,7 @@ section {
   }
   test {
     name: "map_value_map"
-    expr: "{\"map\": {\"k\": \"v\"}}[\"map\"]"
+    expr: "{'map': {'k': 'v'}}['map']"
     value: {
       map_value {
         entries {
@@ -353,7 +353,7 @@ section {
   }
   test {
     name: "map_value_mix_type"
-    expr: "{\"map\": {\"k\": \"v\"}, \"list\": [1]}[\"map\"]"
+    expr: "{'map': {'k': 'v'}, 'list': [1]}['map']"
     value: {
       map_value {
         entries {
