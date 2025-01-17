@@ -264,8 +264,8 @@ properties are different.
 
 ### String and Bytes Values
 
-Strings are sequences of Unicode code points. Bytes are sequences of octets
-(eight-bit data).
+Strings are valid sequences of Unicode code points. Bytes are arbitrary
+sequences of octets (eight-bit data).
 
 Quoted string literals are delimited by either single- or double-quote
 characters, where the closing delimiter must match the opening one, and can
@@ -307,16 +307,15 @@ Escape sequences are a backslash (`` \ ``) followed by one of the following:
     *   `t`: horizontal tab
     *   `v`: vertical tab
 *   A `u` followed by four hexadecimal characters, encoding a Unicode code point
-    in the
-    [BMP](https://en.wikipedia.org/wiki/Plane_\(Unicode\)#Basic_Multilingual_Plane).
-    Characters in other Unicode planes can be represented with surrogate pairs.
-    Valid only for string literals.
+    in the [BMP](https://www.unicode.org/roadmaps/bmp/).
 *   A `U` followed by eight hexadecimal characters, encoding a Unicode code
-    point. Valid only for string literals.
+    point (in any plane). Valid only for string literals.
 *   A `x` or `X` followed by two hexadecimal characters. For strings, it denotes
-    the unicode code point. For bytes, it represents an octet value.
-*   Three octal digits, in the range `000` to `377`. For strings, it denotes the
-    unicode code point. For bytes, it represents an octet value.
+    a Unicode code point. For bytes, it represents an octet value.
+*   Three octal digits, in the range `000` to `377`. For strings, it denotes a
+    Unicode code point. For bytes, it represents an octet value.
+
+All hexadecimal digits in escape sequences are case-insensitive.
 
 Examples:
 
@@ -335,7 +334,15 @@ CEL Literal   | Meaning
 `"\377"`      | String of "&yuml;" (code point 255)
 `b"\377"`     | Sequence of byte 255 (*not* UTF-8 of &yuml;)
 `"\xFF"`      | String of "&yuml;" (code point 255)
-`b"\xFF"`     | Sequence of byte 255 (*not* UTF-8 of &yuml;)
+`b"\xff"`     | Sequence of byte 255 (*not* UTF-8 of &yuml;)
+
+The following constructions are syntactically invalid and will result in a parse
+error:
+
+*   A backslash (`` \ ``) outside of a valid escape sequence, e.g. `\s`.
+*   An invalid Unicode code point, e.g. `\u2FE0`.
+*   A UTF-16 surrogate code point, even if in a valid UTF-16 surrogate pair,
+    e.g. `\uD83D\uDE03` or `\UD83DDE03`.
 
 While strings must be sequences of valid Unicode code points, no Unicode
 normalization is attempted on strings, as there are several normal forms, they
@@ -548,7 +555,7 @@ The "interoperable" range of integer values is `-(2^53-1)` to `2^53 - 1`.
 
 CEL is a dynamically-typed language, meaning that the types of the values of the
 variables and expressions might not be known until runtime. However, CEL has an
-optional type-checking phase that takes annotation giving the types of all
+optional type-checking phase that takes the types declared for all functions and
 variables and tries to deduce the type of the expression and of all its
 sub-expressions. This is not always possible, due to the dynamic expansion of
 certain messages like `Struct`, `Value`, and `Any` (see
@@ -634,6 +641,13 @@ on the use. For instance in the expression `size(requests) > size`, the first
 The CEL implementation provides mechanisms for adding bindings of variable names
 to either values or errors. The implementation will also provide function
 bindings for at least all the standard functions listed below.
+
+Where feasible, CEL implementations ensure that a value bound to a variable name
+or returned by a custom function conforms to the CEL type declared for that
+value or, for dynamic typed values, _a_ CEL type. Where implementations allow
+nonconforming values, (e.g. strings with invalid Unicode code points) to be
+provided to a CEL program, conformance must be enforced by the application
+embedding the CEL program in order to ensure type safety is maintained.
 
 Some implementations might make use of a _context proto_, where a single
 protocol buffer message represents all variable bindings: each field in the
@@ -997,12 +1011,16 @@ functions and operators.
 
 ### Extension Functions
 
-It is possible to add extension functions to CEL, which then behave in no way
-different than standard functions. The mechanism how to do this is
-implementation dependent and usually highly curated. For example, an application
-domain of CEL can add a new overload to the `size` function above, provided this
-overload's argument types do not overlap with any existing overload. For
-methodological reasons, CEL disallows to add overloads to operators.
+It is possible to add extension functions to CEL, which then behave consistently
+with standard functions. The mechanism for doing this is implementation
+dependent and usually highly curated. For example, an application domain of CEL
+can add a new overload to the `size` function above, provided this overload's
+argument types do not overlap with any existing overload. For methodological
+reasons, CEL does not allow overloading operators.
+
+Like standard functions, extension functions must be free from observable side
+effects in order to prevent expressions from having undefined results, since CEL
+does not guarantee evaluation order of sub-expressions.
 
 ### Receiver Call Style
 
@@ -1161,11 +1179,12 @@ Ordering operators are defined for `int`, `uint`, `double`, `string`, `bytes`,
 supported across `int`, `uint`, and `double` for consistency with the runtime
 equality definition for numeric types.
 
-Strings obey lexicographic ordering of the code points, and bytes obey
-lexicographic ordering of the byte values. The ordering operators obey the
-usual algebraic properties, i.e. `e1 <= e2` gives the same result as
-`!(e1 > e2)` as well as `(e1 < e2) || (e1 == e2)` when the expressions
-involved do not have side effects.
+Strings and bytes obey lexicographic ordering of the byte values. Because
+strings are encoded in UTF-8, strings consequently also obey lexicographic
+ordering of their Unicode code points.
+
+The ordering operators obey the usual algebraic properties, i.e. `e1 <= e2`
+gives the same result as `!(e1 > e2)` as well as `(e1 < e2) || (e1 == e2)`.
 
 ### Overflow
 
@@ -1743,6 +1762,7 @@ size({1: true, 2: false}) // 2
 ```
 b'hello'.size() // 5
 size(b'world!') // 6
+size(b'\xF0\x9F\xA4\xAA') // 4
 ```
 
 #### String Functions
@@ -1822,6 +1842,8 @@ codepoints
 ```
 "hello".size() // 5
 size("world!") // 6
+"fiance\u0301".size() // 7
+size(string(b'\xF0\x9F\xA4\xAA')) // 1
 ```
 
 #### Date/Time Functions
@@ -2014,6 +2036,7 @@ bool("FALSE") // false
 
 ```
 bytes("hello") // b'hello'
+bytes("🤪") // b'\xF0\x9F\xA4\xAA'
 ```
 
 **double** `type(double)` \- Type denotation
@@ -2100,7 +2123,8 @@ int("123") // 123 (if successful, otherwise an error)
 *   `string(uint) -> string` converts unsigned integer values to base 10
     representation
 *   `string(double) -> string` converts a double to a string
-*   `string(bytes) -> string` converts a byte sequence to a utf-8 string
+*   `string(bytes) -> string` converts a byte sequence to a UTF-8 string, errors
+    for invalid code points
 *   `string(timestamp) -> string` converts a timestamp value to
     [RFC3339](https://datatracker.ietf.org/doc/html/rfc3339) format
 *   `string(duration) -> string` converts a duration value to seconds and
@@ -2112,8 +2136,9 @@ int("123") // 123 (if successful, otherwise an error)
 string(123) // "123"
 string(123u) // "123u"
 string(3.14) // "3.14"
-string(b'hello') // 'hello'
-string(duration('1m1ms')) // '60.001s'
+string(b'hello') // "hello"
+string(b'\xf0\x9f\xa4\xaa') // "🤪"
+string(duration('1m1ms')) // "60.001s"
 ```
 
 **timestamp**
