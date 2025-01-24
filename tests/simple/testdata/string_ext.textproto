@@ -524,7 +524,7 @@ section: {
     name: "scientific notation formatting clause"
     expr: '"%.6e".format([1052.032911275])'
     value: {
-      string_value: '1.052033 × 10⁰³',
+      string_value: '1.052033×10⁰³',
     }
   }
   test: {
@@ -538,14 +538,14 @@ section: {
     name: "default precision for scientific notation"
     expr: '"%e".format([2.71828])'
     value: {
-      string_value: '2.718280 × 10⁰⁰',
+      string_value: '2.718280×10⁰⁰',
     }
   }
   test: {
     name: "unicode output for scientific notation"
     expr: '"unescaped unicode: %e, escaped unicode: %e".format([2.71828, 2.71828])'
     value: {
-      string_value: 'unescaped unicode: 2.718280 × 10⁰⁰, escaped unicode: 2.718280\u202f\u00d7\u202f10\u2070\u2070',
+      string_value: 'unescaped unicode: 2.718280×10⁰⁰, escaped unicode: 2.718280\u00d710\u2070\u2070',
     }
   }
   test: {
@@ -622,14 +622,14 @@ section: {
     name: "list support for string"
     expr: '"%s".format([["abc", 3.14, null, [9, 8, 7, 6], timestamp("2023-02-03T23:31:20Z")]])'
     value: {
-      string_value: '["abc", 3.140000, null, [9, 8, 7, 6], timestamp("2023-02-03T23:31:20Z")]',
+      string_value: '["abc", 3.14, null, [9, 8, 7, 6], timestamp("2023-02-03T23:31:20Z")]',
     }
   }
   test: {
     name: "map support for string"
     expr: '"%s".format([{"key1": b"xyz", "key5": null, "key2": duration("2h"), "key4": true, "key3": 2.71828}])'
     value: {
-      string_value: '{"key1":b"xyz", "key2":duration("7200s"), "key3":2.718280, "key4":true, "key5":null}',
+      string_value: '{"key1":b"xyz", "key2":duration("7200s"), "key3":2.71828, "key4":true, "key5":null}',
     }
   }
   test: {
@@ -706,7 +706,7 @@ section: {
     name: "dyntype support for scientific notation"
     expr: '"(dyntype) e: %e".format([dyn(2.71828)])'
     value: {
-      string_value: '(dyntype) e: 2.718280 × 10⁰⁰',
+      string_value: '(dyntype) e: 2.718280×10⁰⁰',
     }
   }
   test: {
@@ -734,7 +734,7 @@ section: {
     name: "dyntype support for lists"
     expr: '"dyntype list: %s".format([dyn([6, 4.2, "a string"])])'
     value: {
-      string_value: 'dyntype list: [6, 4.200000, "a string"]',
+      string_value: 'dyntype list: [6, 4.2, "a string"]',
     }
   }
   test: {
@@ -838,7 +838,7 @@ section: {
       value: { value: { string_value: "%.6e" } }
     }
     value: {
-      string_value: '1.052033 × 10⁰³',
+      string_value: '1.052033×10⁰³',
     }
   }
   test: {
@@ -859,10 +859,6 @@ section: {
 }
 section: {
   name: "format_errors"
-  test: {
-    name: "multiline"
-    expr: "strings.quote(\"first\\nsecond\") == \"\\\"first\\\\nsecond\\\"\""
-  }
   test: {
     name: "unrecognized formatting clause"
     expr: '"%a".format([1])'
