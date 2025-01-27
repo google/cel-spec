@@ -23,7 +23,7 @@ section {
   }
   test {
     name: "map_key_bool"
-    expr: '{true:5}[true]'
+    expr: "{true:5}[true]"
     value: { int64_value: 5 }
   }
   test {
@@ -57,18 +57,18 @@ section {
     name: "map_field_access"
     expr: "x.name"
     type_env: {
-      name: "x",
+      name: "x"
       ident: {
         type: {
           map_type: {
-            key_type: {primitive: STRING}
-            value_type: {primitive: INT64}
+            key_type: { primitive: STRING }
+            value_type: { primitive: INT64 }
           }
         }
       }
     }
     bindings: {
-      key: "x",
+      key: "x"
       value: {
         value: {
           map_value: {
@@ -148,18 +148,18 @@ section {
     name: "map_field_select_no_such_key"
     expr: "x.name"
     type_env: {
-      name: "x",
+      name: "x"
       ident: {
         type: {
           map_type: {
-            key_type: {primitive: STRING}
-            value_type: {primitive: STRING}
+            key_type: { primitive: STRING }
+            value_type: { primitive: STRING }
           }
         }
       }
     }
     bindings: {
-      key: "x",
+      key: "x"
       value: {
         value: {
           map_value: {
@@ -172,25 +172,25 @@ section {
       }
     }
     eval_error: {
-      errors: { message:"no such key: 'name'" }
+      errors: { message: "no such key: 'name'" }
     }
   }
   test {
     name: "map_field_select_no_such_key_or_false"
     expr: "dyn(x.name) || false"
     type_env: {
-      name: "x",
+      name: "x"
       ident: {
         type: {
           map_type: {
-            key_type: {primitive: STRING}
-            value_type: {primitive: STRING}
+            key_type: { primitive: STRING }
+            value_type: { primitive: STRING }
           }
         }
       }
     }
     bindings: {
-      key: "x",
+      key: "x"
       value: {
         value: {
           map_value: {
@@ -203,25 +203,25 @@ section {
       }
     }
     eval_error: {
-      errors: { message:"no such key: 'name'" }
+      errors: { message: "no such key: 'name'" }
     }
   }
   test {
     name: "map_field_select_no_such_key_or_true"
     expr: "dyn(x.name) || true"
     type_env: {
-      name: "x",
+      name: "x"
       ident: {
         type: {
           map_type: {
-            key_type: {primitive: STRING}
-            value_type: {primitive: STRING}
+            key_type: { primitive: STRING }
+            value_type: { primitive: STRING }
           }
         }
       }
     }
     bindings: {
-      key: "x",
+      key: "x"
       value: {
         value: {
           map_value: {
@@ -239,18 +239,18 @@ section {
     name: "map_field_select_no_such_key_and_false"
     expr: "dyn(x.name) && false"
     type_env: {
-      name: "x",
+      name: "x"
       ident: {
         type: {
           map_type: {
-            key_type: {primitive: STRING}
-            value_type: {primitive: STRING}
+            key_type: { primitive: STRING }
+            value_type: { primitive: STRING }
           }
         }
       }
     }
     bindings: {
-      key: "x",
+      key: "x"
       value: {
         value: {
           map_value: {
@@ -268,18 +268,18 @@ section {
     name: "map_field_select_no_such_key_and_true"
     expr: "dyn(x.name) && true"
     type_env: {
-      name: "x",
+      name: "x"
       ident: {
         type: {
           map_type: {
-            key_type: {primitive: STRING}
-            value_type: {primitive: STRING}
+            key_type: { primitive: STRING }
+            value_type: { primitive: STRING }
           }
         }
       }
     }
     bindings: {
-      key: "x",
+      key: "x"
       value: {
         value: {
           map_value: {
@@ -292,23 +292,23 @@ section {
       }
     }
     eval_error: {
-      errors: { message:"no such key: 'name'" }
+      errors: { message: "no such key: 'name'" }
     }
   }
   test {
     name: "map_value_null"
-    expr: '{true:null}[true]'
+    expr: "{true:null}[true]"
     value: { null_value: NULL_VALUE }
   }
   test {
     name: "map_value_bool"
-    expr: '{27:false}[27]'
+    expr: "{27:false}[27]"
     value: { bool_value: false }
   }
   test {
     name: "map_value_string"
     expr: "{'n':'x'}['n']"
-    value: { string_value: 'x' }
+    value: { string_value: "x" }
   }
   test {
     name: "map_value_float"
@@ -327,12 +327,12 @@ section {
   }
   test {
     name: "map_value_bytes"
-    expr: '{0:b""}[0]'
+    expr: "{0:b''}[0]"
     value: { bytes_value: "" }
   }
   test {
     name: "map_value_list"
-    expr: '{0u:[1]}[0u]'
+    expr: "{0u:[1]}[0u]"
     value: {
       list_value: {
         values: { int64_value: 1 }
@@ -341,7 +341,7 @@ section {
   }
   test {
     name: "map_value_map"
-    expr: '{"map": {"k": "v"}}["map"]'
+    expr: "{'map': {'k': 'v'}}['map']"
     value: {
       map_value {
         entries {
@@ -353,7 +353,7 @@ section {
   }
   test {
     name: "map_value_mix_type"
-    expr: '{"map": {"k": "v"}, "list": [1]}["map"]'
+    expr: "{'map': {'k': 'v'}, 'list': [1]}['map']"
     value: {
       map_value {
         entries {
@@ -384,17 +384,51 @@ section {
   }
 }
 section {
+  name: "quoted_map_fields"
+  description: "Field accesses using the quote syntax"
+  test {
+    name: "field_access_slash"
+    expr: "{'/api/v1': true, '/api/v2': false}.`/api/v1`"
+    value: { bool_value: true }
+  }
+  test {
+    name: "field_access_dash"
+    expr: "{'content-type': 'application/json', 'content-length': 145}.`content-type` == 'application/json'"
+    value: { bool_value: true }
+  }
+  test {
+    name: "field_access_dot"
+    expr: "{'foo.txt': 32, 'bar.csv': 1024}.`foo.txt`"
+    value: { int64_value: 32 }
+  }
+  test {
+    name: "has_field_slash"
+    expr: "has({'/api/v1': true, '/api/v2': false}.`/api/v3`)"
+    value: { bool_value: false }
+  }
+  test {
+    name: "has_field_dash"
+    expr: "has({'content-type': 'application/json', 'content-length': 145}.`content-type`)"
+    value: { bool_value: true }
+  }
+  test {
+    name: "has_field_dot"
+    expr: "has({'foo.txt': 32, 'bar.csv': 1024}.`foo.txt`)"
+    value: { bool_value: true }
+  }
+}
+section {
   name: "qualified_identifier_resolution"
   description: "Tests for qualified identifier resolution."
   test {
     name: "qualified_ident"
     expr: "a.b.c"
     type_env: {
-      name: "a.b.c",
+      name: "a.b.c"
       ident: { type: { primitive: STRING } }
     }
     bindings: {
-      key: "a.b.c",
+      key: "a.b.c"
       value: { value: { string_value: "yeah" } }
     }
     value: { string_value: "yeah" }
@@ -403,18 +437,18 @@ section {
     name: "map_field_select"
     expr: "a.b.c"
     type_env: {
-      name: "a.b",
+      name: "a.b"
       ident: {
         type: {
           map_type: {
-            key_type: {primitive: STRING}
-            value_type: {primitive: STRING}
+            key_type: { primitive: STRING }
+            value_type: { primitive: STRING }
           }
         }
       }
     }
     bindings: {
-      key: "a.b",
+      key: "a.b"
       value: {
         value: {
           map_value: {
@@ -433,20 +467,20 @@ section {
     description: "namespace resolution should try to find the longest prefix for the evaluator."
     expr: "a.b.c"
     type_env: {
-      name: "a.b.c",
+      name: "a.b.c"
       ident: { type: { primitive: STRING } }
     }
     bindings: {
-      key: "a.b.c",
+      key: "a.b.c"
       value: { value: { string_value: "yeah" } }
     }
     type_env: {
-      name: "a.b",
+      name: "a.b"
       ident: {
         type: {
           map_type: {
-            key_type: {primitive: STRING}
-            value_type: {primitive: STRING}
+            key_type: { primitive: STRING }
+            value_type: { primitive: STRING }
           }
         }
       }
@@ -464,7 +498,7 @@ section {
         }
       }
     }
-    disable_check: true ## when check is disabled, the evaluator should evaluate it in the correct order
+    disable_check: true  ## when check is disabled, the evaluator should evaluate it in the correct order
     value: { string_value: "yeah" }
   }
   test {
@@ -472,17 +506,17 @@ section {
     expr: "a.b.pancakes"
     disable_check: true
     type_env: {
-      name: "a.b",
+      name: "a.b"
       ident: {
         type: {
           list_type: {
-            elem_type: {primitive: STRING}
+            elem_type: { primitive: STRING }
           }
         }
       }
     }
     bindings: {
-      key: "a.b",
+      key: "a.b"
       value: {
         value: {
           list_value: {
@@ -493,7 +527,7 @@ section {
     }
     eval_error: {
       errors: {
-        message:"type 'list_type:<elem_type:<primitive:STRING > > ' does not support field selection"
+        message: "type 'list_type:<elem_type:<primitive:STRING > > ' does not support field selection"
       }
     }
   }
@@ -502,7 +536,7 @@ section {
     expr: "a.pancakes"
     disable_check: true
     type_env: {
-      name: "a",
+      name: "a"
       ident: {
         type: {
           primitive: INT64
@@ -510,7 +544,7 @@ section {
       }
     }
     bindings: {
-      key: "a",
+      key: "a"
       value: {
         value: {
           int64_value: 15
@@ -519,7 +553,7 @@ section {
     }
     eval_error: {
       errors: {
-        message:"type 'int64_type' does not support field selection"
+        message: "type 'int64_type' does not support field selection"
       }
     }
   }
@@ -528,20 +562,20 @@ section {
     description: "namespace resolution should try to find the longest prefix for the checker."
     expr: "a.b.c"
     type_env: {
-      name: "a.b.c",
+      name: "a.b.c"
       ident: { type: { primitive: STRING } }
     }
     bindings: {
-      key: "a.b.c",
+      key: "a.b.c"
       value: { value: { string_value: "yeah" } }
     }
     type_env: {
-      name: "a.b",
+      name: "a.b"
       ident: {
         type: {
           map_type: {
-            key_type: {primitive: STRING}
-            value_type: {primitive: STRING}
+            key_type: { primitive: STRING }
+            value_type: { primitive: STRING }
           }
         }
       }
@@ -565,7 +599,7 @@ section {
     name: "map_key_float"
     description: "map should not support float as the key."
     expr: "{3.3:15.15, 1.0: 5}[1.0]"
-    disable_check: true # need to make it fail in the evaluation phase
+    disable_check: true  # need to make it fail in the evaluation phase
     eval_error: {
       errors: { message: "unsupported key type" }
     }
@@ -576,7 +610,7 @@ section {
     name: "map_key_null"
     description: "map should not support null as the key."
     expr: "{null:false}[null]"
-    disable_check: true # need to make it fail in the evaluation phase
+    disable_check: true  # need to make it fail in the evaluation phase
     eval_error: {
       errors: { message: "unsupported key type" }
     }

@@ -65,6 +65,9 @@ message TestAllTypes {
   optional bool optional_bool = 16;
   optional bool optional_string = 17;
 
+  // Collides with 'in' operator.
+  bool in = 18;
+
   // Wellknown.
   google.protobuf.Any single_any = 100;
   google.protobuf.Duration single_duration = 101;
