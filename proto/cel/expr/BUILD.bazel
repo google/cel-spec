@@ -95,7 +95,7 @@ java_proto_library(
 )
 
 java_lite_proto_library(
-    name = "expr_java_proto",
+    name = "expr_java_proto_lite",
     deps = [":expr_proto"],
 )
 
@@ -105,7 +105,7 @@ java_proto_library(
 )
 
 java_lite_proto_library(
-    name = "syntax_java_proto",
+    name = "syntax_java_proto_lite",
     deps = [":syntax_proto"],
 )
 
@@ -115,7 +115,7 @@ java_proto_library(
 )
 
 java_lite_proto_library(
-    name = "checked_java_proto",
+    name = "checked_java_proto_lite",
     deps = [":checked_proto"],
 )
 
@@ -125,7 +125,7 @@ java_proto_library(
 )
 
 java_lite_proto_library(
-    name = "value_java_proto",
+    name = "value_java_proto_lite",
     deps = [":value_proto"],
 )
 
@@ -135,7 +135,7 @@ java_proto_library(
 )
 
 java_lite_proto_library(
-    name = "eval_java_proto",
+    name = "eval_java_proto_lite",
     deps = [":eval_proto"],
 )
 
