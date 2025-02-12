@@ -79,6 +79,7 @@ proto_library(
     srcs = [
         "explain.proto",
     ],
+    deprecation = "Use EvalState instead.",
     strip_import_prefix = "/proto",
     deps = [
         ":value_proto",
@@ -93,8 +94,18 @@ java_proto_library(
     deps = [":expr_proto"],
 )
 
+java_lite_proto_library(
+    name = "expr_java_proto_lite",
+    deps = [":expr_proto"],
+)
+
 java_proto_library(
     name = "syntax_java_proto",
+    deps = [":syntax_proto"],
+)
+
+java_lite_proto_library(
+    name = "syntax_java_proto_lite",
     deps = [":syntax_proto"],
 )
 
@@ -103,8 +114,18 @@ java_proto_library(
     deps = [":checked_proto"],
 )
 
+java_lite_proto_library(
+    name = "checked_java_proto_lite",
+    deps = [":checked_proto"],
+)
+
 java_proto_library(
     name = "value_java_proto",
+    deps = [":value_proto"],
+)
+
+java_lite_proto_library(
+    name = "value_java_proto_lite",
     deps = [":value_proto"],
 )
 
@@ -113,8 +134,14 @@ java_proto_library(
     deps = [":eval_proto"],
 )
 
+java_lite_proto_library(
+    name = "eval_java_proto_lite",
+    deps = [":eval_proto"],
+)
+
 java_proto_library(
     name = "explain_java_proto",
+    deprecation = "Use EvalState instead.",
     deps = [":explain_proto"],
 )
 
@@ -164,6 +191,7 @@ go_proto_library(
 
 go_proto_library(
     name = "explain_go_proto",
+    deprecation = "Use EvalState instead.",
     embed = [":value_go_proto"],
     importpath = "cel.dev/expr",
     protos = [":explain_proto"],
@@ -198,5 +226,6 @@ cc_proto_library(
 
 cc_proto_library(
     name = "explain_cc_proto",
+    deprecation = "Use EvalState instead.",
     deps = [":explain_proto"],
 )
