@@ -16,6 +16,26 @@ proto_library(
     ],
 )
 
+proto_library(
+    name = "test_suite_proto",
+    srcs = ["test_suite.proto"],
+    strip_import_prefix = "/proto",
+    deps = [
+        "//proto/cel/expr:eval_proto",
+        "//proto/cel/expr:value_proto",
+    ],
+)
+
+proto_library(
+    name = "test_config_proto",
+    srcs = ["test_config.proto"],
+    strip_import_prefix = "/proto",
+    deps = [
+        "//proto/cel/expr:checked_proto",
+        "@com_google_protobuf//:descriptor_proto"
+    ],
+)
+
 ##############################################################################
 # Java
 ##############################################################################
@@ -39,6 +59,18 @@ go_proto_library(
         "//proto/cel/expr:expr_go_proto",
         "@org_golang_google_genproto_googleapis_rpc//status:go_default_library",
     ],
+)
+
+go_proto_library(
+    name = "test_config_go_proto",
+    importpath = "cel.dev/expr/conformance",
+    protos = [":test_suite_proto"],
+)
+
+go_proto_library(
+    name = "test_suite_go_proto",
+    importpath = "cel.dev/expr/conformance",
+    protos = [":test_config_proto"]
 )
 
 ###############################################################################
