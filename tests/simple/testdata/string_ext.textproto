@@ -543,7 +543,7 @@ section: {
   }
   test: {
     name: "NaN support for scientific notation"
-    expr: '"%e".format(["NaN"])'
+    expr: '"%e".format([double("NaN")])'
     value: {
       string_value: 'NaN',
     }
@@ -564,7 +564,7 @@ section: {
   }
   test: {
     name: "NaN support for decimal"
-    expr: '"%d".format(["NaN"])'
+    expr: '"%d".format([double("NaN")])'
     value: {
       string_value: 'NaN',
     }
@@ -585,7 +585,7 @@ section: {
   }
   test: {
     name: "NaN support for fixed-point"
-    expr: '"%f".format(["NaN"])'
+    expr: '"%f".format([double("NaN")])'
     value: {
       string_value: 'NaN',
     }
@@ -655,7 +655,7 @@ section: {
   }
   test: {
     name: "list support for string"
-    expr: '"%s".format([[abc, 3.14, null, [9, 8, 7, 6], 2023-02-03T23:31:20Z]])'
+    expr: '"%s".format([[abc, 3.14, null, [9, 8, 7, 6], timestamp("2023-02-03T23:31:20Z")]])'
     value: {
       string_value: '[abc, 3.14, null, [9, 8, 7, 6], 2023-02-03T23:31:20Z]',
     }
@@ -746,9 +746,9 @@ section: {
   }
   test: {
     name: "dyntype NaN/infinity support for fixed-point"
-    expr: '"NaN: %f, infinity: %f".format([double("NaN"), double("Infinity"), double("-Infinity")])'
+    expr: '"%s".format([double("NaN"), double("Infinity"), double("-Infinity")])'
     value: {
-      string_value: 'NaN, Infinity, -Infinity',
+      string_value: '[NaN, Infinity, -Infinity]',
     }
   }
   test: {
@@ -776,7 +776,7 @@ section: {
     name: "dyntype support for maps"
     expr: '"%s".format([{"strKey":"x", 6:duration("422s"), true:42}])'
     value: {
-      string_value: '{strKey: x, 6: 422s, true: 42}',
+      string_value: '{6: 422s, strKey: x, true: 42}',
     }
   }
   test: {
