@@ -23,8 +23,7 @@ go_library(
     name = "go_default_library",
     srcs = [
         "conformance_service.pb.go",
-        "test_config.pb.go",
-        "test_suite.pb.go",
+        "env_config.pb.go",
     ],
     importpath = "cel.dev/expr/conformance",
     deps = [
@@ -33,5 +32,6 @@ go_library(
         "@org_golang_google_protobuf//reflect/protoreflect",
         "@org_golang_google_protobuf//runtime/protoimpl",
         "@org_golang_google_protobuf//types/descriptorpb",
+        "@org_golang_google_protobuf//types/known/anypb",
     ],
 )
