@@ -16,6 +16,7 @@ syntax = "proto3";
 
 package cel.expr.conformance;
 
+import "cel/expr/checked.proto";
 import "google/protobuf/any.proto";
 import "google/protobuf/descriptor.proto";
 
@@ -70,35 +71,32 @@ message Environment {
   // in the type checker.
   repeated ContextVariable context_variables = 7;
 
-  // List of variable declarations to be configured in the CEL environment.
-  repeated Variable variables = 8;
-
-  // List of function declarations to be configured in the CEL environment.
-  repeated Function functions = 9;
+  // List of declarations to be configured in the CEL environment.
+  repeated cel.expr.Decl declarations = 8;
 
   // List of validators for validating the parsed ast.
-  repeated Validator validators = 10;
+  repeated Validator validators = 9;
 
   // List of feature flags to be enabled or disabled.
-  repeated Feature features = 11;
+  repeated Feature features = 10;
 
   // Disables including the declarations from the standard CEL environment.
   //
   // NOTE: Do not disable the standard CEL declarations unless you are aware of
   // the implications and have discussed your use case on cel-discuss@
   // or with the members of the cel-governance-team@
-  bool disable_standard_cel_declarations = 12;
+  bool disable_standard_cel_declarations = 11;
 
   // If provided, uses the provided FileDescriptorSet to extend types available
   // the CEL expression. All "well-known" protobuf messages (google.protobuf.*)
   // are known to the CEL compiler, but all others must be provided for type
   // checking.
-  google.protobuf.FileDescriptorSet message_type_extension = 13;
+  google.protobuf.FileDescriptorSet message_type_extension = 12;
 
   // When macro call tracking is enabled, the resulting SourceInfo in the
   // CheckedExpr will contain a collection of expressions representing the
   // function calls which were replaced by macros.
-  bool enable_macro_call_tracking = 14;
+  bool enable_macro_call_tracking = 13;
 }
 
 // Represents a named validator with an optional map-based configuration object.
@@ -152,66 +150,10 @@ message LibrarySubset {
   //
   // Note: the overloads specified in the subset need only specify their ID.
   // Note: if IncludeFunctions is non-empty, then ExcludeFunctions is ignored.
-  repeated Function include_functions = 5;
+  repeated cel.expr.Decl include_functions = 5;
 
   // Specifies the set of functions to exclude from the subset.
   //
   // Note: the overloads specified in the subset need only specify their ID.
-  repeated Function ExcludeFunctions = 6;
-}
-
-// Variable represents a typed variable declaration which will be published via
-// the cel.VariableDecls() option.
-message Variable {
-  // Name of the variable.
-  string name = 1;
-
-  // Description of the variable.
-  string description = 2;
-
-  // Represents the type declaration for the variable.
-  repeated TypeDesc type = 3;
-}
-
-// Function represents the serializable format of a function and its overloads
-message Function {
-  // Name of the function
-  string name = 1;
-
-  // Description of the function
-  string description = 2;
-
-  // Set of function overloads
-  repeated Overload overloads = 3;
-}
-
-// Overload represents the serializable format of a function overload.
-message Overload {
-  // ID of the function orverload.
-  string id = 1;
-
-  // Description of the function overload.
-  string description = 2;
-
-  // Specifies the type of the receiver for a receiver-style
-  // overload.
-  TypeDesc target = 3;
-
-  // Specifies the type for all the function arguments
-  repeated TypeDesc args = 4;
-
-  // Specifies the type of the function return value
-  TypeDesc return = 5;
-}
-
-// TypeDesc represents the serializable format of a CEL *types.Type value.
-message TypeDesc {
-  // Name of the type
-  string type_name = 1;
-
-  // Parameters of the type
-  repeated TypeDesc params = 2;
-
-  // Specifies if this is a parameterized type
-  bool is_type_param = 3;
+  repeated cel.expr.Decl ExcludeFunctions = 6;
 }
