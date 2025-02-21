@@ -68,7 +68,7 @@ message Environment {
   //
   // Context messages have all of their top-level fields available as variables
   // in the type checker.
-  repeated ContextVariable context_declarations = 7;
+  repeated ContextVariable context_variables = 7;
 
   // List of variable declarations to be configured in the CEL environment.
   repeated Variable variables = 8;
