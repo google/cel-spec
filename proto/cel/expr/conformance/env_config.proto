@@ -16,7 +16,7 @@ syntax = "proto3";
 
 package cel.expr.conformance;
 
-import "cel/expr/checked.proto";
+import "google/protobuf/any.proto";
 import "google/protobuf/descriptor.proto";
 
 option cc_enable_arenas = true;
@@ -28,20 +28,11 @@ option java_package = "cel.dev.expr.conformance";
 // Representation of a CEL Environment, defining what features and extensions
 // are available for conformance testing.
 message Environment {
-  // List of custom declarations to use when type-checking an expression.
-  repeated cel.expr.Decl declarations = 1;
+  // Name of the environment
+  string name = 1;
 
-  // ContextDeclaration represents a message type to be made available as a
-  // context variable to the CEL environment.
-  message ContextDeclaration {
-    // Qualified message name of the context proto.
-    string message_type = 1;
-  }
-  // If set, adds a context declaration from a proto message.
-  //
-  // Context messages have all of their top-level fields available as variables
-  // in the type checker.
-  repeated ContextDeclaration context_declarations = 2;
+  // Description for the current environment
+  string description = 2;
 
   // Sets the namespace (container) for the expression.
   // This is used to simplify resolution: e.g. with container
@@ -50,35 +41,177 @@ message Environment {
   // `AttributeContext` in the CEL expression.
   string container = 3;
 
+  // Import represents a type name that will be abbreviated by its simple name
+  // using the cel.Abbrevs() option.
+  message Import {
+    // Qualified type name which will be abbreviated
+    string name = 1;
+  }
+
+  // List of abbreviations to be added to the CEL environment
+  repeated Import imports = 4;
+
+  // Set of options to subset a subsettable library
+  LibrarySubset stdlib = 5;
+
+  // List of extensions to enable in the CEL environment.
+  repeated Extension extensions = 6;
+
+  // ContextVariable represents a message type to be made available as a
+  // context variable to the CEL environment.
+  message ContextVariable {
+    // Fully qualified type name of the context proto.
+    string type_name = 1;
+  }
+
+  // If set, adds a context declaration from a proto message.
+  //
+  // Context messages have all of their top-level fields available as variables
+  // in the type checker.
+  repeated ContextVariable context_declarations = 7;
+
+  // List of variable declarations to be configured in the CEL environment.
+  repeated Variable variables = 8;
+
+  // List of function declarations to be configured in the CEL environment.
+  repeated Function functions = 9;
+
+  // List of validators for validating the parsed ast.
+  repeated Validator validators = 10;
+
+  // List of feature flags to be enabled or disabled.
+  repeated Feature features = 11;
+
   // Disables including the declarations from the standard CEL environment.
   //
   // NOTE: Do not disable the standard CEL declarations unless you are aware of
   // the implications and have discussed your use case on cel-discuss@
   // or with the members of the cel-governance-team@
-  bool disable_standard_cel_declarations = 4;
+  bool disable_standard_cel_declarations = 12;
 
   // If provided, uses the provided FileDescriptorSet to extend types available
   // the CEL expression. All "well-known" protobuf messages (google.protobuf.*)
   // are known to the CEL compiler, but all others must be provided for type
   // checking.
-  google.protobuf.FileDescriptorSet message_type_extension = 5;
-
-  // Disables macros in the CEL compiler. Macros are enabled by default.
-  bool disable_macros = 6;
+  google.protobuf.FileDescriptorSet message_type_extension = 13;
 
   // When macro call tracking is enabled, the resulting SourceInfo in the
   // CheckedExpr will contain a collection of expressions representing the
   // function calls which were replaced by macros.
-  bool enable_macro_call_tracking = 7;
+  bool enable_macro_call_tracking = 14;
+}
 
-  // CanonicalExtension represents a versioned extension library reference to
-  // enable in the CEL environment.
-  message CanonicalExtension {
-    // Name of the extension library.
-    string name = 1;
-    // Version of the extension library.
-    string version = 2;
-  }
-  // List of canonical extensions to enable in the CEL environment.
-  repeated CanonicalExtension canonical_extensions = 8;
+// Represents a named validator with an optional map-based configuration object.
+//
+// Note: the map-keys must directly correspond to the internal representation of
+// the original validator, and should only use primitive scalar types as values
+// at this time.
+message Validator {
+  string name = 1;
+
+  // Additional configurations to be included as part of the validation
+  map<string, google.protobuf.Any> config = 2;
+}
+
+// Represents a named boolean feature flag supported by CEL
+message Feature {
+  // Name of the feature flag.
+  string name = 1;
+
+  // State of the feature flab.
+  bool enabled = 2;
+}
+
+// Extension represents a versioned extension library reference to enable in the
+// CEL environment.
+message Extension {
+  // Name of the extension library.
+  string name = 1;
+  // Version of the extension library.
+  string version = 2;
+}
+
+// LibrarySubset indicates a subset of the macros and function supported by a
+// subsettable library.
+message LibrarySubset {
+  // Indicates whether the library has been disabled, typically only
+  // used for default-enabled libraries like stdlib.
+  bool disabled = 1;
+
+  // Disables macros for the given library.
+  bool disable_macros = 2;
+
+  // Specifies a set of macro function names to include in the subset.
+  repeated string include_macros = 3;
+
+  // Specifies a set of macro function names to exclude from the subset.
+  // Note: if IncludeMacros is non-empty, then ExcludeFunctions is ignored.
+  repeated string exclude_macros = 4;
+
+  // Specifies a set of functions to include in the subset.
+  //
+  // Note: the overloads specified in the subset need only specify their ID.
+  // Note: if IncludeFunctions is non-empty, then ExcludeFunctions is ignored.
+  repeated Function include_functions = 5;
+
+  // Specifies the set of functions to exclude from the subset.
+  //
+  // Note: the overloads specified in the subset need only specify their ID.
+  repeated Function ExcludeFunctions = 6;
+}
+
+// Variable represents a typed variable declaration which will be published via
+// the cel.VariableDecls() option.
+message Variable {
+  // Name of the variable.
+  string name = 1;
+
+  // Description of the variable.
+  string description = 2;
+
+  // Represents the type declaration for the variable.
+  repeated TypeDesc type = 3;
+}
+
+// Function represents the serializable format of a function and its overloads
+message Function {
+  // Name of the function
+  string name = 1;
+
+  // Description of the function
+  string description = 2;
+
+  // Set of function overloads
+  repeated Overload overloads = 3;
+}
+
+// Overload represents the serializable format of a function overload.
+message Overload {
+  // ID of the function orverload.
+  string id = 1;
+
+  // Description of the function overload.
+  string description = 2;
+
+  // Specifies the type of the receiver for a receiver-style
+  // overload.
+  TypeDesc target = 3;
+
+  // Specifies the type for all the function arguments
+  repeated TypeDesc args = 4;
+
+  // Specifies the type of the function return value
+  TypeDesc return = 5;
+}
+
+// TypeDesc represents the serializable format of a CEL *types.Type value.
+message TypeDesc {
+  // Name of the type
+  string type_name = 1;
+
+  // Parameters of the type
+  repeated TypeDesc params = 2;
+
+  // Specifies if this is a parameterized type
+  bool is_type_param = 3;
 }
