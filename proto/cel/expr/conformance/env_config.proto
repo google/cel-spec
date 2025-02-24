@@ -18,6 +18,7 @@ package cel.expr.conformance;
 
 import "cel/expr/checked.proto";
 import "google/protobuf/any.proto";
+import "google/protobuf/struct.proto";
 import "google/protobuf/descriptor.proto";
 
 option cc_enable_arenas = true;
@@ -36,14 +37,20 @@ message Environment {
   string description = 2;
 
   // Sets the namespace (container) for the expression.
-  // This is used to simplify resolution: e.g. with container
-  // `google.rpc.context`, an identifier of
-  // `google.rpc.context.AttributeContext` could be referred to simply as
-  // `AttributeContext` in the CEL expression.
+  // This is used to simplify resolution.
+  // For example with container
+  //   `google.rpc.context`
+  //  an identifier of `google.rpc.context.AttributeContext` could be referred
+  //  to simply as `AttributeContext` in the CEL expression.
   string container = 3;
 
   // Import represents a type name that will be abbreviated by its simple name
-  // using the cel.Abbrevs() option.
+  // making it easier to reference simple type names from packages other than
+  // the expression container.
+  // For ex:
+  //   Import{name: 'google.rpc.Status'}
+  // The above import will ensure that `google.rpc.Status` is available by the
+  // simple name `Status` within CEL expressions.
   message Import {
     // Qualified type name which will be abbreviated
     string name = 1;
@@ -69,9 +76,13 @@ message Environment {
   //
   // Context messages have all of their top-level fields available as variables
   // in the type checker.
-  repeated ContextVariable context_variables = 7;
+  ContextVariable context_variable = 7;
 
   // List of declarations to be configured in the CEL environment.
+  //
+  // Note: The CEL environment can be configured with either the
+  // context_variable or a set of ident_decls provided as part of declarations.
+  // Providing both will result in an error.
   repeated cel.expr.Decl declarations = 8;
 
   // List of validators for validating the parsed ast.
@@ -85,6 +96,9 @@ message Environment {
   // NOTE: Do not disable the standard CEL declarations unless you are aware of
   // the implications and have discussed your use case on cel-discuss@
   // or with the members of the cel-governance-team@
+  //
+  // Deprecated: Use LibrarySubset to disable standard cel declarations instead:
+  //   stdlib = LibrarySubset{ disable: true }
   bool disable_standard_cel_declarations = 11;
 
   // If provided, uses the provided FileDescriptorSet to extend types available
@@ -96,10 +110,17 @@ message Environment {
   // When macro call tracking is enabled, the resulting SourceInfo in the
   // CheckedExpr will contain a collection of expressions representing the
   // function calls which were replaced by macros.
+  //
+  // Deprecated: Use Feature to enable macro call tracking
+  //  Feature{ name: "cel.feature.macro_call_tracking", enabled: true }
   bool enable_macro_call_tracking = 13;
 }
 
 // Represents a named validator with an optional map-based configuration object.
+// Naming convention followed by validators:
+//   <domain>.validator.<validator_name>
+// For ex:
+//   `cel.validator.timestamp`
 //
 // Note: the map-keys must directly correspond to the internal representation of
 // the original validator, and should only use primitive scalar types as values
@@ -108,10 +129,14 @@ message Validator {
   string name = 1;
 
   // Additional configurations to be included as part of the validation
-  map<string, google.protobuf.Any> config = 2;
+  map<string, google.protobuf.Value> config = 2;
 }
 
-// Represents a named boolean feature flag supported by CEL
+// Represents a named boolean feature flag supported by CEL.
+// Naming convention followed by features:
+//   <domain>.feature.<feature_name>
+// For ex:
+//   `cel.feature.cross_type_numeric_comparisons`
 message Feature {
   // Name of the feature flag.
   string name = 1;
@@ -129,7 +154,7 @@ message Extension {
   string version = 2;
 }
 
-// LibrarySubset indicates a subset of the macros and function supported by a
+// LibrarySubset indicates a subset of the macros and functions supported by a
 // subsettable library.
 message LibrarySubset {
   // Indicates whether the library has been disabled, typically only
@@ -155,5 +180,5 @@ message LibrarySubset {
   // Specifies the set of functions to exclude from the subset.
   //
   // Note: the overloads specified in the subset need only specify their ID.
-  repeated cel.expr.Decl ExcludeFunctions = 6;
+  repeated cel.expr.Decl exclude_functions = 6;
 }
