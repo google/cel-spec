@@ -15,7 +15,6 @@ proto_library(
         "//proto/cel/expr:eval_proto",
         "//proto/cel/expr:value_proto",
         "//proto/cel/expr/conformance:env_config_proto",
-        "@com_google_protobuf//:any_proto",
     ],
 )
 
