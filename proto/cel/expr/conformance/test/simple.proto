@@ -22,6 +22,7 @@ import "cel/expr/checked.proto";
 import "cel/expr/eval.proto";
 import "cel/expr/value.proto";
 import "cel/expr/conformance/env_config.proto";
+import "google/protobuf/any.proto";
 
 option cc_enable_arenas = true;
 option go_package = "cel.dev/expr/conformance/test";
@@ -200,11 +201,15 @@ message TestCase {
     // expression.
     Bindings bindings = 5;
 
+    // A context message represents an input kind in the form of a proto
+    // message whose type is defined at runtime.
+    google.protobuf.Any context_message = 6;
+
     // A context expression representing a context proto variable. The
     // fields of the input proto.Messages are used as top-level variables within
     // an Activation. The expression is evaluated using the cel environment
     // configured for the test suite.
-    string context_expr = 6;
+    string context_expr = 7;
   }
 
   // Expected result of the test case.
@@ -213,29 +218,29 @@ message TestCase {
     // equality semantics. This coincides with proto equality, except for:
     // *   maps are order-agnostic
     // *   a floating point NaN should match any NaN
-    cel.expr.Value value = 7;
+    cel.expr.Value value = 8;
 
     // An expression to be evaluated using the cel environment configured for
     // the test suite. The result of this expression must match the result of
     // the test case.
-    string result_expr = 8;
+    string result_expr = 9;
 
     // An error evaluation result set. Success if we match all of the errors in
     // the set.
-    cel.expr.ErrorSet eval_error = 9;
+    cel.expr.ErrorSet eval_error = 10;
 
     // An unknown evaluation result.
-    cel.expr.UnknownSet unknown = 10;
+    cel.expr.UnknownSet unknown = 11;
   }
 
   // If specified validates that the deduced type at check time matches
   // If the result kind is not set and this field is set, the test is considered
   // "check-only".
-  cel.expr.Type deduced_type = 11;
+  cel.expr.Type deduced_type = 12;
 
   // Bypass the type-checking and only attempt to evaluate the parsed
   // expression.
-  bool disable_check = 12;
+  bool disable_check = 13;
 }
 
 // The bindings of input variables for the test case.
