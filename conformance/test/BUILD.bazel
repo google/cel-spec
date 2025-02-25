@@ -23,6 +23,7 @@ go_library(
     name = "go_default_library",
     srcs = [
         "simple.pb.go",
+        "suite.pb.go"
     ],
     importpath = "cel.dev/expr/conformance/test",
     deps = [

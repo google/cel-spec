@@ -1,0 +1,135 @@
+// Copyright 2024 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+// Unit tests and end-to-end conformance tests.
+
+syntax = "proto3";
+
+package cel.expr.conformance.test;
+
+import "cel/expr/checked.proto";
+import "cel/expr/eval.proto";
+import "cel/expr/value.proto";
+import "cel/expr/conformance/env_config.proto";
+import "google/protobuf/any.proto";
+
+option cc_enable_arenas = true;
+option go_package = "cel.dev/expr/conformance/test";
+option java_multiple_files = true;
+option java_outer_classname = "SuiteProto";
+option java_package = "dev.cel.expr.conformance.test";
+
+// A test suite is a collection of tests designed to evaluate the correctness of
+// a CEL policy, a CEL expression or the conformance of a CEL implementation to
+// the standard specification.
+message TestSuite {
+  // The name of the test suite.
+  string name = 1;
+
+  // Description of the test suite.
+  string description = 2;
+
+  // Test sections of the test suite.
+  // Each section represents a behavior to be tested.
+  repeated TestSection sections = 3;
+}
+
+// A collection of related test cases.
+message TestSection {
+  // Name of the test section.
+  string name = 1;
+
+  // Description of the test section.
+  string description = 2;
+
+  // Test cases of the test section.
+  // Each test case represents a test scenario.
+  repeated TestCase tests = 3;
+}
+
+// A test to validate a CEL policy or expression. The test case encompasses
+// evaluation of the compiled expression using the provided input bindings and
+// asserting the result against the expected result.
+// It can also validate a raw CEL expression string through parse, check and
+// eval stages, making use of the augmenting CEL environment if provided.
+message TestCase {
+  // Name of the test case.
+  string name = 1;
+
+  // A description of the test.
+  string description = 2;
+
+  // The text of the CEL expression.
+  string expr = 3;
+
+  // Serialized environment to be used for compilation and evaluation of the
+  // CEL expression for the current test case.
+  // This option allows validating the same expression against multiple
+  // environments.
+  cel.expr.conformance.Environment env = 4;
+
+  // Input for the test case
+  oneof input_kind {
+    // A set of variable bindings to be used for evaluating a checked
+    // expression.
+    Bindings bindings = 5;
+
+    // A context message represents an input kind in the form of a proto
+    // message whose type is defined at runtime.
+    google.protobuf.Any context_message = 6;
+
+    // A context expression representing a context proto variable. The
+    // fields of the input proto.Messages are used as top-level variables within
+    // an Activation. The expression is evaluated using the cel environment
+    // configured for the test suite.
+    string context_expr = 7;
+  }
+
+  // Expected result of the test case.
+  oneof result_kind {
+    // A normal value, which must match the evaluation result exactly via value
+    // equality semantics. This coincides with proto equality, except for:
+    // *   maps are order-agnostic
+    // *   a floating point NaN should match any NaN
+    cel.expr.Value result_value = 8;
+
+    // An expression to be evaluated using the cel environment configured for
+    // the test suite. The result of this expression must match the result of
+    // the test case.
+    string result_expr = 9;
+
+    // An error evaluation result set. Success if we match all of the errors in
+    // the set.
+    cel.expr.ErrorSet eval_error = 10;
+
+    // An unknown evaluation result.
+    cel.expr.UnknownSet unknown = 11;
+  }
+
+  // If specified validates that the deduced type at check time matches
+  // If the result kind is not set and this field is set, the test is considered
+  // "check-only".
+  cel.expr.Type deduced_type = 12;
+
+  // Bypass the type-checking and only attempt to evaluate the parsed
+  // expression.
+  bool disable_check = 13;
+}
+
+// The bindings of input variables for the test case.
+message Bindings {
+  // A map representing a variable binding where the key is the name of the
+  // input variable.
+  map<string, cel.expr.Value> values = 1;
+}
