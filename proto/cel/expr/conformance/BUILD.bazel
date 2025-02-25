@@ -16,6 +16,17 @@ proto_library(
     ],
 )
 
+proto_library(
+    name = "env_config_proto",
+    srcs = ["env_config.proto"],
+    strip_import_prefix = "/proto",
+    deps = [
+        "//proto/cel/expr:checked_proto",
+        "@com_google_protobuf//:descriptor_proto",
+        "@com_google_protobuf//:struct_proto",
+    ],
+)
+
 ##############################################################################
 # Java
 ##############################################################################
@@ -39,6 +50,15 @@ go_proto_library(
         "//proto/cel/expr:expr_go_proto",
         "@org_golang_google_genproto_googleapis_rpc//status:go_default_library",
     ],
+)
+
+go_proto_library(
+    name = "env_config_go_proto",
+    importpath = "cel.dev/expr/conformance",
+    protos = [":env_config_proto"],
+    deps = [
+        "//proto/cel/expr:expr_go_proto",
+    ]
 )
 
 ###############################################################################

@@ -31,6 +31,8 @@ option java_package = "dev.cel.expr.conformance.test";
 // The format of a simple test file, expected to be stored in text format.
 // A file is the unit of granularity for selecting conformance tests,
 // so tests of optional features should be segregated into separate files.
+//
+// Deprecated: Use cel.expr.conformance.test.Suite
 message SimpleTestFile {
   // Required.  The name of the file.  Should match the filename.
   string name = 1;
