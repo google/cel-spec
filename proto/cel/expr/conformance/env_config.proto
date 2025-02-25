@@ -17,7 +17,6 @@ syntax = "proto3";
 package cel.expr.conformance;
 
 import "cel/expr/checked.proto";
-import "google/protobuf/any.proto";
 import "google/protobuf/struct.proto";
 import "google/protobuf/descriptor.proto";
 
