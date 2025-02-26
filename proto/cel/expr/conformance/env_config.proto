@@ -1,0 +1,183 @@
+// Copyright 2025 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+package cel.expr.conformance;
+
+import "cel/expr/checked.proto";
+import "google/protobuf/struct.proto";
+import "google/protobuf/descriptor.proto";
+
+option cc_enable_arenas = true;
+option go_package = "cel.dev/expr/conformance";
+option java_multiple_files = true;
+option java_outer_classname = "EnvironmentProto";
+option java_package = "cel.dev.expr.conformance";
+
+// Representation of a CEL Environment, defining what features and extensions
+// are available for conformance testing.
+message Environment {
+  // Name of the environment
+  string name = 1;
+
+  // Description for the current environment
+  string description = 2;
+
+  // Sets the namespace (container) for the expression.
+  // This is used to simplify resolution.
+  // For example with container
+  //   `google.rpc.context`
+  //  an identifier of `google.rpc.context.AttributeContext` could be referred
+  //  to simply as `AttributeContext` in the CEL expression.
+  string container = 3;
+
+  // Import represents a type name that will be abbreviated by its simple name
+  // making it easier to reference simple type names from packages other than
+  // the expression container.
+  // For ex:
+  //   Import{name: 'google.rpc.Status'}
+  // The above import will ensure that `google.rpc.Status` is available by the
+  // simple name `Status` within CEL expressions.
+  message Import {
+    // Qualified type name which will be abbreviated
+    string name = 1;
+  }
+
+  // List of abbreviations to be added to the CEL environment
+  repeated Import imports = 4;
+
+  // Set of options to subset a subsettable library
+  LibrarySubset stdlib = 5;
+
+  // List of extensions to enable in the CEL environment.
+  repeated Extension extensions = 6;
+
+  // ContextVariable represents a message type to be made available as a
+  // context variable to the CEL environment.
+  message ContextVariable {
+    // Fully qualified type name of the context proto.
+    string type_name = 1;
+  }
+
+  // If set, adds a context declaration from a proto message.
+  //
+  // Context messages have all of their top-level fields available as variables
+  // in the type checker.
+  ContextVariable context_variable = 7;
+
+  // List of declarations to be configured in the CEL environment.
+  //
+  // Note: The CEL environment can be configured with either the
+  // context_variable or a set of ident_decls provided as part of declarations.
+  // Providing both will result in an error.
+  repeated cel.expr.Decl declarations = 8;
+
+  // List of validators for validating the parsed ast.
+  repeated Validator validators = 9;
+
+  // List of feature flags to be enabled or disabled.
+  repeated Feature features = 10;
+
+  // Disables including the declarations from the standard CEL environment.
+  //
+  // NOTE: Do not disable the standard CEL declarations unless you are aware of
+  // the implications and have discussed your use case on cel-discuss@
+  // or with the members of the cel-governance-team@
+  //
+  // Deprecated: Use LibrarySubset to disable standard cel declarations instead:
+  //   stdlib = LibrarySubset{ disable: true }
+  bool disable_standard_cel_declarations = 11;
+
+  // If provided, uses the provided FileDescriptorSet to extend types available
+  // the CEL expression. All "well-known" protobuf messages (google.protobuf.*)
+  // are known to the CEL compiler, but all others must be provided for type
+  // checking.
+  google.protobuf.FileDescriptorSet message_type_extension = 12;
+
+  // When macro call tracking is enabled, the resulting SourceInfo in the
+  // CheckedExpr will contain a collection of expressions representing the
+  // function calls which were replaced by macros.
+  //
+  // Deprecated: Use Feature to enable macro call tracking
+  //  Feature{ name: "cel.feature.macro_call_tracking", enabled: true }
+  bool enable_macro_call_tracking = 13;
+}
+
+// Represents a named validator with an optional map-based configuration object.
+// Naming convention followed by validators:
+//   <domain>.validator.<validator_name>
+// For ex:
+//   `cel.validator.timestamp`
+//
+// Note: the map-keys must directly correspond to the internal representation of
+// the original validator, and should only use primitive scalar types as values
+// at this time.
+message Validator {
+  string name = 1;
+
+  // Additional configurations to be included as part of the validation
+  map<string, google.protobuf.Value> config = 2;
+}
+
+// Represents a named boolean feature flag supported by CEL.
+// Naming convention followed by features:
+//   <domain>.feature.<feature_name>
+// For ex:
+//   `cel.feature.cross_type_numeric_comparisons`
+message Feature {
+  // Name of the feature flag.
+  string name = 1;
+
+  // State of the feature flab.
+  bool enabled = 2;
+}
+
+// Extension represents a versioned extension library reference to enable in the
+// CEL environment.
+message Extension {
+  // Name of the extension library.
+  string name = 1;
+  // Version of the extension library.
+  string version = 2;
+}
+
+// LibrarySubset indicates a subset of the macros and functions supported by a
+// subsettable library.
+message LibrarySubset {
+  // Indicates whether the library has been disabled, typically only
+  // used for default-enabled libraries like stdlib.
+  bool disabled = 1;
+
+  // Disables macros for the given library.
+  bool disable_macros = 2;
+
+  // Specifies a set of macro function names to include in the subset.
+  repeated string include_macros = 3;
+
+  // Specifies a set of macro function names to exclude from the subset.
+  // Note: if IncludeMacros is non-empty, then ExcludeFunctions is ignored.
+  repeated string exclude_macros = 4;
+
+  // Specifies a set of functions to include in the subset.
+  //
+  // Note: the overloads specified in the subset need only specify their ID.
+  // Note: if IncludeFunctions is non-empty, then ExcludeFunctions is ignored.
+  repeated cel.expr.Decl include_functions = 5;
+
+  // Specifies the set of functions to exclude from the subset.
+  //
+  // Note: the overloads specified in the subset need only specify their ID.
+  repeated cel.expr.Decl exclude_functions = 6;
+}
