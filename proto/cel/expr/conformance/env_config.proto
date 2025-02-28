@@ -18,7 +18,6 @@ package cel.expr.conformance;
 
 import "cel/expr/checked.proto";
 import "google/protobuf/struct.proto";
-import "google/protobuf/descriptor.proto";
 
 option cc_enable_arenas = true;
 option go_package = "cel.dev/expr/conformance";
@@ -100,19 +99,13 @@ message Environment {
   //   stdlib = LibrarySubset{ disable: true }
   bool disable_standard_cel_declarations = 11;
 
-  // If provided, uses the provided FileDescriptorSet to extend types available
-  // the CEL expression. All "well-known" protobuf messages (google.protobuf.*)
-  // are known to the CEL compiler, but all others must be provided for type
-  // checking.
-  google.protobuf.FileDescriptorSet message_type_extension = 12;
-
   // When macro call tracking is enabled, the resulting SourceInfo in the
   // CheckedExpr will contain a collection of expressions representing the
   // function calls which were replaced by macros.
   //
   // Deprecated: Use Feature to enable macro call tracking
   //  Feature{ name: "cel.feature.macro_call_tracking", enabled: true }
-  bool enable_macro_call_tracking = 13;
+  bool enable_macro_call_tracking = 12;
 }
 
 // Represents a named validator with an optional map-based configuration object.
