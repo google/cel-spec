@@ -524,7 +524,7 @@ section: {
     name: "scientific notation formatting clause"
     expr: '"%.6e".format([1052.032911275])'
     value: {
-      string_value: '1.052033×10⁰³',
+      string_value: '1.052033e+03',
     }
   }
   test: {
@@ -538,35 +538,70 @@ section: {
     name: "default precision for scientific notation"
     expr: '"%e".format([2.71828])'
     value: {
-      string_value: '2.718280×10⁰⁰',
+      string_value: '2.718280e+00',
     }
   }
   test: {
-    name: "unicode output for scientific notation"
-    expr: '"unescaped unicode: %e, escaped unicode: %e".format([2.71828, 2.71828])'
+    name: "NaN support for scientific notation"
+    expr: '"%e".format([double("NaN")])'
     value: {
-      string_value: 'unescaped unicode: 2.718280×10⁰⁰, escaped unicode: 2.718280\u00d710\u2070\u2070',
+      string_value: 'NaN',
+    }
+  }
+  test: {
+    name: "positive infinity support for scientific notation"
+    expr: '"%e".format([double("Infinity")])'
+    value: {
+      string_value: 'Infinity',
+    }
+  }
+  test: {
+    name: "negative infinity support for scientific notation"
+    expr: '"%e".format([double("-Infinity")])'
+    value: {
+      string_value: '-Infinity',
+    }
+  }
+  test: {
+    name: "NaN support for decimal"
+    expr: '"%d".format([double("NaN")])'
+    value: {
+      string_value: 'NaN',
+    }
+  }
+  test: {
+    name: "positive infinity support for decimal"
+    expr: '"%d".format([double("Infinity")])'
+    value: {
+      string_value: 'Infinity',
+    }
+  }
+  test: {
+    name: "negative infinity support for decimal"
+    expr: '"%d".format([double("-Infinity")])'
+    value: {
+      string_value: '-Infinity',
     }
   }
   test: {
     name: "NaN support for fixed-point"
-    expr: '"%f".format(["NaN"])'
+    expr: '"%f".format([double("NaN")])'
     value: {
       string_value: 'NaN',
     }
   }
   test: {
     name: "positive infinity support for fixed-point"
-    expr: '"%f".format(["Infinity"])'
+    expr: '"%f".format([double("Infinity")])'
     value: {
-      string_value: '∞',
+      string_value: 'Infinity',
     }
   }
   test: {
     name: "negative infinity support for fixed-point"
-    expr: '"%f".format(["-Infinity"])'
+    expr: '"%f".format([double("-Infinity")])'
     value: {
-      string_value: '-∞',
+      string_value: '-Infinity',
     }
   }
   test: {
@@ -578,9 +613,9 @@ section: {
   }
   test: {
     name: "null support for string"
-    expr: '"null: %s".format([null])'
+    expr: '"%s".format([null])'
     value: {
-      string_value: 'null: null',
+      string_value: 'null',
     }
   }
   test: {
@@ -592,16 +627,16 @@ section: {
   }
   test: {
     name: "bytes support for string"
-    expr: '"some bytes: %s".format([b"xyz"])'
+    expr: '"%s".format([b"xyz"])'
     value: {
-      string_value: 'some bytes: xyz',
+      string_value: 'xyz',
     }
   }
   test: {
     name: "type() support for string"
-    expr: '"type is %s".format([type("test string")])'
+    expr: '"%s".format([type("test string")])'
     value: {
-      string_value: 'type is string',
+      string_value: 'string',
     }
   }
   test: {
@@ -622,133 +657,126 @@ section: {
     name: "list support for string"
     expr: '"%s".format([["abc", 3.14, null, [9, 8, 7, 6], timestamp("2023-02-03T23:31:20Z")]])'
     value: {
-      string_value: '["abc", 3.14, null, [9, 8, 7, 6], timestamp("2023-02-03T23:31:20Z")]',
+      string_value: '[abc, 3.14, null, [9, 8, 7, 6], 2023-02-03T23:31:20Z]',
     }
   }
   test: {
     name: "map support for string"
     expr: '"%s".format([{"key1": b"xyz", "key5": null, "key2": duration("2h"), "key4": true, "key3": 2.71828}])'
     value: {
-      string_value: '{"key1":b"xyz", "key2":duration("7200s"), "key3":2.71828, "key4":true, "key5":null}',
+      string_value: '{key1: xyz, key2: 7200s, key3: 2.71828, key4: true, key5: null}',
     }
   }
   test: {
     name: "map support (all key types)"
-    expr: '"map with multiple key types: %s".format([{1: "value1", uint(2): "value2", true: double("NaN")}])'
+    expr: '"%s".format([{1: "value1", uint(2): "value2", true: double("NaN")}])'
     value: {
-      string_value: 'map with multiple key types: {1:"value1", 2:"value2", true:"NaN"}',
+      string_value: '{1: value1, 2: value2, true: NaN}',
     }
   }
   test: {
     name: "boolean support for %s"
-    expr: '"true bool: %s, false bool: %s".format([true, false])'
+    expr: '"%s, %s".format([true, false])'
     value: {
-      string_value: 'true bool: true, false bool: false',
+      string_value: 'true, false',
     }
   }
   test: {
       name: "dyntype support for string formatting clause"
-      expr: '"dynamic string: %s".format([dyn("a string")])'
+      expr: '"%s".format([dyn("a string")])'
       value: {
-          string_value: 'dynamic string: a string',
+          string_value: 'a string',
       }
   }
   test: {
     name: "dyntype support for numbers with string formatting clause"
-    expr: '"dynIntStr: %s dynDoubleStr: %s".format([dyn(32), dyn(56.8)])'
+    expr: '"%s, %s".format([dyn(32), dyn(56.8)])'
     value: {
-      string_value: 'dynIntStr: 32 dynDoubleStr: 56.8',
+      string_value: '32, 56.8',
     }
   }
   test: {
     name: "dyntype support for integer formatting clause"
-    expr: '"dynamic int: %d".format([dyn(128)])'
+    expr: '"%d".format([dyn(128)])'
     value: {
-      string_value: 'dynamic int: 128',
+      string_value: '128',
     }
   }
   test: {
     name: "dyntype support for integer formatting clause (unsigned)"
-    expr: '"dynamic unsigned int: %d".format([dyn(256u)])'
+    expr: '"%d".format([dyn(256u)])'
     value: {
-      string_value: 'dynamic unsigned int: 256',
+      string_value: '256',
     }
   }
   test: {
     name: "dyntype support for hex formatting clause"
-    expr: '"dynamic hex int: %x".format([dyn(22)])'
+    expr: '"%x".format([dyn(22)])'
     value: {
-      string_value: 'dynamic hex int: 16',
+      string_value: '16',
     }
   }
   test: {
     name: "dyntype support for hex formatting clause (uppercase)"
-    expr: '"dynamic hex int: %X (uppercase)".format([dyn(26)])'
+    expr: '"%X".format([dyn(26)])'
     value: {
-      string_value: 'dynamic hex int: 1A (uppercase)',
+      string_value: '1A',
     }
   }
   test: {
     name: "dyntype support for unsigned hex formatting clause"
-    expr: '"dynamic hex int: %x (unsigned)".format([dyn(500u)])'
+    expr: '"%x".format([dyn(500u)])'
     value: {
-      string_value: 'dynamic hex int: 1f4 (unsigned)',
+      string_value: '1f4',
     }
   }
   test: {
     name: "dyntype support for fixed-point formatting clause"
-    expr: '"dynamic double: %.3f".format([dyn(4.5)])'
+    expr: '"%.3f".format([dyn(4.5)])'
     value: {
-      string_value: 'dynamic double: 4.500',
+      string_value: '4.500',
     }
   }
   test: {
     name: "dyntype support for scientific notation"
-    expr: '"(dyntype) e: %e".format([dyn(2.71828)])'
+    expr: '"%e".format([dyn(2.71828)])'
     value: {
-      string_value: '(dyntype) e: 2.718280×10⁰⁰',
+      string_value: '2.718280e+00',
     }
   }
   test: {
-    name: "dyntype NaN/infinity support for fixed-point"
-    expr: '"NaN: %f, infinity: %f".format([dyn("NaN"), dyn("Infinity")])'
+    name: "dyntype NaN/infinity support"
+    expr: '"%s".format([[double("NaN"), double("Infinity"), double("-Infinity")]])'
     value: {
-      string_value: 'NaN: NaN, infinity: ∞',
+      string_value: '[NaN, Infinity, -Infinity]',
     }
   }
   test: {
     name: "dyntype support for timestamp"
-    expr: '"dyntype timestamp: %s".format([dyn(timestamp("2009-11-10T23:00:00Z"))])'
+    expr: '"%s".format([dyn(timestamp("2009-11-10T23:00:00Z"))])'
     value: {
-      string_value: 'dyntype timestamp: 2009-11-10T23:00:00Z',
+      string_value: '2009-11-10T23:00:00Z',
     }
   }
   test: {
     name: "dyntype support for duration"
-    expr: '"dyntype duration: %s".format([dyn(duration("8747s"))])'
+    expr: '"%s".format([dyn(duration("8747s"))])'
     value: {
-      string_value: 'dyntype duration: 8747s',
+      string_value: '8747s',
     }
   }
   test: {
     name: "dyntype support for lists"
-    expr: '"dyntype list: %s".format([dyn([6, 4.2, "a string"])])'
+    expr: '"%s".format([dyn([6, 4.2, "a string"])])'
     value: {
-      string_value: 'dyntype list: [6, 4.2, "a string"]',
+      string_value: '[6, 4.2, a string]',
     }
   }
   test: {
     name: "dyntype support for maps"
-    expr: '"dyntype map: %s".format([{"strKey":"x", 6:duration("422s"), true:42}])'
+    expr: '"%s".format([{"strKey":"x", 6:duration("422s"), true:42}])'
     value: {
-      string_value: 'dyntype map: {"strKey":"x", 6:duration("422s"), true:42}',
-    }
-  }
-  test: {
-    name: "message field support"
-    expr: '"message field msg.single_int32: %d, msg.single_double: %.1f".format([2, 1.0])'
-    value: {
-      string_value: 'message field msg.single_int32: 2, msg.single_double: 1.0',
+      string_value: '{6: 422s, strKey: x, true: 42}',
     }
   }
   test: {
@@ -760,10 +788,10 @@ section: {
     }
     bindings: {
       key: "str_var"
-      value: { value: { string_value: "str is %s and some more" } }
+      value: { value: { string_value: "%s" } }
     }
     value: {
-      string_value: 'str is filler and some more',
+      string_value: 'filler',
     }
   }
   test: {
@@ -820,10 +848,10 @@ section: {
     }
     bindings: {
       key: "str_var"
-      value: { value: { string_value: "this is 5 in binary: %b" } }
+      value: { value: { string_value: "%b" } }
     }
     value: {
-      string_value: 'this is 5 in binary: 101',
+      string_value: '101',
     }
   }
   test: {
@@ -838,7 +866,7 @@ section: {
       value: { value: { string_value: "%.6e" } }
     }
     value: {
-      string_value: '1.052033×10⁰³',
+      string_value: '1.052033e+03',
     }
   }
   test: {
