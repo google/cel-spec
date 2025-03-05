@@ -174,3 +174,478 @@ section {
     value { int64_value: 1 }
   }
 }
+section {
+  name: "selectors"
+  description: "Check that reserved identifiers are permitted as selectors as long as they are not language keywords"
+  test {
+    name: "as"
+    description: "Check that `as` can be used as a selector."
+    expr: "{ 'as': 1 }.as"
+    value { int64_value: 1 }
+  }
+  test {
+    name: "break"
+    description: "Check that `break` can be used as a selector."
+    expr: "{ 'break': 1 }.break"
+    value { int64_value: 1 }
+  }
+  test {
+    name: "const"
+    description: "Check that `const` can be used as a selector."
+    expr: "{ 'const': 1 }.const"
+    value { int64_value: 1 }
+  }
+  test {
+    name: "continue"
+    description: "Check that `continue` can be used as a selector."
+    expr: "{ 'continue': 1 }.continue"
+    value { int64_value: 1 }
+  }
+  test {
+    name: "else"
+    description: "Check that `else` can be used as a selector."
+    expr: "{ 'else': 1 }.else"
+    value { int64_value: 1 }
+  }
+  test {
+    name: "for"
+    description: "Check that `for` can be used as a selector."
+    expr: "{ 'for': 1 }.for"
+    value { int64_value: 1 }
+  }
+  test {
+    name: "function"
+    description: "Check that `function` can be used as a selector."
+    expr: "{ 'function': 1 }.function"
+    value { int64_value: 1 }
+  }
+  test {
+    name: "if"
+    description: "Check that `if` can be used as a selector."
+    expr: "{ 'if': 1 }.if"
+    value { int64_value: 1 }
+  }
+  test {
+    name: "import"
+    description: "Check that `import` can be used as a selector."
+    expr: "{ 'import': 1 }.import"
+    value { int64_value: 1 }
+  }
+  test {
+    name: "let"
+    description: "Check that `let` can be used as a selector."
+    expr: "{ 'let': 1 }.let"
+    value { int64_value: 1 }
+  }
+  test {
+    name: "loop"
+    description: "Check that `loop` can be used as a selector."
+    expr: "{ 'loop': 1 }.loop"
+    value { int64_value: 1 }
+  }
+  test {
+    name: "package"
+    description: "Check that `package` can be used as a selector."
+    expr: "{ 'package': 1 }.package"
+    value { int64_value: 1 }
+  }
+  test {
+    name: "namespace"
+    description: "Check that `namespace` can be used as a selector."
+    expr: "{ 'namespace': 1 }.namespace"
+    value { int64_value: 1 }
+  }
+  test {
+    name: "return"
+    description: "Check that `return` can be used as a selector."
+    expr: "{ 'return': 1 }.return"
+    value { int64_value: 1 }
+  }
+  test {
+    name: "var"
+    description: "Check that `var` can be used as a selector."
+    expr: "{ 'var': 1 }.var"
+    value { int64_value: 1 }
+  }
+  test {
+    name: "void"
+    description: "Check that `void` can be used as a selector."
+    expr: "{ 'void': 1 }.void"
+    value { int64_value: 1 }
+  }
+  test {
+    name: "while"
+    description: "Check that `while` can be used as a selector."
+    expr: "{ 'while': 1 }.while"
+    value { int64_value: 1 }
+  }
+}
+section {
+  name: "receiver_functions"
+  description: "Check that reserved identifiers are permitted as receiver functions as long as they are not language keywords"
+  test {
+    name: "as"
+    description: "Check that `as` can be used as a receiver function."
+    expr: "a.as() || true"
+    disable_check: true
+    value { bool_value: true }
+  }
+  test {
+    name: "break"
+    description: "Check that `break` can be used as a receiver function."
+    expr: "a.break() || true"
+    disable_check: true
+    value { bool_value: true }
+  }
+  test {
+    name: "const"
+    description: "Check that `const` can be used as a receiver function."
+    expr: "a.const() || true"
+    disable_check: true
+    value { bool_value: true }
+  }
+  test {
+    name: "continue"
+    description: "Check that `continue` can be used as a receiver function."
+    expr: "a.continue() || true"
+    disable_check: true
+    value { bool_value: true }
+  }
+  test {
+    name: "else"
+    description: "Check that `else` can be used as a receiver function."
+    expr: "a.else() || true"
+    disable_check: true
+    value { bool_value: true }
+  }
+  test {
+    name: "for"
+    description: "Check that `for` can be used as a receiver function."
+    expr: "a.for() || true"
+    disable_check: true
+    value { bool_value: true }
+  }
+  test {
+    name: "function"
+    description: "Check that `function` can be used as a receiver function."
+    expr: "a.function() || true"
+    disable_check: true
+    value { bool_value: true }
+  }
+  test {
+    name: "if"
+    description: "Check that `if` can be used as a receiver function."
+    expr: "a.if() || true"
+    disable_check: true
+    value { bool_value: true }
+  }
+  test {
+    name: "import"
+    description: "Check that `import` can be used as a receiver function."
+    expr: "a.import() || true"
+    disable_check: true
+    value { bool_value: true }
+  }
+  test {
+    name: "let"
+    description: "Check that `let` can be used as a receiver function."
+    expr: "a.let() || true"
+    disable_check: true
+    value { bool_value: true }
+  }
+  test {
+    name: "loop"
+    description: "Check that `loop` can be used as a receiver function."
+    expr: "a.loop() || true"
+    disable_check: true
+    value { bool_value: true }
+  }
+  test {
+    name: "package"
+    description: "Check that `package` can be used as a receiver function."
+    expr: "a.package() || true"
+    disable_check: true
+    value { bool_value: true }
+  }
+  test {
+    name: "namespace"
+    description: "Check that `namespace` can be used as a receiver function."
+    expr: "a.namespace() || true"
+    disable_check: true
+    value { bool_value: true }
+  }
+  test {
+    name: "return"
+    description: "Check that `return` can be used as a receiver function."
+    expr: "a.return() || true"
+    disable_check: true
+    value { bool_value: true }
+  }
+  test {
+    name: "var"
+    description: "Check that `var` can be used as a receiver function."
+    expr: "a.var() || true"
+    disable_check: true
+    value { bool_value: true }
+  }
+  test {
+    name: "void"
+    description: "Check that `void` can be used as a receiver function."
+    expr: "a.void() || true"
+    disable_check: true
+    value { bool_value: true }
+  }
+  test {
+    name: "while"
+    description: "Check that `while` can be used as a receiver function."
+    expr: "a.while() || true"
+    disable_check: true
+    value { bool_value: true }
+  }
+}
+section {
+  name: "struct_names"
+  description: "Check that reserved identifiers are permitted as struct names as long as they are not language keywords"
+  test {
+    name: "as"
+    description: "Check that `as` can be used as a struct name."
+    expr: "as{} || true"
+    disable_check: true
+    value { bool_value: true }
+  }
+  test {
+    name: "break"
+    description: "Check that `break` can be used as a struct name."
+    expr: "break{} || true"
+    disable_check: true
+    value { bool_value: true }
+  }
+  test {
+    name: "const"
+    description: "Check that `const` can be used as a struct name."
+    expr: "const{} || true"
+    disable_check: true
+    value { bool_value: true }
+  }
+  test {
+    name: "continue"
+    description: "Check that `continue` can be used as a struct name."
+    expr: "continue{} || true"
+    disable_check: true
+    value { bool_value: true }
+  }
+  test {
+    name: "else"
+    description: "Check that `else` can be used as a struct name."
+    expr: "else{} || true"
+    disable_check: true
+    value { bool_value: true }
+  }
+  test {
+    name: "for"
+    description: "Check that `for` can be used as a struct name."
+    expr: "for{} || true"
+    disable_check: true
+    value { bool_value: true }
+  }
+  test {
+    name: "function"
+    description: "Check that `function` can be used as a struct name."
+    expr: "function{} || true"
+    disable_check: true
+    value { bool_value: true }
+  }
+  test {
+    name: "if"
+    description: "Check that `if` can be used as a struct name."
+    expr: "if{} || true"
+    disable_check: true
+    value { bool_value: true }
+  }
+  test {
+    name: "import"
+    description: "Check that `import` can be used as a struct name."
+    expr: "import{} || true"
+    disable_check: true
+    value { bool_value: true }
+  }
+  test {
+    name: "let"
+    description: "Check that `let` can be used as a struct name."
+    expr: "let{} || true"
+    disable_check: true
+    value { bool_value: true }
+  }
+  test {
+    name: "loop"
+    description: "Check that `loop` can be used as a struct name."
+    expr: "loop{} || true"
+    disable_check: true
+    value { bool_value: true }
+  }
+  test {
+    name: "package"
+    description: "Check that `package` can be used as a struct name."
+    expr: "package{} || true"
+    disable_check: true
+    value { bool_value: true }
+  }
+  test {
+    name: "namespace"
+    description: "Check that `namespace` can be used as a struct name."
+    expr: "namespace{} || true"
+    disable_check: true
+    value { bool_value: true }
+  }
+  test {
+    name: "return"
+    description: "Check that `return` can be used as a struct name."
+    expr: "return{} || true"
+    disable_check: true
+    value { bool_value: true }
+  }
+  test {
+    name: "var"
+    description: "Check that `var` can be used as a struct name."
+    expr: "var{} || true"
+    disable_check: true
+    value { bool_value: true }
+  }
+  test {
+    name: "void"
+    description: "Check that `void` can be used as a struct name."
+    expr: "void{} || true"
+    disable_check: true
+    value { bool_value: true }
+  }
+  test {
+    name: "while"
+    description: "Check that `while` can be used as a struct name."
+    expr: "while{} || true"
+    disable_check: true
+    value { bool_value: true }
+  }
+}
+section {
+  name: "struct_fields"
+  description: "Check that reserved identifiers are permitted as struct fields as long as they are not language keywords"
+  test {
+    name: "as"
+    description: "Check that `as` can be used as a struct name."
+    expr: "a{ as: 1 } || true"
+    disable_check: true
+    value { bool_value: true }
+  }
+  test {
+    name: "break"
+    description: "Check that `break` can be used as a struct name."
+    expr: "a{ break: 1 } || true"
+    disable_check: true
+    value { bool_value: true }
+  }
+  test {
+    name: "const"
+    description: "Check that `const` can be used as a struct name."
+    expr: "a{ const: 1 } || true"
+    disable_check: true
+    value { bool_value: true }
+  }
+  test {
+    name: "continue"
+    description: "Check that `continue` can be used as a struct name."
+    expr: "a{ continue: 1 } || true"
+    disable_check: true
+    value { bool_value: true }
+  }
+  test {
+    name: "else"
+    description: "Check that `else` can be used as a struct name."
+    expr: "a{ else: 1 } || true"
+    disable_check: true
+    value { bool_value: true }
+  }
+  test {
+    name: "for"
+    description: "Check that `for` can be used as a struct name."
+    expr: "a{ for: 1 } || true"
+    disable_check: true
+    value { bool_value: true }
+  }
+  test {
+    name: "function"
+    description: "Check that `function` can be used as a struct name."
+    expr: "a{ function: 1 } || true"
+    disable_check: true
+    value { bool_value: true }
+  }
+  test {
+    name: "if"
+    description: "Check that `if` can be used as a struct name."
+    expr: "a{ if: 1 } || true"
+    disable_check: true
+    value { bool_value: true }
+  }
+  test {
+    name: "import"
+    description: "Check that `import` can be used as a struct name."
+    expr: "a{ import: 1 } || true"
+    disable_check: true
+    value { bool_value: true }
+  }
+  test {
+    name: "let"
+    description: "Check that `let` can be used as a struct name."
+    expr: "a{ let: 1 } || true"
+    disable_check: true
+    value { bool_value: true }
+  }
+  test {
+    name: "loop"
+    description: "Check that `loop` can be used as a struct name."
+    expr: "a{ loop: 1 } || true"
+    disable_check: true
+    value { bool_value: true }
+  }
+  test {
+    name: "package"
+    description: "Check that `package` can be used as a struct name."
+    expr: "a{ package: 1 } || true"
+    disable_check: true
+    value { bool_value: true }
+  }
+  test {
+    name: "namespace"
+    description: "Check that `namespace` can be used as a struct name."
+    expr: "a{ namespace: 1 } || true"
+    disable_check: true
+    value { bool_value: true }
+  }
+  test {
+    name: "return"
+    description: "Check that `return` can be used as a struct name."
+    expr: "a{ return: 1 } || true"
+    disable_check: true
+    value { bool_value: true }
+  }
+  test {
+    name: "var"
+    description: "Check that `var` can be used as a struct name."
+    expr: "a{ var: 1 } || true"
+    disable_check: true
+    value { bool_value: true }
+  }
+  test {
+    name: "void"
+    description: "Check that `void` can be used as a struct name."
+    expr: "a{ void: 1 } || true"
+    disable_check: true
+    value { bool_value: true }
+  }
+  test {
+    name: "while"
+    description: "Check that `while` can be used as a struct name."
+    expr: "a{ while: 1 } || true"
+    disable_check: true
+    value { bool_value: true }
+  }
+}
