@@ -136,9 +136,9 @@ message Bindings {
       // A simple literal value for a variable binding
       cel.expr.Value value = 1;
 
-      // An expression representing the value for the variable binding.
-      // The expression is evaluated using the same runtime environment as the one
-      // the one used for evaluating the test expression.
+      // An expression which evaluates to the value of the variable binding.
+      // The expression is evaluated using the same runtime environment as the
+      // one used for evaluating the test expression.
       string expr = 2;
     }
   }
