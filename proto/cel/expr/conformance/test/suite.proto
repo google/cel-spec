@@ -129,7 +129,21 @@ message TestCase {
 
 // The bindings of input variables for the test case.
 message Bindings {
+  // The input value for a variable binding
+  message InputValue {
+    // The type of input value that can be used for a variable binding
+    oneof kind {
+      // A simple literal value for a variable binding
+      cel.expr.Value value = 1;
+
+      // An expression representing the value for the variable binding.
+      // The expression is evaluated using the same runtime environment as the one
+      // the one used for evaluating the test expression.
+      string expr = 2;
+    }
+  }
+
   // A map representing a variable binding where the key is the name of the
   // input variable.
-  map<string, cel.expr.Value> values = 1;
+  map<string, InputValue> values = 1;
 }
