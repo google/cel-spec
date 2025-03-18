@@ -138,7 +138,7 @@ message Bindings {
 
       // An expression which evaluates to the value of the variable binding.
       // The expression is evaluated using the same runtime environment as the
-      // one used for evaluating the test expression.
+      // one used for evaluating the expression under test.
       string expr = 2;
     }
   }
