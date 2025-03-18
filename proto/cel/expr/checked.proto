@@ -236,6 +236,20 @@ message Decl {
     Constant value = 2;
 
     // Documentation string for the identifier.
+    //
+    // Provide a brief description of what the variable represents and whether
+    // there are any constraints on the formatting or supported value range.
+    //
+    // Examples:
+    //
+    //    'request.auth.principal' - string which uniquely identifies an
+    //    authenticated principal. For JSON Web Tokens (JWTs), the principal
+    //    is the combination of the issuer ('iss') and subject ('sub') token
+    //    fields concatenated by a forward slash: iss + `/` + sub.
+    //
+    //    'min_cpus' - integer value indicates the minimum number of CPUs
+    //    required for a compute cluster. The 'min_cpus' value must be 
+    //    greater than zero and less than 'max_cpus' or 64 whichever is less.
     string doc = 3;
   }
 
@@ -293,11 +307,45 @@ message Decl {
       bool is_instance_function = 5;
 
       // Documentation string for the overload.
+      //
+      // Provide examples of the overload behavior, preferring to use literal
+      // values as input with a comment on the return value.
+      //
+      // Examples:
+      //
+      //    // Determine whether a value of type <V> exists within a list<V>.
+      //    2 in [1, 2, 3] // returns true
+      //
+      //    // Determine whether a key of type <K> exists within a map<K,V>.
+      //    'hello' in {'hi': 'you', 'hello': 'there'}  // returns true
+      //    'help' in {'hi': 'you', 'hello': 'there'}  // returns false
+      //
+      //    // Take the substring of a string starting at a specific character
+      //    // offset (inclusive).
+      //    "tacocat".substring(1) // returns "acocat"
+      //    "tacocat".substring(20) // error
+      //
+      //    // Take the substring of a string starting at a specific character
+      //    // offset (inclusive) and ending at the given offset (exclusive).
+      //    "tacocat".substring(1, 6) // returns "acoca"
       string doc = 6;
     }
 
     // Required. List of function overloads, must contain at least one overload.
     repeated Overload overloads = 1;
+
+    // Documentation string for the function that indicates the general purpose
+    // of the function and its behavior.
+    //
+    // Documentation strings for the function should be general purpose with
+    // specific examples provided in the overload doc string.
+    //
+    // Examples:
+    // 
+    //     The 'in' operator tests whether an item exists in a collection.
+    //
+    //     The 'substring' function returns a substring of a target string.
+    string doc = 2;
   }
 
   // The fully qualified name of the declaration.
