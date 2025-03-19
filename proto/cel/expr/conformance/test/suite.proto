@@ -80,23 +80,65 @@ message TestCase {
   cel.expr.conformance.Environment env = 4;
 
   // Input for the test case
+  TestInput input = 5;
+
+  // Expected result of the test case.
+  TestOutput output = 6;
+
+  // If specified validates that the deduced type at check time matches
+  // If the result kind is not set and this field is set, the test is considered
+  // "check-only".
+  cel.expr.Type deduced_type = 7;
+
+  // Bypass the type-checking and only attempt to evaluate the parsed
+  // expression.
+  bool disable_check = 8;
+}
+
+// Input for the test case
+message TestInput {
+  // The type of input for the test case
   oneof input_kind {
     // A set of variable bindings to be used for evaluating a checked
     // expression.
-    Bindings bindings = 5;
+    Bindings bindings = 1;
 
     // A context message represents an input kind in the form of a proto
     // message whose type is defined at runtime.
-    google.protobuf.Any context_message = 6;
+    google.protobuf.Any context_message = 2;
 
     // A context expression representing a context proto variable. The
     // fields of the input proto.Messages are used as top-level variables within
     // an Activation. The expression is evaluated using the cel environment
     // configured for the test suite.
-    string context_expr = 7;
+    string context_expr = 3;
   }
+}
 
-  // Expected result of the test case.
+// The bindings of input variables for the test case.
+message Bindings {
+  // A map representing a variable binding where the key is the name of the
+  // input variable.
+  map<string, InputValue> values = 1;
+}
+
+// The input value for a variable binding
+message InputValue {
+  // The type of input value that can be used for a variable binding
+  oneof kind {
+    // A simple literal value for a variable binding
+    cel.expr.Value value = 1;
+
+    // An expression which evaluates to the value of the variable binding.
+    // The expression is evaluated using the same runtime environment as the
+    // one used for evaluating the expression under test.
+    string expr = 2;
+  }
+}
+
+// Expected result of the test case.
+message TestOutput {
+  // Type of expected result of the test case.
   oneof result_kind {
     // A normal value, which must match the evaluation result exactly via value
     // equality semantics. This coincides with proto equality, except for:
@@ -116,34 +158,4 @@ message TestCase {
     // An unknown evaluation result.
     cel.expr.UnknownSet unknown = 11;
   }
-
-  // If specified validates that the deduced type at check time matches
-  // If the result kind is not set and this field is set, the test is considered
-  // "check-only".
-  cel.expr.Type deduced_type = 12;
-
-  // Bypass the type-checking and only attempt to evaluate the parsed
-  // expression.
-  bool disable_check = 13;
-}
-
-// The bindings of input variables for the test case.
-message Bindings {
-  // The input value for a variable binding
-  message InputValue {
-    // The type of input value that can be used for a variable binding
-    oneof kind {
-      // A simple literal value for a variable binding
-      cel.expr.Value value = 1;
-
-      // An expression which evaluates to the value of the variable binding.
-      // The expression is evaluated using the same runtime environment as the
-      // one used for evaluating the expression under test.
-      string expr = 2;
-    }
-  }
-
-  // A map representing a variable binding where the key is the name of the
-  // input variable.
-  map<string, InputValue> values = 1;
 }
