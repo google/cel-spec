@@ -77,18 +77,18 @@ Unary          = Member
                | "-" {"-"} Member
                ;
 Member         = Primary
-               | Member "." IDENT ["(" [ExprList] ")"]
+               | Member "." SELECTOR ["(" [ExprList] ")"]
                | Member "[" Expr "]"
                ;
 Primary        = ["."] IDENT ["(" [ExprList] ")"]
                | "(" Expr ")"
                | "[" [ExprList] [","] "]"
                | "{" [MapInits] [","] "}"
-               | ["."] IDENT { "." IDENT } "{" [FieldInits] [","] "}"
+               | ["."] SELECTOR { "." SELECTOR } "{" [FieldInits] [","] "}"
                | LITERAL
                ;
 ExprList       = Expr {"," Expr} ;
-FieldInits     = IDENT ":" Expr {"," IDENT ":" Expr} ;
+FieldInits     = SELECTOR ":" Expr {"," SELECTOR ":" Expr} ;
 MapInits       = Expr ":" Expr {"," Expr ":" Expr} ;
 ```
 
@@ -137,7 +137,8 @@ by the grammar. Please note, that in the lexer `[]` denotes a character range,
 or one occurrence.
 
 ```
-IDENT          ::= [_a-zA-Z][_a-zA-Z0-9]* - RESERVED
+IDENT          ::= SELECTOR - RESERVED
+SELECTOR       ::= [_a-zA-Z][_a-zA-Z0-9]* - KEYWORD
 LITERAL        ::= INT_LIT | UINT_LIT | FLOAT_LIT | STRING_LIT | BYTES_LIT
                  | BOOL_LIT | NULL_LIT
 INT_LIT        ::= -? DIGIT+ | -? 0x HEXDIGIT+
@@ -159,8 +160,8 @@ ESCAPE         ::= \ [abfnrtv\?"'`]
                  | \ [0-3] [0-7] [0-7]
 BOOL_LIT       ::= "true" | "false"
 NULL_LIT       ::= "null"
-RESERVED       ::= BOOL_LIT | NULL_LIT | "in"
-                 | "as" | "break" | "const" | "continue" | "else"
+KEYWORD        ::= BOOL_LIT | NULL_LIT | "in"
+RESERVED       ::= "as" | "break" | "const" | "continue" | "else"
                  | "for" | "function" | "if" | "import" | "let"
                  | "loop" | "package" | "namespace" | "return"
                  | "var" | "void" | "while"
@@ -174,13 +175,13 @@ without the `r` or `R` (raw) prefix process `ESCAPE` sequences, while in strings
 with the raw prefix they stay uninterpreted. See documentation of string
 literals below.
 
-The following identifiers are reserved due to their use as literal values or in
-the syntax:
+The following language keywords are reserved and cannot be used as identifiers,
+function names, selectors, struct name segments, or field names:
 
     false in null true
 
-The following identifiers are reserved to allow easier embedding of CEL into a
-host language.
+The following tokens are reserved to allow easier embedding of CEL into a host
+language and cannot be used as identifiers or function names[^function-names]:
 
     as break const continue else for function if import let loop package
     namespace return var void while
@@ -188,6 +189,9 @@ host language.
 In general it is a bad idea for those defining contexts or extensions to use
 identifiers that are reserved words in programming languages which might embed
 CEL.
+
+[^function-names]: Except for receiver-call-style functions, e.g. `a.package()`,
+                   which is permitted.
 
 ### Name Resolution
 
