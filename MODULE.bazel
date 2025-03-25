@@ -8,7 +8,7 @@ bazel_dep(
 )
 bazel_dep(
     name = "gazelle",
-    version = "0.36.0",
+    version = "0.39.1",
     repo_name = "bazel_gazelle",
 )
 bazel_dep(
