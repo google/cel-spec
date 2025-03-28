@@ -229,3 +229,35 @@ cc_proto_library(
     deprecation = "Use EvalState instead.",
     deps = [":explain_proto"],
 )
+
+###############################################################################
+## Python
+###############################################################################
+
+load("@com_google_protobuf//bazel:py_proto_library.bzl", "py_proto_library")
+
+py_proto_library(
+    name = "syntax_py_pb2",
+    deps = [":syntax_proto"],
+)
+
+py_proto_library(
+    name = "checked_py_pb2",
+    deps = [":checked_proto"],
+)
+
+py_proto_library(
+    name = "value_py_pb2",
+    deps = [":value_proto"],
+)
+
+py_proto_library(
+    name = "eval_py_pb2",
+    deps = [":eval_proto"],
+)
+
+py_proto_library(
+    name = "explain_py_pb2",
+    deprecation = "Use EvalState instead.",
+    deps = [":explain_proto"],
+)
