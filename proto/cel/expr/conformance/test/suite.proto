@@ -79,30 +79,32 @@ message TestCase {
   // environments.
   cel.expr.conformance.Environment env = 4;
 
-  // Input for the test case
-  TestInput input = 5;
+  // A map representing a variable binding where the key is the name of the
+  // input variable.
+  map<string, InputValue> input_bindings = 5;
+
+  // Input in the form of a context proto for the test case.
+  // Note: Only one of `input_bindings` and `input_context` can be provided. Providing
+  // both should result in an error.
+  InputContext input_context = 6;
 
   // Expected result of the test case.
-  TestOutput output = 6;
+  TestOutput output = 7;
 
   // If specified validates that the deduced type at check time matches
   // If the result kind is not set and this field is set, the test is considered
   // "check-only".
-  cel.expr.Type deduced_type = 7;
+  cel.expr.Type deduced_type = 8;
 
   // Bypass the type-checking and only attempt to evaluate the parsed
   // expression.
-  bool disable_check = 8;
+  bool disable_check = 9;
 }
 
-// Input for the test case
-message TestInput {
-  // The type of input for the test case
-  oneof input_kind {
-    // A set of variable bindings to be used for evaluating a checked
-    // expression.
-    Bindings bindings = 1;
-
+// Input context proto for the test case
+message InputContext {
+  // The type of input context for the test case
+  oneof input_context_kind {
     // A context message represents an input kind in the form of a proto
     // message whose type is defined at runtime.
     google.protobuf.Any context_message = 2;
@@ -113,13 +115,6 @@ message TestInput {
     // configured for the test suite.
     string context_expr = 3;
   }
-}
-
-// The bindings of input variables for the test case.
-message Bindings {
-  // A map representing a variable binding where the key is the name of the
-  // input variable.
-  map<string, InputValue> values = 1;
 }
 
 // The input value for a variable binding
