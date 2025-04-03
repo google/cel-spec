@@ -2062,6 +2062,23 @@ double("3.14") // 3.14 (if successful, otherwise an error)
 
 **duration**
 
+Type conversion for duration values.
+
+Note, duration strings should support the following suffixes:
+
+* "h" (hour)
+* "m" (minute)
+* "s" (second)
+* "ms" (millisecond)
+* "us" (microsecond)
+* "ns" (nanosecond)
+  
+Duration strings may be zero (`"0"`), negative (`-1h`), fractional (`-23.4s`),
+and/or compound (`1h34us`). Durations greater than the hour granularity, such
+as days or weeks, are not supported as this would necessitate an understanding
+of the locale of the execution context to account for leap seconds and leap
+years.
+
 **Signatures:**
 
 *   `duration(google.protobuf.Duration) -> google.protobuf.Duration`
@@ -2071,6 +2088,8 @@ double("3.14") // 3.14 (if successful, otherwise an error)
 
 ```
 duration("1h30m") // google.protobuf.Duration representing 1 hour and 30 minutes
+duration("0") // zero duration value
+duration("-1.5h") // minus 90 minutes
 ```
 
 **dyn** `type(dyn)` \- Type denotation
