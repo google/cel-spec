@@ -63,7 +63,7 @@ message TestAllTypes {
   string single_string = 14;
   bytes single_bytes = 15;
   optional bool optional_bool = 16;
-  optional bool optional_string = 17;
+  optional string optional_string = 17;
 
   // Collides with 'in' operator.
   bool in = 18;
