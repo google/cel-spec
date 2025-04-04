@@ -244,15 +244,15 @@ section: {
   }
   test: {
     name: "unicode_space_chars_1"
-    expr: "'\\u0085\\u00a0\\u1680text'.trim() == '\\u0085\\u00a0\\u1680text'"
+    expr: "'\\u0085\\u00a0\\u1680text'.trim() == 'text'"
   }
   test: {
     name: "unicode_space_chars_2"
-    expr: "'text\\u2000\\u2001\\u2002\\u2003\\u2004\\u2004\\u2006\\u2007\\u2008\\u2009'.trim() == 'text\\u2000\\u2001\\u2002\\u2003\\u2004\\u2004\\u2006\\u2007\\u2008\\u2009'"
+    expr: "'text\\u2000\\u2001\\u2002\\u2003\\u2004\\u2004\\u2006\\u2007\\u2008\\u2009'.trim() == 'text'"
   }
   test: {
     name: "unicode_space_chars_3"
-    expr: "'\\u200atext\\u2028\\u2029\\u202F\\u205F\\u3000'.trim() == '\\u200atext\\u2028\\u2029\\u202F\\u205F\\u3000'"
+    expr: "'\\u200atext\\u2028\\u2029\\u202F\\u205F\\u3000'.trim() == 'text'"
   }
   test: {
     name: "unicode_no_trim"
