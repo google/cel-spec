@@ -1432,8 +1432,7 @@ false ? error : value // value
 
 #### Arithmetic Operators
 
-**Negation (-)** \- Takes a numeric value (int or double) as input and returns
-its negated value.
+**Negation (-)** \- Negate a numeric value.
 
 **Signatures:**
 
@@ -1443,8 +1442,8 @@ its negated value.
 **Examples:**
 
 ```
--5    // -5
--3.14 // -3.14
+-(5)    // -5
+-(3.14) // -3.14
 ```
 
 **Addition (+)** \- Adds two numeric values or concatenates two strings, bytes,
@@ -1522,6 +1521,38 @@ timestamp('2023-01-10T12:00:00Z')
 7.0 / 2.0 // 3.5
 ```
 
+**Modulus (%)** \- Compute the modulus of one integer into another.
+
+**Signatures:**
+
+*   `int % int -> int`
+*   `uint % uint -> uint`
+
+**Examples:**
+
+```
+3 % 2 // 1
+6u % 3u // 0u
+```
+
+**Multiply (*)** \- Multiply two numbers. If the operation exceeds the possible
+value which can be represented by the type, the result will be an overflow
+error.
+
+**Signatures:**
+
+*   `double * double -> double`
+*   `int * int -> int`
+*   `uint * uint -> uint`
+
+**Examples:**
+
+```
+3.5 * 40.0 // 140.0
+-2 * 6 // 12
+13u * 3u // 39u
+```
+
 #### Comparison Operators
 
 Comparisons require strict type equality at type-check time. If types do not
@@ -1567,8 +1598,8 @@ they are not equal, and `false` otherwise.
 3.0 != 3.1 // true
 ```
 
-**Less Than or Equal To (\<=)** \- Compares two values and returns `true` if the
-first value is less than or equal to the second value, and `false` otherwise
+**Less Than or Equal To (\<=)** \- Compare two values and return `true` if the
+first value is less than or equal to the second value.
 
 **Signatures:**
 
@@ -1589,8 +1620,8 @@ first value is less than or equal to the second value, and `false` otherwise
 timestamp('2023-08-25T12:00:00Z') <= timestamp('2023-08-26T12:00:00Z') // true
 ```
 
-**Less Than (\<)** \- Compares two values and returns `true` if the first value
-is less than the second value, and `false` otherwise
+**Less Than (\<)** \- Compare two values and return `true` if the first value
+is less than the second.
 
 **Signatures:**
 
@@ -1612,9 +1643,8 @@ duration('2h') < duration('3h') // true
 -1 < dyn(1u) // true
 ```
 
-**Greater Than or Equal To (\>=)** \- Compares two values and returns `true` if
-the first value is greater than or equal to the second value, and `false`
-otherwise
+**Greater Than or Equal To (\>=)** \- Compare two values and return `true` if
+the first value is greater than or equal to the second.
 
 **Signatures:**
 
@@ -1636,8 +1666,8 @@ duration('2h') + duration('1h1m') >= duration('3h') // true
 1 >= dyn(18446744073709551615u) // false
 ```
 
-**Greater Than (\>)** \- Compares two values and returns `true` if the first
-value is greater than the second value, and `false` otherwise
+**Greater Than (\>)** \- Compares two values and return `true` if the first
+value is greater than the second value
 
 **Signatures:**
 
