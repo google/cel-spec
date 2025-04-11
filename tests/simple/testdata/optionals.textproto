@@ -433,4 +433,19 @@ section: {
     expr: "optional.of(1) != optional.of(1)"
     value: { bool_value: false }
   }
+  test {
+    name: "map_optional_has"
+    expr: "has({'foo': optional.none()}.foo)"
+    value: { bool_value: true }
+  }
+  test {
+    name: "map_optional_select_has"
+    expr: "has({'foo': optional.none()}.foo.bar)"
+    value: { bool_value: false }
+  }
+  test {
+    name: "map_optional_entry_has"
+    expr: "has({?'foo': optional.none()}.foo)"
+    value: { bool_value: false }
+  }
 }
