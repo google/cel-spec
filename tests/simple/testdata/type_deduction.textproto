@@ -321,6 +321,56 @@ section {
     }
   }
   test {
+    name: "comprehension_type_var_aliasing"
+    expr: "msg.repeated_nested_message.map(x, x).map(y, y.bb)"
+    check_only: true
+    type_env {
+      name: "msg"
+      ident {
+        type {
+          message_type: "cel.expr.conformance.proto3.TestAllTypes"
+        }
+      }
+    }
+    typed_result {
+      deduced_type {
+        list_type {
+          elem_type {
+            primitive: INT64
+          }
+        }
+      }
+    }
+  }
+  test {
+    name: "overload_type_var_aliasing"
+    expr: "([] + msg.repeated_nested_message + [])[0].bb"
+    check_only: true
+    type_env {
+      name: "msg"
+      ident {
+        type {
+          message_type: "cel.expr.conformance.proto3.TestAllTypes"
+        }
+      }
+    }
+    typed_result {
+      deduced_type {
+        primitive: INT64
+      }
+    }
+  }
+  test {
+    name: "unconstrained_type_var_as_dyn"
+    expr: "([].map(x,x))[0].foo"
+    check_only: true
+    typed_result {
+      deduced_type {
+        dyn {}
+      }
+    }
+  }
+  test {
     name: "list_parameters_do_not_unify"
     expr: "[msg.single_int64_wrapper, msg.single_string_wrapper]"
     type_env {
