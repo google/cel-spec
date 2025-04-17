@@ -498,6 +498,13 @@ section {
   }
 
   test {
+    name: "repeated_enum"
+    container: "cel.expr.conformance.proto3"
+    expr: "TestAllTypes{}.repeated_nested_enum"
+    value: { list_value: {} }
+  }
+
+  test {
     name: "repeated_nested"
     container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{}.repeated_nested_message"
