@@ -104,6 +104,49 @@ section {
       }
     }
   }
+  test {
+    name: "access_repeated_enum"
+    container: "cel.expr.conformance.proto2"
+    expr: "TestAllTypes{}.repeated_nested_enum"
+    value {
+      list_value {}
+    }
+  }
+  test {
+    name: "assign_repeated_enum"
+    container: "cel.expr.conformance.proto2"
+    expr:
+      "TestAllTypes{"
+      "  repeated_nested_enum: ["
+      "    TestAllTypes.NestedEnum.FOO,"
+      "    TestAllTypes.NestedEnum.BAR]}"
+    value {
+      object_value {
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes] {
+          repeated_nested_enum: FOO
+          repeated_nested_enum: BAR
+        }
+      }
+    }
+  }
+  test {
+    name: "list_enum_as_list_int"
+    container: "cel.expr.conformance.proto2"
+    expr:
+      "0 in "
+      "TestAllTypes{"
+      "  repeated_nested_enum: ["
+      "    TestAllTypes.NestedEnum.FOO,"
+      "    TestAllTypes.NestedEnum.BAR]}"
+      ".repeated_nested_enum"
+    value: { bool_value: true }
+  }
+  test {
+    name: "enum_as_int"
+    container: "cel.expr.conformance.proto2"
+    expr: "TestAllTypes{standalone_enum: TestAllTypes.NestedEnum.FOO}.standalone_enum in [0]"
+    value: { bool_value: true }
+  }
 }
 section {
   name: "legacy_proto3"
@@ -301,6 +344,49 @@ section {
         message: "range"
       }
     }
+  }
+  test {
+    name: "access_repeated_enum"
+    container: "cel.expr.conformance.proto2"
+    expr: "TestAllTypes{}.repeated_nested_enum"
+    value {
+      list_value {}
+    }
+  }
+  test {
+    name: "assign_repeated_enum"
+    container: "cel.expr.conformance.proto2"
+    expr:
+      "TestAllTypes{"
+      "  repeated_nested_enum: ["
+      "    TestAllTypes.NestedEnum.FOO,"
+      "    TestAllTypes.NestedEnum.BAR]}"
+    value {
+      object_value {
+        [type.googleapis.com/cel.expr.conformance.proto2.TestAllTypes] {
+          repeated_nested_enum: FOO
+          repeated_nested_enum: BAR
+        }
+      }
+    }
+  }
+  test {
+    name: "list_enum_as_list_int"
+    container: "cel.expr.conformance.proto2"
+    expr:
+      "0 in "
+      "TestAllTypes{"
+      "  repeated_nested_enum: ["
+      "    TestAllTypes.NestedEnum.FOO,"
+      "    TestAllTypes.NestedEnum.BAR]}"
+      ".repeated_nested_enum"
+    value: { bool_value: true }
+  }
+  test {
+    name: "enum_as_int"
+    container: "cel.expr.conformance.proto2"
+    expr: "TestAllTypes{standalone_enum: TestAllTypes.NestedEnum.FOO}.standalone_enum in [0]"
+    value: { bool_value: true }
   }
 }
 section {
