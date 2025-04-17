@@ -1,5 +1,5 @@
 # proto-file: ../../../proto/cel/expr/conformance/test/simple.proto
-# proto-message: google.api.expr.test.v1.SimpleTestFile
+# proto-message: cel.expr.conformance.test.SimpleTestFile
 
 name: "timestamps"
 description: "Timestamp and duration tests."
@@ -26,6 +26,11 @@ section {
     expr: "type(timestamp('2009-02-13T23:31:30Z'))"
     value: { type_value: "google.protobuf.Timestamp" }
   }
+  test {
+    name: "type_comparison"
+    expr: "google.protobuf.Timestamp == type(timestamp('2009-02-13T23:31:30Z'))"
+    value: { bool_value: true }
+  }
 }
 section {
   name: "duration_conversions"
@@ -39,6 +44,11 @@ section {
     name: "toType_duration"
     expr: "type(duration('1000000s'))"
     value: { type_value: "google.protobuf.Duration" }
+  }
+  test {
+    name: "type_comparison"
+    expr: "google.protobuf.Duration == type(duration('1000000s'))"
+    value: { bool_value: true }
   }
 }
 
@@ -216,12 +226,12 @@ section {
   test {
     name: "add_duration_to_time"
     expr: "timestamp('2009-02-13T23:00:00Z') + duration('240s') == timestamp('2009-02-13T23:04:00Z')"
-    value: { bool_value: true}
+    value: { bool_value: true }
   }
   test {
     name: "add_time_to_duration"
     expr: "duration('120s') + timestamp('2009-02-13T23:01:00Z') == timestamp('2009-02-13T23:03:00Z')"
-    value: { bool_value: true}
+    value: { bool_value: true }
   }
   test {
     name: "add_duration_to_duration"
@@ -241,12 +251,12 @@ section {
   test {
     name: "subtract_duration_from_time"
     expr: "timestamp('2009-02-13T23:10:00Z') - duration('600s') == timestamp('2009-02-13T23:00:00Z')"
-    value: { bool_value: true}
+    value: { bool_value: true }
   }
   test {
     name: "subtract_time_from_time"
     expr: "timestamp('2009-02-13T23:31:00Z') - timestamp('2009-02-13T23:29:00Z') == duration('120s')"
-    value: { bool_value: true}
+    value: { bool_value: true }
   }
   test {
     name: "subtract_duration_from_duration"
@@ -339,10 +349,9 @@ section {
       value {
         value {
           object_value {
-            [type.googleapis.com/google.protobuf.Duration]
-            {
+            [type.googleapis.com/google.protobuf.Duration] {
               seconds: 123
-              nanos:321456789
+              nanos: 321456789
             }
           }
         }
