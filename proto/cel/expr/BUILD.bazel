@@ -4,6 +4,8 @@ package(default_visibility = ["//visibility:public"])
 # Common
 ##############################################################################
 
+load("@com_google_protobuf//bazel:proto_library.bzl", "proto_library")
+
 proto_library(
     name = "expr_proto",
     srcs = [
@@ -89,6 +91,10 @@ proto_library(
 ##############################################################################
 # Java
 ##############################################################################
+
+load("@com_google_protobuf//bazel:java_proto_library.bzl", "java_proto_library")
+load("@com_google_protobuf//bazel:java_lite_proto_library.bzl", "java_lite_proto_library")
+
 java_proto_library(
     name = "expr_java_proto",
     deps = [":expr_proto"],
@@ -204,6 +210,8 @@ go_proto_library(
 # Note: cc_proto_library cannot generate a target for expr_proto due to the subtargets
 # defined below
 
+load("@com_google_protobuf//bazel:cc_proto_library.bzl", "cc_proto_library")
+
 cc_proto_library(
     name = "syntax_cc_proto",
     deps = [":syntax_proto"],
@@ -226,6 +234,38 @@ cc_proto_library(
 
 cc_proto_library(
     name = "explain_cc_proto",
+    deprecation = "Use EvalState instead.",
+    deps = [":explain_proto"],
+)
+
+###############################################################################
+## upb
+###############################################################################
+
+load("@com_google_protobuf//bazel:upb_c_proto_library.bzl", "upb_c_proto_library")
+
+upb_c_proto_library(
+    name = "syntax_upb_proto",
+    deps = [":syntax_proto"],
+)
+
+upb_c_proto_library(
+    name = "checked_upb_proto",
+    deps = [":checked_proto"],
+)
+
+upb_c_proto_library(
+    name = "value_upb_proto",
+    deps = [":value_proto"],
+)
+
+upb_c_proto_library(
+    name = "eval_upb_proto",
+    deps = [":eval_proto"],
+)
+
+upb_c_proto_library(
+    name = "explain_upb_proto",
     deprecation = "Use EvalState instead.",
     deps = [":explain_proto"],
 )
