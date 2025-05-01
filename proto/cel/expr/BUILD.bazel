@@ -70,7 +70,7 @@ proto_library(
     strip_import_prefix = "/proto",
     deps = [
         ":value_proto",
-        "@com_google_googleapis//google/rpc:status_proto",
+        "@com_google_protobuf//:any_proto",
     ],
 )
 
