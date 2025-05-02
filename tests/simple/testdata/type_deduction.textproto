@@ -193,6 +193,46 @@ section {
       }
     }
   }
+  test {
+    name: "enum_field"
+    container: "cel.expr.conformance.proto3"
+    expr: "TestAllTypes{}.standalone_enum"
+    typed_result {
+      result {
+        int64_value: 0
+      }
+      deduced_type { primitive: INT64 }
+    }
+  }
+  test {
+    name: "repeated_enum_field"
+    container: "cel.expr.conformance.proto3"
+    expr: "TestAllTypes{}.repeated_nested_enum"
+    typed_result {
+      result {
+        list_value {}
+      }
+      deduced_type {
+        list_type { elem_type { primitive: INT64 } }
+      }
+    }
+  }
+  test {
+    name: "enum_map_field"
+    container: "cel.expr.conformance.proto3"
+    expr: "TestAllTypes{}.map_int32_enum"
+    typed_result {
+      result {
+        map_value {}
+      }
+      deduced_type {
+        map_type {
+          key_type { primitive: INT64 }
+          value_type { primitive: INT64 }
+        }
+      }
+    }
+  }
 }
 
 section {
