@@ -634,13 +634,13 @@ section: {
   }
   test: {
     name: "bytes support for string with invalid utf-8 sequences"
-    expr: '"%s".format([b"\xF0abc\x8Cxyz"])'
+    expr: '"%s".format([b"\xF0abc\x8C\xF0xyz"])'
     value: {
       string_value: '\ufffdabc\ufffdxyz',
     }
   }
   test: {
-    name: "bytes support for string with multiple adjacent invalid utf-8 sequences"
+    name: "bytes support for string with only invalid utf-8 sequences"
     expr: '"%s".format([b"\xF0\x8C\xF0"])'
     value: {
       string_value: '\ufffd',
