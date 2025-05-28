@@ -633,6 +633,20 @@ section: {
     }
   }
   test: {
+    name: "bytes support for string with invalid utf-8 sequences"
+    expr: '"%s".format([b"\xF0abc\x8Cxyz"])'
+    value: {
+      string_value: '\ufffdabc\ufffdxyz',
+    }
+  }
+  test: {
+    name: "bytes support for string with multiple adjacent invalid utf-8 sequences"
+    expr: '"%s".format([b"\xF0\x8C\xF0"])'
+    value: {
+      string_value: '\ufffd',
+    }
+  }
+  test: {
     name: "type() support for string"
     expr: '"%s".format([type("test string")])'
     value: {
