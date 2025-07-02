@@ -958,7 +958,7 @@ computation. Argument and result types can use type variables to express
 overloads which work on lists and maps. At runtime, a matching overload is
 selected and the according computation invoked. If no overload matches, the
 runtime error `no_matching_overload` is raised (see also
-[Runtime Errors](#errors)). For example, the standard function `size` is
+[Runtime Errors](#runtime-errors)). For example, the standard function `size` is
 specified by the following overloads:
 
 <table border="1">
