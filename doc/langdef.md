@@ -42,7 +42,6 @@ This page constitutes the reference for CEL. For a gentle introduction, see
     - [Regular Expressions](#regular-expressions)
     - [Standard Environment](#standard-environment)
 - [Appendix 1: Legacy Behavior](#appendix-1-legacy-behavior)
-    - [Enums as Ints](#enums-as-ints)
 
 ## Overview
 
