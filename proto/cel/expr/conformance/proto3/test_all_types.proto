@@ -316,7 +316,7 @@ message TestAllTypes {
     bool oneof_bool = 402;
   }
 
-  // Formerly defined as reserved field names.
+  // Field names formerly defined as reserved CEL identifiers.
   bool as = 500;
   bool break = 501;
   bool const = 502;
