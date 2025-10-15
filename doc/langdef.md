@@ -2147,7 +2147,6 @@ dyn("hello") // string "hello" marked `dyn` during type-checking
 *   `int(double) -> int` (type conversion, rounds toward zero, errors if out of
     range)
 *   `int(string) -> int` (type conversion)
-*   `int(enum E) -> int` (type conversion)
 *   `int(google.protobuf.Timestamp) -> int` converts to seconds since Unix
     epoch
 
