@@ -3,47 +3,6 @@
 This page constitutes the reference for CEL. For a gentle introduction, see
 [Intro](intro.md).
 
-## Contents
-
-- [Overview](#overview)
-- [Syntax](#syntax)
-    - [Name Resolution](#name-resolution)
-- [Values](#values)
-    - [Numeric Values](#numeric-values)
-    - [String and Bytes Values](#string-and-bytes-values)
-    - [Aggregate Values](#aggregate-values)
-    - [Booleans and Null](#booleans-and-null)
-    - [Type Values](#type-values)
-    - [Abstract Types](#abstract-types)
-    - [Protocol Buffer Data Conversion](#protocol-buffer-data-conversion)
-    - [Dynamic Values](#dynamic-values)
-- [JSON Data Conversion](#json-data-conversion)
-- [Gradual Type Checking](#gradual-type-checking)
-- [Evaluation](#evaluation)
-    - [Evaluation Environment](#evaluation-environment)
-    - [Runtime Errors](#runtime-errors)
-    - [Logical Operators](#logical-operators)
-    - [Macros](#macros)
-    - [Field Selection](#field-selection)
-- [Performance](#performance)
-    - [Abstract Sizes](#abstract-sizes)
-    - [Time Complexity](#time-complexity)
-    - [Space Complexity](#space-complexity)
-    - [Macro Performance](#macro-performance)
-    - [Performance Limits](#performance-limits)
-- [Functions](#functions)
-    - [Extension Functions](#extension-functions)
-    - [Receiver Call Style](#receiver-call-style)
-- [Standard Definitions](#standard-definitions)
-    - [Equality](#equality)
-    - [Ordering](#ordering)
-    - [Overflow](#overflow)
-    - [Timezones](#timezones)
-    - [Regular Expressions](#regular-expressions)
-    - [Standard Environment](#standard-environment)
-- [Appendix 1: Legacy Behavior](#appendix-1-legacy-behavior)
-    - [Enums as Ints](#enums-as-ints)
-
 ## Overview
 
 In the taxonomy of programming languages, CEL is:
