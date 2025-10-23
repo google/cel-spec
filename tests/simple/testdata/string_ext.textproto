@@ -92,7 +92,11 @@ section: {
 section: {
   name: "last_index_of"
   test: {
-    name: "empty"
+    name: "empty_string"
+    expr: "''.lastIndexOf('@@') == -1"
+  }
+  test: {
+    name: "empty_argument"
     expr: "'tacocat'.lastIndexOf('') == 7"
   }
   test: {
