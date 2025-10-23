@@ -19,7 +19,6 @@ package cel.expr.conformance;
 import "cel/expr/checked.proto";
 import "cel/expr/eval.proto";
 import "cel/expr/syntax.proto";
-import "google/rpc/status.proto";
 
 option cc_enable_arenas = true;
 option go_package = "cel.dev/expr/conformance";
@@ -69,7 +68,7 @@ message ParseResponse {
   cel.expr.ParsedExpr parsed_expr = 1;
 
   // Any number of issues with [StatusDetails][] as the details.
-  repeated google.rpc.Status issues = 2;
+  cel.expr.ErrorSet issues = 2;
 }
 
 // Request message for the Check method.
@@ -86,7 +85,7 @@ message CheckRequest {
   // Language Definition.
   string container = 3;
 
-  // If true, use only the declarations in [type_env][google.api.expr.conformance.v1alpha1.CheckRequest.type_env].  If false (default),
+  // If true, use only the declarations in [type_env][cel.expr.conformance.CheckRequest.type_env].  If false (default),
   // add declarations for the standard definitions to the type environment.  See
   // "Standard Definitions" in the Language Definition.
   bool no_std_env = 4;
@@ -98,7 +97,7 @@ message CheckResponse {
   cel.expr.CheckedExpr checked_expr = 1;
 
   // Any number of issues with [StatusDetails][] as the details.
-  repeated google.rpc.Status issues = 2;
+  cel.expr.ErrorSet issues = 2;
 }
 
 // Request message for the Eval method.
@@ -113,10 +112,10 @@ message EvalRequest {
   }
 
   // Bindings for the external variables.  The types SHOULD be compatible
-  // with the type environment in [CheckRequest][google.api.expr.conformance.v1alpha1.CheckRequest], if checked.
+  // with the type environment in [CheckRequest][cel.expr.conformance.CheckRequest], if checked.
   map<string, cel.expr.ExprValue> bindings = 3;
 
-  // SHOULD be the same container as used in [CheckRequest][google.api.expr.conformance.v1alpha1.CheckRequest], if checked.
+  // SHOULD be the same container as used in [CheckRequest][cel.expr.conformance.CheckRequest], if checked.
   string container = 4;
 }
 
@@ -129,7 +128,7 @@ message EvalResponse {
   // Note that CEL execution errors are reified into [ExprValue][].
   // Nevertheless, we'll allow out-of-band issues to be raised,
   // which also makes the replies more regular.
-  repeated google.rpc.Status issues = 2;
+  cel.expr.ErrorSet issues = 2;
 }
 
 // A specific position in source.
