@@ -319,6 +319,25 @@ message TestAllTypes {
     optional string single_name = 405;
   }
 
+  // Field names formerly defined as reserved CEL identifiers.
+  optional bool as = 500;
+  optional bool break = 501;
+  optional bool const = 502;
+  optional bool continue = 503;
+  optional bool else = 504;
+  optional bool for = 505;
+  optional bool function = 506;
+  optional bool if = 507;
+  optional bool import = 508;
+  optional bool let = 509;
+  optional bool loop = 510;
+  optional bool package = 511;
+  optional bool namespace = 512;
+  optional bool return = 513;
+  optional bool var = 514;
+  optional bool void = 515;
+  optional bool while = 516;
+
   extensions 1000 to max;
 }
 

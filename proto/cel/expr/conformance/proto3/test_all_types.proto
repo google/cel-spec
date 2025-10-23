@@ -315,6 +315,25 @@ message TestAllTypes {
     NestedMessage oneof_msg = 401;
     bool oneof_bool = 402;
   }
+
+  // Field names formerly defined as reserved CEL identifiers.
+  bool as = 500;
+  bool break = 501;
+  bool const = 502;
+  bool continue = 503;
+  bool else = 504;
+  bool for = 505;
+  bool function = 506;
+  bool if = 507;
+  bool import = 508;
+  bool let = 509;
+  bool loop = 510;
+  bool package = 511;
+  bool namespace = 512;
+  bool return = 513;
+  bool var = 514;
+  bool void = 515;
+  bool while = 516;
 }
 
 // This proto includes a recursively nested message.
