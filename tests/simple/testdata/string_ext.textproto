@@ -910,6 +910,20 @@ test: {
     }
   }
   test: {
+    name: "format_%f_halfway_round_up_to_nearest_even"
+    expr: '"%.0f".format([1.5])'
+    value: {
+      string_value: '2',
+    }
+  }
+  test: {
+    name: "format_%f_halfway_truncate_to_nearest_even"
+    expr: '"%.0f".format([2.5])'
+    value: {
+      string_value: '2',
+    }
+  }
+  test: {
     name: "format_%f_positive_round_up"
     expr: '"%.3f".format([123.4999])'
     value: {
