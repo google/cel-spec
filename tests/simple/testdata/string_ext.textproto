@@ -888,6 +888,76 @@ section: {
       string_value: '2.718280',
     }
   }
+test: {
+    name: "format_%f_insignificant_zeroes_removed"
+    expr: '"%.0f".format([123.000000])'
+    value: {
+      string_value: '123',
+    }
+  }
+  test: {
+    name: "format_%f_positive_round_to_whole_number"
+    expr: '"%.0f".format([3.5001])'
+    value: {
+      string_value: '4',
+    }
+  }
+  test: {
+    name: "format_%f_negative_truncate_to_whole_number"
+    expr: '"%.0f".format([3.4999])'
+    value: {
+      string_value: '3',
+    }
+  }
+  test: {
+    name: "format_%f_halfway_round_up_to_nearest_even"
+    expr: '"%.0f".format([1.5])'
+    value: {
+      string_value: '2',
+    }
+  }
+  test: {
+    name: "format_%f_halfway_truncate_to_nearest_even"
+    expr: '"%.0f".format([2.5])'
+    value: {
+      string_value: '2',
+    }
+  }
+  test: {
+    name: "format_%f_positive_round_up"
+    expr: '"%.3f".format([123.4999])'
+    value: {
+      string_value: '123.500',
+    }
+  }
+  test: {
+    name: "format_%f_positive_round_down"
+    expr: '"%.3f".format([123.4994])'
+    value: {
+      string_value: '123.499',
+    }
+  }
+  test: {
+    name: "format_%f_negative_round_up"
+    expr: '"%.3f".format([-123.4999])'
+    value: {
+      string_value: '-123.500',
+    }
+  }
+  test: {
+    name: "format_%f_negative_round_down"
+    expr: '"%.3f".format([-123.4994])'
+    value: {
+      string_value: '-123.499',
+    }
+  }
+  test: {
+    name: "format_%f_zero_padding"
+    expr: '"%.5f".format([-1.2])'
+    value: {
+      string_value: '-1.20000',
+    }
+  }
 }
 section: {
   name: "format_errors"
