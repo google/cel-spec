@@ -17,7 +17,6 @@ proto_library(
     ],
     strip_import_prefix = "/proto",
     deps = [
-        "@com_google_googleapis//google/rpc:status_proto",
         "@com_google_protobuf//:any_proto",
         "@com_google_protobuf//:duration_proto",
         "@com_google_protobuf//:empty_proto",
@@ -161,9 +160,6 @@ go_proto_library(
     name = "expr_go_proto",
     importpath = "cel.dev/expr",
     protos = [":expr_proto"],
-    deps = [
-        "@org_golang_google_genproto_googleapis_rpc//status:go_default_library",
-    ],
 )
 
 go_proto_library(
@@ -190,9 +186,6 @@ go_proto_library(
     embed = [":value_go_proto"],
     importpath = "cel.dev/expr",
     protos = [":eval_proto"],
-    deps = [
-        "@org_golang_google_genproto_googleapis_rpc//status:go_default_library",
-    ],
 )
 
 go_proto_library(

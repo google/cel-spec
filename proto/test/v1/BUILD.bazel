@@ -14,16 +14,15 @@ proto_library(
         "simple.proto",
     ],
     deps = [
-        "@com_google_googleapis//google/api/expr/v1alpha1:checked_proto",
-        "@com_google_googleapis//google/api/expr/v1alpha1:eval_proto",
-        "@com_google_googleapis//google/api/expr/v1alpha1:value_proto",
+        "//proto/cel/expr:expr_proto",
         "@com_google_protobuf//:empty_proto",
     ],
 )
 
 cc_proto_library(
     name = "simple_cc_proto",
-    deps = [":simple_proto",],
+    deps = [":simple_proto",
+    ],
 )
 
 java_proto_library(
