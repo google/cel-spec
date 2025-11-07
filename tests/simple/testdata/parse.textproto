@@ -292,6 +292,38 @@ section {
   }
 
   test {
+    name: "single_quoted_escaped_windows_line_end"
+    expr: "' \\r\\n '"
+    value: { string_value: " \r\n " }
+  }
+  test {
+    name: "double_quoted_escaped_windows_line_end"
+    expr: '" \\r\\n "'
+    value: { string_value: " \r\n " }
+  }
+
+  test {
+    name: "triple_single_quoted_escaped_windows_line_end"
+    expr: "''' \\r\\n '''"
+    value: { string_value: " \r\n " }
+  }
+  test {
+    name: "triple_double_quoted_escaped_windows_line_end"
+    expr: '""" \\r\\n """'
+    value: { string_value: " \r\n " }
+  }
+  test {
+    name: "triple_single_quoted_unescaped_windows_line_end"
+    expr: "''' \r\n '''"
+    value: { string_value: " \r\n " }
+  }
+  test {
+    name: "triple_double_quoted_unescaped_windows_line_end"
+    expr: '""" \r\n """'
+    value: { string_value: " \r\n " }
+  }
+
+  test {
     name: "single_quoted_escaped_all_control_characters"
     expr: "' \\x01 \\x02 \\x03 \\x04 \\x05 \\x06 \\x07 \\x08 \\x09 \\x0B \\x0C \\x0E \\x0F \\x10 \\x11 \\x12 \\x13 \\x14 \\x15 \\x16 \\x17 \\x18 \\x19 \\x1A \\x1B \\x1C \\x1D \\x1E \\x1f \\x7F '"
     value: { string_value: " \x01 \x02 \x03 \x04 \x05 \x06 \x07 \x08 \x09 \x0B \x0C \x0E \x0F \x10 \x11 \x12 \x13 \x14 \x15 \x16 \x17 \x18 \x19 \x1A \x1B \x1C \x1D \x1E \x1f \x7F " }
@@ -702,6 +734,38 @@ section {
     name: "triple_double_quoted_unescaped_carriage_return"
     expr: 'b""" \r """'
     value: { bytes_value: " \r " }
+  }
+
+  test {
+    name: "single_quoted_escaped_windows_line_end"
+    expr: "b' \\r\\n '"
+    value: { bytes_value: " \r\n " }
+  }
+  test {
+    name: "double_quoted_escaped_windows_line_end"
+    expr: 'b" \\r\\n "'
+    value: { bytes_value: " \r\n " }
+  }
+
+  test {
+    name: "triple_single_quoted_escaped_windows_line_end"
+    expr: "b''' \\r\\n '''"
+    value: { bytes_value: " \r\n " }
+  }
+  test {
+    name: "triple_double_quoted_escaped_windows_line_end"
+    expr: 'b""" \\r\\n """'
+    value: { bytes_value: " \r\n " }
+  }
+  test {
+    name: "triple_single_quoted_unescaped_windows_line_end"
+    expr: "b''' \r\n '''"
+    value: { bytes_value: " \r\n " }
+  }
+  test {
+    name: "triple_double_quoted_unescaped_windows_line_end"
+    expr: 'b""" \r\n """'
+    value: { bytes_value: " \r\n " }
   }
 
   test {
