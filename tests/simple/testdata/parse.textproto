@@ -460,6 +460,48 @@ section {
   }
 
   test {
+    name: "unassigned_code_point_single_quoted_escapes"
+    expr: "' \\U00088888 '"
+    value: { string_value: " \U00088888 " }
+  }
+  test {
+    name: "unassigned_code_point_double_quoted_escapes"
+    expr: '" \\U00088888 "'
+    value: { string_value: " \U00088888 " }
+  }
+  test {
+    name: "unassigned_code_point_triple_single_quoted_escapes"
+    expr: "''' \\U00088888 '''"
+    value: { string_value: " \U00088888 " }
+  }
+  test {
+    name: "unassigned_code_point_triple_double_quoted_escapes"
+    expr: '""" \\U00088888 """'
+    value: { string_value: " \U00088888 " }
+  }
+
+  test {
+    name: "unassigned_code_point_single_quoted_unescaped"
+    expr: "' \U00088888 '"
+    value: { string_value: " \U00088888 " }
+  }
+  test {
+    name: "unassigned_code_point_double_quoted_unescaped"
+    expr: '" \U00088888 "'
+    value: { string_value: " \U00088888 " }
+  }
+  test {
+    name: "unassigned_code_point_triple_single_quoted_unescaped"
+    expr: "''' \U00088888 '''"
+    value: { string_value: " \U00088888 " }
+  }
+  test {
+    name: "unassigned_code_point_triple_double_quoted_unescaped"
+    expr: '""" \U00088888 """'
+    value: { string_value: " \U00088888 " }
+  }
+
+  test {
     name: "raw_single_quoted_escapes"
     expr: "r' \\\\ \\\? \\\" \\` \\a \\b \\f \\t \\v \\n \\r \\000 \\x00 \\X00 \\u0000 \\U00000000 '"
     value: { string_value: " \\\\ \\\? \\\" \\` \\a \\b \\f \\t \\v \\n \\r \\000 \\x00 \\X00 \\u0000 \\U00000000 " }
