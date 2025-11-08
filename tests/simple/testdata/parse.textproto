@@ -280,16 +280,18 @@ section {
     expr: '""" \\r """'
     value: { string_value: " \r " }
   }
-  test {
-    name: "triple_single_quoted_unescaped_carriage_return"
-    expr: "''' \r '''"
-    value: { string_value: " \r " }
-  }
-  test {
-    name: "triple_double_quoted_unescaped_carriage_return"
-    expr: '""" \r """'
-    value: { string_value: " \r " }
-  }
+
+  # See https://github.com/google/cel-spec/issues/490
+  # test {
+  #   name: "triple_single_quoted_unescaped_carriage_return"
+  #   expr: "''' \r '''"
+  #   value: { string_value: " \r " }
+  # }
+  # test {
+  #   name: "triple_double_quoted_unescaped_carriage_return"
+  #   expr: '""" \r """'
+  #   value: { string_value: " \r " }
+  # }
 
   test {
     name: "single_quoted_escaped_windows_line_end"
@@ -312,16 +314,18 @@ section {
     expr: '""" \\r\\n """'
     value: { string_value: " \r\n " }
   }
-  test {
-    name: "triple_single_quoted_unescaped_windows_line_end"
-    expr: "''' \r\n '''"
-    value: { string_value: " \r\n " }
-  }
-  test {
-    name: "triple_double_quoted_unescaped_windows_line_end"
-    expr: '""" \r\n """'
-    value: { string_value: " \r\n " }
-  }
+
+  # See https://github.com/google/cel-spec/issues/490
+  # test {
+  #   name: "triple_single_quoted_unescaped_windows_line_end"
+  #   expr: "''' \r\n '''"
+  #   value: { string_value: " \r\n " }
+  # }
+  # test {
+  #   name: "triple_double_quoted_unescaped_windows_line_end"
+  #   expr: '""" \r\n """'
+  #   value: { string_value: " \r\n " }
+  # }
 
   test {
     name: "single_quoted_escaped_all_control_characters"
@@ -725,16 +729,18 @@ section {
     expr: 'b""" \\r """'
     value: { bytes_value: " \r " }
   }
-  test {
-    name: "triple_single_quoted_unescaped_carriage_return"
-    expr: "b''' \r '''"
-    value: { bytes_value: " \r " }
-  }
-  test {
-    name: "triple_double_quoted_unescaped_carriage_return"
-    expr: 'b""" \r """'
-    value: { bytes_value: " \r " }
-  }
+
+  # See https://github.com/google/cel-spec/issues/490
+  # test {
+  #   name: "triple_single_quoted_unescaped_carriage_return"
+  #   expr: "b''' \r '''"
+  #   value: { bytes_value: " \r " }
+  # }
+  # test {
+  #   name: "triple_double_quoted_unescaped_carriage_return"
+  #   expr: 'b""" \r """'
+  #   value: { bytes_value: " \r " }
+  # }
 
   test {
     name: "single_quoted_escaped_windows_line_end"
@@ -757,16 +763,18 @@ section {
     expr: 'b""" \\r\\n """'
     value: { bytes_value: " \r\n " }
   }
-  test {
-    name: "triple_single_quoted_unescaped_windows_line_end"
-    expr: "b''' \r\n '''"
-    value: { bytes_value: " \r\n " }
-  }
-  test {
-    name: "triple_double_quoted_unescaped_windows_line_end"
-    expr: 'b""" \r\n """'
-    value: { bytes_value: " \r\n " }
-  }
+
+  # See https://github.com/google/cel-spec/issues/490
+  # test {
+  #   name: "triple_single_quoted_unescaped_windows_line_end"
+  #   expr: "b''' \r\n '''"
+  #   value: { bytes_value: " \r\n " }
+  # }
+  # test {
+  #   name: "triple_double_quoted_unescaped_windows_line_end"
+  #   expr: 'b""" \r\n """'
+  #   value: { bytes_value: " \r\n " }
+  # }
 
   test {
     name: "single_quoted_escaped_all_control_characters"
