@@ -1489,3 +1489,19 @@ section: {
     }
   }
 }
+section: {
+  name: "reverse"
+  description: "Tests for (string).reverse(). Added in version 3."
+  test: {
+    name: "empty"
+    expr: "''.reverse() == ''"
+  }
+  test: {
+    name: "single_character"
+    expr: "'☺'.reverse() == '☺'"
+  }
+  test: {
+    name: "multiple"
+    expr: "'Ta©oCαt'.reverse() == 'tαCo©aT'"
+  }
+}
