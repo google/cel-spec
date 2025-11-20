@@ -539,10 +539,38 @@ section: {
     }
   }
   test: {
+    name: "default precision for fixed-point clause with int"
+    expr: '"%f".format([2])'
+    value: {
+      string_value: '2.000000',
+    }
+  }
+  test: {
+    name: "default precision for fixed-point clause with uint"
+    expr: '"%f".format([3u])'
+    value: {
+      string_value: '3.000000',
+    }
+  }
+  test: {
     name: "default precision for scientific notation"
     expr: '"%e".format([2.71828])'
     value: {
       string_value: '2.718280e+00',
+    }
+  }
+  test: {
+    name: "default precision for scientific notation with int"
+    expr: '"%e".format([2])'
+    value: {
+      string_value: '2.000000e+00',
+    }
+  }
+  test: {
+    name: "default precision for scientific notation with uint"
+    expr: '"%e".format([3u])'
+    value: {
+      string_value: '3.000000e+00',
     }
   }
   test: {
