@@ -1,0 +1,32 @@
+{
+  "homepage": "https://cel.dev",
+  "maintainers": [
+    {
+      "email": "cel-lang-discuss@googlegroups.com",
+      "github": "cel-expr",
+      "github_user_id": 186625994,
+      "name": "CEL Team"
+    },
+    {
+      "github": "TristonianJones",
+      "github_user_id": 483300
+    },
+    {
+      "github": "l46kok",
+      "github_user_id": 2355949
+    },
+    {
+      "github": "jcking",
+      "github_user_id": 997958
+    },
+    {
+      "github": "jnthntatum",
+      "github_user_id": 733856
+    }
+  ],
+  "repository": [
+    "github:google/cel-spec"
+  ],
+  "versions": [],
+  "yanked_versions": {}
+}
