@@ -491,6 +491,115 @@ section {
       }
     }
   }
+
+  test {
+    name: "plus_sign"
+    expr: "duration('+30s')"
+    value {
+      object_value {
+        [type.googleapis.com/google.protobuf.Duration] { seconds: 30, nanos: 0 }
+      }
+    }
+  }
+  test {
+    name: "fraction_without_integer_part"
+    expr: "duration('.5s')"
+    value {
+      object_value {
+        [type.googleapis.com/google.protobuf.Duration] { seconds: 0, nanos: 500000000 }
+      }
+    }
+  }
+  test {
+    name: "decimal_point_without_fractional_part"
+    expr: "duration('5.s')"
+    value {
+      object_value {
+        [type.googleapis.com/google.protobuf.Duration] { seconds: 5, nanos: 0 }
+      }
+    }
+  }
+  test {
+    name: "fractional_nanoseconds_truncation"
+    expr: "duration('0.9ns')"
+    value {
+      object_value {
+        [type.googleapis.com/google.protobuf.Duration] { seconds: 0, nanos: 0 }
+      }
+    }
+  }
+  test {
+    name: "inverted_order"
+    expr: "duration('1ns1us1ms1s1m1h')"
+    value {
+      object_value {
+        [type.googleapis.com/google.protobuf.Duration] { seconds: 3661, nanos: 1001001 }
+      }
+    }
+  }
+  test {
+    name: "arbitrary_order"
+    expr: "duration('1us1h1ns1ms1m1s')"
+    value {
+      object_value {
+        [type.googleapis.com/google.protobuf.Duration] { seconds: 3661, nanos: 1001001 }
+      }
+    }
+  }
+  test {
+    name: "repetition"
+    expr: "duration('1h1h1m1m1s1s1ms1ms1us1us1ns1ns')"
+    value {
+      object_value {
+        [type.googleapis.com/google.protobuf.Duration] { seconds: 7322, nanos: 2002002 }
+      }
+    }
+  }
+  test {
+    name: "repetition_overflow"
+    expr: "duration('13h13h31m31m31s31s501ms501ms501us501us501ns501ns')"
+    value {
+      object_value {
+        [type.googleapis.com/google.protobuf.Duration] { seconds: 97383, nanos: 3003002 }
+      }
+    }
+  }
+  test {
+    name: "minus_zero"
+    expr: "duration('-0s')"
+    value {
+      object_value {
+        [type.googleapis.com/google.protobuf.Duration] { seconds: 0, nanos: 0 }
+      }
+    }
+  }
+  test {
+    name: "unitless_zero"
+    expr: "duration('0')"
+    value {
+      object_value {
+        [type.googleapis.com/google.protobuf.Duration] { seconds: 0, nanos: 0 }
+      }
+    }
+  }
+  test {
+    name: "unitless_plus_zero"
+    expr: "duration('+0')"
+    value {
+      object_value {
+        [type.googleapis.com/google.protobuf.Duration] { seconds: 0, nanos: 0 }
+      }
+    }
+  }
+  test {
+    name: "unitless_minus_zero"
+    expr: "duration('-0')"
+    value {
+      object_value {
+        [type.googleapis.com/google.protobuf.Duration] { seconds: 0, nanos: 0 }
+      }
+    }
+  }
 }
 section {
   name: "timestamp_selectors"
