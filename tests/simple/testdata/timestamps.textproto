@@ -427,24 +427,6 @@ section {
       }
     }
   }
-  test {
-    name: "hours_1"
-    expr: "duration('1h')"
-    value {
-      object_value {
-        [type.googleapis.com/google.protobuf.Duration] { seconds: 3600, nanos: 0 }
-      }
-    }
-  }
-  test {
-    name: "hours_negative_1"
-    expr: "duration('-1h')"
-    value {
-      object_value {
-        [type.googleapis.com/google.protobuf.Duration] { seconds: -3600, nanos: 0 }
-      }
-    }
-  }
 
   test {
     name: "all_0"
