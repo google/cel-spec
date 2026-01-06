@@ -32,7 +32,7 @@ section {
       ident: { type: { primitive: BOOL } }
     }
     type_env: {
-      name: "y",
+      name: "y"
       ident: { type: { primitive: STRING } }
     }
     bindings: {
@@ -50,11 +50,11 @@ section {
     expr: "y"
     container: "x"
     type_env: {
-      name: "x.y",
+      name: "x.y"
       ident: { type: { primitive: BOOL } }
     }
     type_env: {
-      name: "y",
+      name: "y"
       ident: { type: { primitive: BOOL } }
     }
     bindings: {
@@ -66,6 +66,182 @@ section {
       value: { value: { bool_value: false } }
     }
     disable_check: true ## ensure unchecked ASTs resolve the same as checked ASTs
+    value: { bool_value: true }
+  }
+  section {
+  name: "namespace_shadowing"
+  description: "Namespaced identifiers."
+  test {
+    name: "basic"
+    expr: "y"
+    container: "com.example"
+    type_env: {
+      name: "com.example.y"
+      ident: { type: { primitive: BOOL } }
+    }
+    type_env: {
+      name: "y"
+      ident: { type: { primitive: STRING } }
+    }
+    bindings: {
+      key: "com.example.y"
+      value: { value: { bool_value: true } }
+    }
+    bindings: {
+      key: "y"
+      value: { value: { string_value: "string" } }
+    }
+    value: { bool_value: true }
+  }
+  test {
+    name: "disambiguation"
+    expr: ".y"
+    container: "com.example"
+    type_env: {
+      name: "com.example.y"
+      ident: { type: { primitive: BOOL } }
+    }
+    type_env: {
+      name: "y"
+      ident: { type: { primitive: STRING } }
+    }
+    bindings: {
+      key: "com.example.y"
+      value: { value: { bool_value: true } }
+    }
+    bindings: {
+      key: "y"
+      value: { value: { string_value: "string" } }
+    }
+    value: { string_value: "string" }
+  }
+  test {
+    name: "comprehension_shadowing"
+    expr: "[0].exists(y, y == 0)"
+    container: "com.example"
+    type_env: {
+      name: "com.example.y"
+      ident: { type: { primitive: INT64 } }
+    }
+    bindings: {
+      key: "com.example.y"
+      value: { value: { int64_value: 42 } }
+    }
+    value: { bool_value: true }
+  }
+  test {
+    name: "comprehension_shadowing_parse_only"
+    expr: "[0].exists(y, y == 0)"
+    container: "com.example"
+    type_env: {
+      name: "com.example.y"
+      ident: { type: { primitive: INT64 } }
+    }
+    bindings: {
+      key: "com.example.y"
+      value: { value: { int64_value: 42 } }
+    }
+    disable_check: true
+    value: { bool_value: true }
+  }
+  test {
+    name: "comprehension_shadowing_selector"
+    expr: "[{'z': 0}].exists(y, y.z == 0)"
+    type_env: {
+      name: "y.z"
+      ident: { type: { primitive: INT64 } }
+    }
+    bindings: {
+      key: "y.z"
+      value: { value: { int64_value: 42 } }
+    }
+    value: { bool_value: true }
+  }
+  test {
+    name: "comprehension_shadowing_selector_parse_only"
+    expr: "[{'z': 0}].exists(y, y.z == 0)"
+    type_env: {
+      name: "y.z"
+      ident: { type: { primitive: INT64 } }
+    }
+    bindings: {
+      key: "y.z"
+      value: { value: { int64_value: 42 } }
+    }
+    disable_check: true
+    value: { bool_value: true }
+  }
+  test {
+    name: "comprehension_shadowing_namespaced_selector"
+    expr: "[{'z': 0}].exists(y, y.z == 0)"
+    container: "com.example"
+    type_env: {
+      name: "com.example.y.z"
+      ident: { type: { primitive: INT64 } }
+    }
+    bindings: {
+      key: "com.example.y.z"
+      value: { value: { int64_value: 42 } }
+    }
+    value: { bool_value: true }
+  }
+  test {
+    name: "comprehension_shadowing_namespaced_selector_parse_only"
+    expr: "[{'z': 0}].exists(y, y.z == 0)"
+    container: "com.example"
+    type_env: {
+      name: "com.example.y.z"
+      ident: { type: { primitive: INT64 } }
+    }
+    bindings: {
+      key: "com.example.y.z"
+      value: { value: { int64_value: 42 } }
+    }
+    disable_check: true
+    value: { bool_value: true }
+  }
+  test {
+    name: "comprehension_shadowing_namespaced_selector_disambiguation"
+    expr: "[{'z': 0}].exists(y, .y.z == 0)"
+    container: "com.example"
+    type_env: {
+      name: "com.example.y.z"
+      ident: { type: { primitive: INT64 } }
+    }
+    type_env: {
+      name: "y.z"
+      ident: { type: { primitive: INT64 } }
+    }
+    bindings: {
+      key: "com.example.y.z"
+      value: { value: { int64_value: 42 } }
+    }
+    bindings: {
+      key: "y.z"
+      value: { value: { int64_value: 42 } }
+    }
+    value: { bool_value: true }
+  }
+  test {
+    name: "comprehension_shadowing_nesting"
+    expr: "[1].exists(y, [0].exists(y, y == 0))"
+    container: "com.example"
+    type_env: {
+      name: "com.example.y"
+      ident: { type: { primitive: INT64 } }
+    }
+    type_env: {
+      name: "y"
+      ident: { type: { primitive: INT64 } }
+    }
+    bindings: {
+      key: "com.example.y"
+      value: { value: { int64_value: 42 } }
+    }
+    bindings: {
+      key: "y"
+      value: { value: { int64_value: 42 } }
+    }
     value: { bool_value: true }
   }
 }
