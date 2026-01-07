@@ -184,14 +184,20 @@ name which resolves in the current lexical scope is used. For example, if
 possible field selection, then `a.b.c` takes priority over the interpretation
 `(a.b).c`.
 
-Note: List comprehensions (.exists, .all, etc) introduce new scopes
-that add variables as simple identifiers. When resolving a name in the body of a
-comprehension, the name is first compared against the variables declared by the
-comprehension. If there is a match, the name resolves to that variable. If not,
-the name is resolved against parent scopes until a match is found or the global
-scope is searched. For example, in `[1].exists(x, x == 1)`, `x` is a local
-variable which shadows any identifier with the same simple name in ancestor
-scopes.
+Note: Comprehensions (.exists, .all, etc) introduce new scopes that add
+variables as simple identifiers. When resolving a name within a comprehension
+body, the name is first compared against the variables declared by the
+comprehension. If there is a match, the name resolves to that variable, taking
+precedence over the package-based resolution rules above. If not,
+resolution proceeds checking for variable matches in parent 
+comprehension scopes recursively. Finally the name follows the package
+resolution rules above against declarations in the environment. A name with a
+leading '.' always resolves in the root scope, bypassing local scopes from
+comprehensions.
+
+For example, in `[1].exists(x, x == 1)`, `x` is a local variable which shadows
+any identifier named 'x' in ancestor scopes or the package namespace. In 
+`[1].exists(x, .x == 1)`, x is the global variable `x`.
 
 ## Values
 

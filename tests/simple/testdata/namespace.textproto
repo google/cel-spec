@@ -11,7 +11,7 @@ section {
     expr: "x.y"
     value: { bool_value: true }
     type_env: {
-      name: "x.y",
+      name: "x.y"
       ident: { type: { primitive: BOOL } }
     }
     bindings: {
@@ -28,7 +28,7 @@ section {
     expr: "y"
     container: "x"
     type_env: {
-      name: "x.y",
+      name: "x.y"
       ident: { type: { primitive: BOOL } }
     }
     type_env: {
@@ -65,12 +65,13 @@ section {
       key: "y"
       value: { value: { bool_value: false } }
     }
-    disable_check: true ## ensure unchecked ASTs resolve the same as checked ASTs
+    disable_check: true  ## ensure unchecked ASTs resolve the same as checked ASTs
     value: { bool_value: true }
   }
-  section {
+}
+section {
   name: "namespace_shadowing"
-  description: "Namespaced identifiers."
+  description: "Variable shadowing in comprehensions"
   test {
     name: "basic"
     expr: "y"
@@ -99,7 +100,7 @@ section {
     container: "com.example"
     type_env: {
       name: "com.example.y"
-      ident: { type: { primitive: BOOL } }
+      ident: { type: { primitive: STRING } }
     }
     type_env: {
       name: "y"
@@ -107,13 +108,13 @@ section {
     }
     bindings: {
       key: "com.example.y"
-      value: { value: { bool_value: true } }
+      value: { value: { string_value: "com.example.y" } }
     }
     bindings: {
       key: "y"
-      value: { value: { string_value: "string" } }
+      value: { value: { string_value: "y" } }
     }
-    value: { string_value: "string" }
+    value: { string_value: "y" }
   }
   test {
     name: "comprehension_shadowing"
@@ -126,6 +127,20 @@ section {
     bindings: {
       key: "com.example.y"
       value: { value: { int64_value: 42 } }
+    }
+    value: { bool_value: true }
+  }
+  test {
+    name: "comprehension_shadowing_disambiguation"
+    expr: "['compre'].exists(y, .y == 'y')"
+    container: "com.example"
+    type_env: {
+      name: "y"
+      ident: { type: { primitive: STRING } }
+    }
+    bindings: {
+      key: "y"
+      value: { value: { string_value: "y" } }
     }
     value: { bool_value: true }
   }
@@ -202,23 +217,23 @@ section {
   }
   test {
     name: "comprehension_shadowing_namespaced_selector_disambiguation"
-    expr: "[{'z': 0}].exists(y, .y.z == 0)"
+    expr: "[{'z': 'compre'}].exists(y, .y.z == 'y.z')"
     container: "com.example"
     type_env: {
       name: "com.example.y.z"
-      ident: { type: { primitive: INT64 } }
+      ident: { type: { primitive: STRING } }
     }
     type_env: {
       name: "y.z"
-      ident: { type: { primitive: INT64 } }
+      ident: { type: { primitive: STRING } }
     }
     bindings: {
       key: "com.example.y.z"
-      value: { value: { int64_value: 42 } }
+      value: { value: { string_value: "com.example.y.z" } }
     }
     bindings: {
       key: "y.z"
-      value: { value: { int64_value: 42 } }
+      value: { value: { string_value: "y.z" } }
     }
     value: { bool_value: true }
   }
