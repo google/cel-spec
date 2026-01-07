@@ -186,10 +186,11 @@ possible field selection, then `a.b.c` takes priority over the interpretation
 
 Note: List comprehensions (.exists, .all, etc) introduce new scopes
 that add variables as simple identifiers. When resolving a name in the body of a
-comprehension, the name is compared against any declared variables for the
-comprehension before resolving against parent scopes. For example, in
-`[1].exists(x, x == 1)`, the interpretation that `x` is the iterator variable is
-chosen over any alternative.
+comprehension, the name is first compared against the variables declared by the
+comprehension. If there is a match, that interpretation is chosen. If not,
+the name is resolved against parent scopes until a match is found or the global
+scope is searched. For example, in `[1].exists(x, x == 1)`, the interpretation
+that `x` is the iterator variable is chosen over any alternative.
 
 ## Values
 
