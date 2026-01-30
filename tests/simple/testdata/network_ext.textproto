@@ -177,7 +177,7 @@ section {
   }
   test {
     name: "ipv4_not_equals"
-    expr: "ip('127.0.0.1') == ip('10.0.0.1')
+    expr: "ip('127.0.0.1') == ip('10.0.0.1')"
     value: { bool_value: false }
   }
   test {
@@ -246,7 +246,7 @@ section {
   }
   test {
     name: "ipv6_not_equals"
-    expr: "ip('::') == ip('::ffff')
+    expr: "ip('::') == ip('::ffff')"
     value: { bool_value: false }
   }
 }
@@ -285,6 +285,21 @@ section {
         message: "IPv4-mapped IPv6 address is not allowed"
       }
     }
+  }
+  test {
+    name: "cidr_equals"
+    expr: "cidr('127.0.0.1/24') == cidr('127.0.0.1/24')"
+    value: { bool_value: true }
+  }
+  test {
+    name: "cidr_not_equals"
+    expr: "cidr('192.0.0.1/32') == cidr('10.0.0.1/8')"
+    value: { bool_value: false }
+  }
+  test {
+    name: "cidr_not_equals_ipv4_ipv6"
+    expr: "cidr('2001:db8::/32') == cidr('10.0.0.1/32')"
+    value: { bool_value: false }
   }
   test {
     name: "cidr_contains_ip_ipv4_object"
