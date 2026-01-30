@@ -71,6 +71,24 @@ section {
     }
   }
   test {
+    name: "parse_invalid_ipv6_with_zone"
+    expr: "ip('fe80::1%en0')"
+    eval_error: {
+      errors: {
+        message: "IP Address with zone value is not allowed"
+      }
+    }
+  }
+  test {
+    name: "parse_invalid_ipv4_in_ipv6"
+    expr: "ip('::ffff:192.168.0.1')"
+    eval_error: {
+      errors: {
+        message: "IPv4-mapped IPv6 address is not allowed"
+      }
+    }
+  }
+  test {
     name: "ip_to_string"
     description: "Converting an IP address back to a string"
     expr: "string(ip('192.168.0.1'))"
@@ -152,6 +170,26 @@ section {
     expr: "ip('192.168.0.1').isLinkLocalUnicast()"
     value: { bool_value: false }
   }
+  test {
+    name: "ipv4_equals"
+    expr: "ip('127.0.0.1') == ip('127.0.0.1')"
+    value: { bool_value: true }
+  }
+  test {
+    name: "ipv4_not_equals"
+    expr: "ip('127.0.0.1') == ip('10.0.0.1')
+    value: { bool_value: false }
+  }
+  test {
+    name: "ipv4_equals_ipv6"
+    expr: "ip('::ffff:c0a8:1') == ip('192.168.0.1')"
+    value: { bool_value: true }
+  }
+  test {
+    name: "ipv4_not_equals_ipv6"
+    expr: "ip('::ffff:c0a8:1') == ip('192.168.10.1')"
+    value: { bool_value: false }
+  }
 }
 section {
   name: "ipv6"
@@ -201,6 +239,16 @@ section {
     expr: "ip('fd80::1').isLinkLocalUnicast()"
     value: { bool_value: false }
   }
+  test {
+    name: "ipv6_equals"
+    expr: "ip('2001:db8::1') == ip('2001:DB8::1')"
+    value: { bool_value: true }
+  }
+  test {
+    name: "ipv6_not_equals"
+    expr: "ip('::') == ip('::ffff')
+    value: { bool_value: false }
+  }
 }
 
 section {
@@ -217,6 +265,24 @@ section {
     eval_error: {
       errors: {
         message: "network address parse error during conversion from string"
+      }
+    }
+  }
+  test {
+    name: "parse_invalid_cidr_with_zone"
+    expr: "ip('fe80::1%en0/24')"
+    eval_error: {
+      errors: {
+        message: "CIDR with zone value is not allowed"
+      }
+    }
+  }
+  test {
+    name: "parse_invalid_cidr_ipv4_in_ipv6"
+    expr: "ip('::ffff:192.168.0.1/24')"
+    eval_error: {
+      errors: {
+        message: "IPv4-mapped IPv6 address is not allowed"
       }
     }
   }
@@ -239,7 +305,7 @@ section {
     name: "cidr_does_not_contain_ip_ipv4_string"
     expr: "cidr('192.168.0.0/24').containsIP('192.168.1.1')"
     value: { bool_value: false }
-  }
+  }  
   test {
     name: "cidr_contains_cidr_ipv4_object"
     expr: "cidr('192.168.0.0/24').containsCIDR(cidr('192.168.0.0/25'))"
@@ -251,7 +317,7 @@ section {
     value: { bool_value: true }
   }
   test {
-    name: "cidr_does_not_contain_cidr_ipv4_object"
+    name: "cidr_not_contains_cidr_ipv4_object"
     expr: "cidr('192.168.0.0/24').containsCIDR(cidr('192.168.0.0/23'))"
     value: { bool_value: false }
   }
@@ -261,14 +327,34 @@ section {
     value: { bool_value: true }
   }
   test {
+    name: "cidr_contains_cidr"
+    expr: "cidr('10.0.0.0/8').containsCIDR(cidr('10.0.0.0/8'))
+    value: { bool_value: true }
+  }
+  test {
+    name: "cidr_contains_cidr_ipv4_exact"
+    expr: "cidr('10.0.0.0/8').containsCIDR('10.0.0.0/8')
+    value: { bool_value: true }
+  }
+  test {
+    name: "cidr_ipv6_not_contains_ip_ipv4_object"
+    expr: "cidr('2001:db8::/32').containsIP(ip('192.168.1.1'))"
+    value: { bool_value: false }
+  }
+  test {
+    name: "cidr_ipv4_not_contains_ip_ipv6_object"
+    expr: "cidr('192.168.1.1/32').containsIP(ip('2001:db8::1'))"
+    value: { bool_value: false }
+  }
+  test {
     name: "cidr_get_ip_ipv4"
     expr: "cidr('192.168.0.0/24').ip() == ip('192.168.0.0')"
     value: { bool_value: true }
   }
   test {
     name: "cidr_masked_ipv4"
-    expr: "cidr('192.168.0.1/24').masked()"
-    value: { string_value: "192.168.0.0/24" }
+    expr: "cidr('192.168.0.1/24').masked() == cidr('192.168.0.0/24')"
+    value: { bool_value: true }
   }
   test {
     name: "cidr_prefix_length_ipv4"
@@ -291,9 +377,14 @@ section {
     value: { bool_value: true }
   }
   test {
+    name: "cidr_ipv4_contains_ip_ipv6_object"
+    expr: "cidr('192.168.0.0/24').containsIP(ip('2001:db8::1'))"
+    value: { bool_value: true }
+  }
+  test {
     name: "cidr_get_ip_ipv6"
     expr: "cidr('2001:db8::/32').ip() == ip('2001:db8::')"
-    value: { bool_value: "true" }
+    value: { bool_value: true }
   }
   test {
     name: "cidr_prefix_length_ipv6"
