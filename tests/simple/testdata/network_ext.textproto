@@ -270,7 +270,7 @@ section {
   }
   test {
     name: "parse_invalid_cidr_with_zone"
-    expr: "ip('fe80::1%en0/24')"
+    expr: "cidr('fe80::1%en0/24')"
     eval_error: {
       errors: {
         message: "CIDR with zone value is not allowed"
@@ -279,7 +279,7 @@ section {
   }
   test {
     name: "parse_invalid_cidr_ipv4_in_ipv6"
-    expr: "ip('::ffff:192.168.0.1/24')"
+    expr: "cidr('::ffff:192.168.0.1/24')"
     eval_error: {
       errors: {
         message: "IPv4-mapped IPv6 address is not allowed"
@@ -343,12 +343,12 @@ section {
   }
   test {
     name: "cidr_contains_cidr"
-    expr: "cidr('10.0.0.0/8').containsCIDR(cidr('10.0.0.0/8'))
+    expr: "cidr('10.0.0.0/8').containsCIDR(cidr('10.0.0.0/8'))"
     value: { bool_value: true }
   }
   test {
     name: "cidr_contains_cidr_ipv4_exact"
-    expr: "cidr('10.0.0.0/8').containsCIDR('10.0.0.0/8')
+    expr: "cidr('10.0.0.0/8').containsCIDR('10.0.0.0/8')"
     value: { bool_value: true }
   }
   test {
@@ -394,7 +394,7 @@ section {
   test {
     name: "cidr_ipv4_contains_ip_ipv6_object"
     expr: "cidr('192.168.0.0/24').containsIP(ip('2001:db8::1'))"
-    value: { bool_value: true }
+    value: { bool_value: false }
   }
   test {
     name: "cidr_get_ip_ipv6"
