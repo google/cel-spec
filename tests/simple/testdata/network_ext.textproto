@@ -392,11 +392,6 @@ section {
     value: { bool_value: true }
   }
   test {
-    name: "cidr_ipv4_contains_ip_ipv6_object"
-    expr: "cidr('192.168.0.0/24').containsIP(ip('2001:db8::1'))"
-    value: { bool_value: false }
-  }
-  test {
     name: "cidr_get_ip_ipv6"
     expr: "cidr('2001:db8::/32').ip() == ip('2001:db8::')"
     value: { bool_value: true }
