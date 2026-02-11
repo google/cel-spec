@@ -3,7 +3,7 @@
 This page constitutes the reference for CEL. For a gentle introduction, see
 [Intro](intro.md). For specific guidance regarding CEL in policy
 see the `doc/policy` folder contains best practices, such as attribute
-specification and example environments for [AI Policy](doc/policy/ai/README.md)
+specification and example environments for [AI Policy](policy/ai/README.md).
 
 ## Overview
 
