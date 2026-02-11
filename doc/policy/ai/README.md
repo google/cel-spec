@@ -170,19 +170,19 @@ Ensure that sensitive data (like PII) is handled correctly across different part
 
 * **Retrieving Sensitivity Labels:**
 
-    // Get optional list of sensitivity findings for the 'pii' label.  
-    agent.context.sensitivityFindings("pii")
+      // Get optional list of sensitivity findings for the 'pii' label.  
+      agent.context.sensitivityFindings("pii")
 
 * **Restricting High-Confidence PII in Tool Calls:**
 
-    // Fail if any PII finding has a confidence score greater than 0.5.  
-    tool.call.sensitivityFindings("pii").orValue(\[\])  
+      // Fail if any PII finding has a confidence score greater than 0.5.  
+      tool.call.sensitivityFindings("pii").orValue(\[\])  
         .all(finding, finding.confidence \<= 0.5)
 
 * **Checking for Specific Data Types:**
 
-    // Returns true if the tool call contains both 'phone\_number' and 'ssn' findings.  
-    tool.call.sensitivityFindings("pii").hasAll(\["phone\_number", "ssn"\])
+      // Returns true if the tool call contains both 'phone\_number' and 'ssn' findings.  
+      tool.call.sensitivityFindings("pii").hasAll(\["phone\_number", "ssn"\])
 
 ### **2\. Safety & Threat Mitigation**
 
@@ -190,13 +190,13 @@ Identify and block malicious inputs or unsafe model outputs.
 
 * **Detecting Prompt Injections or Jailbreaks:**
 
-    // Returns true if any specified threats are detected with high confidence.  
-    agent.context.threatFindings().hasAll(\["injection", "jailbreak", "malicious\_uri"\])
+      // Returns true if any specified threats are detected with high confidence.  
+      agent.context.threatFindings().hasAll(\["injection", "jailbreak", "malicious\_uri"\])
 
 * **Filtering Output for Responsible AI Safety:**
 
-    // Check if the model output contains hate speech or sexually explicit content.  
-    agent.output.safetyFindings("responsible\_ai")  
+      // Check if the model output contains hate speech or sexually explicit content.  
+      agent.output.safetyFindings("responsible\_ai")  
         .hasAll(\["hate\_speech", "sexually\_explicit"\])
 
 ### **3\. Context & History Analysis**
@@ -205,16 +205,16 @@ Analyze previous turns in the conversation to enforce policies over time.
 
 * **Filtering History by Role and Time:**
 
-    // Check for threats in user messages from the last 5 minutes.  
-    agent.history  
-        .role("user")  
-        .after(now \- duration('5m'))  
-        .threatFindings().hasAll(\["injection", "jailbreak"\])
+      // Check for threats in user messages from the last 5 minutes.  
+      agent.history  
+          .role("user")  
+          .after(now \- duration('5m'))  
+          .threatFindings().hasAll(\["injection", "jailbreak"\])
 
 * **Inspecting Tool History:**
 
-    // Find all JSON-based tool results in the agent's history.  
-    agent.history.role("agent").toolCalls("get\_weather").resultType("json")
+      // Find all JSON-based tool results in the agent's history.  
+      agent.history.role("agent").toolCalls("get\_weather").resultType("json")
 
 ### **4\. Advanced Tool Governance**
 
@@ -222,17 +222,18 @@ Control how tools interact with the world based on their definitions.
 
 * **The "Lethal Trifecta" Check:**
 
-    // Block tool calls that are destructive, interact with the open world, and produce untrusted output.  
-    agent.input.parts.exists(part,  
+      // Block tool calls that are destructive, interact with the open world, and produce untrusted output.  
+      agent.input.parts.exists(part,  
         has(part.tool\_call) &&  
         \!part.tool\_call.spec().annotations.output\_trust.level in \['trusted', 'trusted\_1p'\]  
-    )
+      )
 
 ### **5\. Utility Functions**
 
 * **Creating Manual Findings:** `ai.finding("picc_score", 0.5)`  
 * **Casting Content:** `agent.input.parts[0].asType(bigquery.QueryRequest)`  
-* **Union of Findings:** Combine findings from context and tool calls, keeping the highest confidence score:
+* **Union of Findings:** 
+Combine findings from context and tool calls, keeping the highest confidence score:
 
-    agent.context.sensitivityFindings("pii")
-      .union(tool.call.sensitivityFindings("pii"))
+      agent.context.sensitivityFindings("pii")
+        .union(tool.call.sensitivityFindings("pii"))
