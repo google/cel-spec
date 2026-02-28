@@ -696,6 +696,66 @@ section {
     value: { bool_value: true }
   }
   test {
+    name: "repeated_field_timestamp_null_pruned"
+    container: "cel.expr.conformance.proto3"
+    expr: "TestAllTypes{repeated_timestamp: [timestamp(1), null]}.repeated_timestamp == [timestamp(1)]"
+    value: { bool_value: true }
+  }
+  test {
+    name: "repeated_field_duration_null_pruned"
+    container: "cel.expr.conformance.proto3"
+    expr: "TestAllTypes{repeated_duration: [duration('1s'), null]}.repeated_duration == [duration('1s')]"
+    value: { bool_value: true }
+  }
+  test {
+    name: "repeated_field_wrapper_null_pruned"
+    container: "cel.expr.conformance.proto3"
+    expr: "TestAllTypes{repeated_int32_wrapper: [1, null]}.repeated_int32_wrapper == [1]"
+    value: { bool_value: true }
+  }
+  test {
+    name: "repeated_field_anytype_null_retained"
+    container: "cel.expr.conformance.proto3"
+    expr: "TestAllTypes{repeated_any: [1, null]}.repeated_any == [1, null]"
+    value: { bool_value: true }
+  }
+  test {
+    name: "repeated_field_jsontype_null_retained"
+    container: "cel.expr.conformance.proto3"
+    expr: "TestAllTypes{repeated_value: [google.protobuf.Value{bool_value: true}, null]}.repeated_value == [true, null]"
+    value: { bool_value: true }
+  }
+  test {
+    name: "map_timestamp_null_pruned"
+    container: "cel.expr.conformance.proto3"
+    expr: "TestAllTypes{map_bool_timestamp: {true: null, false: timestamp(1)}}.map_bool_timestamp == {false: timestamp(1)}"
+    value: { bool_value: true }
+  }
+  test {
+    name: "map_duration_null_pruned"
+    container: "cel.expr.conformance.proto3"
+    expr: "TestAllTypes{map_bool_duration: {true: null, false: duration('1s')}}.map_bool_duration == {false: duration('1s')}"
+    value: { bool_value: true }
+  }
+  test {
+    name: "map_wrapper_null_pruned"
+    container: "cel.expr.conformance.proto3"
+    expr: "TestAllTypes{map_bool_int32_wrapper: {true: null, false: 1}}.map_bool_int32_wrapper == {false: 1}"
+    value: { bool_value: true }
+  }
+  test {
+    name: "map_anytype_null_retained"
+    container: "cel.expr.conformance.proto3"
+    expr: "TestAllTypes{map_bool_any: {true: null, false: 1}}.map_bool_any == {true: null, false: 1}"
+    value: { bool_value: true }
+  }
+  test {
+    name: "map_jsontype_null_retained"
+    container: "cel.expr.conformance.proto3"
+    expr: "TestAllTypes{map_bool_value: {true: null, false: google.protobuf.Value{bool_value: true}}}.map_bool_value == {true: null, false: true}"
+    value: { bool_value: true }
+  }
+  test {
     name: "single_scalar"
     container: "cel.expr.conformance.proto3"
     expr: "TestAllTypes{single_bool: null} == TestAllTypes{}"
