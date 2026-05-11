@@ -153,36 +153,36 @@ section {
     expr: '"""hello"""'
     value: { string_value: "hello" }
   }
-
   test {
     name: "single_quoted_escaped_punctuation"
-    expr: "' \\\\ \\\? \\\" \\\' \\` '"
-    value: { string_value: " \\ \? \" \' ` " }
+    # ' \\ \? \" \' \` '
+    expr: "' \\\\ \\? \\\" \\\' \\` '"
+    value: { string_value: " \\ ? \" \' ` " }
   }
   test {
     name: "double_quoted_escaped_punctuation"
-    expr: '" \\\\ \\\? \\\" \\\' \\` "'
-    value: { string_value: " \\ \? \" \' ` " }
+    expr: '" \\\\ \\? \\\" \\\' \\` "'
+    value: { string_value: " \\ ? \" \' ` " }
   }
   test {
     name: "triple_single_quoted_escaped_punctuation"
-    expr: "''' \\\\ \\\? \\\" \\\' \\` '''"
-    value: { string_value: " \\ \? \" \' ` " }
+    expr: "''' \\\\ \\? \\\" \\\' \\` '''"
+    value: { string_value: " \\ ? \" \' ` " }
   }
   test {
     name: "triple_double_quoted_escaped_punctuation"
-    expr: '""" \\\\ \\\? \\\" \\\' \\` """'
-    value: { string_value: " \\ \? \" \' ` " }
+    expr: '""" \\\\ \\? \\\" \\\' \\` """'
+    value: { string_value: " \\ ? \" \' ` " }
   }
   test {
     name: "triple_single_quoted_unescaped_punctuation"
     expr: "''' ? \" \' ` '''"
-    value: { string_value: " \? \" \' ` " }
+    value: { string_value: " ? \" \' ` " }
   }
   test {
     name: "triple_double_quoted_unescaped_punctuation"
     expr: '""" ? \" \' ` """'
-    value: { string_value: " \? \" \' ` " }
+    value: { string_value: " ? \" \' ` " }
   }
 
   test {
@@ -904,44 +904,44 @@ section {
 
   test {
     name: "raw_single_quoted_escapes"
-    expr: "br' \\\\ \\\? \\\" \\` \\a \\b \\f \\t \\v \\n \\r \\000 \\x00 \\X00 \\u0000 \\U00000000 '"
-    value: { bytes_value: " \\\\ \\\? \\\" \\` \\a \\b \\f \\t \\v \\n \\r \\000 \\x00 \\X00 \\u0000 \\U00000000 " }
+    expr: "br' \\\\ \\? \\\" \\` \\a \\b \\f \\t \\v \\n \\r \\000 \\x00 \\X00 \\u0000 \\U00000000 '"
+    value: { bytes_value: " \\\\ \\? \\\" \\` \\a \\b \\f \\t \\v \\n \\r \\000 \\x00 \\X00 \\u0000 \\U00000000 " }
   }
   test {
     name: "raw_double_quoted_escapes"
-    expr: 'br" \\\\ \\\? \\\' \\` \\a \\b \\f \\t \\v \\n \\r \\000 \\x00 \\X00 \\u0000 \\U00000000 "'
-    value: { bytes_value: " \\\\ \\\? \\\' \\` \\a \\b \\f \\t \\v \\n \\r \\000 \\x00 \\X00 \\u0000 \\U00000000 " }
+    expr: 'br" \\\\ \\? \\\' \\` \\a \\b \\f \\t \\v \\n \\r \\000 \\x00 \\X00 \\u0000 \\U00000000 "'
+    value: { bytes_value: " \\\\ \\? \\\' \\` \\a \\b \\f \\t \\v \\n \\r \\000 \\x00 \\X00 \\u0000 \\U00000000 " }
   }
   test {
     name: "raw_triple_single_quoted_escapes"
-    expr: "br''' \\\\ \\\? \\\" \\\' \\` \\a \\b \\f \\t \\v \\n \\r \\000 \\x00 \\X00 \\u0000 \\U00000000 '''"
-    value: { bytes_value: " \\\\ \\\? \\\" \\\' \\` \\a \\b \\f \\t \\v \\n \\r \\000 \\x00 \\X00 \\u0000 \\U00000000 " }
+    expr: "br''' \\\\ \\? \\\" \\\' \\` \\a \\b \\f \\t \\v \\n \\r \\000 \\x00 \\X00 \\u0000 \\U00000000 '''"
+    value: { bytes_value: " \\\\ \\? \\\" \\\' \\` \\a \\b \\f \\t \\v \\n \\r \\000 \\x00 \\X00 \\u0000 \\U00000000 " }
   }
   test {
     name: "raw_triple_double_quoted_escapes"
-    expr: 'br""" \\\\ \\\? \\\" \\\' \\` \\a \\b \\f \\t \\v \\n \\r \\000 \\x00 \\X00 \\u0000 \\U00000000 """'
-    value: { bytes_value: " \\\\ \\\? \\\" \\\' \\` \\a \\b \\f \\t \\v \\n \\r \\000 \\x00 \\X00 \\u0000 \\U00000000 " }
+    expr: 'br""" \\\\ \\? \\\" \\\' \\` \\a \\b \\f \\t \\v \\n \\r \\000 \\x00 \\X00 \\u0000 \\U00000000 """'
+    value: { bytes_value: " \\\\ \\? \\\" \\\' \\` \\a \\b \\f \\t \\v \\n \\r \\000 \\x00 \\X00 \\u0000 \\U00000000 " }
   }
 
   test {
     name: "upper_raw_single_quoted_escapes"
-    expr: "bR' \\\\ \\\? \\\" \\` \\a \\b \\f \\t \\v \\n \\r \\000 \\x00 \\X00 \\u0000 \\U00000000 '"
-    value: { bytes_value: " \\\\ \\\? \\\" \\` \\a \\b \\f \\t \\v \\n \\r \\000 \\x00 \\X00 \\u0000 \\U00000000 " }
+    expr: "bR' \\\\ \\? \\\" \\` \\a \\b \\f \\t \\v \\n \\r \\000 \\x00 \\X00 \\u0000 \\U00000000 '"
+    value: { bytes_value: " \\\\ \\? \\\" \\` \\a \\b \\f \\t \\v \\n \\r \\000 \\x00 \\X00 \\u0000 \\U00000000 " }
   }
   test {
     name: "upper_raw_double_quoted_escapes"
-    expr: 'bR" \\\\ \\\? \\\' \\` \\a \\b \\f \\t \\v \\n \\r \\000 \\x00 \\X00 \\u0000 \\U00000000 "'
-    value: { bytes_value: " \\\\ \\\? \\\' \\` \\a \\b \\f \\t \\v \\n \\r \\000 \\x00 \\X00 \\u0000 \\U00000000 " }
+    expr: 'bR" \\\\ \\? \\\' \\` \\a \\b \\f \\t \\v \\n \\r \\000 \\x00 \\X00 \\u0000 \\U00000000 "'
+    value: { bytes_value: " \\\\ \\? \\\' \\` \\a \\b \\f \\t \\v \\n \\r \\000 \\x00 \\X00 \\u0000 \\U00000000 " }
   }
   test {
     name: "upper_raw_triple_single_quoted_escapes"
-    expr: "bR''' \\\\ \\\? \\\" \\\' \\` \\a \\b \\f \\t \\v \\n \\r \\000 \\x00 \\X00 \\u0000 \\U00000000 '''"
-    value: { bytes_value: " \\\\ \\\? \\\" \\\' \\` \\a \\b \\f \\t \\v \\n \\r \\000 \\x00 \\X00 \\u0000 \\U00000000 " }
+    expr: "bR''' \\\\ \\? \\\" \\\' \\` \\a \\b \\f \\t \\v \\n \\r \\000 \\x00 \\X00 \\u0000 \\U00000000 '''"
+    value: { bytes_value: " \\\\ \\? \\\" \\\' \\` \\a \\b \\f \\t \\v \\n \\r \\000 \\x00 \\X00 \\u0000 \\U00000000 " }
   }
   test {
     name: "upper_raw_triple_double_quoted_escapes"
-    expr: 'bR""" \\\\ \\\? \\\" \\\' \\` \\a \\b \\f \\t \\v \\n \\r \\000 \\x00 \\X00 \\u0000 \\U00000000 """'
-    value: { bytes_value: " \\\\ \\\? \\\" \\\' \\` \\a \\b \\f \\t \\v \\n \\r \\000 \\x00 \\X00 \\u0000 \\U00000000 " }
+    expr: 'bR""" \\\\ \\? \\\" \\\' \\` \\a \\b \\f \\t \\v \\n \\r \\000 \\x00 \\X00 \\u0000 \\U00000000 """'
+    value: { bytes_value: " \\\\ \\? \\\" \\\' \\` \\a \\b \\f \\t \\v \\n \\r \\000 \\x00 \\X00 \\u0000 \\U00000000 " }
   }
 }
 section {
