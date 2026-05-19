@@ -381,8 +381,22 @@ section {
     }
   }
   test {
+    name: "from_int_under"
+    expr: "timestamp(-62135596801)"
+    eval_error {
+      errors { message: "range" }
+    }
+  }
+  test {
     name: "from_string_over"
     expr: "timestamp('10000-01-01T00:00:00Z')"
+    eval_error {
+      errors { message: "range" }
+    }
+  }
+  test {
+    name: "from_int_over"
+    expr: "timestamp(253402300800)"
     eval_error {
       errors { message: "range" }
     }
