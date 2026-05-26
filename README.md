@@ -1,12 +1,9 @@
 # Common Expression Language
 
-<table border="1" cellpadding="10" width="100%">
-  <tr>
-    <td align="center">
-      <h3 style="color: red;"><strong>On June 16, 2026, this repository will move to github.com/cel-expr/cel-spec!<br>Please update your links and dependencies. See the <a href="https://github.com/google/cel-spec/issues/513">pinned issue</a> for details.</strong></h3>
-    </td>
-  </tr>
-</table>
+> [!WARNING]
+> **On June 16, 2026, this repository will move to [github.com/cel-expr/cel-spec](https://github.com/cel-expr/cel-spec)!**
+>
+> Please update your links and dependencies. See the [pinned issue](https://github.com/google/cel-spec/issues/513) for details.
 
 The Common Expression Language (CEL) implements common semantics for expression
 evaluation, enabling different applications to more easily interoperate.
